@@ -2,9 +2,9 @@ name: CI - Portfolio
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   lint:
@@ -61,4 +61,3 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t portfolio-test .
-
