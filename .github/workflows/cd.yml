@@ -19,4 +19,4 @@ jobs:
           node-version: 20
       - run: npm ci
       - run: npm install -g vercel
-      - run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes --confirm --scope=antoine-gourgue
+      - run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes --confirm
