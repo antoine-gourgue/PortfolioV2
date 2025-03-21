@@ -12,7 +12,8 @@
     "lint:fix": "eslint --ext .js,.ts,.vue . --fix",
     "format": "prettier --write .",
     "prepare": "husky install",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "dev:docker": "npx nuxi dev --dotenv .env.development"
   },
   "lint-staged": {
     "*.{js,ts,vue}": [
