@@ -16,10 +16,8 @@
     "dev:docker": "npx nuxi dev --dotenv .env.development"
   },
   "lint-staged": {
-    "*.{js,ts,vue}": [
-      "eslint --fix",
-      "prettier --write"
-    ]
+    "*.{js,ts,vue}": "eslint --cache",
+    "*.**": "prettier --check --ignore-unknown"
   },
   "dependencies": {
     "@nuxt/icon": "^1.11.0",
