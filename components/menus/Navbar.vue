@@ -33,8 +33,8 @@
     </div>
 
     <div class="flex items-center space-x-4">
-      <NuxtLink to="/resume" class="nav-link" :class="isActive('/resume')"
-        >Resume</NuxtLink
+      <NuxtLink to="/blog" class="nav-link" :class="isActive('/blog')"
+        >Blog</NuxtLink
       >
       <NuxtLink to="/projects" class="nav-link" :class="isActive('/projects')"
         >Projects</NuxtLink
@@ -66,13 +66,9 @@
       <i class="fa-solid fa-keyboard w-5 h-5 mb-1"></i>
       <span class="text-xs">Services</span>
     </NuxtLink>
-    <NuxtLink
-      to="/resume"
-      class="bottom-link"
-      :class="isActiveMobile('/resume')"
-    >
+    <NuxtLink to="/blog" class="bottom-link" :class="isActiveMobile('/blog')">
       <i class="fa-solid fa-file w-5 h-5 mb-1"></i>
-      <span class="text-xs">Resume</span>
+      <span class="text-xs">Blog</span>
     </NuxtLink>
     <NuxtLink
       to="/projects"

@@ -2,7 +2,7 @@
   <main
     class="bg-gray-50 min-h-screen flex flex-col justify-between px-6 lg:px-20 py-32 relative overflow-hidden"
   >
-    <div class="absolute inset-0 opacity-70 pointer-events-none">
+    <div class="absolute inset-0 opacity-70 pointer-events-none fade-in-up">
       <img
         src="/assets/shape.svg"
         alt="background"
@@ -10,7 +10,7 @@
       />
     </div>
 
-    <div class="relative z-10">
+    <div class="relative z-10 fade-in-up">
       <h1 class="text-5xl font-extrabold text-center mb-6">My Projects</h1>
 
       <p
@@ -21,7 +21,7 @@
         experiments, each project reflects my passion and progression.
       </p>
 
-      <div class="flex flex-wrap justify-center gap-4 mb-12">
+      <div class="flex flex-wrap justify-center gap-4 mb-12 fade-in-up">
         <button
           v-for="lang in languages"
           :key="lang"
@@ -162,7 +162,6 @@ const languageSVGs: Record<string, string> = {
   'C++': 'cplusplus.svg',
   Java: 'java.svg',
   Twig: 'twig.svg',
-  Other: 'default.svg',
 }
 
 const currentPage = ref(1)
