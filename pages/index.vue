@@ -64,8 +64,8 @@
       </div>
     </div>
 
-    <section class="py-20 bg-white text-center px-6 relative overflow-hidden">
-      <div class="absolute inset-0 opacity-35">
+    <section class="py-20 bg-gray-50 text-center px-6 relative overflow-hidden">
+      <div class="absolute inset-0 opacity-70">
         <img
           src="/assets/shape.svg"
           class="w-full h-full object-cover"
@@ -176,7 +176,7 @@ const logos = [
 ]
 
 const handleScroll = () => {
-  showIndicator.value = window.scrollY < 200
+  showIndicator.value = window.scrollY < 5
 }
 
 onMounted(() => {
