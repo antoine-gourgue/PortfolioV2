@@ -5,7 +5,7 @@ A clean, modern, and professional showcase of my projects, services, and experie
 
 ## 🌐 Live Website
 
-[https://antoine-gourgue.vercel.app](https://antoine-gourgue.vercel.app)
+[https://antoinegourgue.dev](https://antoinegourgue.dev)
 
 ---
 

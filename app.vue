@@ -5,6 +5,7 @@
     >
       <NuxtLoadingIndicator />
       <NuxtPage />
+      <Analytics />
       <div
         id="transition-overlay"
         class="fixed inset-0 bg-gray-200 z-50 pointer-events-none scale-0 opacity-0 transition-transform duration-700 origin-center"
@@ -13,13 +14,9 @@
   </MetaSeoLayout>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { Analytics } from '@vercel/analytics/nuxt'
 import MetaSeoLayout from '~/layouts/MetaSeoLayout.vue'
-
-export default defineComponent({
-  components: { MetaSeoLayout },
-})
 </script>
 
 <style>
