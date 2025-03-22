@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="w-fit mx-auto mt-6 bg-white text-black rounded-full px-6 py-3 flex items-center space-x-9 border border-gray-200 hidden lg:flex"
+    class="hidden lg:flex fixed top-6 left-1/2 transform -translate-x-1/2 z-50 bg-white bg-opacity-80 backdrop-blur-md text-black rounded-full px-6 py-3 items-center space-x-9 border border-gray-200 shadow-md"
   >
     <div class="flex items-center space-x-4">
       <NuxtLink to="/" class="nav-link" :class="isActive('/')">Home</NuxtLink>

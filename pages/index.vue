@@ -1,19 +1,22 @@
 <template>
   <main class="relative overflow-hidden bg-gray-50">
     <section
-      class="min-h-screen flex flex-col lg:flex-row items-center justify-center text-center lg:text-left px-6 lg:px-20"
+      class="min-h-screen flex flex-col lg:flex-row items-center justify-center text-center lg:text-left px-4 sm:px-6 lg:px-20 gap-12 relative"
     >
-      <div class="flex-1 z-10 animate-fade-in">
-        <h1 class="text-4xl lg:text-6xl font-bold mb-4">Hi, I'm Antoine</h1>
-        <h2 class="text-2xl lg:text-3xl text-gray-600 mb-6">
+      <div
+        class="flex-1 z-10 animate-fade-in flex flex-col items-center lg:items-start"
+      >
+        <h1 class="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4">
+          Hi, I'm Antoine
+        </h1>
+        <h2 class="text-xl sm:text-2xl lg:text-3xl text-gray-600 mb-6">
           Fullstack Developer
         </h2>
         <p class="text-gray-500 mb-8 max-w-md">
           Building modern web experiences with Vue, Nuxt & cutting-edge tech.
         </p>
-
         <div
-          class="flex flex-col lg:flex-row gap-4 justify-center lg:justify-start"
+          class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
         >
           <NuxtLink
             to="/contact"
@@ -28,128 +31,26 @@
         </div>
       </div>
 
-      <div
-        class="relative flex-1 mt-12 lg:mt-0 flex justify-center items-center"
-      >
+      <div class="relative flex-1 flex flex-col items-center justify-center">
+        <img
+          src="/assets/profile.png"
+          alt="Antoine Gourgue"
+          class="w-3/4 sm:w-2/3 md:w-1/2 lg:w-auto max-w-[100%] h-auto object-contain z-20"
+        />
         <div
-          class="absolute w-[20rem] h-[20rem] animate-spin-slow rounded-full flex justify-center items-center"
+          class="absolute top-4 right-4 lg:top-12 lg:right-12 transform rotate-90 text-gray-300 text-sm sm:text-xl lg:text-2xl tracking-widest"
         >
-          <div
-            v-for="(logo, index) in logos"
-            :key="index"
-            class="absolute opacity-10"
-            :style="{
-              transform: `rotate(${index * (360 / logos.length)}deg) translate(9rem) rotate(-${index * (360 / logos.length)}deg)`,
-            }"
-          >
-            <img
-              :src="logo.src"
-              :alt="logo.alt"
-              class="w-8 h-8 lg:w-10 lg:h-10 object-contain"
-            />
-          </div>
+          PORTFOLIO 2025
         </div>
-        <AgLogo
-          class="w-48 h-48 lg:w-64 lg:h-64 relative z-10 transition-transform duration-500 hover:scale-105"
+      </div>
+
+      <div class="absolute inset-0 z-0 opacity-70">
+        <img
+          src="/assets/abstract-bg.svg"
+          class="w-full h-full object-cover"
+          alt="abstract"
         />
       </div>
-    </section>
-
-    <section class="max-w-6xl mx-auto mt-24 px-6 text-center lg:text-left">
-      <div class="flex flex-col lg:flex-row items-center gap-12">
-        <div class="flex-1">
-          <h3 class="text-4xl font-bold mb-6">About Me</h3>
-          <p class="text-gray-600 leading-relaxed mb-4">
-            MSc student at
-            <span class="font-semibold text-black">Epitech Rennes</span> &
-            apprentice at
-            <span class="font-semibold text-black">Digitaleo</span>.
-          </p>
-          <p class="text-gray-600 leading-relaxed mb-6">
-            I specialize in crafting performant fullstack applications, blending
-            technical precision with intuitive UX.
-          </p>
-          <div class="flex flex-wrap gap-4">
-            <span class="bg-gray-100 px-4 py-2 rounded-full text-sm shadow-sm"
-              >Problem Solver</span
-            >
-            <span class="bg-gray-100 px-4 py-2 rounded-full text-sm shadow-sm"
-              >Team Player</span
-            >
-            <span class="bg-gray-100 px-4 py-2 rounded-full text-sm shadow-sm"
-              >Clean Code Advocate</span
-            >
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="max-w-6xl mx-auto mt-24 px-6 text-center">
-      <h3 class="text-4xl font-bold mb-12">What I Do</h3>
-      <div class="grid md:grid-cols-3 gap-12">
-        <div class="flex flex-col items-center gap-4">
-          <i class="fa-solid fa-code text-5xl text-black mb-4"></i>
-          <h4 class="text-xl font-semibold">Frontend</h4>
-          <p class="text-gray-600 text-sm max-w-xs">
-            Vue, Nuxt, Tailwind — pixel-perfect UIs & smooth interactions.
-          </p>
-        </div>
-        <div class="flex flex-col items-center gap-4">
-          <i class="fa-solid fa-server text-5xl text-black mb-4"></i>
-          <h4 class="text-xl font-semibold">Backend</h4>
-          <p class="text-gray-600 text-sm max-w-xs">
-            APIs & microservices using AdonisJS, Node.js, scalable & secure.
-          </p>
-        </div>
-        <div class="flex flex-col items-center gap-4">
-          <i class="fa-solid fa-laptop-code text-5xl text-black mb-4"></i>
-          <h4 class="text-xl font-semibold">DevOps</h4>
-          <p class="text-gray-600 text-sm max-w-xs">
-            Dockerized environments & CI/CD pipelines for seamless deployment.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="max-w-6xl mx-auto mt-24 px-6 text-center">
-      <h3 class="text-4xl font-bold mb-12">Recent Projects</h3>
-      <div class="grid md:grid-cols-2 gap-12">
-        <div
-          class="flex flex-col items-start bg-white p-6 rounded-xl shadow-sm"
-        >
-          <h4 class="text-lg font-semibold mb-2">E-Commerce Dashboard</h4>
-          <p class="text-gray-600 text-sm mb-4">
-            Built with Nuxt 3 & AdonisJS. Includes custom admin panel, charts, &
-            secure API.
-          </p>
-          <NuxtLink to="/projects" class="text-sm text-blue-600 hover:underline"
-            >View Project →</NuxtLink
-          >
-        </div>
-        <div
-          class="flex flex-col items-start bg-white p-6 rounded-xl shadow-sm"
-        >
-          <h4 class="text-lg font-semibold mb-2">Portfolio Website</h4>
-          <p class="text-gray-600 text-sm mb-4">
-            Crafted using Vue 3, Tailwind, fully responsive, smooth transitions.
-          </p>
-          <NuxtLink to="/projects" class="text-sm text-blue-600 hover:underline"
-            >View Project →</NuxtLink
-          >
-        </div>
-      </div>
-    </section>
-
-    <section class="bg-black text-white py-20 mt-32 text-center px-6">
-      <h3 class="text-4xl font-bold mb-4">Let’s Build Something Great</h3>
-      <p class="text-gray-400 mb-8">
-        Interested in working together? Let's connect and make it happen.
-      </p>
-      <NuxtLink
-        to="/contact"
-        class="bg-white text-black px-8 py-3 rounded-full hover:bg-gray-200 transition"
-        >Get In Touch</NuxtLink
-      >
     </section>
 
     <div
@@ -162,24 +63,118 @@
         <div class="w-1 h-1 bg-gray-400 rounded-full mb-1"></div>
       </div>
     </div>
+
+    <section class="py-20 bg-white text-center px-6 relative overflow-hidden">
+      <div class="absolute inset-0 opacity-35">
+        <img
+          src="/assets/shape.svg"
+          class="w-full h-full object-cover"
+          alt="Shape"
+        />
+      </div>
+      <div class="relative z-10">
+        <h3 class="text-2xl font-bold mb-6">About Me</h3>
+        <p class="text-gray-600 max-w-2xl mx-auto mb-8">
+          I'm a passionate Fullstack Developer currently pursuing a Master's
+          Degree at Epitech Rennes, while gaining real-world experience through
+          my apprenticeship at Digitaleo. I enjoy building modern, scalable web
+          applications using Vue, Nuxt, and TypeScript.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <span class="bg-black text-white px-4 py-2 rounded-full text-sm"
+            >Vue.js</span
+          >
+          <span class="bg-black text-white px-4 py-2 rounded-full text-sm"
+            >Nuxt</span
+          >
+          <span class="bg-black text-white px-4 py-2 rounded-full text-sm"
+            >TypeScript</span
+          >
+          <span class="bg-black text-white px-4 py-2 rounded-full text-sm"
+            >Docker</span
+          >
+        </div>
+        <p class="italic text-gray-500 mt-8">
+          "Crafting clean & scalable web experiences, one line of code at a
+          time."
+        </p>
+      </div>
+    </section>
+
+    <section class="py-24 bg-gray-50 flex flex-col items-center relative">
+      <h4
+        class="text-lg font-semibold mb-10 tracking-wide uppercase text-gray-700"
+      >
+        Technologies I Work With
+      </h4>
+      <div class="flex flex-wrap justify-center gap-12 opacity-80 max-w-5xl">
+        <img
+          v-for="(logo, index) in logos"
+          :key="index"
+          :src="logo.src"
+          :alt="logo.alt"
+          class="h-12 w-auto grayscale hover:grayscale-0 transition"
+        />
+      </div>
+    </section>
+
+    <section class="py-28 bg-white px-6 relative">
+      <h3 class="text-2xl font-bold mb-16 text-center">My Journey</h3>
+      <div class="max-w-4xl mx-auto space-y-20">
+        <div class="flex items-start">
+          <div class="text-5xl font-bold text-gray-300 w-28 text-right">
+            2024
+          </div>
+          <div class="ml-8 border-l-2 border-gray-200 pl-8 relative">
+            <div
+              class="absolute w-3 h-3 bg-black rounded-full -left-1.5 top-2"
+            ></div>
+            <h4 class="font-semibold text-lg mb-3">
+              Fullstack Developer - Digitaleo
+            </h4>
+            <p class="text-gray-600 mb-2">2024 - 2026</p>
+            <p class="text-gray-500 leading-relaxed">
+              In charge of developing and maintaining the email editor of the
+              platform, ensuring smooth UX and strong compatibility (Outlook,
+              responsive...).
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-start">
+          <div class="text-5xl font-bold text-gray-300 w-28 text-right">
+            2023
+          </div>
+          <div class="ml-8 border-l-2 border-gray-200 pl-8 relative">
+            <div
+              class="absolute w-3 h-3 bg-black rounded-full -left-1.5 top-2"
+            ></div>
+            <h4 class="font-semibold text-lg mb-3">
+              Master's Degree - Epitech Rennes
+            </h4>
+            <p class="text-gray-600 mb-2">2023 - 2026</p>
+            <p class="text-gray-500 leading-relaxed">
+              Specializing in Artificial Intelligence & Data, focusing on
+              machine learning, data science, and innovative solutions.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 </template>
 
 <script setup lang="ts">
-import AgLogo from '~/components/ui/AGLogo.vue'
-
-const logos = [
-  { src: '/assets/vuedotjs.svg', alt: 'Vue.js' },
-  { src: '/assets/nuxt.svg', alt: 'Nuxt' },
-  { src: '/assets/typescript.svg', alt: 'TypeScript' },
-  { src: '/assets/tailwindcss.svg', alt: 'Tailwind CSS' },
-  { src: '/assets/vite.svg', alt: 'Vite' },
-  { src: '/assets/docker.svg', alt: 'Docker' },
-  { src: '/assets/git.svg', alt: 'Git' },
-  { src: '/assets/github.svg', alt: 'GitHub' },
-  { src: '/assets/adonisjs.svg', alt: 'AdonisJS' },
-]
 const showIndicator = ref(true)
+const logos = [
+  { src: '/assets/vuedotjs.svg', alt: 'Vue' },
+  { src: '/assets/nuxt.svg', alt: 'Nuxt' },
+  { src: '/assets/nodedotjs.svg', alt: 'Node.js' },
+  { src: '/assets/docker.svg', alt: 'Docker' },
+  { src: '/assets/typescript.svg', alt: 'TypeScript' },
+  { src: '/assets/github.svg', alt: 'Github' },
+]
+
 const handleScroll = () => {
   showIndicator.value = window.scrollY < 200
 }
@@ -192,28 +187,3 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
 </script>
-
-<style scoped>
-@keyframes spin-slow {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-.animate-spin-slow {
-  animation: spin-slow 90s linear infinite;
-}
-@keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-7px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
-}
-</style>
