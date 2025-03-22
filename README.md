@@ -1,75 +1,69 @@
-# Nuxt Minimal Starter
+# Antoine Gourgue — Portfolio
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Welcome to my personal portfolio! 🚀  
+A clean, modern, and professional showcase of my projects, services, and experience as a Fullstack Developer.
 
-## Setup
+## 🌐 Live Website
 
-Make sure to install dependencies:
+[https://antoine-gourgue.vercel.app](https://antoine-gourgue.vercel.app)
+
+---
+
+## 📄 Features
+
+- 💻 Fully responsive design, inspired by Apple's minimal aesthetics
+- 🚀 Animated navigation and smooth page transitions
+- 📂 Dynamic Projects page fetching from GitHub API
+- 📰 Blog section pulling external mentions using Google Custom Search API
+- 📬 Contact form with email integration via SMTP
+- ⚙️ Simple, modular component architecture with reusable UI elements
+- 🎨 Built with modern technologies (Nuxt 3, TypeScript, Tailwind CSS)
+
+---
+
+## 🛠️ Tech Stack
+
+- **Nuxt 3** (Vue 3 + Composition API + TypeScript)
+- **Tailwind CSS** for styling
+- **Font Awesome & Feather Icons**
+- **Vercel** for deployment & hosting
+- **Google Custom Search API** (Blog mentions)
+- **Nodemailer** (Contact form email integration)
+
+---
+
+## 🚀 Local Setup
 
 ```bash
-# npm
+# Clone the repository
+git clone https://github.com/antoine-gourgue/portfolio.git
+cd portfolio
+
+# Install dependencies
 npm install
 
-# pnpm
-pnpm install
+# Create your .env file
+cp .env.example .env
+# Fill in your environment variables (SMTP, GitHub token, Google API key, etc.)
 
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
+# Start development server
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+# Environment variables
 
-Build the application for production:
+    GITHUB_TOKEN=your_github_token
 
-```bash
-# npm
-npm run build
+# Email Contact (SMTP)
 
-# pnpm
-pnpm build
+    MAIL_HOST=smtp.example.com
+    MAIL_PORT=465
+    MAIL_USER=youremail@example.com
+    MAIL_PASS=yourpassword
+    MAIL_FROM=youremail@example.com
+    MAIL_TO=youremail@example.com
 
-# yarn
-yarn build
+# Google Custom Search API
 
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+    GOOGLE_API_KEY=your_google_api_key
+    GOOGLE_CX_ID=your_custom_search_engine_id

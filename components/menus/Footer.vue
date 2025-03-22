@@ -1,9 +1,9 @@
 <template>
   <footer
-    class="w-full bg-white bg-opacity-80 backdrop-blur-md border-t border-gray-200 shadow-md py-4 px-6"
+    class="hidden lg:block w-full bg-white bg-opacity-80 backdrop-blur-md border-t border-gray-200 shadow-md py-4 px-6"
   >
     <div
-      class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0"
+      class="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0"
     >
       <div class="flex items-center space-x-3 text-sm text-gray-600">
         <AgLogo class="w-8 h-8" />
