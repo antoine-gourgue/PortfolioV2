@@ -2,7 +2,7 @@
   <main
     class="bg-gray-50 min-h-screen px-6 lg:px-20 py-32 relative overflow-hidden"
   >
-    <div class="absolute inset-0 opacity-50 pointer-events-none">
+    <div class="absolute inset-0 opacity-70 pointer-events-none">
       <img
         src="/assets/shape.svg"
         alt="background"
@@ -14,7 +14,7 @@
       class="relative z-10 max-w-5xl mx-auto text-center mb-20 fade-in-up"
     >
       <h1 class="text-5xl lg:text-6xl font-extrabold mb-6 leading-tight">
-        Featured In
+        Featured In.
       </h1>
       <p class="text-gray-600 max-w-2xl mx-auto text-lg leading-relaxed">
         Discover articles, interviews, and mentions about my work.

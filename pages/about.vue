@@ -4,7 +4,7 @@
       class="flex flex-col lg:flex-row items-center justify-center px-6 lg:px-20 py-32 gap-16 fade-in-up"
     >
       <div class="flex-1 text-left">
-        <h1 class="text-5xl lg:text-7xl font-extrabold leading-tight mb-10">
+        <h1 class="text-6xl lg:text-7xl font-extrabold leading-tight mb-10">
           Passion. <br />
           Precision. <br />
           Progression.
@@ -19,7 +19,7 @@
         <img
           src="/assets/profile.png"
           alt="Antoine Gourgue"
-          class="w-full max-w-md lg:max-w-3xl object-contain transform transition duration-700 hover:scale-105"
+          class="w-full max-w-md lg:max-w-3xl object-contain"
         />
       </div>
       <div class="absolute inset-0 -z-50 opacity-70">

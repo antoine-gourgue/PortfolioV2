@@ -11,7 +11,7 @@
     </div>
 
     <div class="relative z-10 fade-in-up">
-      <h1 class="text-5xl font-extrabold text-center mb-6">My Projects</h1>
+      <h1 class="text-6xl font-extrabold text-center mb-6">My Projects.</h1>
 
       <p
         class="text-center text-gray-600 max-w-2xl mx-auto mb-12 leading-relaxed"

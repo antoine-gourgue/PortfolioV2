@@ -11,7 +11,7 @@
     </div>
 
     <div class="relative z-10 max-w-3xl mx-auto text-center fade-in-up">
-      <h1 class="text-6xl lg:text-7xl font-extrabold mb-6 leading-tight">
+      <h1 class="text-6xl lg:text-6xl font-extrabold mb-6 leading-tight">
         Let's Connect.
       </h1>
 

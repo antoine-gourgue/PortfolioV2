@@ -24,7 +24,7 @@
             >Contact Me</NuxtLink
           >
           <NuxtLink
-            to="/resume"
+            to="/about"
             class="border border-black text-black px-6 py-3 rounded-full hover:bg-gray-100 transition"
             >Download CV</NuxtLink
           >
@@ -38,7 +38,7 @@
           class="w-3/4 sm:w-2/3 md:w-1/2 lg:w-auto max-w-[100%] h-auto object-contain z-20"
         />
         <div
-          class="absolute top-4 right-4 lg:top-12 lg:right-12 transform rotate-90 text-gray-300 text-sm sm:text-xl lg:text-2xl tracking-widest"
+          class="absolute top-4 right-4 lg:top-12 lg:left-72 transform rotate-90 text-gray-300 text-sm sm:text-xl lg:text-6xl tracking-widest"
         >
           PORTFOLIO 2025
         </div>
