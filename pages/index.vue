@@ -1,7 +1,7 @@
 <template>
   <main class="relative overflow-hidden bg-gray-50">
     <section
-      class="min-h-screen flex flex-col lg:flex-row items-center justify-center text-center lg:text-left px-4 sm:px-6 lg:px-20 gap-12 relative"
+      class="min-h-screen flex flex-col lg:flex-row items-center justify-center text-center lg:text-left px-4 sm:px-6 lg:px-20 gap-12 relative fade-in-up"
     >
       <div
         class="flex-1 z-10 animate-fade-in flex flex-col items-center lg:items-start"
@@ -187,3 +187,17 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
 </script>
+
+<style>
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 0.8s ease forwards;
+}
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+</style>

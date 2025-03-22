@@ -167,16 +167,9 @@ const languageSVGs: Record<string, string> = {
 
 const currentPage = ref(1)
 const itemsPerPage = 6
-const config = useRuntimeConfig()
-const { data: projects, error } = await useFetch<GithubRepo[]>(
-  () => `https://api.github.com/users/antoine-gourgue/repos`,
-  {
-    headers: {
-      Authorization: `token ${config.githubToken}`,
-    },
-    params: { per_page: 100 },
-  }
-)
+const { data: projects, error } = useFetch<GithubRepo[]>('/api/github', {
+  server: true,
+})
 
 const sortedProjects = computed(() => {
   if (!projects.value) return []

@@ -22,6 +22,13 @@
           class="w-full max-w-md lg:max-w-3xl object-contain transform transition duration-700 hover:scale-105"
         />
       </div>
+      <div class="absolute inset-0 -z-50 opacity-70">
+        <img
+          src="/assets/abstract-bg.svg"
+          class="w-full h-full object-cover"
+          alt="abstract"
+        />
+      </div>
     </section>
 
     <div
