@@ -46,7 +46,7 @@
   </nav>
 
   <nav
-    class="lg:hidden fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white bg-opacity-80 shadow-xl rounded-full px-6 py-3 flex justify-between items-center w-[90%] max-w-md border border-gray-200 z-50"
+    class="lg:hidden fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white bg-opacity-80 backdrop-blur-md shadow-xl rounded-full px-6 py-3 flex justify-between items-center w-[90%] max-w-md border border-gray-200 z-50"
   >
     <NuxtLink to="/" class="bottom-link" :class="isActiveMobile('/')">
       <i
