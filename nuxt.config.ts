@@ -18,4 +18,5 @@ export default defineNuxtConfig({
   runtimeConfig: {
     githubToken: process.env.VITE_GITHUB_TOKEN,
   },
+  ssr: true,
 })

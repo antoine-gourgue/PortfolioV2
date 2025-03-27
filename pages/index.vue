@@ -23,10 +23,11 @@
             class="bg-black text-white px-6 py-3 rounded-full hover:bg-gray-800 transition"
             >Contact Me</NuxtLink
           >
-          <NuxtLink
-            to="/about"
+          <a
+            href="/assets/antoinegourgue-cv.pdf"
+            download
             class="border border-black text-black px-6 py-3 rounded-full hover:bg-gray-100 transition"
-            >Download CV</NuxtLink
+            >Download CV</a
           >
         </div>
       </div>
