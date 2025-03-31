@@ -12,25 +12,27 @@
       >
     </div>
 
-    <div
-      class="relative flex items-center group cursor-pointer"
-      @mouseenter="hovered = true"
-      @mouseleave="hovered = false"
-    >
-      <AgLogo
-        class="w-12 h-10 transition-transform duration-300 ease-in-out"
-        :class="{ '-translate-x-8': hovered }"
-      />
-      <transition name="fade-slide">
-        <div
-          v-if="hovered"
-          class="absolute left-0 ml-2 flex flex-col text-gray-700 text-xs font-light whitespace-nowrap transition-all duration-300 ease-in-out"
-        >
-          <span>Made by</span>
-          <span class="font-semibold">Antoine</span>
-        </div>
-      </transition>
-    </div>
+    <NuxtLink to="/">
+      <div
+        class="relative flex items-center group cursor-pointer"
+        @mouseenter="hovered = true"
+        @mouseleave="hovered = false"
+      >
+        <AgLogo
+          class="w-12 h-10 transition-transform duration-300 ease-in-out"
+          :class="{ '-translate-x-8': hovered }"
+        />
+        <transition name="fade-slide">
+          <div
+            v-if="hovered"
+            class="absolute left-0 ml-2 flex flex-col text-gray-700 text-xs font-light whitespace-nowrap transition-all duration-300 ease-in-out"
+          >
+            <span>Made by</span>
+            <span class="font-semibold">Antoine</span>
+          </div>
+        </transition>
+      </div>
+    </NuxtLink>
 
     <div class="flex items-center space-x-4">
       <NuxtLink to="/blog" class="nav-link" :class="isActive('/blog')"

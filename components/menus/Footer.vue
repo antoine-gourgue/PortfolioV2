@@ -6,7 +6,9 @@
       class="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0"
     >
       <div class="flex items-center space-x-3 text-sm text-gray-600">
-        <AgLogo class="w-8 h-8" />
+        <NuxtLink to="/">
+          <AgLogo class="w-8 h-8" />
+        </NuxtLink>
         <span>© 2025 Antoine Gourgue</span>
       </div>
 
