@@ -11,6 +11,7 @@
         id="transition-overlay"
         class="fixed inset-0 bg-gray-200 z-50 pointer-events-none scale-0 opacity-0 transition-transform duration-700 origin-center"
       ></div>
+      <ChatAssistant />
     </NuxtLayout>
   </MetaSeoLayout>
 </template>
@@ -19,6 +20,7 @@
 import { Analytics } from '@vercel/analytics/nuxt'
 import { SpeedInsights } from '@vercel/speed-insights/nuxt'
 import MetaSeoLayout from '~/layouts/MetaSeoLayout.vue'
+import ChatAssistant from '~/components/assistant/ChatAssistant.vue'
 </script>
 
 <style>

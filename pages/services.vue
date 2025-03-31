@@ -83,7 +83,8 @@
     <section class="relative z-10 text-center mt-20 fade-in-up">
       <p class="text-gray-500 text-sm">
         Interested in working together in the future? Don’t hesitate to
-        <a href="/contact" class="text-black underline">reach out</a>.
+        <NuxtLink to="/contact" class="text-black underline">reach out</NuxtLink
+        >.
       </p>
     </section>
   </main>
