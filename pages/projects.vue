@@ -133,6 +133,37 @@
         Next
       </button>
     </div>
+
+    <div class="relative z-10 fade-in-up mt-20">
+      <h2 class="text-4xl font-bold text-center mb-10">Online Projects</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+        <a
+          v-for="project in onlineProjects"
+          :key="project.url"
+          :href="project.url"
+          target="_blank"
+          class="border border-gray-200 rounded-2xl bg-white p-6 shadow-sm hover:shadow-lg transition transform hover:-translate-y-1 hover:border-gray-400 flex flex-col justify-between min-h-[220px] group"
+        >
+          <div>
+            <h3
+              class="font-bold text-lg mb-4 text-gray-800 group-hover:underline"
+            >
+              {{ project.name }}
+            </h3>
+            <p class="text-sm text-gray-600">{{ project.description }}</p>
+          </div>
+
+          <div v-if="project.image" class="mt-4">
+            <img
+              :src="project.image"
+              :alt="project.name"
+              class="rounded-lg w-full object-cover"
+            />
+          </div>
+        </a>
+      </div>
+    </div>
   </main>
 </template>
 
@@ -146,6 +177,36 @@ interface GithubRepo {
   language: string | null
   updated_at: string
 }
+interface OnlineProject {
+  name: string
+  url: string
+  description: string
+  image?: string
+}
+
+const onlineProjects = ref<OnlineProject[]>([
+  {
+    name: 'Medical-AI-Detection',
+    url: 'https://medical-ai.antoinegourgue.dev/',
+    description:
+      'A deep learning-powered web application that assists in detecting medical conditions from chest X-ray images. Built for research and educational purposes.',
+    image: '/assets/medical-ai-thumb.png',
+  },
+  {
+    name: 'Portfolio',
+    url: 'https://antoinegourgue.dev/',
+    description:
+      'My personal developer portfolio showcasing projects, skills, and experience. Built with Vue.js, Nuxt, and Tailwind CSS for a clean and modern design.',
+    image: '/assets/portfolio-thumb.png',
+  },
+  {
+    name: 'Trinity Shop',
+    url: 'https://trinity.antoinegourgue.dev/',
+    description:
+      'An e-commerce platform built with Vue.js and Tailwind CSS, featuring a modern design and user-friendly interface. Explore products, manage your cart, and enjoy a seamless shopping experience.',
+    image: '/assets/trinity-shop-thumb.png',
+  },
+])
 
 const selectedLang = ref('All')
 const languages = ref(['All', 'Vue', 'TypeScript', 'Other'])
