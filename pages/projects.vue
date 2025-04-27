@@ -199,13 +199,6 @@ const onlineProjects = ref<OnlineProject[]>([
       'My personal developer portfolio showcasing projects, skills, and experience. Built with Vue.js, Nuxt, and Tailwind CSS for a clean and modern design.',
     image: '/assets/portfolio-thumb.png',
   },
-  {
-    name: 'Trinity Shop',
-    url: 'https://trinity.antoinegourgue.dev/',
-    description:
-      'An e-commerce platform built with Vue.js and Tailwind CSS, featuring a modern design and user-friendly interface. Explore products, manage your cart, and enjoy a seamless shopping experience.',
-    image: '/assets/trinity-shop-thumb.png',
-  },
 ])
 
 const selectedLang = ref('All')

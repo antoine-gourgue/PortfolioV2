@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="hidden sm:block">
     <button
       class="fixed bottom-6 right-6 z-50 bg-black text-white p-4 rounded-full shadow-lg hover:scale-105 transition duration-300"
       @click="toggleChat"
