@@ -14,7 +14,11 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@nuxt/image', '@nuxt/icon'],
+  modules: ['@nuxt/image', '@nuxt/icon', '@nuxtjs/sitemap', '@nuxtjs/robots'],
+  site: {
+    url: 'https://antoinegourgue.dev',
+    name: 'Antoine Gourgue',
+  },
   runtimeConfig: {
     githubToken: process.env.VITE_GITHUB_TOKEN,
   },
