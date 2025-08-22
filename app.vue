@@ -21,6 +21,16 @@ import { Analytics } from '@vercel/analytics/nuxt'
 import { SpeedInsights } from '@vercel/speed-insights/nuxt'
 import MetaSeoLayout from '~/layouts/MetaSeoLayout.vue'
 import ChatAssistant from '~/components/assistant/ChatAssistant.vue'
+
+useHead({
+  script: [
+    {
+      src: 'https://antoinegourgue.dev/script.js',
+      async: true,
+      'data-website-id': '59c1f287-b36f-454d-b1e1-f16c213d1e89',
+    },
+  ],
+})
 </script>
 
 <style>
