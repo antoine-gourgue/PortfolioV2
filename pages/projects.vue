@@ -199,6 +199,13 @@ const onlineProjects = ref<OnlineProject[]>([
       'My personal developer portfolio showcasing projects, skills, and experience. Built with Vue.js, Nuxt, and Tailwind CSS for a clean and modern design.',
     image: '/assets/portfolio-thumb.png',
   },
+  {
+    name: 'Crypto Viewer',
+    url: 'https://crypto-app.antoinegourgue.dev/',
+    description:
+      'A real-time crypto news analytics web app that aggregates feeds, detects tickers, and computes 24-hour momentum to surface trends, built for learning and demo purposes.',
+    image: '/assets/crypto-viewer-thumb.png',
+  },
 ])
 
 const selectedLang = ref('All')
