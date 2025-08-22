@@ -25,7 +25,7 @@ import ChatAssistant from '~/components/assistant/ChatAssistant.vue'
 useHead({
   script: [
     {
-      src: 'https://crypto-analytics.antoinegourgue.dev/script.js',
+      src: 'https://umami.antoinegourgue.dev/script.js',
       async: true,
       'data-website-id': '59c1f287-b36f-454d-b1e1-f16c213d1e89',
     },
