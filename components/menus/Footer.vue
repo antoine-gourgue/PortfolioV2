@@ -9,36 +9,45 @@
         <NuxtLink to="/">
           <AgLogo class="w-8 h-8" />
         </NuxtLink>
-        <span>© 2025 Antoine Gourgue</span>
+        <span>{{ $t('footer.copyright') }}</span>
       </div>
 
       <nav class="flex space-x-6 text-sm text-gray-600">
-        <NuxtLink to="/" class="footer-link" :class="isActive('/')"
-          >Home</NuxtLink
-        >
-        <NuxtLink to="/about" class="footer-link" :class="isActive('/about')"
-          >About</NuxtLink
+        <NuxtLink
+          :to="localePath('/')"
+          class="footer-link"
+          :class="isActive('/')"
+          >{{ $t('nav.home') }}</NuxtLink
         >
         <NuxtLink
-          to="/services"
+          :to="localePath('/about')"
+          class="footer-link"
+          :class="isActive('/about')"
+          >{{ $t('nav.about') }}</NuxtLink
+        >
+        <NuxtLink
+          :to="localePath('/services')"
           class="footer-link"
           :class="isActive('/services')"
-          >Services</NuxtLink
+          >{{ $t('nav.services') }}</NuxtLink
         >
         <NuxtLink
-          to="/projects"
+          :to="localePath('/projects')"
           class="footer-link"
           :class="isActive('/projects')"
-          >Projects</NuxtLink
-        >
-        <NuxtLink to="/blog" class="footer-link" :class="isActive('/blog')"
-          >Blog</NuxtLink
+          >{{ $t('nav.projects') }}</NuxtLink
         >
         <NuxtLink
-          to="/contact"
+          :to="localePath('/blog')"
+          class="footer-link"
+          :class="isActive('/blog')"
+          >{{ $t('nav.blog') }}</NuxtLink
+        >
+        <NuxtLink
+          :to="localePath('/contact')"
           class="footer-link"
           :class="isActive('/contact')"
-          >Contact</NuxtLink
+          >{{ $t('nav.contact') }}</NuxtLink
         >
       </nav>
 
@@ -67,9 +76,12 @@ import { useRoute } from 'vue-router'
 import AgLogo from '~/components/ui/AGLogo.vue'
 
 const route = useRoute()
+const localePath = useLocalePath()
 
-const isActive = (path: string) =>
-  route.path === path ? 'active-footer-link' : ''
+const isActive = (path: string) => {
+  const currentPath = route.path.replace(/^\/[a-z]{2}(\/|$)/, '/')
+  return currentPath === path ? 'active-footer-link' : ''
+}
 </script>
 
 <style scoped>

@@ -14,12 +14,10 @@
       class="relative z-10 max-w-5xl mx-auto text-center mb-20 fade-in-up"
     >
       <h1 class="text-5xl lg:text-6xl font-extrabold mb-6 leading-tight">
-        Services.
+        {{ $t('services.title') }}
       </h1>
       <p class="text-gray-600 max-w-2xl mx-auto text-lg leading-relaxed">
-        Currently focused on my studies and role at Digitaleo. I’m not available
-        for freelance projects at the moment, but feel free to get in touch for
-        future opportunities.
+        {{ $t('services.description') }}
       </p>
     </section>
 
@@ -30,65 +28,79 @@
         class="border border-gray-200 rounded-2xl bg-white p-6 shadow-sm flex flex-col items-center text-center"
       >
         <i class="fas fa-laptop-code text-4xl text-gray-700 mb-4"></i>
-        <h3 class="font-bold text-xl mb-3">Fullstack Development</h3>
+        <h3 class="font-bold text-xl mb-3">
+          {{ $t('services.fullstack.title') }}
+        </h3>
         <p class="text-gray-500">
-          Vue.js, AngularJS, TypeScript, PHP, REST APIs
+          {{ $t('services.fullstack.description') }}
         </p>
       </div>
       <div
         class="border border-gray-200 rounded-2xl bg-white p-6 shadow-sm flex flex-col items-center text-center"
       >
         <i class="fas fa-cogs text-4xl text-gray-700 mb-4"></i>
-        <h3 class="font-bold text-xl mb-3">DevOps & CI/CD</h3>
-        <p class="text-gray-500">Docker, GitLab CI, Vercel, GitHub Actions</p>
+        <h3 class="font-bold text-xl mb-3">
+          {{ $t('services.devops.title') }}
+        </h3>
+        <p class="text-gray-500">{{ $t('services.devops.description') }}</p>
       </div>
       <div
         class="border border-gray-200 rounded-2xl bg-white p-6 shadow-sm flex flex-col items-center text-center"
       >
         <i class="fas fa-envelope text-4xl text-gray-700 mb-4"></i>
-        <h3 class="font-bold text-xl mb-3">Email Integration</h3>
+        <h3 class="font-bold text-xl mb-3">{{ $t('services.email.title') }}</h3>
         <p class="text-gray-500">
-          VML, Outlook-specific integration, responsive emails
+          {{ $t('services.email.description') }}
         </p>
       </div>
       <div
         class="border border-gray-200 rounded-2xl bg-white p-6 shadow-sm flex flex-col items-center text-center"
       >
         <i class="fas fa-brain text-4xl text-gray-700 mb-4"></i>
-        <h3 class="font-bold text-xl mb-3">AI & Data Projects</h3>
+        <h3 class="font-bold text-xl mb-3">{{ $t('services.ai.title') }}</h3>
         <p class="text-gray-500">
-          Machine Learning, CNN models, Data exploration
+          {{ $t('services.ai.description') }}
         </p>
       </div>
       <div
         class="border border-gray-200 rounded-2xl bg-white p-6 shadow-sm flex flex-col items-center text-center"
       >
         <i class="fas fa-palette text-4xl text-gray-700 mb-4"></i>
-        <h3 class="font-bold text-xl mb-3">Design System Integration</h3>
+        <h3 class="font-bold text-xl mb-3">
+          {{ $t('services.design.title') }}
+        </h3>
         <p class="text-gray-500">
-          Custom components, theming, internal design systems
+          {{ $t('services.design.description') }}
         </p>
       </div>
       <div
         class="border border-gray-200 rounded-2xl bg-white p-6 shadow-sm flex flex-col items-center text-center"
       >
         <i class="fas fa-tasks text-4xl text-gray-700 mb-4"></i>
-        <h3 class="font-bold text-xl mb-3">Collaboration & Tools</h3>
+        <h3 class="font-bold text-xl mb-3">
+          {{ $t('services.collaboration.title') }}
+        </h3>
         <p class="text-gray-500">
-          Git, Jira, Agile methods, efficient teamwork practices
+          {{ $t('services.collaboration.description') }}
         </p>
       </div>
     </section>
 
     <section class="relative z-10 text-center mt-20 fade-in-up">
       <p class="text-gray-500 text-sm">
-        Interested in working together in the future? Don’t hesitate to
-        <NuxtLink to="/contact" class="text-black underline">reach out</NuxtLink
+        {{ $t('services.interested') }}
+        <NuxtLink :to="localePath('/contact')" class="text-black underline">{{
+          $t('services.reachOut')
+        }}</NuxtLink
         >.
       </p>
     </section>
   </main>
 </template>
+
+<script setup lang="ts">
+const localePath = useLocalePath()
+</script>
 
 <style scoped>
 .fade-in-up {

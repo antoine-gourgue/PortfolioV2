@@ -11,14 +11,14 @@
     </div>
 
     <div class="relative z-10 fade-in-up">
-      <h1 class="text-6xl font-extrabold text-center mb-6">My Projects.</h1>
+      <h1 class="text-6xl font-extrabold text-center mb-6">
+        {{ $t('projects.title') }}
+      </h1>
 
       <p
         class="text-center text-gray-600 max-w-2xl mx-auto mb-12 leading-relaxed"
       >
-        A curated collection of personal and academic projects showcasing my
-        journey as a Fullstack Developer. From web applications to technical
-        experiments, each project reflects my passion and progression.
+        {{ $t('projects.description') }}
       </p>
 
       <div class="flex flex-wrap justify-center gap-4 mb-12 fade-in-up">
@@ -43,9 +43,9 @@
       class="flex flex-col items-center justify-center text-center text-red-500 mb-12 space-y-4"
     >
       <i class="fas fa-exclamation-triangle text-4xl"></i>
-      <p class="text-lg font-semibold">Failed to load projects.</p>
+      <p class="text-lg font-semibold">{{ $t('projects.error') }}</p>
       <p class="text-sm text-gray-500">
-        Please try refreshing or check back later.
+        {{ $t('projects.errorDescription') }}
       </p>
     </div>
 
@@ -54,9 +54,9 @@
       class="flex flex-col items-center justify-center text-center text-gray-400 mb-12 space-y-4 animate-pulse"
     >
       <i class="fas fa-spinner fa-spin text-4xl"></i>
-      <p class="text-lg font-semibold">Loading projects...</p>
+      <p class="text-lg font-semibold">{{ $t('projects.loading') }}</p>
       <p class="text-sm text-gray-500">
-        Fetching the latest repositories from GitHub.
+        {{ $t('projects.loadingDescription') }}
       </p>
     </div>
 
@@ -90,7 +90,7 @@
               />
             </div>
             <span class="text-sm text-gray-500">{{
-              project.language || 'Other'
+              project.language || t('projects.other')
             }}</span>
           </div>
 
@@ -123,19 +123,21 @@
         class="px-4 py-2 rounded-full border border-gray-300 hover:bg-gray-100 disabled:opacity-50"
         @click="prevPage"
       >
-        Previous
+        {{ $t('projects.previous') }}
       </button>
       <button
         :disabled="currentPage === totalPages"
         class="px-4 py-2 rounded-full border border-gray-300 hover:bg-gray-100 disabled:opacity-50"
         @click="nextPage"
       >
-        Next
+        {{ $t('projects.next') }}
       </button>
     </div>
 
     <div class="relative z-10 fade-in-up mt-20">
-      <h2 class="text-4xl font-bold text-center mb-10">Online Projects</h2>
+      <h2 class="text-4xl font-bold text-center mb-10">
+        {{ $t('projects.onlineProjects') }}
+      </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
         <a
@@ -169,6 +171,9 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useI18n } from '#imports'
+
+const { t } = useI18n()
 
 interface GithubRepo {
   id: number
@@ -208,8 +213,13 @@ const onlineProjects = ref<OnlineProject[]>([
   },
 ])
 
-const selectedLang = ref('All')
-const languages = ref(['All', 'Vue', 'TypeScript', 'Other'])
+const selectedLang = ref(t('projects.all'))
+const languages = computed(() => [
+  t('projects.all'),
+  'Vue',
+  'TypeScript',
+  t('projects.other'),
+])
 
 const languageSVGs: Record<string, string> = {
   Vue: 'vuedotjs.svg',
@@ -241,12 +251,12 @@ const sortedProjects = computed(() => {
 
 const filteredProjects = computed(() => {
   if (!sortedProjects.value) return []
-  if (selectedLang.value === 'All') return sortedProjects.value
+  if (selectedLang.value === t('projects.all')) return sortedProjects.value
   return sortedProjects.value.filter(
     (p) =>
       p.language === selectedLang.value ||
       (!languages.value.includes(p.language || '') &&
-        selectedLang.value === 'Other')
+        selectedLang.value === t('projects.other'))
   )
 })
 

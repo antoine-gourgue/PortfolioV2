@@ -14,10 +14,10 @@
       class="relative z-10 max-w-5xl mx-auto text-center mb-20 fade-in-up"
     >
       <h1 class="text-5xl lg:text-6xl font-extrabold mb-6 leading-tight">
-        Featured In.
+        {{ $t('blog.title') }}
       </h1>
       <p class="text-gray-600 max-w-2xl mx-auto text-lg leading-relaxed">
-        Discover articles, interviews, and mentions about my work.
+        {{ $t('blog.description') }}
       </p>
     </section>
 
@@ -43,7 +43,7 @@
               :href="article.link"
               target="_blank"
               class="text-sm text-gray-400 group-hover:text-black transition"
-              >Read More →</a
+              >{{ $t('blog.readMore') }}</a
             >
           </div>
         </div>
@@ -54,9 +54,9 @@
         class="flex flex-col items-center justify-center text-center text-red-500 col-span-full mb-12 space-y-4"
       >
         <i class="fas fa-exclamation-triangle text-4xl"></i>
-        <p class="text-lg font-semibold">Failed to load articles.</p>
+        <p class="text-lg font-semibold">{{ $t('blog.error') }}</p>
         <p class="text-sm text-gray-500">
-          Please try refreshing or check back later.
+          {{ $t('blog.errorDescription') }}
         </p>
       </div>
 

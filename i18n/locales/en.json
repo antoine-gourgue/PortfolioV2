@@ -1,0 +1,160 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "blog": "Blog",
+    "projects": "Projects",
+    "contact": "Contact",
+    "language": "Language"
+  },
+  "home": {
+    "title": "Hi, I'm Antoine",
+    "subtitle": "Fullstack Developer",
+    "description": "Building modern web experiences with Vue, Nuxt & cutting-edge tech.",
+    "contactMe": "Contact Me",
+    "downloadCV": "Download CV",
+    "aboutMe": "About Me",
+    "aboutDescription": "I'm a passionate Fullstack Developer currently pursuing a Master's Degree at Epitech Rennes, while gaining real-world experience through my apprenticeship at Digitaleo. I enjoy building modern, scalable web applications using Vue, Nuxt, and TypeScript.",
+    "quote": "Crafting clean & scalable web experiences, one line of code at a time.",
+    "technologies": "Technologies I Work With",
+    "journey": "My Journey",
+    "journey2024": {
+      "title": "Fullstack Developer - Digitaleo",
+      "period": "2024 - 2026",
+      "description": "In charge of developing and maintaining the email editor of the platform, ensuring smooth UX and strong compatibility (Outlook, responsive...)."
+    },
+    "journey2023": {
+      "title": "Master's Degree - Epitech Rennes",
+      "period": "2023 - 2026",
+      "description": "Specializing in Artificial Intelligence & Data, focusing on machine learning, data science, and innovative solutions."
+    }
+  },
+  "about": {
+    "title": {
+      "line1": "Passion.",
+      "line2": "Precision.",
+      "line3": "Progression."
+    },
+    "subtitle": "Fullstack Developer specializing in scalable web solutions.",
+    "description": "Focused on AI & Data at Epitech Rennes, gaining hands-on experience at Digitaleo.",
+    "journey": "My Journey.",
+    "digitaleo": {
+      "title": "Digitaleo",
+      "role": "Fullstack Developer Apprentice",
+      "description": "In charge of the email editor (AngularJS, VML Outlook integration), campaign archiving (Vue.js 2 & TypeScript) and legacy PHP backend."
+    },
+    "epitech": {
+      "title": "Epitech Rennes",
+      "role": "Master's Degree - AI & Data",
+      "description": "Specializing in AI & Data, focusing on Machine Learning, Data Science, and innovative solutions."
+    },
+    "education": {
+      "title": "Bac STL / Bac S / BTS SNIR",
+      "description": "Strong foundation in science, networking & IT fundamentals before fully transitioning to software engineering."
+    },
+    "skills": {
+      "line1": "Skills.",
+      "line2": "Stack."
+    },
+    "qualities": {
+      "line1": "Rigorous.",
+      "line2": "Curious.",
+      "line3": "Autonomous."
+    },
+    "qualitiesDescription": "Always eager to learn, improve, and deliver clean, efficient code. Thrives both independently and within teams.",
+    "languages": "Languages",
+    "french": "French - Native",
+    "english": "English - Technical basics",
+    "spanish": "Spanish - High School",
+    "interests": {
+      "line1": "Football.",
+      "line2": "Watches.",
+      "line3": "Projects."
+    },
+    "interestsDescription": "Outside of coding, I enjoy exploring horology, following football, and working on side projects to sharpen my skills."
+  },
+  "contact": {
+    "title": "Let's Connect.",
+    "description": "Got an idea, a question, or just wanna chat? Drop me a message and I'll get back to you shortly.",
+    "name": "Your Name",
+    "email": "Your Email",
+    "message": "Your Message",
+    "send": "Send Message",
+    "sending": "Sending…",
+    "errors": {
+      "fillAll": "Please fill in all fields.",
+      "invalidEmail": "Please enter a valid email address.",
+      "tooShort": "Your message is a bit too short.",
+      "failed": "Failed to send message. Please try again later."
+    },
+    "success": "Message sent successfully!"
+  },
+  "services": {
+    "title": "Services.",
+    "description": "Currently focused on my studies and role at Digitaleo. I'm not available for freelance projects at the moment, but feel free to get in touch for future opportunities.",
+    "fullstack": {
+      "title": "Fullstack Development",
+      "description": "Vue.js, AngularJS, TypeScript, PHP, REST APIs"
+    },
+    "devops": {
+      "title": "DevOps & CI/CD",
+      "description": "Docker, GitLab CI, Vercel, GitHub Actions"
+    },
+    "email": {
+      "title": "Email Integration",
+      "description": "VML, Outlook-specific integration, responsive emails"
+    },
+    "ai": {
+      "title": "AI & Data Projects",
+      "description": "Machine Learning, CNN models, Data exploration"
+    },
+    "design": {
+      "title": "Design System Integration",
+      "description": "Custom components, theming, internal design systems"
+    },
+    "collaboration": {
+      "title": "Collaboration & Tools",
+      "description": "Git, Jira, Agile methods, efficient teamwork practices"
+    },
+    "interested": "Interested in working together in the future? Don't hesitate to",
+    "reachOut": "reach out"
+  },
+  "projects": {
+    "title": "My Projects.",
+    "description": "A curated collection of personal and academic projects showcasing my journey as a Fullstack Developer. From web applications to technical experiments, each project reflects my passion and progression.",
+    "loading": "Loading projects...",
+    "loadingDescription": "Fetching the latest repositories from GitHub.",
+    "error": "Failed to load projects.",
+    "errorDescription": "Please try refreshing or check back later.",
+    "previous": "Previous",
+    "next": "Next",
+    "onlineProjects": "Online Projects",
+    "all": "All",
+    "other": "Other"
+  },
+  "blog": {
+    "title": "Featured In.",
+    "description": "Discover articles, interviews, and mentions about my work.",
+    "loading": "Loading articles...",
+    "error": "Failed to load articles.",
+    "errorDescription": "Please try refreshing or check back later.",
+    "readMore": "Read More →"
+  },
+  "footer": {
+    "copyright": "© 2025 Antoine Gourgue"
+  },
+  "chatbot": {
+    "title": "Assistant",
+    "placeholder": "Ask me something…",
+    "send": "Send",
+    "close": "Close chat",
+    "welcome": "👋 Hello! I'm here to answer your questions about my portfolio.",
+    "switchToFr": "Switch to French",
+    "switchToEn": "Switch to English",
+    "switchToEs": "Switch to Spanish",
+    "detectedFr": "🇫🇷 It looks like you're speaking French.",
+    "detectedEn": "🇬🇧 It looks like you're speaking English.",
+    "detectedEs": "🇪🇸 It looks like you're speaking Spanish."
+  }
+}

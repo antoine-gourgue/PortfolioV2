@@ -5,14 +5,13 @@
     >
       <div class="flex-1 text-left">
         <h1 class="text-6xl lg:text-7xl font-extrabold leading-tight mb-10">
-          Passion. <br />
-          Precision. <br />
-          Progression.
+          {{ $t('about.title.line1') }}<br />
+          {{ $t('about.title.line2') }}<br />
+          {{ $t('about.title.line3') }}
         </h1>
         <p class="text-gray-600 text-lg max-w-xl leading-relaxed">
-          Fullstack Developer specializing in scalable web solutions.<br />
-          Focused on AI & Data at Epitech Rennes, gaining hands-on experience at
-          Digitaleo.
+          {{ $t('about.subtitle') }}<br />
+          {{ $t('about.description') }}
         </p>
       </div>
       <div class="flex-1 flex justify-center">
@@ -43,7 +42,9 @@
     </div>
 
     <section class="max-w-6xl mx-auto px-6 lg:px-0 mt-52 relative fade-in-up">
-      <h2 class="text-6xl font-extrabold mb-32 text-center">My Journey.</h2>
+      <h2 class="text-6xl font-extrabold mb-32 text-center">
+        {{ $t('about.journey') }}
+      </h2>
 
       <div class="flex flex-col space-y-32 relative">
         <div
@@ -58,14 +59,14 @@
           <div
             class="flex-1 text-left z-10 transition-opacity duration-700 opacity-90 group-hover:opacity-100"
           >
-            <h4 class="text-3xl font-bold mb-4">Digitaleo</h4>
+            <h4 class="text-3xl font-bold mb-4">
+              {{ $t('about.digitaleo.title') }}
+            </h4>
             <p class="text-gray-500 mb-2 text-lg">
-              Fullstack Developer Apprentice
+              {{ $t('about.digitaleo.role') }}
             </p>
             <p class="text-gray-600 leading-relaxed">
-              In charge of the email editor (AngularJS, VML Outlook
-              integration), campaign archiving (Vue.js 2 & TypeScript) and
-              legacy PHP backend.
+              {{ $t('about.digitaleo.description') }}
             </p>
           </div>
         </div>
@@ -82,13 +83,14 @@
           <div
             class="flex-1 text-left z-10 transition-opacity duration-700 opacity-90 group-hover:opacity-100"
           >
-            <h4 class="text-3xl font-bold mb-4">Epitech Rennes</h4>
+            <h4 class="text-3xl font-bold mb-4">
+              {{ $t('about.epitech.title') }}
+            </h4>
             <p class="text-gray-500 mb-2 text-lg">
-              Master’s Degree - AI & Data
+              {{ $t('about.epitech.role') }}
             </p>
             <p class="text-gray-600 leading-relaxed">
-              Specializing in AI & Data, focusing on Machine Learning, Data
-              Science, and innovative solutions.
+              {{ $t('about.epitech.description') }}
             </p>
           </div>
         </div>
@@ -105,10 +107,11 @@
           <div
             class="flex-1 text-left z-10 transition-opacity duration-700 opacity-90 group-hover:opacity-100"
           >
-            <h4 class="text-3xl font-bold mb-4">Bac STL / Bac S / BTS SNIR</h4>
+            <h4 class="text-3xl font-bold mb-4">
+              {{ $t('about.education.title') }}
+            </h4>
             <p class="text-gray-600 leading-relaxed">
-              Strong foundation in science, networking & IT fundamentals before
-              fully transitioning to software engineering.
+              {{ $t('about.education.description') }}
             </p>
           </div>
         </div>
@@ -116,7 +119,10 @@
     </section>
 
     <section class="text-center mt-52 px-6 fade-in-up">
-      <h2 class="text-5xl font-extrabold mb-20">Skills.<br />Stack.</h2>
+      <h2 class="text-5xl font-extrabold mb-20">
+        {{ $t('about.skills.line1') }}<br />
+        {{ $t('about.skills.line2') }}
+      </h2>
       <div class="flex flex-wrap justify-center gap-12 opacity-90">
         <img
           v-for="(logo, index) in logos"
@@ -129,30 +135,33 @@
 
     <section class="text-center mt-52 px-6 fade-in-up">
       <h2 class="text-5xl font-extrabold leading-tight mb-16">
-        Rigorous.<br />Curious.<br />Autonomous.
+        {{ $t('about.qualities.line1') }}<br />
+        {{ $t('about.qualities.line2') }}<br />
+        {{ $t('about.qualities.line3') }}
       </h2>
       <p class="text-gray-600 max-w-2xl mx-auto leading-relaxed text-lg">
-        Always eager to learn, improve, and deliver clean, efficient code.
-        Thrives both independently and within teams.
+        {{ $t('about.qualitiesDescription') }}
       </p>
     </section>
 
     <section class="text-center mt-52 px-6 fade-in-up">
-      <h2 class="text-5xl font-extrabold mb-16">Languages</h2>
+      <h2 class="text-5xl font-extrabold mb-16">{{ $t('about.languages') }}</h2>
       <div class="flex flex-wrap justify-center gap-16 text-xl text-gray-700">
-        <div><i class="fas fa-language mr-2"></i>French - Native</div>
-        <div><i class="fas fa-globe mr-2"></i>English - Technical basics</div>
-        <div><i class="fas fa-globe-europe mr-2"></i>Spanish - High School</div>
+        <div><i class="fas fa-language mr-2"></i>{{ $t('about.french') }}</div>
+        <div><i class="fas fa-globe mr-2"></i>{{ $t('about.english') }}</div>
+        <div>
+          <i class="fas fa-globe-europe mr-2"></i>{{ $t('about.spanish') }}
+        </div>
       </div>
     </section>
 
     <section class="py-32 bg-gray-50 mt-52 px-6 text-center fade-in-up">
       <h2 class="text-5xl font-extrabold mb-12">
-        Football. Watches. Projects.
+        {{ $t('about.interests.line1') }} {{ $t('about.interests.line2') }}
+        {{ $t('about.interests.line3') }}
       </h2>
       <p class="text-gray-600 max-w-xl mx-auto mb-8">
-        Outside of coding, I enjoy exploring horology, following football, and
-        working on side projects to sharpen my skills.
+        {{ $t('about.interestsDescription') }}
       </p>
       <div
         class="flex justify-center space-x-12 text-3xl text-gray-500 animate-float"

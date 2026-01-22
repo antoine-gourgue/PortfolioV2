@@ -17,15 +17,27 @@
         >
           <div class="flex items-center gap-2">
             <i class="fas fa-comments text-gray-500 text-lg"></i>
-            <span class="font-semibold">{{ t('title') }}</span>
+            <span class="font-semibold">{{ $t('chatbot.title') }}</span>
           </div>
           <div class="flex items-center gap-2">
             <div class="relative">
               <select
-                v-model="selectedLang"
                 class="appearance-none text-sm bg-white border border-gray-300 rounded-lg pl-3 pr-7 py-1 focus:outline-none hover:border-black transition"
+                :value="selectedLang"
+                @change="
+                  (e) => {
+                    const path = switchLocalePath(
+                      (e.target as HTMLSelectElement).value as
+                        | 'fr'
+                        | 'es'
+                        | 'en'
+                    )
+                    router.push(path)
+                  }
+                "
               >
                 <option value="fr">🇫🇷</option>
+                <option value="es">🇪🇸</option>
                 <option value="en">🇬🇧</option>
               </select>
               <i
@@ -34,8 +46,8 @@
             </div>
             <button
               class="text-gray-400 hover:text-black transition"
+              :aria-label="$t('chatbot.close')"
               @click="toggleChat"
-              aria-label="Fermer le chat"
             >
               <i class="fas fa-times text-lg"></i>
             </button>
@@ -99,7 +111,7 @@
             ref="inputRef"
             v-model="newMessage"
             type="text"
-            :placeholder="t('placeholder')"
+            :placeholder="$t('chatbot.placeholder')"
             class="flex-1 px-4 py-2 rounded-xl border border-gray-300 focus:outline-none text-sm"
             :disabled="isBotTyping"
           />
@@ -108,7 +120,7 @@
             class="bg-black text-white px-4 py-2 rounded-xl text-sm hover:opacity-90 transition disabled:opacity-50"
             :disabled="isBotTyping"
           >
-            {{ t('send') }}
+            {{ $t('chatbot.send') }}
           </button>
         </form>
       </div>
@@ -117,24 +129,27 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, ref, watch } from 'vue'
+import { nextTick, ref, watch, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useI18n, useSwitchLocalePath } from '#imports'
 import { type Lang, useChatbotIntents } from '@/composables/useChatbotIntents'
 import { sanitizeHtml } from '@/utils/sanitizeHtml'
+
+const { locale, t } = useI18n()
+const switchLocalePath = useSwitchLocalePath()
+const router = useRouter()
 
 const isOpen = ref(false)
 const newMessage = ref('')
 const chatBody = ref<HTMLElement | null>(null)
 const isBotTyping = ref(false)
 const inputRef = ref<HTMLInputElement | null>(null)
-const selectedLang = ref<Lang>('fr')
+const selectedLang = computed(() => locale.value as Lang)
 
 const messages = ref([
   {
     from: 'bot',
-    text:
-      selectedLang.value === 'fr'
-        ? '👋 Bonjour ! Je suis là pour répondre à tes questions sur mon portfolio.'
-        : "👋 Hello! I'm here to answer your questions about my portfolio.",
+    text: t('chatbot.welcome'),
   },
 ])
 
@@ -142,7 +157,9 @@ onMounted(() => {
   const handler = (e: Event) => {
     const target = e.target as HTMLElement
     if (target.classList.contains('lang-switch')) {
-      selectedLang.value = target.dataset.lang as Lang
+      const lang = target.dataset.lang as 'fr' | 'es' | 'en'
+      const path = switchLocalePath(lang)
+      router.push(path)
     }
   }
 
@@ -173,19 +190,23 @@ const similarity = (input: string, keyword: string): number => {
   return intersection.length / Math.max(a.length, b.length)
 }
 
-const detectLang = (input: string): Lang => {
+const detectLang = (input: string): 'fr' | 'es' | 'en' => {
   const wordList = input.toLowerCase().split(/\s+/)
   let scoreFr = 0
   let scoreEn = 0
+  let scoreEs = 0
 
   for (const intent of intents) {
     for (const word of wordList) {
-      if (intent.keywords.fr.includes(word)) scoreFr++
-      if (intent.keywords.en.includes(word)) scoreEn++
+      if (intent.keywords.fr?.includes(word)) scoreFr++
+      if (intent.keywords.en?.includes(word)) scoreEn++
+      if (intent.keywords.es?.includes(word)) scoreEs++
     }
   }
 
-  return scoreEn > scoreFr ? 'en' : 'fr'
+  if (scoreEs > scoreFr && scoreEs > scoreEn) return 'es'
+  if (scoreEn > scoreFr) return 'en'
+  return 'fr'
 }
 
 const getBotResponse = (msg: string): string => {
@@ -204,9 +225,11 @@ const getBotResponse = (msg: string): string => {
   }
 
   const match = intents.find((i) => i.intent === bestMatch.intent)
+  const defaultIntent = intents.find((i) => i.intent === 'default')!
   const response =
     match?.response[lang] ??
-    intents.find((i) => i.intent === 'default')!.response[lang]
+    defaultIntent.response[lang] ??
+    defaultIntent.response.fr
 
   if (awaitingFollowUp.value && bestMatch.intent === awaitingFollowUp.value) {
     awaitingFollowUp.value = null
@@ -217,7 +240,8 @@ const getBotResponse = (msg: string): string => {
 
   if (match?.followUp) {
     awaitingFollowUp.value = match.followUp.expectedIntent
-    return `${response}\n\n${match.followUp.question[lang]}`
+    const question = match.followUp.question[lang] || match.followUp.question.fr
+    return `${response}\n\n${question}`
   }
 
   return response
@@ -240,10 +264,14 @@ const sendMessage = async () => {
   const detectedLang = detectLang(userText)
   if (detectedLang !== selectedLang.value) {
     setTimeout(async () => {
-      const switchMsg =
-        detectedLang === 'en'
-          ? `🇬🇧 It looks like you're speaking English. <span class='lang-switch underline cursor-pointer text-blue-600' data-lang="en">Switch to English</span>`
-          : `🇫🇷 On dirait que tu parles français. <span class='lang-switch underline cursor-pointer text-blue-600' data-lang="fr">Passer en français</span>`
+      let switchMsg = ''
+      if (detectedLang === 'en') {
+        switchMsg = `${t('chatbot.detectedEn')} <span class='lang-switch underline cursor-pointer text-blue-600' data-lang="en">${t('chatbot.switchToEn')}</span>`
+      } else if (detectedLang === 'es') {
+        switchMsg = `${t('chatbot.detectedEs')} <span class='lang-switch underline cursor-pointer text-blue-600' data-lang="es">${t('chatbot.switchToEs')}</span>`
+      } else {
+        switchMsg = `${t('chatbot.detectedFr')} <span class='lang-switch underline cursor-pointer text-blue-600' data-lang="fr">${t('chatbot.switchToFr')}</span>`
+      }
 
       messages.value.push({ from: 'bot', text: sanitizeHtml(switchMsg) })
       isBotTyping.value = false
@@ -272,22 +300,6 @@ const sendMessage = async () => {
   }, 1000)
 }
 
-const t = (key: 'title' | 'placeholder' | 'send') => {
-  const translations = {
-    fr: {
-      title: 'Assistant',
-      placeholder: 'Pose-moi une question…',
-      send: 'Envoyer',
-    },
-    en: {
-      title: 'Assistant',
-      placeholder: 'Ask me something…',
-      send: 'Send',
-    },
-  }
-  return translations[selectedLang.value][key]
-}
-
 watch(messages, async () => {
   await nextTick()
   chatBody.value?.scrollTo({
@@ -296,14 +308,11 @@ watch(messages, async () => {
   })
 })
 
-watch(selectedLang, (lang) => {
+watch(selectedLang, () => {
   messages.value = [
     {
       from: 'bot',
-      text:
-        lang === 'fr'
-          ? '👋 Bonjour ! Je suis là pour répondre à tes questions sur mon portfolio.'
-          : "👋 Hello! I'm here to answer your questions about my portfolio.",
+      text: t('chatbot.welcome'),
     },
   ]
 

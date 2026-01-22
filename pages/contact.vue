@@ -12,47 +12,64 @@
 
     <div class="relative z-10 max-w-3xl mx-auto text-center fade-in-up">
       <h1 class="text-6xl lg:text-6xl font-extrabold mb-6 leading-tight">
-        Let's Connect.
+        {{ $t('contact.title') }}
       </h1>
 
       <p class="text-gray-600 mb-16 max-w-xl mx-auto text-lg leading-relaxed">
-        Got an idea, a question, or just wanna chat? Drop me a message and I’ll
-        get back to you shortly.
+        {{ $t('contact.description') }}
       </p>
 
       <form
-        class="max-w-md w-full mx-auto p-8 rounded-3xl space-y-6"
+        class="max-w-md w-full mx-auto p-8 rounded-3xl space-y-6 bg-white/70 backdrop-blur"
         @submit.prevent="submitForm"
       >
-        <div class="space-y-4">
+        <div class="space-y-4 text-left">
           <input
             v-model="form.name"
             type="text"
-            placeholder="Your Name"
+            :placeholder="$t('contact.name')"
             required
-            class="w-full border border-gray-300 rounded-xl px-4 py-3 text-gray-800 ransition"
+            class="w-full border border-gray-300 rounded-xl px-4 py-3 text-gray-800 transition focus:outline-none focus:ring-2 focus:ring-black/80"
           />
+
           <input
             v-model="form.email"
             type="email"
-            placeholder="Your Email"
+            :placeholder="$t('contact.email')"
             required
-            class="w-full border border-gray-300 rounded-xl px-4 py-3 text-gray-800 transition"
+            class="w-full border border-gray-300 rounded-xl px-4 py-3 text-gray-800 transition focus:outline-none focus:ring-2 focus:ring-black/80"
           />
+
           <textarea
             v-model="form.message"
-            placeholder="Your Message"
+            :placeholder="$t('contact.message')"
             required
             rows="5"
-            class="w-full border border-gray-300 rounded-xl px-4 py-3 text-gray-800 transition resize-none"
+            class="w-full border border-gray-300 rounded-xl px-4 py-3 text-gray-800 transition resize-none focus:outline-none focus:ring-2 focus:ring-black/80"
           ></textarea>
+
+          <!-- Champ honeypot (anti-bot) -->
+          <input
+            v-model="form.honeypot"
+            type="text"
+            autocomplete="off"
+            tabindex="-1"
+            class="hidden"
+          />
         </div>
+
         <button
           type="submit"
-          class="w-full bg-black text-white py-3 rounded-xl font-medium hover:opacity-90 transition"
+          :disabled="loading"
+          class="w-full bg-black text-white py-3 rounded-xl font-medium hover:opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          Send Message
+          <span v-if="!loading">{{ $t('contact.send') }}</span>
+          <span v-else>{{ $t('contact.sending') }}</span>
         </button>
+
+        <p v-if="errorMessage" class="text-sm text-red-600 mt-2">
+          {{ errorMessage }}
+        </p>
       </form>
     </div>
   </main>
@@ -61,14 +78,60 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
+import { useI18n } from '#imports'
+
+const toast = useToast()
+const { t } = useI18n()
 
 const form = ref({
   name: '',
   email: '',
   message: '',
+  honeypot: '', // champ caché anti-bot
 })
-const toast = useToast()
+
+const loading = ref(false)
+const errorMessage = ref<string | null>(null)
+
+const validateClient = () => {
+  errorMessage.value = null
+
+  if (
+    !form.value.name.trim() ||
+    !form.value.email.trim() ||
+    !form.value.message.trim()
+  ) {
+    errorMessage.value = t('contact.errors.fillAll')
+    return false
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(form.value.email.trim())) {
+    errorMessage.value = t('contact.errors.invalidEmail')
+    return false
+  }
+
+  if (form.value.message.trim().length < 5) {
+    errorMessage.value = t('contact.errors.tooShort')
+    return false
+  }
+
+  return true
+}
+
 const submitForm = async () => {
+  if (!validateClient()) {
+    return
+  }
+
+  // si un bot remplit le honeypot
+  if (form.value.honeypot && form.value.honeypot.trim().length > 0) {
+    return
+  }
+
+  loading.value = true
+  errorMessage.value = null
+
   try {
     await $fetch('/api/contact', {
       method: 'POST',
@@ -76,17 +139,30 @@ const submitForm = async () => {
         name: form.value.name,
         email: form.value.email,
         message: form.value.message,
+        honeypot: form.value.honeypot,
       },
     })
 
-    toast.success('Message sent successfully!')
+    toast.success(t('contact.success'))
 
     form.value.name = ''
     form.value.email = ''
     form.value.message = ''
-  } catch (error) {
+    form.value.honeypot = ''
+  } catch (error: unknown) {
+    // eslint-disable-next-line no-console
     console.error(error)
-    toast.error('Failed to send message.')
+    const errorObj = error as {
+      data?: { message?: string }
+      statusMessage?: string
+    }
+    errorMessage.value =
+      errorObj?.data?.message ||
+      errorObj?.statusMessage ||
+      t('contact.errors.failed')
+    toast.error(t('contact.errors.failed'))
+  } finally {
+    loading.value = false
   }
 }
 </script>

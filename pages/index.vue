@@ -7,27 +7,27 @@
         class="flex-1 z-10 animate-fade-in flex flex-col items-center lg:items-start"
       >
         <h1 class="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4">
-          Hi, I'm Antoine
+          {{ $t('home.title') }}
         </h1>
         <h2 class="text-xl sm:text-2xl lg:text-3xl text-gray-600 mb-6">
-          Fullstack Developer
+          {{ $t('home.subtitle') }}
         </h2>
         <p class="text-gray-500 mb-8 max-w-md">
-          Building modern web experiences with Vue, Nuxt & cutting-edge tech.
+          {{ $t('home.description') }}
         </p>
         <div
           class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
         >
           <NuxtLink
-            to="/contact"
+            :to="localePath('/contact')"
             class="bg-black text-white px-6 py-3 rounded-full hover:bg-gray-800 transition"
-            >Contact Me</NuxtLink
+            >{{ $t('home.contactMe') }}</NuxtLink
           >
           <a
             href="/assets/antoinegourgue-cv.pdf"
             download
             class="border border-black text-black px-6 py-3 rounded-full hover:bg-gray-100 transition"
-            >Download CV</a
+            >{{ $t('home.downloadCV') }}</a
           >
         </div>
       </div>
@@ -74,12 +74,9 @@
         />
       </div>
       <div class="relative z-10">
-        <h3 class="text-2xl font-bold mb-6">About Me</h3>
+        <h3 class="text-2xl font-bold mb-6">{{ $t('home.aboutMe') }}</h3>
         <p class="text-gray-600 max-w-2xl mx-auto mb-8">
-          I'm a passionate Fullstack Developer currently pursuing a Master's
-          Degree at Epitech Rennes, while gaining real-world experience through
-          my apprenticeship at Digitaleo. I enjoy building modern, scalable web
-          applications using Vue, Nuxt, and TypeScript.
+          {{ $t('home.aboutDescription') }}
         </p>
         <div class="flex flex-wrap justify-center gap-4">
           <span class="bg-black text-white px-4 py-2 rounded-full text-sm"
@@ -95,10 +92,7 @@
             >Docker</span
           >
         </div>
-        <p class="italic text-gray-500 mt-8">
-          "Crafting clean & scalable web experiences, one line of code at a
-          time."
-        </p>
+        <p class="italic text-gray-500 mt-8">"{{ $t('home.quote') }}"</p>
       </div>
     </section>
 
@@ -106,7 +100,7 @@
       <h4
         class="text-lg font-semibold mb-10 tracking-wide uppercase text-gray-700"
       >
-        Technologies I Work With
+        {{ $t('home.technologies') }}
       </h4>
       <div class="flex flex-wrap justify-center gap-12 opacity-80 max-w-5xl">
         <img
@@ -120,7 +114,9 @@
     </section>
 
     <section class="py-28 bg-white px-6 relative">
-      <h3 class="text-2xl font-bold mb-16 text-center">My Journey</h3>
+      <h3 class="text-2xl font-bold mb-16 text-center">
+        {{ $t('home.journey') }}
+      </h3>
       <div class="max-w-4xl mx-auto space-y-20">
         <div class="flex items-start">
           <div class="text-5xl font-bold text-gray-300 w-28 text-right">
@@ -131,13 +127,13 @@
               class="absolute w-3 h-3 bg-black rounded-full -left-1.5 top-2"
             ></div>
             <h4 class="font-semibold text-lg mb-3">
-              Fullstack Developer - Digitaleo
+              {{ $t('home.journey2024.title') }}
             </h4>
-            <p class="text-gray-600 mb-2">2024 - 2026</p>
+            <p class="text-gray-600 mb-2">
+              {{ $t('home.journey2024.period') }}
+            </p>
             <p class="text-gray-500 leading-relaxed">
-              In charge of developing and maintaining the email editor of the
-              platform, ensuring smooth UX and strong compatibility (Outlook,
-              responsive...).
+              {{ $t('home.journey2024.description') }}
             </p>
           </div>
         </div>
@@ -151,12 +147,13 @@
               class="absolute w-3 h-3 bg-black rounded-full -left-1.5 top-2"
             ></div>
             <h4 class="font-semibold text-lg mb-3">
-              Master's Degree - Epitech Rennes
+              {{ $t('home.journey2023.title') }}
             </h4>
-            <p class="text-gray-600 mb-2">2023 - 2026</p>
+            <p class="text-gray-600 mb-2">
+              {{ $t('home.journey2023.period') }}
+            </p>
             <p class="text-gray-500 leading-relaxed">
-              Specializing in Artificial Intelligence & Data, focusing on
-              machine learning, data science, and innovative solutions.
+              {{ $t('home.journey2023.description') }}
             </p>
           </div>
         </div>
@@ -166,6 +163,8 @@
 </template>
 
 <script setup lang="ts">
+const localePath = useLocalePath()
+
 const showIndicator = ref(true)
 const logos = [
   { src: '/assets/vuedotjs.svg', alt: 'Vue' },

@@ -1,0 +1,160 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "about": "Sobre mí",
+    "services": "Servicios",
+    "blog": "Blog",
+    "projects": "Proyectos",
+    "contact": "Contacto",
+    "language": "Idioma"
+  },
+  "home": {
+    "title": "Hola, soy Antoine",
+    "subtitle": "Desarrollador Fullstack",
+    "description": "Construyendo experiencias web modernas con Vue, Nuxt y tecnologías de vanguardia.",
+    "contactMe": "Contáctame",
+    "downloadCV": "Descargar CV",
+    "aboutMe": "Sobre mí",
+    "aboutDescription": "Soy un desarrollador Fullstack apasionado, actualmente cursando un Máster en Epitech Rennes, mientras adquiero experiencia profesional a través de mi aprendizaje en Digitaleo. Disfruto construyendo aplicaciones web modernas y escalables usando Vue, Nuxt y TypeScript.",
+    "quote": "Creando experiencias web limpias y escalables, una línea de código a la vez.",
+    "technologies": "Tecnologías con las que trabajo",
+    "journey": "Mi trayectoria",
+    "journey2024": {
+      "title": "Desarrollador Fullstack - Digitaleo",
+      "period": "2024 - 2026",
+      "description": "A cargo del desarrollo y mantenimiento del editor de correo electrónico de la plataforma, garantizando una UX fluida y una fuerte compatibilidad (Outlook, responsive...)."
+    },
+    "journey2023": {
+      "title": "Máster - Epitech Rennes",
+      "period": "2023 - 2026",
+      "description": "Especialización en Inteligencia Artificial y Datos, centrada en el aprendizaje automático, la ciencia de datos y soluciones innovadoras."
+    }
+  },
+  "about": {
+    "title": {
+      "line1": "Pasión.",
+      "line2": "Precisión.",
+      "line3": "Progresión."
+    },
+    "subtitle": "Desarrollador Fullstack especializado en soluciones web escalables.",
+    "description": "Enfocado en IA y Datos en Epitech Rennes, adquiriendo experiencia práctica en Digitaleo.",
+    "journey": "Mi trayectoria.",
+    "digitaleo": {
+      "title": "Digitaleo",
+      "role": "Aprendiz Desarrollador Fullstack",
+      "description": "A cargo del editor de correo electrónico (AngularJS, integración VML Outlook), archivo de campañas (Vue.js 2 y TypeScript) y backend PHP legacy."
+    },
+    "epitech": {
+      "title": "Epitech Rennes",
+      "role": "Máster - IA y Datos",
+      "description": "Especialización en IA y Datos, centrada en Machine Learning, Ciencia de Datos y soluciones innovadoras."
+    },
+    "education": {
+      "title": "Bac STL / Bac S / BTS SNIR",
+      "description": "Base sólida en ciencias, redes y fundamentos de TI antes de pasar completamente a la ingeniería de software."
+    },
+    "skills": {
+      "line1": "Habilidades.",
+      "line2": "Stack."
+    },
+    "qualities": {
+      "line1": "Riguroso.",
+      "line2": "Curioso.",
+      "line3": "Autónomo."
+    },
+    "qualitiesDescription": "Siempre ansioso por aprender, mejorar y entregar código limpio y eficiente. Prospera tanto de forma independiente como dentro de equipos.",
+    "languages": "Idiomas",
+    "french": "Francés - Nativo",
+    "english": "Inglés - Bases técnicas",
+    "spanish": "Español - Instituto",
+    "interests": {
+      "line1": "Fútbol.",
+      "line2": "Relojes.",
+      "line3": "Proyectos."
+    },
+    "interestsDescription": "Fuera del código, disfruto explorando la relojería, siguiendo el fútbol y trabajando en proyectos paralelos para perfeccionar mis habilidades."
+  },
+  "contact": {
+    "title": "Conectémonos.",
+    "description": "¿Tienes una idea, una pregunta o solo quieres charlar? Envíame un mensaje y te responderé pronto.",
+    "name": "Tu nombre",
+    "email": "Tu email",
+    "message": "Tu mensaje",
+    "send": "Enviar mensaje",
+    "sending": "Enviando…",
+    "errors": {
+      "fillAll": "Por favor, completa todos los campos.",
+      "invalidEmail": "Por favor, introduce una dirección de email válida.",
+      "tooShort": "Tu mensaje es un poco demasiado corto.",
+      "failed": "Error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde."
+    },
+    "success": "¡Mensaje enviado con éxito!"
+  },
+  "services": {
+    "title": "Servicios.",
+    "description": "Actualmente enfocado en mis estudios y mi rol en Digitaleo. No estoy disponible para proyectos freelance en este momento, pero no dude en contactarme para futuras oportunidades.",
+    "fullstack": {
+      "title": "Desarrollo Fullstack",
+      "description": "Vue.js, AngularJS, TypeScript, PHP, REST APIs"
+    },
+    "devops": {
+      "title": "DevOps & CI/CD",
+      "description": "Docker, GitLab CI, Vercel, GitHub Actions"
+    },
+    "email": {
+      "title": "Integración de Correo",
+      "description": "VML, integración específica de Outlook, correos responsive"
+    },
+    "ai": {
+      "title": "Proyectos IA y Datos",
+      "description": "Machine Learning, modelos CNN, exploración de datos"
+    },
+    "design": {
+      "title": "Integración de Design System",
+      "description": "Componentes personalizados, temas, sistemas de diseño internos"
+    },
+    "collaboration": {
+      "title": "Colaboración y Herramientas",
+      "description": "Git, Jira, métodos Agile, prácticas eficientes de trabajo en equipo"
+    },
+    "interested": "¿Interesado en trabajar juntos en el futuro? No dude en",
+    "reachOut": "contactarme"
+  },
+  "projects": {
+    "title": "Mis Proyectos.",
+    "description": "Una colección curada de proyectos personales y académicos que muestran mi trayectoria como Desarrollador Fullstack. Desde aplicaciones web hasta experimentos técnicos, cada proyecto refleja mi pasión y progresión.",
+    "loading": "Cargando proyectos...",
+    "loadingDescription": "Obteniendo los últimos repositorios de GitHub.",
+    "error": "Error al cargar proyectos.",
+    "errorDescription": "Por favor, intente actualizar o vuelva más tarde.",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "onlineProjects": "Proyectos en línea",
+    "all": "Todos",
+    "other": "Otro"
+  },
+  "blog": {
+    "title": "Mencionado en.",
+    "description": "Descubre artículos, entrevistas y menciones sobre mi trabajo.",
+    "loading": "Cargando artículos...",
+    "error": "Error al cargar artículos.",
+    "errorDescription": "Por favor, intente actualizar o vuelva más tarde.",
+    "readMore": "Leer más →"
+  },
+  "footer": {
+    "copyright": "© 2025 Antoine Gourgue"
+  },
+  "chatbot": {
+    "title": "Asistente",
+    "placeholder": "Hazme una pregunta…",
+    "send": "Enviar",
+    "close": "Cerrar el chat",
+    "welcome": "👋 ¡Hola! Estoy aquí para responder tus preguntas sobre mi portafolio.",
+    "switchToFr": "Cambiar a francés",
+    "switchToEn": "Cambiar a inglés",
+    "switchToEs": "Cambiar a español",
+    "detectedFr": "🇫🇷 Parece que estás hablando francés.",
+    "detectedEn": "🇬🇧 Parece que estás hablando inglés.",
+    "detectedEs": "🇪🇸 Parece que estás hablando español."
+  }
+}
