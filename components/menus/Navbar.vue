@@ -13,10 +13,10 @@
         >{{ $t('nav.about') }}</NuxtLink
       >
       <NuxtLink
-        :to="localePath('/services')"
+        :to="localePath('/blog')"
         class="nav-link"
-        :class="isActive('/services')"
-        >{{ $t('nav.services') }}</NuxtLink
+        :class="isActive('/blog')"
+        >{{ $t('nav.blog') }}</NuxtLink
       >
     </div>
 
@@ -43,12 +43,6 @@
     </NuxtLink>
 
     <div class="flex items-center space-x-4">
-      <NuxtLink
-        :to="localePath('/blog')"
-        class="nav-link"
-        :class="isActive('/blog')"
-        >{{ $t('nav.blog') }}</NuxtLink
-      >
       <NuxtLink
         :to="localePath('/projects')"
         class="nav-link"
@@ -127,14 +121,6 @@
     >
       <i class="fa-solid fa-address-card w-5 h-5 mb-1"></i>
       <span class="text-xs">{{ $t('nav.about') }}</span>
-    </NuxtLink>
-    <NuxtLink
-      class="bottom-link"
-      :class="isActiveMobile('/services')"
-      :to="localePath('/services')"
-    >
-      <i class="fa-solid fa-keyboard w-5 h-5 mb-1"></i>
-      <span class="text-xs">{{ $t('nav.services') }}</span>
     </NuxtLink>
     <NuxtLink
       :to="localePath('/blog')"
