@@ -1,6 +1,6 @@
 <template>
   <main
-    class="bg-gray-50 min-h-screen px-6 lg:px-20 py-32 relative overflow-hidden"
+    class="bg-gray-50 min-h-screen px-6 lg:px-20 py-32 pb-24 lg:pb-32 relative overflow-hidden"
   >
     <div class="absolute inset-0 opacity-70 pointer-events-none">
       <img

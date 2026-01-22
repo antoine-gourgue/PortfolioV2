@@ -26,16 +26,22 @@
           >{{ $t('nav.about') }}</NuxtLink
         >
         <NuxtLink
-          :to="localePath('/blog')"
+          :to="localePath('/services')"
           class="footer-link"
-          :class="isActive('/blog')"
-          >{{ $t('nav.blog') }}</NuxtLink
+          :class="isActive('/services')"
+          >{{ $t('nav.services') }}</NuxtLink
         >
         <NuxtLink
           :to="localePath('/projects')"
           class="footer-link"
           :class="isActive('/projects')"
           >{{ $t('nav.projects') }}</NuxtLink
+        >
+        <NuxtLink
+          :to="localePath('/blog')"
+          class="footer-link"
+          :class="isActive('/blog')"
+          >{{ $t('nav.blog') }}</NuxtLink
         >
         <NuxtLink
           :to="localePath('/contact')"

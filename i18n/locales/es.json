@@ -75,7 +75,7 @@
     "interestsDescription": "Fuera del código, disfruto explorando la relojería, siguiendo el fútbol y trabajando en proyectos paralelos para perfeccionar mis habilidades."
   },
   "contact": {
-    "title": "Conectémonos.",
+    "title": "Mantengámonos en contacto.",
     "description": "¿Tienes una idea, una pregunta o solo quieres charlar? Envíame un mensaje y te responderé pronto.",
     "name": "Tu nombre",
     "email": "Tu email",
@@ -131,7 +131,15 @@
     "next": "Siguiente",
     "onlineProjects": "Proyectos en línea",
     "all": "Todos",
-    "other": "Otro"
+    "other": "Otro",
+    "stats": {
+      "title": "Estadísticas de GitHub",
+      "repositories": "Repositorios",
+      "stars": "Estrellas",
+      "forks": "Forks",
+      "languages": "Idiomas",
+      "topLanguages": "Idiomas Más Utilizados"
+    }
   },
   "blog": {
     "title": "Mencionado en.",

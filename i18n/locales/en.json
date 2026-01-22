@@ -131,7 +131,15 @@
     "next": "Next",
     "onlineProjects": "Online Projects",
     "all": "All",
-    "other": "Other"
+    "other": "Other",
+    "stats": {
+      "title": "GitHub Statistics",
+      "repositories": "Repositories",
+      "stars": "Stars",
+      "forks": "Forks",
+      "languages": "Languages",
+      "topLanguages": "Most Used Languages"
+    }
   },
   "blog": {
     "title": "Featured In.",

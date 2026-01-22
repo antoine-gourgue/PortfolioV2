@@ -155,7 +155,9 @@
       </div>
     </section>
 
-    <section class="py-32 bg-gray-50 mt-52 px-6 text-center fade-in-up">
+    <section
+      class="py-32 pb-24 lg:pb-32 bg-gray-50 mt-52 px-6 text-center fade-in-up"
+    >
       <h2 class="text-5xl font-extrabold mb-12">
         {{ $t('about.interests.line1') }} {{ $t('about.interests.line2') }}
         {{ $t('about.interests.line3') }}
@@ -171,6 +173,9 @@
         <i class="fas fa-laptop-code"></i>
       </div>
     </section>
+
+    <!-- Espace supplémentaire pour desktop -->
+    <div class="hidden lg:block h-32"></div>
   </main>
 </template>
 

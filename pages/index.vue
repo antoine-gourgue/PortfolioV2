@@ -1,51 +1,44 @@
 <template>
-  <main class="relative overflow-hidden bg-gray-50">
+  <main class="bg-gray-50 text-black">
     <section
-      class="min-h-screen flex flex-col lg:flex-row items-center justify-center text-center lg:text-left px-4 sm:px-6 lg:px-20 gap-12 relative fade-in-up"
+      class="flex flex-col lg:flex-row items-center justify-center px-6 lg:px-20 py-32 gap-16 fade-in-up"
     >
-      <div
-        class="flex-1 z-10 animate-fade-in flex flex-col items-center lg:items-start"
-      >
-        <h1 class="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4">
+      <div class="flex-1 text-left">
+        <h1
+          class="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight mb-10"
+        >
           {{ $t('home.title') }}
         </h1>
-        <h2 class="text-xl sm:text-2xl lg:text-3xl text-gray-600 mb-6">
+        <h2
+          class="text-2xl sm:text-3xl lg:text-4xl text-gray-600 mb-6 leading-tight"
+        >
           {{ $t('home.subtitle') }}
         </h2>
-        <p class="text-gray-500 mb-8 max-w-md">
+        <p class="text-gray-600 text-lg max-w-xl leading-relaxed mb-8">
           {{ $t('home.description') }}
         </p>
-        <div
-          class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
-        >
+        <div class="flex flex-col sm:flex-row gap-4">
           <NuxtLink
             :to="localePath('/contact')"
-            class="bg-black text-white px-6 py-3 rounded-full hover:bg-gray-800 transition"
+            class="bg-black text-white px-6 py-3 rounded-full hover:bg-gray-800 transition text-center"
             >{{ $t('home.contactMe') }}</NuxtLink
           >
           <a
             href="/assets/antoinegourgue-cv.pdf"
             download
-            class="border border-black text-black px-6 py-3 rounded-full hover:bg-gray-100 transition"
+            class="border border-black text-black px-6 py-3 rounded-full hover:bg-gray-100 transition text-center"
             >{{ $t('home.downloadCV') }}</a
           >
         </div>
       </div>
-
-      <div class="relative flex-1 flex flex-col items-center justify-center">
+      <div class="flex-1 flex justify-center">
         <img
           src="/assets/profile.png"
           alt="Antoine Gourgue"
-          class="w-3/4 sm:w-2/3 md:w-1/2 lg:w-auto max-w-[100%] h-auto object-contain z-20"
+          class="w-full max-w-md lg:max-w-3xl object-contain"
         />
-        <div
-          class="absolute top-4 right-4 lg:top-12 lg:left-72 transform rotate-90 text-gray-300 text-sm sm:text-xl lg:text-6xl tracking-widest"
-        >
-          PORTFOLIO 2025
-        </div>
       </div>
-
-      <div class="absolute inset-0 z-0 opacity-70">
+      <div class="absolute inset-0 -z-50 opacity-70">
         <img
           src="/assets/abstract-bg.svg"
           class="w-full h-full object-cover"
@@ -65,100 +58,105 @@
       </div>
     </div>
 
-    <section class="py-20 bg-gray-50 text-center px-6 relative overflow-hidden">
-      <div class="absolute inset-0 opacity-70">
-        <img
-          src="/assets/shape.svg"
-          class="w-full h-full object-cover"
-          alt="Shape"
-        />
+    <section class="text-center mt-52 px-6 fade-in-up">
+      <h2 class="text-5xl font-extrabold mb-20">
+        {{ $t('home.aboutMe') }}
+      </h2>
+      <p class="text-gray-600 max-w-2xl mx-auto leading-relaxed text-lg mb-12">
+        {{ $t('home.aboutDescription') }}
+      </p>
+      <div class="flex flex-wrap justify-center gap-4 mb-12">
+        <span class="bg-black text-white px-4 py-2 rounded-full text-sm"
+          >Vue.js</span
+        >
+        <span class="bg-black text-white px-4 py-2 rounded-full text-sm"
+          >Nuxt</span
+        >
+        <span class="bg-black text-white px-4 py-2 rounded-full text-sm"
+          >TypeScript</span
+        >
+        <span class="bg-black text-white px-4 py-2 rounded-full text-sm"
+          >Docker</span
+        >
       </div>
-      <div class="relative z-10">
-        <h3 class="text-2xl font-bold mb-6">{{ $t('home.aboutMe') }}</h3>
-        <p class="text-gray-600 max-w-2xl mx-auto mb-8">
-          {{ $t('home.aboutDescription') }}
-        </p>
-        <div class="flex flex-wrap justify-center gap-4">
-          <span class="bg-black text-white px-4 py-2 rounded-full text-sm"
-            >Vue.js</span
-          >
-          <span class="bg-black text-white px-4 py-2 rounded-full text-sm"
-            >Nuxt</span
-          >
-          <span class="bg-black text-white px-4 py-2 rounded-full text-sm"
-            >TypeScript</span
-          >
-          <span class="bg-black text-white px-4 py-2 rounded-full text-sm"
-            >Docker</span
-          >
-        </div>
-        <p class="italic text-gray-500 mt-8">"{{ $t('home.quote') }}"</p>
-      </div>
+      <p class="italic text-gray-500 text-lg">"{{ $t('home.quote') }}"</p>
     </section>
 
-    <section class="py-24 bg-gray-50 flex flex-col items-center relative">
-      <h4
-        class="text-lg font-semibold mb-10 tracking-wide uppercase text-gray-700"
-      >
+    <section class="text-center mt-52 px-6 fade-in-up">
+      <h2 class="text-5xl font-extrabold mb-20">
         {{ $t('home.technologies') }}
-      </h4>
-      <div class="flex flex-wrap justify-center gap-12 opacity-80 max-w-5xl">
+      </h2>
+      <div class="flex flex-wrap justify-center gap-12 opacity-90">
         <img
           v-for="(logo, index) in logos"
           :key="index"
           :src="logo.src"
           :alt="logo.alt"
-          class="h-12 w-auto grayscale hover:grayscale-0 transition"
+          class="h-14 w-auto hover:scale-110 transition duration-500"
         />
       </div>
     </section>
 
-    <section class="py-28 bg-white px-6 relative">
-      <h3 class="text-2xl font-bold mb-16 text-center">
+    <section
+      class="max-w-6xl mx-auto px-6 lg:px-0 mt-52 relative fade-in-up pb-24 lg:pb-0"
+    >
+      <h2 class="text-6xl font-extrabold mb-32 text-center">
         {{ $t('home.journey') }}
-      </h3>
-      <div class="max-w-4xl mx-auto space-y-20">
-        <div class="flex items-start">
-          <div class="text-5xl font-bold text-gray-300 w-28 text-right">
-            2024
+      </h2>
+
+      <div class="flex flex-col space-y-32 relative">
+        <div
+          class="relative flex flex-col lg:flex-row gap-16 group transition-all"
+        >
+          <div
+            class="absolute left-0 top-0 text-6xl lg:text-8xl font-extrabold text-gray-400 opacity-20 transform scale-95 group-hover:scale-100 transition duration-500"
+          >
+            2024-2026
           </div>
-          <div class="ml-8 border-l-2 border-gray-200 pl-8 relative">
-            <div
-              class="absolute w-3 h-3 bg-black rounded-full -left-1.5 top-2"
-            ></div>
-            <h4 class="font-semibold text-lg mb-3">
+          <div class="flex-1"></div>
+          <div
+            class="flex-1 text-left z-10 transition-opacity duration-700 opacity-90 group-hover:opacity-100"
+          >
+            <h4 class="text-3xl font-bold mb-4">
               {{ $t('home.journey2024.title') }}
             </h4>
-            <p class="text-gray-600 mb-2">
+            <p class="text-gray-500 mb-2 text-lg">
               {{ $t('home.journey2024.period') }}
             </p>
-            <p class="text-gray-500 leading-relaxed">
+            <p class="text-gray-600 leading-relaxed">
               {{ $t('home.journey2024.description') }}
             </p>
           </div>
         </div>
 
-        <div class="flex items-start">
-          <div class="text-5xl font-bold text-gray-300 w-28 text-right">
-            2023
+        <div
+          class="relative flex flex-col lg:flex-row-reverse gap-16 group transition-all"
+        >
+          <div
+            class="absolute right-0 top-0 text-6xl lg:text-8xl font-extrabold text-gray-400 opacity-20 transform scale-95 group-hover:scale-100 transition duration-500"
+          >
+            2023-2026
           </div>
-          <div class="ml-8 border-l-2 border-gray-200 pl-8 relative">
-            <div
-              class="absolute w-3 h-3 bg-black rounded-full -left-1.5 top-2"
-            ></div>
-            <h4 class="font-semibold text-lg mb-3">
+          <div class="flex-1"></div>
+          <div
+            class="flex-1 text-left z-10 transition-opacity duration-700 opacity-90 group-hover:opacity-100"
+          >
+            <h4 class="text-3xl font-bold mb-4">
               {{ $t('home.journey2023.title') }}
             </h4>
-            <p class="text-gray-600 mb-2">
+            <p class="text-gray-500 mb-2 text-lg">
               {{ $t('home.journey2023.period') }}
             </p>
-            <p class="text-gray-500 leading-relaxed">
+            <p class="text-gray-600 leading-relaxed">
               {{ $t('home.journey2023.description') }}
             </p>
           </div>
         </div>
       </div>
     </section>
+
+    <!-- Espace supplémentaire pour desktop -->
+    <div class="hidden lg:block h-32"></div>
   </main>
 </template>
 
@@ -188,7 +186,7 @@ onUnmounted(() => {
 })
 </script>
 
-<style>
+<style scoped>
 .fade-in-up {
   opacity: 0;
   transform: translateY(30px);

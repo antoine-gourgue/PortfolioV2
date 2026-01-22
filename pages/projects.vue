@@ -1,6 +1,6 @@
 <template>
   <main
-    class="bg-gray-50 min-h-screen flex flex-col justify-between px-6 lg:px-20 py-32 relative overflow-hidden"
+    class="bg-gray-50 min-h-screen flex flex-col justify-between px-6 lg:px-20 py-32 pb-24 lg:pb-32 relative overflow-hidden"
   >
     <div class="absolute inset-0 opacity-70 pointer-events-none fade-in-up">
       <img
@@ -20,6 +20,77 @@
       >
         {{ $t('projects.description') }}
       </p>
+
+      <!-- GitHub Statistics Section -->
+      <div
+        v-if="projects && projects.length > 0"
+        class="max-w-4xl mx-auto mb-16 fade-in-up"
+      >
+        <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
+          <h2 class="text-2xl font-bold text-center mb-8">
+            {{ $t('projects.stats.title') }}
+          </h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div class="flex flex-col items-center">
+              <div class="text-4xl font-bold text-black mb-2">
+                {{ totalRepos }}
+              </div>
+              <div class="text-sm text-gray-600">
+                {{ $t('projects.stats.repositories') }}
+              </div>
+            </div>
+            <div class="flex flex-col items-center">
+              <div class="text-4xl font-bold text-black mb-2">
+                {{ totalStars }}
+              </div>
+              <div class="text-sm text-gray-600">
+                {{ $t('projects.stats.stars') }}
+              </div>
+            </div>
+            <div class="flex flex-col items-center">
+              <div class="text-4xl font-bold text-black mb-2">
+                {{ totalForks }}
+              </div>
+              <div class="text-sm text-gray-600">
+                {{ $t('projects.stats.forks') }}
+              </div>
+            </div>
+            <div class="flex flex-col items-center">
+              <div class="text-4xl font-bold text-black mb-2">
+                {{ topLanguages.length }}
+              </div>
+              <div class="text-sm text-gray-600">
+                {{ $t('projects.stats.languages') }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Top Languages -->
+          <div v-if="topLanguages.length > 0" class="mt-8">
+            <h3 class="text-lg font-semibold mb-4 text-center">
+              {{ $t('projects.stats.topLanguages') }}
+            </h3>
+            <div class="flex flex-wrap justify-center gap-3">
+              <div
+                v-for="lang in topLanguages.slice(0, 5)"
+                :key="lang.name"
+                class="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-full border border-gray-200"
+              >
+                <img
+                  v-if="languageSVGs[lang.name]"
+                  :src="`/assets/${languageSVGs[lang.name]}`"
+                  :alt="lang.name"
+                  class="w-5 h-5 object-contain"
+                />
+                <span class="text-sm font-medium text-gray-700">{{
+                  lang.name
+                }}</span>
+                <span class="text-xs text-gray-500">({{ lang.count }})</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="flex flex-wrap justify-center gap-4 mb-12 fade-in-up">
         <button
@@ -95,8 +166,24 @@
           </div>
 
           <div
-            class="flex items-center space-x-1 text-gray-400 group-hover:text-black"
+            class="flex items-center space-x-4 text-gray-400 group-hover:text-black"
           >
+            <div
+              v-if="project.stargazers_count > 0"
+              class="flex items-center space-x-1"
+              :title="`${project.stargazers_count} stars`"
+            >
+              <i class="fas fa-star text-sm"></i>
+              <span class="text-xs">{{ project.stargazers_count }}</span>
+            </div>
+            <div
+              v-if="project.forks_count > 0"
+              class="flex items-center space-x-1"
+              :title="`${project.forks_count} forks`"
+            >
+              <i class="fas fa-code-branch text-sm"></i>
+              <span class="text-xs">{{ project.forks_count }}</span>
+            </div>
             <i class="fab fa-github text-lg"></i>
           </div>
         </div>
@@ -181,6 +268,9 @@ interface GithubRepo {
   html_url: string
   language: string | null
   updated_at: string
+  stargazers_count: number
+  forks_count: number
+  watchers_count: number
 }
 interface OnlineProject {
   name: string
@@ -292,6 +382,39 @@ const nextPage = () => {
 const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--
 }
+
+// GitHub Statistics
+const totalRepos = computed(() => {
+  return projects.value?.length || 0
+})
+
+const totalStars = computed(() => {
+  if (!projects.value) return 0
+  return projects.value.reduce(
+    (sum, repo) => sum + (repo.stargazers_count || 0),
+    0
+  )
+})
+
+const totalForks = computed(() => {
+  if (!projects.value) return 0
+  return projects.value.reduce((sum, repo) => sum + (repo.forks_count || 0), 0)
+})
+
+const topLanguages = computed(() => {
+  if (!projects.value) return []
+
+  const langCount: Record<string, number> = {}
+  projects.value.forEach((repo) => {
+    if (repo.language) {
+      langCount[repo.language] = (langCount[repo.language] || 0) + 1
+    }
+  })
+
+  return Object.entries(langCount)
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count)
+})
 </script>
 
 <style scoped>

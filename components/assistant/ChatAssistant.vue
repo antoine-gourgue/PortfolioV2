@@ -10,7 +10,7 @@
     <transition name="fade-slide">
       <div
         v-if="isOpen"
-        class="fixed bottom-24 right-6 w-[90%] max-w-sm bg-white border border-gray-200 rounded-2xl shadow-xl flex flex-col z-50 overflow-hidden"
+        class="fixed bottom-24 right-6 w-sm max-w-sm bg-white border border-gray-200 rounded-2xl shadow-xl flex flex-col z-50 overflow-hidden"
       >
         <div
           class="bg-gray-100 px-4 py-3 text-black flex justify-between items-center"
@@ -19,39 +19,13 @@
             <i class="fas fa-comments text-gray-500 text-lg"></i>
             <span class="font-semibold">{{ $t('chatbot.title') }}</span>
           </div>
-          <div class="flex items-center gap-2">
-            <div class="relative">
-              <select
-                class="appearance-none text-sm bg-white border border-gray-300 rounded-lg pl-3 pr-7 py-1 focus:outline-none hover:border-black transition"
-                :value="selectedLang"
-                @change="
-                  (e) => {
-                    const path = switchLocalePath(
-                      (e.target as HTMLSelectElement).value as
-                        | 'fr'
-                        | 'es'
-                        | 'en'
-                    )
-                    router.push(path)
-                  }
-                "
-              >
-                <option value="fr">🇫🇷</option>
-                <option value="es">🇪🇸</option>
-                <option value="en">🇬🇧</option>
-              </select>
-              <i
-                class="fas fa-chevron-down absolute right-2 top-1.5 text-xs text-gray-400 pointer-events-none"
-              ></i>
-            </div>
-            <button
-              class="text-gray-400 hover:text-black transition"
-              :aria-label="$t('chatbot.close')"
-              @click="toggleChat"
-            >
-              <i class="fas fa-times text-lg"></i>
-            </button>
-          </div>
+          <button
+            class="text-gray-400 hover:text-black transition"
+            :aria-label="$t('chatbot.close')"
+            @click="toggleChat"
+          >
+            <i class="fas fa-times text-lg"></i>
+          </button>
         </div>
 
         <div

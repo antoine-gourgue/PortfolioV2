@@ -131,7 +131,15 @@
     "next": "Suivant",
     "onlineProjects": "Projets en ligne",
     "all": "Tous",
-    "other": "Autre"
+    "other": "Autre",
+    "stats": {
+      "title": "Statistiques GitHub",
+      "repositories": "Dépôts",
+      "stars": "Étoiles",
+      "forks": "Forks",
+      "languages": "Langages",
+      "topLanguages": "Langages les plus utilisés"
+    }
   },
   "blog": {
     "title": "Mentionné dans.",

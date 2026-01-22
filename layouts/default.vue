@@ -2,7 +2,7 @@
   <div class="min-h-screen flex flex-col bg-gray-50">
     <Navbar />
 
-    <main class="flex-1">
+    <main class="flex-1 pb-20 lg:pb-0">
       <slot />
     </main>
 

@@ -1,6 +1,6 @@
 <template>
   <main
-    class="bg-gray-50 min-h-screen flex flex-col justify-center px-6 lg:px-20 py-32 relative overflow-hidden"
+    class="bg-gray-50 min-h-screen flex flex-col justify-center px-6 lg:px-20 py-32 pb-24 lg:pb-32 relative overflow-hidden"
   >
     <div class="absolute inset-0 opacity-50 pointer-events-none">
       <img
@@ -10,12 +10,16 @@
       />
     </div>
 
-    <div class="relative z-10 max-w-3xl mx-auto text-center fade-in-up">
-      <h1 class="text-6xl lg:text-6xl font-extrabold mb-6 leading-tight">
+    <div class="relative z-10 max-w-3xl mx-auto text-center fade-in-up px-4">
+      <h1
+        class="text-6xl font-extrabold mb-6 leading-tight break-words hyphens-auto"
+      >
         {{ $t('contact.title') }}
       </h1>
 
-      <p class="text-gray-600 mb-16 max-w-xl mx-auto text-lg leading-relaxed">
+      <p
+        class="text-gray-600 mb-16 max-w-xl mx-auto text-base sm:text-lg leading-relaxed break-words hyphens-auto"
+      >
         {{ $t('contact.description') }}
       </p>
 
@@ -61,13 +65,18 @@
         <button
           type="submit"
           :disabled="loading"
-          class="w-full bg-black text-white py-3 rounded-xl font-medium hover:opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed"
+          class="w-full bg-black text-white py-3 rounded-xl font-medium hover:opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed break-words"
         >
-          <span v-if="!loading">{{ $t('contact.send') }}</span>
-          <span v-else>{{ $t('contact.sending') }}</span>
+          <span v-if="!loading" class="break-words">{{
+            $t('contact.send')
+          }}</span>
+          <span v-else class="break-words">{{ $t('contact.sending') }}</span>
         </button>
 
-        <p v-if="errorMessage" class="text-sm text-red-600 mt-2">
+        <p
+          v-if="errorMessage"
+          class="text-sm text-red-600 mt-2 break-words hyphens-auto"
+        >
           {{ errorMessage }}
         </p>
       </form>
@@ -183,5 +192,14 @@ textarea {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Gestion des mots longs pour l'espagnol */
+.hyphens-auto {
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 </style>
