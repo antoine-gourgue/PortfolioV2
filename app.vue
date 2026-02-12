@@ -11,7 +11,7 @@
         id="transition-overlay"
         class="fixed inset-0 bg-gray-200 z-50 pointer-events-none scale-0 opacity-0 transition-transform duration-700 origin-center"
       ></div>
-      <ChatAssistant />
+      <ChatAssistant v-if="!isAdminRoute" />
     </NuxtLayout>
   </MetaSeoLayout>
 </template>
@@ -21,6 +21,12 @@ import { Analytics } from '@vercel/analytics/nuxt'
 import { SpeedInsights } from '@vercel/speed-insights/nuxt'
 import MetaSeoLayout from '~/layouts/MetaSeoLayout.vue'
 import ChatAssistant from '~/components/assistant/ChatAssistant.vue'
+
+const route = useRoute()
+const isAdminRoute = computed(() => {
+  const path = route.path.replace(/^\/(fr|en|es)(?=\/|$)/, '') || '/'
+  return path.startsWith('/admin')
+})
 
 useHead({
   script: [

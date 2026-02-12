@@ -13,10 +13,10 @@
         >{{ $t('nav.about') }}</NuxtLink
       >
       <NuxtLink
-        :to="localePath('/blog')"
+        :to="localePath('/articles')"
         class="nav-link"
-        :class="isActive('/blog')"
-        >{{ $t('nav.blog') }}</NuxtLink
+        :class="isActive('/articles')"
+        >{{ $t('nav.articles') }}</NuxtLink
       >
     </div>
 
@@ -123,12 +123,12 @@
       <span class="text-xs">{{ $t('nav.about') }}</span>
     </NuxtLink>
     <NuxtLink
-      :to="localePath('/blog')"
+      :to="localePath('/articles')"
       class="bottom-link"
-      :class="isActiveMobile('/blog')"
+      :class="isActiveMobile('/articles')"
     >
       <i class="fa-solid fa-file w-5 h-5 mb-1"></i>
-      <span class="text-xs">{{ $t('nav.blog') }}</span>
+      <span class="text-xs">{{ $t('nav.articles') }}</span>
     </NuxtLink>
     <NuxtLink
       :to="localePath('/projects')"
@@ -201,8 +201,32 @@ const showLangDropdownMobile = ref(false)
 const currentLocale = computed(() => locale.value)
 const availableLocales = computed(() => locales.value)
 
-const selectLanguage = (code: string) => {
-  const path = switchLocalePath(code as 'fr' | 'es' | 'en')
+const selectLanguage = async (code: string) => {
+  const targetCode = code as 'fr' | 'es' | 'en'
+  let path = switchLocalePath(targetCode)
+
+  const normalizedPath = route.path.replace(/^\/(fr|en|es)(?=\/|$)/, '') || '/'
+  const articleMatch = normalizedPath.match(/^\/articles\/([^/]+)$/)
+  const currentSlug = articleMatch?.[1]
+
+  if (currentSlug) {
+    try {
+      const response = await $fetch<{ article: { slug: string } }>(
+        `/api/articles/${currentSlug}`,
+        {
+          query: { locale: targetCode },
+        }
+      )
+      const localizedSlug = response.article.slug
+      path =
+        targetCode === 'fr'
+          ? `/articles/${localizedSlug}`
+          : `/${targetCode}/articles/${localizedSlug}`
+    } catch {
+      // Keep default switchLocalePath fallback.
+    }
+  }
+
   router.push(path)
   showLangDropdown.value = false
   showLangDropdownMobile.value = false
@@ -210,11 +234,17 @@ const selectLanguage = (code: string) => {
 
 const isActive = (path: string) => {
   const currentPath = route.path.replace(/^\/[a-z]{2}(\/|$)/, '/')
+  if (path === '/articles' && currentPath.startsWith('/articles')) {
+    return 'active-link'
+  }
   return currentPath === path ? 'active-link' : ''
 }
 
 const isActiveMobile = (path: string) => {
   const currentPath = route.path.replace(/^\/[a-z]{2}(\/|$)/, '/')
+  if (path === '/articles' && currentPath.startsWith('/articles')) {
+    return 'text-black scale-95'
+  }
   return currentPath === path ? 'text-black scale-95' : 'text-gray-500'
 }
 

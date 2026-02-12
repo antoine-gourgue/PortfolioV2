@@ -1,9 +1,10 @@
-{
+﻿{
   "nav": {
     "home": "Home",
     "about": "About",
     "services": "Services",
     "blog": "Blog",
+    "articles": "Articles",
     "projects": "Projects",
     "contact": "Contact",
     "language": "Language"
@@ -148,6 +149,44 @@
     "error": "Failed to load articles.",
     "errorDescription": "Please try refreshing or check back later.",
     "readMore": "Read More →"
+  },
+  "articles": {
+    "title": "My Articles.",
+    "description": "Read my articles about digital products and design.",
+    "loading": "Loading articles...",
+    "error": "Failed to load articles.",
+    "errorDescription": "Please try again in a few moments.",
+    "empty": "No published articles yet.",
+    "adminCta": "Open back office",
+    "backToList": "Back to articles",
+    "notFound": "Article not found."
+  },
+  "articlesAdmin": {
+    "title": "Articles back office",
+    "description": "Generate a draft with Mistral and publish your article quickly.",
+    "loginTitle": "Admin access",
+    "loginDescription": "Enter the password to access the back office.",
+    "password": "Password",
+    "loginCta": "Sign in",
+    "loggingIn": "Signing in...",
+    "logout": "Sign out",
+    "generate": "AI generation",
+    "publish": "Publishing",
+    "editLanguage": "Editing language",
+    "autoAllLocales": "Automatic generation for all languages",
+    "topic": "Topic",
+    "language": "Language",
+    "tone": "Tone",
+    "length": "Target length (words)",
+    "generateCta": "Generate draft",
+    "generating": "Generating...",
+    "publishCta": "Publish article",
+    "publishing": "Publishing...",
+    "titleLabel": "Title",
+    "excerptLabel": "Excerpt",
+    "tagsLabel": "Tags (comma separated)",
+    "contentLabel": "Content",
+    "coverImageLabel": "Cover image (optional)"
   },
   "footer": {
     "copyright": "© 2025 Antoine Gourgue"

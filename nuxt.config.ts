@@ -61,6 +61,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     githubToken: process.env.VITE_GITHUB_TOKEN,
+    articleAdminKey: process.env.ARTICLE_ADMIN_KEY,
+    mistralApiKey: process.env.MISTRAL_API_KEY,
   },
   ssr: true,
 })

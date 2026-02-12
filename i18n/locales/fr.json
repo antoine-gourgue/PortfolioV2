@@ -1,9 +1,10 @@
-{
+﻿{
   "nav": {
     "home": "Accueil",
     "about": "À propos",
     "services": "Services",
     "blog": "Blog",
+    "articles": "Articles",
     "projects": "Projets",
     "contact": "Contact",
     "language": "Langue"
@@ -148,6 +149,44 @@
     "error": "Échec du chargement des articles.",
     "errorDescription": "Veuillez réessayer de rafraîchir ou revenir plus tard.",
     "readMore": "Lire la suite →"
+  },
+  "articles": {
+    "title": "Mes articles.",
+    "description": "Retrouvez mes articles sur le digital, le produit et le design.",
+    "loading": "Chargement des articles...",
+    "error": "Impossible de charger les articles.",
+    "errorDescription": "Veuillez réessayer dans quelques instants.",
+    "empty": "Aucun article publié pour le moment.",
+    "adminCta": "Accéder au back-office",
+    "backToList": "Retour aux articles",
+    "notFound": "Article introuvable."
+  },
+  "articlesAdmin": {
+    "title": "Back-office articles",
+    "description": "Générez un brouillon via Mistral puis publiez votre article en quelques clics.",
+    "loginTitle": "Accès administrateur",
+    "loginDescription": "Entrez le mot de passe pour accéder au back-office.",
+    "password": "Mot de passe",
+    "loginCta": "Se connecter",
+    "loggingIn": "Connexion...",
+    "logout": "Se déconnecter",
+    "generate": "Génération IA",
+    "publish": "Publication",
+    "editLanguage": "Langue d'edition",
+    "autoAllLocales": "Generation automatique pour toutes les langues",
+    "topic": "Sujet",
+    "language": "Langue",
+    "tone": "Ton",
+    "length": "Longueur cible (mots)",
+    "generateCta": "Générer un brouillon",
+    "generating": "Génération en cours...",
+    "publishCta": "Publier l'article",
+    "publishing": "Publication en cours...",
+    "titleLabel": "Titre",
+    "excerptLabel": "Résumé",
+    "tagsLabel": "Tags (séparés par des virgules)",
+    "contentLabel": "Contenu",
+    "coverImageLabel": "Image de couverture (optionnel)"
   },
   "footer": {
     "copyright": "© 2025 Antoine Gourgue"
