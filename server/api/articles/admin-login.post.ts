@@ -1,6 +1,14 @@
+import {
+  ADMIN_SESSION_COOKIE,
+  ADMIN_SESSION_MAX_AGE,
+  createAdminSessionToken,
+  matchesAdminKey,
+} from '~/server/utils/admin'
+
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event)
-  const expectedKey = config.articleAdminKey
+  const expectedKey =
+    typeof config.articleAdminKey === 'string' ? config.articleAdminKey : ''
 
   if (!expectedKey) {
     throw createError({
@@ -13,19 +21,19 @@ export default defineEventHandler(async (event) => {
   const body = await readBody<{ password?: string }>(event)
   const password = body.password?.trim()
 
-  if (!password || password !== expectedKey) {
+  if (!matchesAdminKey(password, expectedKey)) {
     throw createError({
       statusCode: 401,
       statusMessage: 'Mot de passe invalide',
     })
   }
 
-  setCookie(event, 'ag_articles_admin', '1', {
+  setCookie(event, ADMIN_SESSION_COOKIE, createAdminSessionToken(expectedKey), {
     httpOnly: true,
     sameSite: 'strict',
     secure: process.env.NODE_ENV === 'production',
     path: '/',
-    maxAge: 60 * 60 * 8,
+    maxAge: ADMIN_SESSION_MAX_AGE,
   })
 
   return { success: true }

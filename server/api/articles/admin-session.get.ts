@@ -1,4 +1,6 @@
+import { hasAdminSessionAccess } from '~/server/utils/admin'
+
 export default defineEventHandler((event) => {
-  const authenticated = getCookie(event, 'ag_articles_admin') === '1'
+  const authenticated = hasAdminSessionAccess(event)
   return { authenticated }
 })

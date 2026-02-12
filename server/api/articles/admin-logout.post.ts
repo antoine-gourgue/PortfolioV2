@@ -1,5 +1,7 @@
+import { ADMIN_SESSION_COOKIE } from '~/server/utils/admin'
+
 export default defineEventHandler((event) => {
-  deleteCookie(event, 'ag_articles_admin', {
+  deleteCookie(event, ADMIN_SESSION_COOKIE, {
     path: '/',
   })
 
