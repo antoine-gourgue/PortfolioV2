@@ -301,6 +301,13 @@ const onlineProjects = ref<OnlineProject[]>([
       'A real-time crypto news analytics web app that aggregates feeds, detects tickers, and computes 24-hour momentum to surface trends, built for learning and demo purposes.',
     image: '/assets/crypto-viewer-thumb.png',
   },
+  {
+    name: 'Design System Storybook',
+    url: 'https://design-system-storybook.antoinegourgue.dev/',
+    description:
+      'A Storybook instance showcasing a design system built with Vue.js and Tailwind CSS. It includes reusable components, documentation, and interactive examples for UI development.',
+    image: '/assets/design-system.png',
+  },
 ])
 
 const selectedLang = ref(t('projects.all'))
