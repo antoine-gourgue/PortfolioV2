@@ -130,6 +130,17 @@
     "previous": "Anterior",
     "next": "Siguiente",
     "onlineProjects": "Proyectos en línea",
+    "items": {
+      "portfolio": {
+        "description": "Mi portfolio personal de desarrollador que muestra proyectos, habilidades y experiencia. Construido con Vue.js, Nuxt y Tailwind CSS para un diseño limpio y moderno."
+      },
+      "designSystem": {
+        "description": "Una instancia de Storybook que presenta un sistema de diseño construido con Vue.js y Tailwind CSS. Incluye componentes reutilizables, documentación y ejemplos interactivos para el desarrollo de UI."
+      },
+      "sapia": {
+        "description": "Una plataforma de cultura general construida con Nuxt, Vue.js y Tailwind CSS. Ofrece una experiencia interactiva para poner a prueba y ampliar tus conocimientos en numerosos temas a través de cuestionarios y contenidos seleccionados."
+      }
+    },
     "all": "Todos",
     "other": "Otro",
     "stats": {

@@ -279,34 +279,24 @@ interface OnlineProject {
   image?: string
 }
 
-const onlineProjects = ref<OnlineProject[]>([
-  {
-    name: 'Medical-AI-Detection',
-    url: 'https://medical-ai.antoinegourgue.dev/',
-    description:
-      'A deep learning-powered web application that assists in detecting medical conditions from chest X-ray images. Built for research and educational purposes.',
-    image: '/assets/medical-ai-thumb.png',
-  },
+const onlineProjects = computed<OnlineProject[]>(() => [
   {
     name: 'Portfolio',
     url: 'https://antoinegourgue.dev/',
-    description:
-      'My personal developer portfolio showcasing projects, skills, and experience. Built with Vue.js, Nuxt, and Tailwind CSS for a clean and modern design.',
+    description: t('projects.items.portfolio.description'),
     image: '/assets/portfolio-thumb.png',
-  },
-  {
-    name: 'Crypto Viewer',
-    url: 'https://crypto-app.antoinegourgue.dev/',
-    description:
-      'A real-time crypto news analytics web app that aggregates feeds, detects tickers, and computes 24-hour momentum to surface trends, built for learning and demo purposes.',
-    image: '/assets/crypto-viewer-thumb.png',
   },
   {
     name: 'Design System Storybook',
     url: 'https://design-system-storybook.antoinegourgue.dev/',
-    description:
-      'A Storybook instance showcasing a design system built with Vue.js and Tailwind CSS. It includes reusable components, documentation, and interactive examples for UI development.',
+    description: t('projects.items.designSystem.description'),
     image: '/assets/design-system.png',
+  },
+  {
+    name: 'Sapia',
+    url: 'https://sapia.antoinegourgue.dev/',
+    description: t('projects.items.sapia.description'),
+    image: '/assets/sapia.png',
   },
 ])
 
