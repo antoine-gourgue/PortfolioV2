@@ -38,10 +38,10 @@
           >{{ $t('nav.projects') }}</NuxtLink
         >
         <NuxtLink
-          :to="localePath('/blog')"
+          :to="localePath('/articles')"
           class="footer-link"
-          :class="isActive('/blog')"
-          >{{ $t('nav.blog') }}</NuxtLink
+          :class="isActive('/articles')"
+          >{{ $t('nav.articles') }}</NuxtLink
         >
         <NuxtLink
           :to="localePath('/contact')"
@@ -80,6 +80,9 @@ const localePath = useLocalePath()
 
 const isActive = (path: string) => {
   const currentPath = route.path.replace(/^\/[a-z]{2}(\/|$)/, '/')
+  if (path === '/articles' && currentPath.startsWith('/articles')) {
+    return 'active-footer-link'
+  }
   return currentPath === path ? 'active-footer-link' : ''
 }
 </script>

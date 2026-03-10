@@ -1,9 +1,10 @@
-{
+﻿{
   "nav": {
     "home": "Inicio",
     "about": "Sobre mí",
     "services": "Servicios",
     "blog": "Blog",
+    "articles": "Artículos",
     "projects": "Proyectos",
     "contact": "Contacto",
     "language": "Idioma"
@@ -159,6 +160,44 @@
     "error": "Error al cargar artículos.",
     "errorDescription": "Por favor, intente actualizar o vuelva más tarde.",
     "readMore": "Leer más →"
+  },
+  "articles": {
+    "title": "Mis artículos.",
+    "description": "Descubre mis artículos sobre digital, producto y diseño.",
+    "loading": "Cargando artículos...",
+    "error": "Error al cargar los artículos.",
+    "errorDescription": "Por favor, vuelve a intentarlo en unos instantes.",
+    "empty": "Aún no hay artículos publicados.",
+    "adminCta": "Ir al back office",
+    "backToList": "Volver a artículos",
+    "notFound": "Artículo no encontrado."
+  },
+  "articlesAdmin": {
+    "title": "Back office de artículos",
+    "description": "Genera un borrador con Mistral y publica tu artículo rápidamente.",
+    "loginTitle": "Acceso administrador",
+    "loginDescription": "Introduce la contraseña para acceder al back office.",
+    "password": "Contraseña",
+    "loginCta": "Iniciar sesión",
+    "loggingIn": "Conectando...",
+    "logout": "Cerrar sesión",
+    "generate": "Generación IA",
+    "publish": "Publicación",
+    "editLanguage": "Idioma de edicion",
+    "autoAllLocales": "Generacion automatica para todos los idiomas",
+    "topic": "Tema",
+    "language": "Idioma",
+    "tone": "Tono",
+    "length": "Longitud objetivo (palabras)",
+    "generateCta": "Generar borrador",
+    "generating": "Generando...",
+    "publishCta": "Publicar artículo",
+    "publishing": "Publicando...",
+    "titleLabel": "Título",
+    "excerptLabel": "Resumen",
+    "tagsLabel": "Etiquetas (separadas por comas)",
+    "contentLabel": "Contenido",
+    "coverImageLabel": "Imagen de portada (opcional)"
   },
   "footer": {
     "copyright": "© 2025 Antoine Gourgue"
