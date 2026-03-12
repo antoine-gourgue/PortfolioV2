@@ -64,11 +64,36 @@
         <i class="fas fa-spinner fa-spin text-4xl text-gray-400"></i>
       </div>
     </section>
+
+    <div
+      v-if="showIndicator"
+      class="fixed bottom-6 left-1/2 transform -translate-x-1/2 hidden lg:block z-50"
+    >
+      <div
+        class="w-8 h-14 border-2 border-gray-400 rounded-full flex items-start justify-center p-1 animate-bounce"
+      >
+        <div class="w-1 h-1 bg-gray-400 rounded-full mb-1"></div>
+      </div>
+    </div>
   </main>
 </template>
 
 <script setup lang="ts">
 const { data, error } = await useFetch('/api/mentions')
+
+const showIndicator = ref(true)
+
+const handleScroll = () => {
+  showIndicator.value = window.scrollY < 5
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 
 <style scoped>
