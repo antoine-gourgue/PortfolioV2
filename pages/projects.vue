@@ -298,6 +298,12 @@ const onlineProjects = computed<OnlineProject[]>(() => [
     description: t('projects.items.sapia.description'),
     image: '/assets/sapia.png',
   },
+  {
+    name: 'AuroraHome - Documentation',
+    url: 'https://aurora-home-documentation.vercel.app/fr/docs',
+    description: t('projects.items.aurora.description'),
+    image: '/assets/aurora-home.png',
+  },
 ])
 
 const selectedLang = ref(t('projects.all'))

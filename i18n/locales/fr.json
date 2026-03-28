@@ -139,6 +139,9 @@
       },
       "sapia": {
         "description": "Une plateforme de culture générale construite avec Nuxt, Vue.js et Tailwind CSS. Elle propose une expérience interactive pour tester et enrichir ses connaissances dans de nombreux domaines à travers des quiz et du contenu sélectionné."
+      },
+      "aurora": {
+        "description": "Documentation technique complète de l'écosystème Aurora Home — architecture, installation, API, base de données, CI/CD, et guides de contribution pour tous les projets."
       }
     },
     "all": "Tous",
