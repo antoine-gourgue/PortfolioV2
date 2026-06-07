@@ -131,6 +131,9 @@
     "next": "Next",
     "onlineProjects": "Online Projects",
     "items": {
+      "mosaic": {
+        "description": "A Pinterest-style image board to discover, save and organize visual ideas. Built with Next.js, Prisma and Auth.js, with collaborative boards, search, a complete admin back office and continuous deployment with Docker."
+      },
       "portfolio": {
         "description": "My personal developer portfolio showcasing projects, skills, and experience. Built with Vue.js, Nuxt, and Tailwind CSS for a clean and modern design."
       },

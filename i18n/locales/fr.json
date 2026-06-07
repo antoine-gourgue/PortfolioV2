@@ -131,6 +131,9 @@
     "next": "Suivant",
     "onlineProjects": "Projets en ligne",
     "items": {
+      "mosaic": {
+        "description": "Un tableau d'images façon Pinterest pour découvrir, enregistrer et organiser des idées visuelles. Conçu avec Next.js, Prisma et Auth.js : boards collaboratifs, recherche, back-office d'administration complet et déploiement continu avec Docker."
+      },
       "portfolio": {
         "description": "Mon portfolio personnel de développeur mettant en valeur mes projets, compétences et expériences. Conçu avec Vue.js, Nuxt et Tailwind CSS pour un design épuré et moderne."
       },

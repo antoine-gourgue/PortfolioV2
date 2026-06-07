@@ -281,6 +281,12 @@ interface OnlineProject {
 
 const onlineProjects = computed<OnlineProject[]>(() => [
   {
+    name: 'Mosaic',
+    url: 'https://mosaic.antoinegourgue.dev/',
+    description: t('projects.items.mosaic.description'),
+    image: '/assets/mosaic.png',
+  },
+  {
     name: 'Portfolio',
     url: 'https://antoinegourgue.dev/',
     description: t('projects.items.portfolio.description'),

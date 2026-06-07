@@ -131,6 +131,9 @@
     "next": "Siguiente",
     "onlineProjects": "Proyectos en línea",
     "items": {
+      "mosaic": {
+        "description": "Un tablero de imágenes al estilo Pinterest para descubrir, guardar y organizar ideas visuales. Creado con Next.js, Prisma y Auth.js: tableros colaborativos, búsqueda, un back office de administración completo y despliegue continuo con Docker."
+      },
       "portfolio": {
         "description": "Mi portfolio personal de desarrollador que muestra proyectos, habilidades y experiencia. Construido con Vue.js, Nuxt y Tailwind CSS para un diseño limpio y moderno."
       },
