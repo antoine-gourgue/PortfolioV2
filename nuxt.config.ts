@@ -17,10 +17,6 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  build: {
-    // vue-toastification est publié en CommonJS : transpilation requise pour le bundle serveur
-    transpile: ['vue-toastification'],
-  },
   modules: [
     '@nuxt/image',
     '@nuxt/icon',

@@ -320,7 +320,8 @@
     "errTitle": "Fichier introuvable",
     "errDesc": "L'élément demandé n'existe pas sur ce Mac.",
     "errBack": "Retour au bureau",
-    "close": "Fermer"
+    "close": "Fermer",
+    "notifNow": "maintenant"
   },
   "notesApp": {
     "foldersTitle": "iCloud",

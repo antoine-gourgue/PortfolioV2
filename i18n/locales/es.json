@@ -320,7 +320,8 @@
     "errTitle": "Archivo no encontrado",
     "errDesc": "El elemento solicitado no existe en este Mac.",
     "errBack": "Volver al escritorio",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "notifNow": "ahora"
   },
   "notesApp": {
     "foldersTitle": "iCloud",

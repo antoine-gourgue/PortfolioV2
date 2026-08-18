@@ -127,14 +127,13 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useToast } from 'vue-toastification'
 import { useI18n } from '#imports'
 import AgLogo from '~/components/ui/AGLogo.vue'
 
-const toast = useToast()
 const { t } = useI18n()
 const { gsap } = useGsap()
 const sfx = useSfx()
+const { notify } = useNotify()
 
 const form = ref({
   name: '',
@@ -191,7 +190,7 @@ const submitForm = async () => {
     })
 
     sfx.send()
-    toast.success(t('contact.success'))
+    notify({ icon: 'mail', title: 'Mail', message: t('contact.success') })
 
     form.value.name = ''
     form.value.email = ''
@@ -209,7 +208,7 @@ const submitForm = async () => {
       errorObj?.statusMessage ||
       t('contact.errors.failed')
     sfx.error()
-    toast.error(t('contact.errors.failed'))
+    notify({ icon: 'mail', title: 'Mail', message: t('contact.errors.failed') })
   } finally {
     loading.value = false
   }
