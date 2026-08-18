@@ -488,34 +488,39 @@
           </template>
 
           <div class="flex min-h-[300px]">
-            <!-- Sidebar des calendriers -->
+            <!-- Sidebar des calendriers (checkboxes fonctionnelles) -->
             <aside
               class="hidden w-44 shrink-0 border-r border-black/5 bg-white/40 px-4 py-4 sm:block"
             >
               <p class="pb-2 text-[11px] font-semibold text-black/35">
                 {{ $t('macos.calTitle') }}
               </p>
-              <div
+              <button
                 v-for="cat in calCategories"
-                :key="cat.labelKey"
-                class="flex items-center gap-2 py-1 text-[13px] text-aink"
+                :key="cat.id"
+                class="flex w-full items-center gap-2 rounded-md px-1 py-1 text-left text-[13px] text-aink transition-colors hover:bg-black/5"
+                @click.stop="toggleCat(cat.id)"
               >
                 <span
-                  class="flex h-3.5 w-3.5 items-center justify-center rounded-[4px] text-[8px] font-bold text-white"
-                  :style="{ background: cat.color }"
-                  >✓</span
+                  class="flex h-3.5 w-3.5 items-center justify-center rounded-[4px] text-[8px] font-bold text-white transition-colors"
+                  :style="{
+                    background: activeCats[cat.id] ? cat.color : 'transparent',
+                    boxShadow: `inset 0 0 0 1.5px ${cat.color}`,
+                  }"
+                  >{{ activeCats[cat.id] ? '✓' : '' }}</span
                 >
                 {{ $t(cat.labelKey) }}
-              </div>
+              </button>
             </aside>
 
-            <!-- Événements -->
+            <!-- Événements (cliquables : popover de détail) -->
             <div class="min-w-0 flex-1 space-y-3 p-5 sm:p-6">
-              <div
-                v-for="step in journeySteps"
+              <button
+                v-for="step in visibleSteps"
                 :key="step.id"
-                class="relative overflow-hidden rounded-lg px-4 py-3"
+                class="relative block w-full overflow-hidden rounded-lg px-4 py-3 text-left transition-[filter] duration-200 hover:brightness-95"
                 :style="{ background: step.tint }"
+                @click.stop="openEvent($event, step.id)"
               >
                 <span
                   class="absolute bottom-0 left-0 top-0 w-1"
@@ -537,7 +542,13 @@
                 <p class="mt-1 text-[13px] leading-relaxed text-black/55">
                   {{ $t(step.descKey) }}
                 </p>
-              </div>
+              </button>
+              <p
+                v-if="!visibleSteps.length"
+                class="py-10 text-center text-[13px] text-black/35"
+              >
+                {{ $t('macos.spotlightEmpty') }}
+              </p>
             </div>
           </div>
         </UiMacWindow>
@@ -592,6 +603,46 @@
         </UiMacWindow>
       </div>
     </section>
+
+    <!-- ═══ Popover d'événement (Calendrier) ═══ -->
+    <Teleport to="body">
+      <Transition name="ql">
+        <div
+          v-if="evtStep"
+          class="ql-panel fixed z-[92] w-[300px] overflow-hidden rounded-xl border border-black/10 bg-white shadow-2xl ring-1 ring-white/40"
+          :style="{ left: evt.x + 'px', top: evt.y + 'px' }"
+          @click.stop
+        >
+          <div class="h-1.5" :style="{ background: evtStep.color }"></div>
+          <div class="p-4">
+            <h3 class="text-[15px] font-bold leading-snug text-aink">
+              {{ $t(evtStep.titleKey) }}
+            </h3>
+            <div class="mt-2 space-y-1 text-[12.5px] text-agray">
+              <p class="flex items-center gap-2">
+                <span class="text-[12px]"><DesktopSfIcon name="clock" /></span>
+                {{ evtStep.periodKey ? $t(evtStep.periodKey) : evtStep.period }}
+              </p>
+              <p class="flex items-center gap-2">
+                <span class="text-[12px]"><DesktopSfIcon name="folder" /></span>
+                {{ evtStep.location }}
+              </p>
+            </div>
+            <p
+              class="mt-3 border-t border-black/5 pt-3 text-[13px] leading-relaxed text-black/60"
+            >
+              {{ $t(evtStep.descKey) }}
+            </p>
+            <NuxtLink
+              :to="{ path: localePath('/about'), query: { c: evtStep.aboutId } }"
+              class="mt-3 inline-block rounded-md bg-ablue px-3.5 py-1.5 text-[12.5px] font-medium text-white shadow-sm transition-colors hover:bg-[#0077ed]"
+            >
+              {{ $t('macos.openInContacts') }} ›
+            </NuxtLink>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
 
     <!-- ═══ Quick Look ═══ -->
     <Teleport to="body">
@@ -710,16 +761,40 @@ const winEls: Record<string, Ref<HTMLElement | null>> = {
 const router = useRouter()
 const go = (path: string) => router.push(localePath(path))
 
-// Parcours façon Calendrier : catégories et blocs d'événements colorés
+// Parcours façon Calendrier : catégories cochables et événements cliquables
 const calCategories = [
-  { labelKey: 'macos.calWork', color: '#1273DE' },
-  { labelKey: 'macos.calStudies', color: '#0E9F6E' },
-  { labelKey: 'macos.calTraining', color: '#EA580C' },
+  { id: 'work', labelKey: 'macos.calWork', color: '#1273DE' },
+  { id: 'studies', labelKey: 'macos.calStudies', color: '#0E9F6E' },
+  { id: 'training', labelKey: 'macos.calTraining', color: '#EA580C' },
 ]
+
+const activeCats = reactive<Record<string, boolean>>({
+  work: true,
+  studies: true,
+  training: true,
+})
+const toggleCat = (id: string) => {
+  activeCats[id] = !activeCats[id]
+}
+
+// Popover de détail d'un événement
+const evt = reactive({ id: '', x: 0, y: 0 })
+const openEvent = (e: MouseEvent, id: string) => {
+  sfx.click()
+  evt.id = evt.id === id ? '' : id
+  evt.x = Math.min(Math.max(e.clientX - 150, 12), window.innerWidth - 312)
+  evt.y = Math.min(e.clientY + 14, window.innerHeight - 300)
+}
+const evtStep = computed(() =>
+  journeySteps.find((s) => s.id === evt.id)
+)
 
 const journeySteps = [
   {
     id: 'digitaleo',
+    cat: 'work',
+    location: 'Rennes, France',
+    aboutId: 'digitaleo',
     color: '#1273DE',
     colorDark: '#0B4FA0',
     tint: 'rgba(18, 115, 222, 0.10)',
@@ -730,6 +805,9 @@ const journeySteps = [
   },
   {
     id: 'epitech',
+    cat: 'studies',
+    location: 'Rennes, France',
+    aboutId: 'epitech',
     color: '#0E9F6E',
     colorDark: '#086A49',
     tint: 'rgba(14, 159, 110, 0.10)',
@@ -740,6 +818,9 @@ const journeySteps = [
   },
   {
     id: 'kpme',
+    cat: 'work',
+    location: 'Boucau, France',
+    aboutId: 'kpme',
     color: '#1273DE',
     colorDark: '#0B4FA0',
     tint: 'rgba(18, 115, 222, 0.10)',
@@ -750,6 +831,9 @@ const journeySteps = [
   },
   {
     id: 'bts',
+    cat: 'training',
+    location: 'Hasparren, France',
+    aboutId: 'education',
     color: '#EA580C',
     colorDark: '#9A3908',
     tint: 'rgba(234, 88, 12, 0.10)',
@@ -760,6 +844,9 @@ const journeySteps = [
   },
   {
     id: 'bac',
+    cat: 'training',
+    location: 'Biarritz, France',
+    aboutId: 'bac',
     color: '#EA580C',
     colorDark: '#9A3908',
     tint: 'rgba(234, 88, 12, 0.10)',
@@ -769,6 +856,10 @@ const journeySteps = [
     descKey: 'about.bac.description',
   },
 ]
+
+const visibleSteps = computed(() =>
+  journeySteps.filter((st) => activeCats[st.cat])
+)
 
 const projects = useProjects()
 const { t } = useI18n()
@@ -872,7 +963,10 @@ const deskIcons = [
 
 // ── Menu contextuel ──
 const onEsc = (e: KeyboardEvent) => {
-  if (e.key === 'Escape') quicklook.value = ''
+  if (e.key === 'Escape') {
+    quicklook.value = ''
+    evt.id = ''
+  }
 }
 
 const ctx = reactive({ show: false, x: 0, y: 0 })
@@ -954,6 +1048,7 @@ onMounted(() => {
   document.addEventListener('click', () => {
     selectedIcon.value = ''
     sortMenuOpen.value = false
+    evt.id = ''
   })
   document.addEventListener('keydown', onEsc)
 

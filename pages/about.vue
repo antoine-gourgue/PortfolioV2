@@ -268,6 +268,16 @@ const entries: ContactEntry[] = [
 const selected = ref('antoine')
 const current = computed(() => entries.find((e) => e.id === selected.value))
 
+// Pré-sélection via ?c=<id> (liens "Ouvrir dans Contacts" du Calendrier)
+const route = useRoute()
+const preselect = route.query.c
+if (
+  typeof preselect === 'string' &&
+  entries.some((e) => e.id === preselect)
+) {
+  selected.value = preselect
+}
+
 const container = ref<HTMLElement | null>(null)
 const winEl = ref<HTMLElement | null>(null)
 const { closeToDesktop, toggleZoom } = usePageWindow(winEl)

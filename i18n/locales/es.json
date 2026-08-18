@@ -309,6 +309,7 @@
     "wxMyLocation": "MI UBICACIÓN",
     "wxHourly": "PREVISIÓN POR HORAS",
     "wxDaily": "PREVISIÓN DE 6 DÍAS",
-    "wxNow": "Ahora"
+    "wxNow": "Ahora",
+    "openInContacts": "Abrir en Contactos"
   }
 }
