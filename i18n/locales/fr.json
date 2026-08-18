@@ -163,6 +163,9 @@
       "tailtcg": {
         "description": "Suivi de collection de cartes Pokémon : état, valeur, pré-gradation sur photos, classeurs et vitrine partageable. Gratuit, sans pub. Conçu avec Next.js et TypeScript."
       },
+      "echoconnect": {
+        "description": "Messagerie temps réel avec salons de groupe, messages privés et commandes de chat façon IRC. Vue 3, Socket.io, Express et MongoDB — avec un mode démo intégré qui simule l'API et le socket pour essayer l'app sans backend."
+      },
       "emailEditor": {
         "description": "L'éditeur d'email de la plateforme Digitaleo, utilisé au quotidien par des réseaux d'enseignes. Mon terrain de jeu en alternance : blocs dynamiques, préheader et sélecteur d'émojis, compatibilité Outlook via VML et HTML conditionnel, inversion de colonnes sur mobile, intégration des composants du Design System Vue.js dans le legacy AngularJS, archivage des campagnes et refonte des statistiques Marketing Direct."
       }
@@ -316,6 +319,7 @@
     "openInContacts": "Ouvrir dans Contacts",
     "sidebarWork": "Alternance",
     "catSaas": "Marketing SaaS",
+    "catChat": "Messagerie",
     "messagesTitle": "Messages",
     "errTitle": "Fichier introuvable",
     "errDesc": "L'élément demandé n'existe pas sur ce Mac.",

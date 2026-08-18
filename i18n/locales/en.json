@@ -163,6 +163,9 @@
       "tailtcg": {
         "description": "Pokémon card collection tracker: condition, value, photo-based pre-grading, binders and a shareable showcase. Free, ad-free. Built with Next.js and TypeScript."
       },
+      "echoconnect": {
+        "description": "Real-time messaging app with group channels, private messages and IRC-style chat commands. Vue 3, Socket.io, Express and MongoDB — including a built-in demo mode that mocks the API and socket so the app can be tried without a backend."
+      },
       "emailEditor": {
         "description": "Digitaleo's platform email editor, used daily by retail networks. My apprenticeship playground: dynamic blocks, preheader and emoji picker, Outlook compatibility through VML and conditional HTML, mobile column reordering, Vue.js Design System components integrated into the AngularJS legacy, campaign archiving and the Direct Marketing statistics revamp."
       }
@@ -316,6 +319,7 @@
     "openInContacts": "Open in Contacts",
     "sidebarWork": "Apprenticeship",
     "catSaas": "Marketing SaaS",
+    "catChat": "Messaging",
     "messagesTitle": "Messages",
     "errTitle": "File not found",
     "errDesc": "The requested item doesn't exist on this Mac.",

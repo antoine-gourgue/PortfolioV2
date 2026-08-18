@@ -111,9 +111,9 @@ export const useChatbotIntents = (): Intent[] => [
       en: ['projects', 'portfolio', 'work', 'project'],
     },
     response: {
-      fr: `📁 Tout est dans l'${link('/projects', 'App Store')} : TailTCG, Mosaic, Sapia, mon Design System, AuroraHome — et l'éditeur d'email Digitaleo côté pro.`,
-      es: `📁 Todo está en el ${link('/projects', 'App Store')}: TailTCG, Mosaic, Sapia, mi Design System, AuroraHome — y el editor de email de Digitaleo en la parte profesional.`,
-      en: `📁 Everything is in the ${link('/projects', 'App Store')}: TailTCG, Mosaic, Sapia, my Design System, AuroraHome — plus the Digitaleo email editor on the pro side.`,
+      fr: `📁 Tout est dans l'${link('/projects', 'App Store')} : TailTCG, Mosaic, Sapia, EchoConnect, mon Design System, AuroraHome — et l'éditeur d'email Digitaleo côté pro.`,
+      es: `📁 Todo está en el ${link('/projects', 'App Store')}: TailTCG, Mosaic, Sapia, EchoConnect, mi Design System, AuroraHome — y el editor de email de Digitaleo en la parte profesional.`,
+      en: `📁 Everything is in the ${link('/projects', 'App Store')}: TailTCG, Mosaic, Sapia, EchoConnect, my Design System, AuroraHome — plus the Digitaleo email editor on the pro side.`,
     },
     followUp: {
       question: {
