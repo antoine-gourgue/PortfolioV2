@@ -52,11 +52,7 @@
           @zoom="go('/about')"
         >
           <div class="px-8 pb-8 pt-7 text-center">
-            <div
-              class="mx-auto flex h-20 w-20 items-center justify-center rounded-[22px] bg-gradient-to-b from-[#3b4048] to-[#17181b] shadow-md ring-1 ring-white/10"
-            >
-              <AgLogo class="h-11 w-12 text-white" />
-            </div>
+            <AgLogo class="mx-auto h-16 w-20 text-aink" />
             <h1 class="mt-4 text-[22px] font-bold tracking-tight">
               Antoine Gourgue
             </h1>
@@ -265,20 +261,36 @@
             <h2 class="text-2xl font-bold tracking-tight">
               {{ $t('home.journey') }}
             </h2>
-            <div
-              v-for="step in journey"
-              :key="step"
-              class="mt-6 border-l-2 border-ablue/40 pl-5"
-            >
-              <p class="text-sm font-medium text-agray">
-                {{ $t(`home.${step}.period`) }}
-              </p>
-              <h3 class="mt-0.5 font-semibold">
-                {{ $t(`home.${step}.title`) }}
-              </h3>
-              <p class="mt-1.5 text-sm leading-relaxed text-agray">
-                {{ $t(`home.${step}.description`) }}
-              </p>
+
+            <!-- Frise chronologique -->
+            <div class="relative ml-1 mt-7">
+              <span
+                class="absolute bottom-4 left-[15px] top-2 w-px bg-black/10"
+              ></span>
+              <div
+                v-for="step in journeySteps"
+                :key="step.id"
+                class="relative flex gap-5 pb-8 last:pb-0"
+              >
+                <span
+                  class="z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[12px] font-bold text-white shadow-sm ring-2 ring-white"
+                  :style="{ background: step.bg }"
+                  >{{ step.initial }}</span
+                >
+                <div class="min-w-0 pt-0.5">
+                  <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                    <h3 class="font-semibold">{{ $t(step.titleKey) }}</h3>
+                    <span
+                      v-if="step.periodKey"
+                      class="rounded-full bg-black/5 px-2 py-0.5 text-[11px] font-medium text-black/50"
+                      >{{ $t(step.periodKey) }}</span
+                    >
+                  </div>
+                  <p class="mt-1.5 text-sm leading-relaxed text-agray">
+                    {{ $t(step.descKey) }}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </UiMacWindow>
@@ -451,7 +463,33 @@ const winEls: Record<string, Ref<HTMLElement | null>> = {
 const router = useRouter()
 const go = (path: string) => router.push(localePath(path))
 
-const journey = ['journey2024', 'journey2023']
+// Parcours en frise chronologique (fenêtre Notes)
+const journeySteps = [
+  {
+    id: 'digitaleo',
+    initial: 'D',
+    bg: 'linear-gradient(to bottom, #34C1F2, #1273DE)',
+    titleKey: 'home.journey2024.title',
+    periodKey: 'home.journey2024.period',
+    descKey: 'home.journey2024.description',
+  },
+  {
+    id: 'epitech',
+    initial: 'E',
+    bg: 'linear-gradient(to bottom, #3ECF8E, #0E9F6E)',
+    titleKey: 'home.journey2023.title',
+    periodKey: 'home.journey2023.period',
+    descKey: 'home.journey2023.description',
+  },
+  {
+    id: 'bts',
+    initial: 'B',
+    bg: 'linear-gradient(to bottom, #FB923C, #EA580C)',
+    titleKey: 'about.education.title',
+    periodKey: '',
+    descKey: 'about.education.description',
+  },
+]
 
 const projects = useProjects()
 

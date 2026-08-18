@@ -33,10 +33,21 @@
               @click="selected = entry.id"
             >
               <span
-                class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white"
-                :style="{ background: entry.avatarBg }"
+                class="flex h-7 w-7 shrink-0 items-center justify-center"
+                :class="
+                  entry.id === 'antoine'
+                    ? ''
+                    : 'rounded-full text-[11px] font-bold text-white'
+                "
+                :style="
+                  entry.id === 'antoine' ? {} : { background: entry.avatarBg }
+                "
               >
-                <AgLogo v-if="entry.id === 'antoine'" class="h-4 w-5" />
+                <AgLogo
+                  v-if="entry.id === 'antoine'"
+                  class="h-5 w-6"
+                  :class="selected === 'antoine' ? 'text-white' : 'text-aink'"
+                />
                 <template v-else>{{ entry.initials }}</template>
               </span>
               {{ entry.name }}
@@ -63,12 +74,16 @@
             </div>
 
             <div class="flex items-center gap-5">
+              <AgLogo
+                v-if="current.id === 'antoine'"
+                class="h-16 w-20 shrink-0 text-aink"
+              />
               <span
+                v-else
                 class="flex h-20 w-20 shrink-0 items-center justify-center rounded-full text-2xl font-bold text-white shadow-md"
                 :style="{ background: current.avatarBg }"
               >
-                <AgLogo v-if="current.id === 'antoine'" class="h-10 w-12" />
-                <template v-else>{{ current.initials }}</template>
+                {{ current.initials }}
               </span>
               <div class="min-w-0">
                 <h1 class="text-2xl font-bold tracking-tight">
