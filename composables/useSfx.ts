@@ -103,11 +103,10 @@ export function useSfx() {
       if (!enabled()) return
       tone({ from: 360, to: 650, dur: 0.1, peak: 0.14 })
     },
-    /** Réduction vers le dock */
+    /** Fermeture / réduction : "thup" feutré, très discret */
     minimize() {
       if (!enabled()) return
-      tone({ from: 540, to: 150, dur: 0.24, peak: 0.12 })
-      noise({ dur: 0.22, peak: 0.05, filterFrom: 2000, filterTo: 300 })
+      tone({ from: 300, to: 190, dur: 0.08, peak: 0.09, lowpass: 800 })
     },
     /** Restauration depuis le dock */
     restore() {
