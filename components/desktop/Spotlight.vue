@@ -129,7 +129,7 @@ const open = (url: string) => {
 
 const items = computed<Item[]>(() => [
   { id: 'home', label: t('nav.home'), icon: { name: 'finder' }, kind: 'App', group: 'apps', action: () => go('/') },
-  { id: 'projects', label: t('nav.projects'), icon: { name: 'safari' }, kind: 'App', group: 'apps', action: () => go('/projects') },
+  { id: 'projects', label: t('nav.projects'), icon: { name: 'appstore' }, kind: 'App', group: 'apps', action: () => go('/projects') },
   { id: 'about', label: t('nav.about'), icon: { name: 'contacts' }, kind: 'App', group: 'apps', action: () => go('/about') },
   { id: 'blog', label: t('nav.blog'), icon: { name: 'notes' }, kind: 'App', group: 'apps', action: () => go('/blog') },
   { id: 'contact', label: t('nav.contact'), icon: { name: 'mail' }, kind: 'App', group: 'apps', action: () => go('/contact') },

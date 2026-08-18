@@ -85,16 +85,18 @@
         </transition>
       </div>
 
-      <i
-        class="fas fa-battery-three-quarters hidden px-1.5 text-[13px] text-white/80 sm:block"
-      ></i>
-      <i class="fas fa-wifi hidden px-1.5 text-xs text-white/80 sm:block"></i>
+      <span class="hidden px-1.5 text-[16px] text-white/85 sm:block"
+        ><DesktopSfIcon name="battery"
+      /></span>
+      <span class="hidden px-1.5 text-[15px] text-white/85 sm:block"
+        ><DesktopSfIcon name="wifi"
+      /></span>
       <button
-        class="menu-btn hidden px-1.5 lg:block"
+        class="menu-btn hidden px-1.5 text-[14px] text-white/85 lg:block"
         aria-label="Spotlight"
         @click="desktop.state.value.spotlightOpen = true"
       >
-        <i class="fas fa-magnifying-glass text-xs text-white/80"></i>
+        <DesktopSfIcon name="search" />
       </button>
       <span class="px-1.5 tabular-nums text-white/90">{{ clock }}</span>
     </div>

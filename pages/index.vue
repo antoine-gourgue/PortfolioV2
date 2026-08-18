@@ -185,8 +185,8 @@
           <template #toolbar>
             <div class="flex items-center gap-3">
               <div class="flex items-center gap-1 text-black/45">
-                <button class="tb-btn"><i class="fas fa-chevron-left text-[13px]"></i></button>
-                <button class="tb-btn text-black/20"><i class="fas fa-chevron-right text-[13px]"></i></button>
+                <button class="tb-btn text-[15px]"><DesktopSfIcon name="chevron-left" /></button>
+                <button class="tb-btn text-[15px] text-black/20"><DesktopSfIcon name="chevron-right" /></button>
               </div>
               <span class="text-[14px] font-semibold">{{
                 $t('macos.finderProjects')
@@ -197,30 +197,30 @@
                   class="hidden overflow-hidden rounded-md border border-black/10 sm:flex"
                 >
                   <button
-                    class="px-2 py-0.5"
+                    class="px-2 py-1 text-[13px]"
                     :class="finderView === 'grid' ? 'bg-black/10 text-aink' : ''"
                     @click="finderView = 'grid'"
                   >
-                    <i class="fas fa-border-all text-[11px]"></i>
+                    <DesktopSfIcon name="grid" />
                   </button>
                   <button
-                    class="px-2 py-0.5"
+                    class="px-2 py-1 text-[13px]"
                     :class="finderView === 'list' ? 'bg-black/10 text-aink' : ''"
                     @click="finderView = 'list'"
                   >
-                    <i class="fas fa-list text-[11px]"></i>
+                    <DesktopSfIcon name="list" />
                   </button>
                 </div>
 
                 <!-- Tri -->
                 <div class="relative hidden sm:block">
                   <button
-                    class="tb-btn"
+                    class="tb-btn text-[14px]"
                     :class="sortMenuOpen ? 'bg-black/10 text-aink' : ''"
                     :title="$t('macos.sortBy')"
                     @click.stop="sortMenuOpen = !sortMenuOpen"
                   >
-                    <i class="fas fa-arrow-down-wide-short text-[12px]"></i>
+                    <DesktopSfIcon name="sort" />
                   </button>
                   <transition name="dropdown">
                     <div
@@ -253,15 +253,17 @@
                   </transition>
                 </div>
 
-                <i
-                  class="fas fa-arrow-up-from-bracket hidden text-[12px] md:block"
-                ></i>
+                <span class="hidden text-[14px] md:block"
+                  ><DesktopSfIcon name="share"
+                /></span>
 
                 <!-- Recherche réelle -->
                 <div
                   class="hidden items-center gap-1.5 rounded-md bg-black/5 px-2.5 py-1 md:flex"
                 >
-                  <i class="fas fa-magnifying-glass text-[10px] text-black/35"></i>
+                  <span class="text-[12px] text-black/35"
+                    ><DesktopSfIcon name="search"
+                  /></span>
                   <input
                     v-model="finderQuery"
                     type="text"
@@ -282,33 +284,33 @@
                 {{ $t('macos.finderFavorites') }}
               </p>
               <div class="sidebar-item">
-                <i class="fas fa-wifi text-[12px] text-ablue"></i>
+                <span class="sf"><DesktopSfIcon name="airdrop" /></span>
                 {{ $t('macos.finderAirdrop') }}
               </div>
               <div class="sidebar-item">
-                <i class="fas fa-clock text-[12px] text-ablue"></i>
+                <span class="sf"><DesktopSfIcon name="clock" /></span>
                 {{ $t('macos.finderRecents') }}
               </div>
               <div class="sidebar-item">
-                <i class="fas fa-table-cells-large text-[12px] text-ablue"></i>
+                <span class="sf"><DesktopSfIcon name="grid" /></span>
                 {{ $t('macos.finderApps') }}
               </div>
               <div class="sidebar-item">
-                <i class="fas fa-desktop text-[12px] text-ablue"></i>
+                <span class="sf"><DesktopSfIcon name="desktop" /></span>
                 {{ $t('macos.finderDesktop') }}
               </div>
               <div class="sidebar-item">
-                <i class="fas fa-file-lines text-[12px] text-ablue"></i>
+                <span class="sf"><DesktopSfIcon name="doc" /></span>
                 {{ $t('macos.finderDocs') }}
               </div>
               <div class="sidebar-item">
-                <i class="fas fa-circle-down text-[12px] text-ablue"></i>
+                <span class="sf"><DesktopSfIcon name="download" /></span>
                 {{ $t('macos.finderDownloads') }}
               </div>
               <div
                 class="mt-0.5 flex items-center gap-2 rounded-md bg-black/10 px-2 py-1 text-[13px] font-medium text-aink"
               >
-                <i class="fas fa-folder text-[12px] text-ablue"></i>
+                <span class="sf"><DesktopSfIcon name="folder" /></span>
                 {{ $t('macos.finderProjects') }}
               </div>
 
@@ -318,7 +320,7 @@
                 {{ $t('macos.finderLocations') }}
               </p>
               <div class="sidebar-item">
-                <i class="fas fa-laptop text-[12px] text-ablue"></i>
+                <span class="sf"><DesktopSfIcon name="laptop" /></span>
                 {{ $t('macos.finderMac') }}
               </div>
             </aside>
@@ -988,6 +990,9 @@ onUnmounted(() => {
 /* Barre d'outils Finder */
 .tb-btn {
   @apply rounded px-1.5 py-0.5 transition-colors hover:bg-black/5;
+}
+.sf {
+  @apply text-[14px] text-ablue;
 }
 .sort-item {
   @apply flex w-full items-center justify-between rounded-md px-2.5 py-1 text-left text-[13px] text-aink transition-colors hover:bg-ablue hover:text-white;

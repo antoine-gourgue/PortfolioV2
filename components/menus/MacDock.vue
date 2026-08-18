@@ -91,7 +91,7 @@ interface DockApp {
 
 const apps: DockApp[] = [
   { id: 'finder', label: 'nav.home', path: '/', icon: 'finder' },
-  { id: 'safari', label: 'nav.projects', path: '/projects', icon: 'safari' },
+  { id: 'appstore', label: 'nav.projects', path: '/projects', icon: 'appstore' },
   { id: 'contacts', label: 'nav.about', path: '/about', icon: 'contacts' },
   { id: 'notes', label: 'nav.blog', path: '/blog', icon: 'notes' },
   { id: 'mail', label: 'nav.contact', path: '/contact', icon: 'mail' },

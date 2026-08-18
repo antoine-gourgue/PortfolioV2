@@ -142,6 +142,21 @@
     />
   </svg>
 
+  <!-- App Store -->
+  <svg v-else-if="name === 'appstore'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
+    <defs>
+      <linearGradient :id="`as-${uid}`" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#1D9BF6" /><stop offset="1" stop-color="#0D5FE3" />
+      </linearGradient>
+    </defs>
+    <rect width="100" height="100" rx="22" :fill="`url(#as-${uid})`" />
+    <g stroke="#fff" stroke-width="7.5" stroke-linecap="round" fill="none">
+      <path d="M34 70 L52 32" />
+      <path d="M66 70 L48 32" />
+      <path d="M30 58 H70" />
+    </g>
+  </svg>
+
   <!-- Calendrier -->
   <svg v-else-if="name === 'calendar'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
     <defs>
