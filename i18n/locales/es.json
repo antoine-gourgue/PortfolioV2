@@ -166,6 +166,9 @@
       "trinity": {
         "description": "Supermercado online completo hecho en Epitech: catálogo de productos reales con Nutri-Score, búsqueda por secciones, carrito, pedidos y facturas PDF, back office de administración con estadísticas, PWA instalable (con app Android) y pago simulado. Next.js 15, Prisma y PostgreSQL."
       },
+      "jobboard": {
+        "description": "Plataforma completa de ofertas de empleo: búsqueda y filtros (contrato, teletrabajo), candidatura en un clic con CV y mensaje, favoritos, alertas de empleo, puntuación de matching según tus competencias, espacio reclutador con candidaturas recibidas, dashboard admin y modo oscuro. Vue 3 en el front, API AdonisJS + MySQL — con un modo demo integrado para probar sin backend."
+      },
       "echoconnect": {
         "description": "Mensajería en tiempo real con salas de grupo, mensajes privados y comandos de chat estilo IRC. Vue 3, Socket.io, Express y MongoDB — con un modo demo integrado que simula la API y el socket para probar la app sin backend."
       },
@@ -323,6 +326,7 @@
     "sidebarWork": "Alternancia",
     "catSaas": "Marketing SaaS",
     "catChat": "Mensajería",
+    "catJobs": "Empleo",
     "catShop": "E-commerce",
     "messagesTitle": "Messages",
     "errTitle": "Archivo no encontrado",
