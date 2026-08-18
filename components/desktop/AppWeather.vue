@@ -34,11 +34,11 @@
         </div>
 
         <!-- En-tête : ville, température géante, condition, H/L -->
-        <div class="wx-drag select-none px-6 pb-4 pt-1 text-center">
-          <p class="text-[10px] font-semibold tracking-[0.12em] text-white/70">
+        <div class="wx-drag mx-auto w-full max-w-md select-none px-6 pb-5 pt-3 text-center lg:max-w-none lg:pb-4 lg:pt-1">
+          <p class="text-[12px] font-semibold tracking-[0.12em] text-white/70 lg:text-[10px]">
             {{ $t('macos.wxMyLocation') }}
           </p>
-          <p class="mt-0.5 text-[22px] font-medium leading-tight">
+          <p class="mt-0.5 text-[30px] font-medium leading-tight lg:text-[22px]">
             {{ city }}
           </p>
           <template v-if="header">
@@ -48,13 +48,13 @@
             >
               {{ header.dayLong }}
             </p>
-            <p class="text-[64px] font-thin leading-[1.05]">
+            <p class="text-[92px] font-thin leading-[1.05] lg:text-[64px]">
               {{ Math.round(header.temp) }}°
             </p>
-            <p class="text-[15px] font-medium text-white/95">
+            <p class="text-[19px] font-medium text-white/95 lg:text-[15px]">
               {{ $t(wxLabel(header.code)) }}
             </p>
-            <p class="mt-0.5 text-[15px] font-medium text-white/90">
+            <p class="mt-0.5 text-[19px] font-medium text-white/90 lg:text-[15px]">
               ↑&nbsp;{{ Math.round(header.max) }}°&nbsp;&nbsp;↓&nbsp;{{ Math.round(header.min) }}°
             </p>
           </template>
@@ -67,7 +67,7 @@
         </div>
 
         <!-- Prévisions horaires (du jour sélectionné) -->
-        <div v-if="shownHours.length" class="wx-card">
+        <div v-if="shownHours.length" class="wx-card mx-auto w-[calc(100%-2rem)] max-w-md lg:mx-3 lg:w-auto lg:max-w-none">
           <p class="wx-card-title">
             <span class="text-[11px]"><DesktopSfIcon name="clock" /></span>
             {{ $t('macos.wxHourly') }}
@@ -76,19 +76,22 @@
             <div
               v-for="(h, i) in shownHours"
               :key="h.time"
-              class="flex min-w-[44px] flex-col items-center gap-1.5"
+              class="flex min-w-[54px] flex-col items-center gap-2 lg:min-w-[44px] lg:gap-1.5"
             >
-              <span class="text-[11px] font-medium text-white/80">{{
+              <span class="text-[13px] font-medium text-white/80 lg:text-[11px]">{{
                 selectedDay === 0 && i === 0 ? $t('macos.wxNow') : h.label
               }}</span>
-              <span class="text-[14px] leading-none"><DesktopWxIcon :code="h.code" /></span>
-              <span class="text-[14px] font-semibold">{{ Math.round(h.temp) }}°</span>
+              <span class="text-[22px] leading-none lg:text-[14px]"><DesktopWxIcon :code="h.code" /></span>
+              <span class="text-[17px] font-semibold lg:text-[14px]">{{ Math.round(h.temp) }}°</span>
             </div>
           </div>
         </div>
 
         <!-- Prévisions sur 6 jours -->
-        <div v-if="days.length" class="wx-card">
+        <div
+          v-if="days.length"
+          class="wx-card mx-auto w-[calc(100%-2rem)] max-w-md lg:mx-3 lg:w-auto lg:max-w-none"
+        >
           <p class="wx-card-title">
             <span class="text-[11px]"><DesktopSfIcon name="calendar" /></span>
             {{ $t('macos.wxDaily') }}
@@ -96,18 +99,18 @@
           <button
             v-for="(d, i) in days"
             :key="d.date"
-            class="flex w-full items-center gap-3 rounded-lg px-2 py-[7px] text-[14px] transition-colors"
+            class="flex w-full items-center gap-3 rounded-lg px-2 py-[10px] text-[17px] transition-colors lg:py-[7px] lg:text-[14px]"
             :class="[
               i === 0 ? '' : 'border-t border-white/10',
               selectedDay === i ? 'bg-white/15 !border-transparent' : 'hover:bg-white/5',
             ]"
             @click="selectedDay = i"
           >
-            <span class="w-12 font-medium capitalize">{{ d.label }}</span>
-            <span class="w-6 text-center text-[14px] leading-none">
+            <span class="w-14 font-medium capitalize lg:w-12">{{ d.label }}</span>
+            <span class="w-8 text-center text-[22px] leading-none lg:w-6 lg:text-[14px]">
               <DesktopWxIcon :code="d.code" />
             </span>
-            <span class="w-7 text-right font-medium text-white/60">{{ Math.round(d.min) }}°</span>
+            <span class="w-9 text-right font-medium text-white/60 lg:w-7">{{ Math.round(d.min) }}°</span>
             <!-- Barre de plage de température (signature macOS) -->
             <span class="relative h-[4px] flex-1 overflow-hidden rounded-full bg-black/25">
               <span
@@ -115,7 +118,7 @@
                 :style="rangeBar(d)"
               ></span>
             </span>
-            <span class="w-7 text-right font-medium">{{ Math.round(d.max) }}°</span>
+            <span class="w-9 text-right font-medium lg:w-7">{{ Math.round(d.max) }}°</span>
           </button>
         </div>
       </div>
@@ -383,7 +386,7 @@ watch(
 
 <style scoped>
 .wx-card {
-  @apply mx-3 mt-2.5 rounded-xl bg-black/15 px-2 pb-1 pt-1.5 backdrop-blur-sm;
+  @apply mt-3 rounded-2xl bg-black/15 px-2 pb-1 pt-1.5 backdrop-blur-sm lg:mt-2.5 lg:rounded-xl;
 }
 .wx-card-title {
   @apply mb-1 flex items-center gap-1.5 border-b border-white/15 px-2 pb-1.5 text-[10px] font-semibold tracking-[0.08em] text-white/60;
