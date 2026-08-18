@@ -74,7 +74,7 @@
               <span class="text-[11px] font-medium text-white/80">{{
                 selectedDay === 0 && i === 0 ? $t('macos.wxNow') : h.label
               }}</span>
-              <span class="text-[15px]"><DesktopWxIcon :code="h.code" /></span>
+              <span class="text-[14px] leading-none"><DesktopWxIcon :code="h.code" /></span>
               <span class="text-[14px] font-semibold">{{ Math.round(h.temp) }}°</span>
             </div>
           </div>
@@ -97,7 +97,7 @@
             @click="selectedDay = i"
           >
             <span class="w-12 font-medium capitalize">{{ d.label }}</span>
-            <span class="w-6 text-center text-[15px]">
+            <span class="w-6 text-center text-[14px] leading-none">
               <DesktopWxIcon :code="d.code" />
             </span>
             <span class="w-7 text-right font-medium text-white/60">{{ Math.round(d.min) }}°</span>
