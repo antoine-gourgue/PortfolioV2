@@ -12,7 +12,7 @@
   >
     <!-- Barre de navigation iOS (mobile uniquement) -->
     <div
-      class="relative flex items-center justify-between px-3 py-2.5 lg:hidden"
+      class="relative flex items-center justify-between px-3 py-2.5 md:hidden"
       :class="
         dark
           ? 'border-b border-white/10 bg-[#2c2c2e]'
@@ -36,9 +36,9 @@
       </span>
     </div>
 
-    <!-- Barre de titre (desktop) -->
+    <!-- Barre de titre (desktop et tablette) -->
     <div
-      class="drag-handle relative hidden items-center px-4 py-2.5 select-none lg:flex"
+      class="drag-handle relative hidden items-center px-4 py-2.5 select-none md:flex"
       :class="
         dark
           ? 'border-b border-white/10 bg-[#2c2c2e]'
