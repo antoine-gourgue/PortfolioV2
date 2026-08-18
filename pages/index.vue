@@ -9,15 +9,62 @@
       class="flex min-h-[calc(100svh-90px)] flex-col px-7 pb-6 pt-16 lg:hidden"
     >
       <ClientOnly>
-        <div
-          class="mx-auto w-full max-w-sm rounded-[24px] border border-white/30 bg-white/20 px-5 py-4 shadow-lg backdrop-blur-2xl"
-        >
-          <p class="text-[13px] font-semibold capitalize text-white/85">
-            {{ sbWeekday }}
-          </p>
-          <p class="text-[42px] font-bold leading-none text-white">
-            {{ sbDay }}
-          </p>
+        <div class="mx-auto grid w-full max-w-sm grid-cols-2 gap-4">
+          <!-- Widget Calendrier -->
+          <button
+            class="flex aspect-square flex-col rounded-[22px] bg-white/90 p-4 text-left shadow-lg backdrop-blur-2xl"
+            @click="go('/about')"
+          >
+            <p
+              class="text-[12px] font-semibold uppercase tracking-wide text-[#FF453A]"
+            >
+              {{ sbWeekday }}
+            </p>
+            <p class="text-[42px] font-semibold leading-none text-aink">
+              {{ sbDay }}
+            </p>
+            <div class="mt-auto space-y-1">
+              <div
+                class="rounded-md border-l-[3px] border-[#1273DE] bg-[#1273DE]/15 px-1.5 py-0.5"
+              >
+                <p class="truncate text-[10px] font-semibold text-[#0B4FA0]">
+                  Digitaleo · 2024—26
+                </p>
+              </div>
+              <div
+                class="rounded-md border-l-[3px] border-[#0E9F6E] bg-[#0E9F6E]/15 px-1.5 py-0.5"
+              >
+                <p class="truncate text-[10px] font-semibold text-[#086A49]">
+                  Epitech · 2023—26
+                </p>
+              </div>
+            </div>
+          </button>
+
+          <!-- Widget Météo (live) -->
+          <button
+            class="flex aspect-square flex-col rounded-[22px] bg-gradient-to-b from-[#2E67BE] to-[#4A86D8] p-4 text-left text-white shadow-lg"
+            @click="desktop.state.value.apps.weather = true"
+          >
+            <p class="truncate text-[14px] font-semibold">
+              {{ wxWidget.city }}
+            </p>
+            <p class="text-[40px] font-thin leading-tight">
+              {{ wxWidget.temp !== null ? Math.round(wxWidget.temp) + '°' : '—' }}
+            </p>
+            <div class="mt-auto">
+              <p v-if="wxWidget.code !== null" class="text-[24px] leading-none">
+                <DesktopWxIcon :code="wxWidget.code" />
+              </p>
+              <p class="mt-1 text-[11px] font-medium text-white/85">
+                <template v-if="wxWidget.max !== null"
+                  >↑{{ Math.round(wxWidget.max!) }}° ↓{{
+                    Math.round(wxWidget.min!)
+                  }}°</template
+                >
+              </p>
+            </div>
+          </button>
         </div>
       </ClientOnly>
 
@@ -913,6 +960,48 @@ const sbWeekday = new Intl.DateTimeFormat(locale.value, {
   weekday: 'long',
 }).format(now)
 const sbDay = now.getDate()
+
+// Widget météo de l'écran d'accueil : position IP uniquement (aucune permission)
+const wxWidget = reactive<{
+  city: string
+  temp: number | null
+  code: number | null
+  min: number | null
+  max: number | null
+}>({ city: '…', temp: null, code: null, min: null, max: null })
+
+onMounted(async () => {
+  if (window.innerWidth >= 1024) return
+  let lat = 43.4832
+  let lon = -1.514
+  wxWidget.city = 'Anglet'
+  try {
+    const geo = await $fetch<{ latitude: string; longitude: string; city?: string }>(
+      'https://get.geojs.io/v1/ip/geo.json'
+    )
+    if (geo.latitude && geo.longitude) {
+      lat = parseFloat(geo.latitude)
+      lon = parseFloat(geo.longitude)
+      if (geo.city) wxWidget.city = geo.city
+    }
+  } catch {
+    /* repli Anglet */
+  }
+  try {
+    const res = await $fetch<{
+      current: { temperature_2m: number; weather_code: number }
+      daily: { temperature_2m_max: number[]; temperature_2m_min: number[] }
+    }>(
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=1`
+    )
+    wxWidget.temp = res.current.temperature_2m
+    wxWidget.code = res.current.weather_code
+    wxWidget.max = res.daily.temperature_2m_max[0]
+    wxWidget.min = res.daily.temperature_2m_min[0]
+  } catch {
+    /* le widget reste sobre en cas d'échec */
+  }
+})
 
 interface SpringboardApp {
   id: string
