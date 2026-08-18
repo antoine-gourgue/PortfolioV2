@@ -75,7 +75,7 @@ const minimizedMeta: Record<
 > = {
   about: { icon: 'contacts', label: 'macos.aboutTitle' },
   terminal: { icon: 'terminal', raw: 'Terminal' },
-  finder: { icon: 'finder', label: 'macos.finderProjects' },
+  finder: { icon: 'folder', label: 'macos.finderProjects' },
   notes: { icon: 'notes', label: 'macos.journeyFile' },
   mail: { icon: 'mail', label: 'macos.mailTitle' },
 }
