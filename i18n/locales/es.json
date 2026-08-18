@@ -163,6 +163,9 @@
       "tailtcg": {
         "description": "Seguimiento de colecciones de cartas Pokémon: estado, valor, pre-gradación sobre fotos, archivadores y vitrina compartible. Gratis y sin anuncios. Hecho con Next.js y TypeScript."
       },
+      "trinity": {
+        "description": "Supermercado online completo hecho en Epitech: catálogo de productos reales con Nutri-Score, búsqueda por secciones, carrito, pedidos y facturas PDF, back office de administración con estadísticas, PWA instalable (con app Android) y pago simulado. Next.js 15, Prisma y PostgreSQL."
+      },
       "echoconnect": {
         "description": "Mensajería en tiempo real con salas de grupo, mensajes privados y comandos de chat estilo IRC. Vue 3, Socket.io, Express y MongoDB — con un modo demo integrado que simula la API y el socket para probar la app sin backend."
       },
@@ -320,6 +323,7 @@
     "sidebarWork": "Alternancia",
     "catSaas": "Marketing SaaS",
     "catChat": "Mensajería",
+    "catShop": "E-commerce",
     "messagesTitle": "Messages",
     "errTitle": "Archivo no encontrado",
     "errDesc": "El elemento solicitado no existe en este Mac.",

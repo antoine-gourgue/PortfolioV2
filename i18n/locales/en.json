@@ -163,6 +163,9 @@
       "tailtcg": {
         "description": "Pokémon card collection tracker: condition, value, photo-based pre-grading, binders and a shareable showcase. Free, ad-free. Built with Next.js and TypeScript."
       },
+      "trinity": {
+        "description": "Full online supermarket built at Epitech: real product catalog with Nutri-Score, aisle search, cart, orders and PDF invoices, admin back office with statistics, installable PWA (with an Android app) and simulated checkout. Next.js 15, Prisma and PostgreSQL."
+      },
       "echoconnect": {
         "description": "Real-time messaging app with group channels, private messages and IRC-style chat commands. Vue 3, Socket.io, Express and MongoDB — including a built-in demo mode that mocks the API and socket so the app can be tried without a backend."
       },
@@ -320,6 +323,7 @@
     "sidebarWork": "Apprenticeship",
     "catSaas": "Marketing SaaS",
     "catChat": "Messaging",
+    "catShop": "E-commerce",
     "messagesTitle": "Messages",
     "errTitle": "File not found",
     "errDesc": "The requested item doesn't exist on this Mac.",
