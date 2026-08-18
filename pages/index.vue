@@ -836,6 +836,18 @@ const deskIcons = [
     icon: 'linkedin',
     action: () => openUrl('https://linkedin.com/in/antoine-gourgue'),
   },
+  {
+    id: 'weather',
+    label: 'macos.weatherTitle',
+    icon: 'weather',
+    action: () => (desktop.state.value.apps.weather = true),
+  },
+  {
+    id: 'calculator',
+    label: 'macos.calcTitle',
+    icon: 'calculator',
+    action: () => (desktop.state.value.apps.calculator = true),
+  },
 ]
 
 // ── Menu contextuel ──
