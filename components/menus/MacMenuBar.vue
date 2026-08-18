@@ -74,12 +74,12 @@
       <!-- Menu de saisie macOS : drapeau + liste des langues cochée -->
       <div class="relative hidden lg:block">
         <button
-          class="menu-btn rounded px-1.5 py-0.5 text-[15px] leading-none"
+          class="menu-btn flex items-center rounded px-2 py-1"
           :class="openMenu === 'lang' ? 'bg-white/20' : ''"
           aria-label="language"
           @click="(sfx.click(), (openMenu = openMenu === 'lang' ? '' : 'lang'))"
         >
-          {{ FLAGS[currentLocale] }}
+          <DesktopFlagIcon :code="currentLocale" class="h-[14px] w-[21px]" />
         </button>
         <transition name="menu-pop">
           <div
@@ -95,9 +95,10 @@
               <span class="w-3 text-[12px]">{{
                 currentLocale === loc.code ? '✓' : ''
               }}</span>
-              <span class="text-[15px] leading-none">{{
-                FLAGS[loc.code]
-              }}</span>
+              <DesktopFlagIcon
+                :code="loc.code"
+                class="h-[13px] w-[20px] shrink-0"
+              />
               <span
                 :class="currentLocale === loc.code ? 'font-semibold' : ''"
                 >{{ loc.name }}</span
@@ -226,13 +227,6 @@ const menus: Array<{
 
 const openMenu = ref('')
 const sfx = useSfx()
-
-// Drapeaux du menu de saisie (comme le sélecteur de clavier macOS)
-const FLAGS: Record<string, string> = {
-  fr: '🇫🇷',
-  en: '🇬🇧',
-  es: '🇪🇸',
-}
 
 const toggleSfx = () => {
   desktop.state.value.sfxMuted = !desktop.state.value.sfxMuted
