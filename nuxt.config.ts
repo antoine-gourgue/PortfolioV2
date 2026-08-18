@@ -3,6 +3,30 @@ export default defineNuxtConfig({
   app: {
     head: {
       script: [{ src: 'https://kit.fontawesome.com/180b0301cc.js' }],
+      link: [
+        { rel: 'icon', type: 'image/png', href: '/favicon.png' },
+        {
+          rel: 'apple-touch-icon',
+          sizes: '180x180',
+          href: '/apple-touch-icon.png',
+        },
+        {
+          rel: 'icon',
+          type: 'image/png',
+          sizes: '192x192',
+          href: '/icon-192.png',
+        },
+        {
+          rel: 'icon',
+          type: 'image/png',
+          sizes: '512x512',
+          href: '/icon-512.png',
+        },
+      ],
+      meta: [
+        { name: 'theme-color', content: '#0b0f1a' },
+        { name: 'apple-mobile-web-app-title', content: 'Antoine G.' },
+      ],
     },
   },
   css: [
