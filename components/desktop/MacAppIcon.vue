@@ -68,19 +68,36 @@
     </g>
   </svg>
 
-  <!-- Contacts -->
+  <!-- Contacts (carnet d'adresses) -->
   <svg v-else-if="name === 'contacts'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
     <defs>
       <linearGradient :id="`ca-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#FFFFFF" /><stop offset="1" stop-color="#E6E8EC" />
+        <stop offset="0" stop-color="#FFFFFF" /><stop offset="1" stop-color="#EAECEF" />
+      </linearGradient>
+      <linearGradient :id="`cb-${uid}`" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#C98F55" /><stop offset="1" stop-color="#A6713C" />
+      </linearGradient>
+      <linearGradient :id="`cs-${uid}`" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#AAB1BC" /><stop offset="1" stop-color="#8A919D" />
       </linearGradient>
       <clipPath :id="`cc-${uid}`"><rect width="100" height="100" rx="22" /></clipPath>
     </defs>
     <g :clip-path="`url(#cc-${uid})`">
       <rect width="100" height="100" :fill="`url(#ca-${uid})`" />
-      <rect x="0" y="0" width="100" height="14" fill="#B7BdC6" />
-      <circle cx="50" cy="46" r="14" fill="#9098A3" />
-      <path d="M22 88 Q50 58 78 88 L78 100 L22 100 Z" fill="#9098A3" />
+      <!-- Bande cuir + couture -->
+      <rect width="100" height="17" :fill="`url(#cb-${uid})`" />
+      <line x1="6" y1="13" x2="94" y2="13" stroke="#8A5A2B" stroke-width="1.4" stroke-dasharray="3 3.4" stroke-linecap="round" />
+      <!-- Silhouette (glyphe SF person_fill, Framework7 Icons MIT) -->
+      <path
+        transform="translate(17 24) scale(1.18)"
+        :fill="`url(#cs-${uid})`"
+        d="M 28.0117 27.3672 C 33.0508 27.3672 37.3867 22.8672 37.3867 17.0078 C 37.3867 11.2187 33.0274 6.9297 28.0117 6.9297 C 22.9961 6.9297 18.6367 11.3125 18.6367 17.0547 C 18.6367 22.8672 22.9961 27.3672 28.0117 27.3672 Z M 13.2930 49.0703 L 42.7305 49.0703 C 46.4101 49.0703 47.7226 48.0156 47.7226 45.9531 C 47.7226 39.9062 40.1523 31.5625 28.0117 31.5625 C 15.8477 31.5625 8.2774 39.9062 8.2774 45.9531 C 8.2774 48.0156 9.5898 49.0703 13.2930 49.0703 Z"
+      />
+      <!-- Onglets colorés sur la tranche -->
+      <rect x="91" y="26" width="9" height="13" rx="2.5" fill="#F87171" />
+      <rect x="91" y="44" width="9" height="13" rx="2.5" fill="#FBBF24" />
+      <rect x="91" y="62" width="9" height="13" rx="2.5" fill="#34D399" />
+      <rect x="91" y="80" width="9" height="13" rx="2.5" fill="#60A5FA" />
     </g>
   </svg>
 
