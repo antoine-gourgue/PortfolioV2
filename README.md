@@ -1,69 +1,56 @@
-# Antoine Gourgue — Portfolio
+# antoinegourgue.dev — a macOS-style portfolio
 
-Welcome to my personal portfolio! 🚀  
-A clean, modern, and professional showcase of my projects, services, and experience as a Fullstack Developer.
+My personal portfolio, built as a **hand-coded macOS clone** — and a full **iOS experience on mobile**. No template, no UI kit: every window, icon and interaction is custom.
 
-## 🌐 Live Website
+![Portfolio preview](public/og-image.jpg)
 
-[https://antoinegourgue.dev](https://antoinegourgue.dev)
+## The concept
 
----
+The site behaves like a real Mac:
 
-## 📄 Features
+- **Menu bar** with working dropdown menus, keyboard shortcuts (`⌘1-5`, `⌘K`, `T`), live clock and sound toggle
+- **Desktop** with draggable windows (About panel, live Terminal), double-clickable desktop icons and a right-click context menu (wallpaper switcher included)
+- **Dock** with the real magnification effect (size-based, not scale — icons stay crisp), running indicators, bounce on click and minimized windows
+- **Functional traffic lights** on every window: close/minimize animate into the dock, green opens the matching page
+- **Spotlight** (`⌘K`): fuzzy search across pages, projects and actions
+- **Boot screen** on every page load (server-rendered — zero flash), with a synthesized startup chime
 
-- 💻 Fully responsive design, inspired by Apple's minimal aesthetics
-- 🚀 Animated navigation and smooth page transitions
-- 📂 Dynamic Projects page fetching from GitHub API
-- 📰 Blog section pulling external mentions using Google Custom Search API
-- 📬 Contact form with email integration via SMTP
-- ⚙️ Simple, modular component architecture with reusable UI elements
-- 🎨 Built with modern technologies (Nuxt 3, TypeScript, Tailwind CSS)
+On mobile, the site turns into an **iPhone**: iOS status bar, springboard home screen with live widgets (calendar + real weather), app grid, iOS dock, and fullscreen apps with native-style navigation bars.
 
----
+## Real apps, really working
 
-## 🛠️ Tech Stack
+| App | What it does |
+| --- | --- |
+| **App Store** | My projects as full product pages — live GitHub stars, categories, screenshots, and my Digitaleo apprenticeship as a case study |
+| **Messages** | An iMessage clone running my home-made intent-based chatbot (FR/EN/ES, language detection) |
+| **Weather** | Real forecast for the visitor's location (open-meteo + IP/GPS geolocation), hourly + 6-day views with Apple-style range bars |
+| **Calculator** | Fully functional — macOS tiles on desktop, iOS round buttons on mobile |
+| **Contacts** | My background as an address book (Digitaleo, Epitech, schools) with deep links |
+| **Calendar** | My journey as filterable, clickable colored events |
+| **Notes** | Real first-person notes (how this site is built, what I learn at Digitaleo) + press mentions, with folders, pinned notes and working search |
+| **Mail** | The actual contact form (honeypot + SMTP) styled as a compose window |
 
-- **Nuxt 3** (Vue 3 + Composition API + TypeScript)
-- **Tailwind CSS** for styling
-- **Font Awesome & Feather Icons**
-- **Vercel** for deployment & hosting
-- **Google Custom Search API** (Blog mentions)
-- **Nodemailer** (Contact form email integration)
+Every UI sound (clicks, whooshes, sent-mail swoosh, boot chord) is **synthesized with Web Audio** — zero audio files.
 
----
+## Stack
 
-## 🚀 Local Setup
+- **Nuxt 3** (SSR) · Vue 3 · TypeScript
+- **Tailwind CSS** — design tokens, responsive macOS/iOS split
+- **GSAP** — Draggable windows, dock physics, ScrollTrigger reveals
+- **i18n** — French, English, Spanish
+- Icons: hand-drawn SVGs + [Framework7 Icons](https://framework7.io/icons/) (MIT) · Weather icons: [Meteocons](https://github.com/basmilius/weather-icons) (MIT)
+- Deployed on Vercel
+
+## Run it
 
 ```bash
-# Clone the repository
-git clone https://github.com/antoine-gourgue/portfolio.git
-cd portfolio
-
-# Install dependencies
 npm install
-
-# Create your .env file
-cp .env.example .env
-# Fill in your environment variables (SMTP, GitHub token, Google API key, etc.)
-
-# Start development server
-npm run dev
+npm run dev      # http://localhost:3000
+npm run build    # production build
 ```
 
-# Environment variables
+Environment: `VITE_GITHUB_TOKEN` (live GitHub stats) and SMTP variables for the contact form.
 
-    GITHUB_TOKEN=your_github_token
+---
 
-# Email Contact (SMTP)
-
-    MAIL_HOST=smtp.example.com
-    MAIL_PORT=465
-    MAIL_USER=youremail@example.com
-    MAIL_PASS=yourpassword
-    MAIL_FROM=youremail@example.com
-    MAIL_TO=youremail@example.com
-
-# Google Custom Search API
-
-    GOOGLE_API_KEY=your_google_api_key
-    GOOGLE_CX_ID=your_custom_search_engine_id
+Built by [Antoine Gourgue](https://antoinegourgue.dev) — fullstack developer, Anglet 🇫🇷
