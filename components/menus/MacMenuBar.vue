@@ -53,8 +53,10 @@
         </transition>
       </div>
 
-      <!-- Mobile : juste le nom -->
-      <span class="ml-1 font-bold lg:hidden">Antoine Gourgue</span>
+      <!-- Mobile : heure iOS à gauche -->
+      <span class="ml-2 text-[15px] font-semibold tabular-nums lg:hidden">{{
+        clockShort
+      }}</span>
     </div>
 
     <div class="flex items-center gap-1">
@@ -103,10 +105,10 @@
           desktop.state.value.sfxMuted ? 'speaker_slash_fill' : 'speaker_2_fill'
         }}</i>
       </button>
-      <span class="hidden px-1.5 text-[16px] text-white/85 sm:block"
+      <span class="px-1.5 text-[16px] text-white/85"
         ><DesktopSfIcon name="battery"
       /></span>
-      <span class="hidden px-1.5 text-[15px] text-white/85 sm:block"
+      <span class="px-1.5 text-[15px] text-white/85"
         ><DesktopSfIcon name="wifi"
       /></span>
       <button
@@ -116,7 +118,9 @@
       >
         <DesktopSfIcon name="search" />
       </button>
-      <span class="px-1.5 tabular-nums text-white/90">{{ clock }}</span>
+      <span class="hidden px-1.5 tabular-nums text-white/90 lg:block">{{
+        clock
+      }}</span>
     </div>
   </header>
 </template>
@@ -227,17 +231,23 @@ const cycleLocale = () => {
   router.push(switchLocalePath(next))
 }
 
-// Horloge macOS en direct
+// Horloge macOS en direct (+ format court iOS pour mobile)
 const clock = ref('')
+const clockShort = ref('')
 let timer: ReturnType<typeof setInterval> | undefined
 const tick = () => {
+  const now = new Date()
   clock.value = new Intl.DateTimeFormat(locale.value, {
     weekday: 'short',
     day: 'numeric',
     month: 'short',
     hour: '2-digit',
     minute: '2-digit',
-  }).format(new Date())
+  }).format(now)
+  clockShort.value = new Intl.DateTimeFormat(locale.value, {
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(now)
 }
 
 // Raccourcis clavier globaux

@@ -4,10 +4,53 @@
     class="relative font-sans text-aink"
     @contextmenu.prevent="openContext"
   >
-    <!-- ═══ Bureau ═══ -->
+    <!-- ═══ Écran d'accueil iOS (mobile) ═══ -->
+    <section
+      class="flex min-h-[calc(100svh-90px)] flex-col px-7 pb-6 pt-16 lg:hidden"
+    >
+      <ClientOnly>
+        <div
+          class="mx-auto w-full max-w-sm rounded-[24px] border border-white/30 bg-white/20 px-5 py-4 shadow-lg backdrop-blur-2xl"
+        >
+          <p class="text-[13px] font-semibold capitalize text-white/85">
+            {{ sbWeekday }}
+          </p>
+          <p class="text-[42px] font-bold leading-none text-white">
+            {{ sbDay }}
+          </p>
+        </div>
+      </ClientOnly>
+
+      <div class="mx-auto mt-9 grid w-full max-w-sm grid-cols-4 gap-x-4 gap-y-6">
+        <component
+          :is="app.to ? NuxtLinkComponent : app.href ? 'a' : 'button'"
+          v-for="app in springboard"
+          :key="app.id"
+          v-bind="
+            app.to
+              ? { to: localePath(app.to) }
+              : app.href
+                ? { href: app.href, target: '_blank' }
+                : {}
+          "
+          class="flex flex-col items-center gap-1.5"
+          @click="app.action && app.action()"
+        >
+          <span class="block h-14 w-14">
+            <DesktopMacAppIcon :name="app.icon" />
+          </span>
+          <span
+            class="max-w-full truncate text-[11px] font-medium text-white drop-shadow"
+            >{{ app.raw ?? $t(app.label!) }}</span
+          >
+        </component>
+      </div>
+    </section>
+
+    <!-- ═══ Bureau (desktop) ═══ -->
     <section
       ref="heroEl"
-      class="relative min-h-[92vh] w-full px-5 pt-20 lg:px-0 lg:pt-0"
+      class="relative hidden min-h-[92vh] w-full lg:block"
     >
       <!-- Icônes du bureau -->
       <div
@@ -40,7 +83,7 @@
       <div
         v-show="!desktop.state.value.wins.about?.min"
         ref="aboutEl"
-        class="win relative z-10 mx-auto max-w-lg lg:absolute lg:left-12 lg:top-28 lg:mx-0 lg:w-[500px] lg:max-w-none xl:left-[7%]"
+        class="win absolute left-12 top-28 z-10 w-[500px] xl:left-[7%]"
         :style="{ zIndex: desktop.state.value.wins.about?.z ?? 10 }"
         @pointerdown="desktop.focus('about')"
       >
@@ -111,7 +154,7 @@
       <div
         v-show="!desktop.state.value.wins.terminal?.min"
         ref="termEl"
-        class="win relative z-10 mx-auto mt-8 max-w-lg lg:absolute lg:right-36 lg:top-60 lg:mx-0 lg:mt-0 lg:w-[440px] lg:max-w-none xl:right-[12%]"
+        class="win absolute right-36 top-60 z-10 w-[440px] xl:right-[12%]"
         :style="{ zIndex: desktop.state.value.wins.terminal?.z ?? 10 }"
         @pointerdown="desktop.focus('terminal')"
       >
@@ -173,7 +216,7 @@
     <!-- ═══ Projets : fenêtre Finder + Quick Look ═══ -->
     <section
       v-show="!desktop.state.value.wins.finder?.min"
-      class="mx-auto w-full max-w-5xl px-5 pt-20 lg:px-8"
+      class="mx-auto hidden w-full max-w-5xl px-5 pt-20 lg:block lg:px-8"
     >
       <div ref="finderEl" data-reveal>
         <UiMacWindow
@@ -454,7 +497,7 @@
     <!-- ═══ Parcours (Calendrier) ═══ -->
     <section
       v-show="!desktop.state.value.wins.notes?.min"
-      class="mx-auto w-full max-w-4xl px-5 pt-20 lg:px-8"
+      class="mx-auto hidden w-full max-w-4xl px-5 pt-20 lg:block lg:px-8"
     >
       <div ref="notesEl" data-reveal>
         <UiMacWindow
@@ -558,7 +601,7 @@
     <!-- ═══ Contact (Mail) ═══ -->
     <section
       v-show="!desktop.state.value.wins.mail?.min"
-      class="mx-auto w-full max-w-2xl px-5 pb-36 pt-20 lg:px-8"
+      class="mx-auto hidden w-full max-w-2xl px-5 pb-36 pt-20 lg:block lg:px-8"
     >
       <div ref="mailEl" data-reveal>
         <UiMacWindow
@@ -860,6 +903,39 @@ const journeySteps = [
 const visibleSteps = computed(() =>
   journeySteps.filter((st) => activeCats[st.cat])
 )
+
+const NuxtLinkComponent = resolveComponent('NuxtLink')
+
+// Écran d'accueil iOS (mobile)
+const { locale } = useI18n()
+const now = new Date()
+const sbWeekday = new Intl.DateTimeFormat(locale.value, {
+  weekday: 'long',
+}).format(now)
+const sbDay = now.getDate()
+
+interface SpringboardApp {
+  id: string
+  icon: string
+  label?: string
+  raw?: string
+  to?: string
+  href?: string
+  action?: () => void
+}
+
+const springboard: SpringboardApp[] = [
+  { id: 'projects', icon: 'appstore', label: 'nav.projects', to: '/projects' },
+  { id: 'about', icon: 'contacts', label: 'nav.about', to: '/about' },
+  { id: 'blog', icon: 'notes', label: 'nav.blog', to: '/blog' },
+  { id: 'contact', icon: 'mail', label: 'nav.contact', to: '/contact' },
+  { id: 'messages', icon: 'messages', label: 'macos.messagesTitle', action: () => (desktop.state.value.apps.messages = true) },
+  { id: 'weather', icon: 'weather', label: 'macos.weatherTitle', action: () => (desktop.state.value.apps.weather = true) },
+  { id: 'calculator', icon: 'calculator', label: 'macos.calcTitle', action: () => (desktop.state.value.apps.calculator = true) },
+  { id: 'github', icon: 'github', raw: 'GitHub', href: 'https://github.com/antoine-gourgue' },
+  { id: 'linkedin', icon: 'linkedin', raw: 'LinkedIn', href: 'https://linkedin.com/in/antoine-gourgue' },
+  { id: 'cv', icon: 'pdf', label: 'macos.deskCv', action: () => downloadCv() },
+]
 
 // L'accueil (Finder) ne montre que les projets perso ; l'App Store montre tout
 const projects = useProjects().filter((p) => !p.pro)

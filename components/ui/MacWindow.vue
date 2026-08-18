@@ -10,9 +10,33 @@
         : 'shadow-[0_15px_40px_-15px_rgba(0,0,0,0.3)]',
     ]"
   >
-    <!-- Barre de titre -->
+    <!-- Barre de navigation iOS (mobile uniquement) -->
     <div
-      class="drag-handle relative flex items-center px-4 py-2.5 select-none"
+      class="relative flex items-center justify-between px-3 py-2.5 lg:hidden"
+      :class="
+        dark
+          ? 'border-b border-white/10 bg-[#2c2c2e]'
+          : 'border-b border-black/5 bg-white/70'
+      "
+    >
+      <NuxtLink
+        :to="localePath('/')"
+        class="flex items-center gap-0.5 text-[15px] font-medium text-ablue"
+      >
+        <span class="text-[19px] leading-none">‹</span> {{ $t('nav.home') }}
+      </NuxtLink>
+      <span
+        v-if="title"
+        class="pointer-events-none absolute left-1/2 -translate-x-1/2 text-[15px] font-semibold"
+        :class="dark ? 'text-white/80' : 'text-aink'"
+        >{{ title }}</span
+      >
+      <span class="w-16"></span>
+    </div>
+
+    <!-- Barre de titre (desktop) -->
+    <div
+      class="drag-handle relative hidden items-center px-4 py-2.5 select-none lg:flex"
       :class="
         dark
           ? 'border-b border-white/10 bg-[#2c2c2e]'
@@ -123,6 +147,7 @@ defineEmits<{
 
 const lightOff = 'border-black/10 bg-[#DBDBDB] dark:bg-[#4a4a4c]'
 const sfx = useSfx()
+const localePath = useLocalePath()
 </script>
 
 <style scoped>
