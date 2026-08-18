@@ -291,6 +291,10 @@
     "wxSnow": "Nieve",
     "wxStorm": "Tormenta",
     "wxToday": "Hoy",
-    "deskLinkedin": "LinkedIn"
+    "deskLinkedin": "LinkedIn",
+    "wxMyLocation": "MI UBICACIÓN",
+    "wxHourly": "PREVISIÓN POR HORAS",
+    "wxDaily": "PREVISIÓN DE 6 DÍAS",
+    "wxNow": "Ahora"
   }
 }

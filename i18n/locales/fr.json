@@ -291,6 +291,10 @@
     "wxSnow": "Neige",
     "wxStorm": "Orage",
     "wxToday": "Auj.",
-    "deskLinkedin": "LinkedIn"
+    "deskLinkedin": "LinkedIn",
+    "wxMyLocation": "MA POSITION",
+    "wxHourly": "PRÉVISIONS HORAIRES",
+    "wxDaily": "PRÉVISIONS SUR 6 JOURS",
+    "wxNow": "Maint."
   }
 }
