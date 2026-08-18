@@ -57,7 +57,7 @@
               Antoine Gourgue
             </h1>
             <p class="mt-0.5 text-[13px] text-agray">
-              {{ $t('home.subtitle') }} — Rennes, France
+              {{ $t('home.subtitle') }} — Anglet, France
             </p>
 
             <div

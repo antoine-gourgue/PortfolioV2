@@ -155,7 +155,7 @@
               </div>
               <div class="field-row">
                 <dt>{{ $t('macos.location') }}</dt>
-                <dd>Rennes, France</dd>
+                <dd>Anglet, France</dd>
               </div>
               <div class="field-row items-start">
                 <dt>{{ $t('macos.note') }}</dt>

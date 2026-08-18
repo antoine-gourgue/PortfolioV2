@@ -222,10 +222,10 @@ const load = async () => {
   if (loaded) return
   loaded = true
 
-  // 1. Estimation immédiate par IP (repli : Rennes), le temps que le GPS réponde
-  let lat = 48.1173
-  let lon = -1.6778
-  city.value = 'Rennes'
+  // 1. Estimation immédiate par IP (repli : Anglet), le temps que le GPS réponde
+  let lat = 43.4832
+  let lon = -1.514
+  city.value = 'Anglet'
   try {
     const geo = await $fetch<{
       latitude: string
