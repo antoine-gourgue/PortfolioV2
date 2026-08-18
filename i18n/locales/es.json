@@ -162,6 +162,9 @@
       },
       "tailtcg": {
         "description": "Seguimiento de colecciones de cartas Pokémon: estado, valor, pre-gradación sobre fotos, archivadores y vitrina compartible. Gratis y sin anuncios. Hecho con Next.js y TypeScript."
+      },
+      "emailEditor": {
+        "description": "El editor de email de la plataforma Digitaleo, usado a diario por redes de puntos de venta. Mi terreno de juego en alternancia: bloques dinámicos, preheader y selector de emojis, compatibilidad con Outlook mediante VML y HTML condicional, inversión de columnas en móvil, integración del Design System Vue.js en el legacy AngularJS, archivado de campañas y rediseño de las estadísticas de Marketing Directo."
       }
     },
     "all": "Todos",
@@ -310,6 +313,8 @@
     "wxHourly": "PREVISIÓN POR HORAS",
     "wxDaily": "PREVISIÓN DE 6 DÍAS",
     "wxNow": "Ahora",
-    "openInContacts": "Abrir en Contactos"
+    "openInContacts": "Abrir en Contactos",
+    "sidebarWork": "Alternancia",
+    "catSaas": "Marketing SaaS"
   }
 }

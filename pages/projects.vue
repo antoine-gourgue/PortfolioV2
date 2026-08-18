@@ -19,10 +19,38 @@
               {{ $t('macos.search') }}
             </div>
             <p class="px-2 pb-1.5 text-[11px] font-semibold text-black/35">
+              {{ $t('macos.sidebarWork') }}
+            </p>
+            <button
+              v-for="project in proProjects"
+              :key="project.key"
+              class="flex w-full items-center gap-2.5 rounded-lg px-2 py-1.5 text-left text-[13px] font-medium transition-colors"
+              :class="
+                selected === project.key
+                  ? 'bg-ablue text-white'
+                  : 'text-aink hover:bg-black/5'
+              "
+              @click="selected = project.key"
+            >
+              <span class="block h-7 w-7 shrink-0">
+                <DesktopProjectIcon
+                  :icon="project.icon"
+                  :name="project.name"
+                  :bg="project.iconBg"
+                  :pad="project.iconPad"
+                  :letter="project.letter"
+                  :color-top="project.colorTop"
+                  :color-bottom="project.colorBottom"
+                />
+              </span>
+              <span class="truncate">{{ project.name }}</span>
+            </button>
+
+            <p class="px-2 pb-1.5 pt-3 text-[11px] font-semibold text-black/35">
               {{ $t('macos.finderProjects') }}
             </p>
             <button
-              v-for="project in projects"
+              v-for="project in persoProjects"
               :key="project.key"
               class="flex w-full items-center gap-2.5 rounded-lg px-2 py-1.5 text-left text-[13px] font-medium transition-colors"
               :class="
@@ -93,6 +121,7 @@
                     {{ $t('macos.get') }}
                   </a>
                   <a
+                    v-if="!current.pro"
                     href="https://github.com/antoine-gourgue"
                     target="_blank"
                     class="text-[13px] font-medium text-ablue hover:underline"
@@ -188,6 +217,8 @@
 const { gsap } = useGsap()
 
 const projects = useProjects()
+const proProjects = projects.filter((p) => p.pro)
+const persoProjects = projects.filter((p) => !p.pro)
 const selected = ref(projects[0].key)
 const current = computed(() => projects.find((p) => p.key === selected.value))
 

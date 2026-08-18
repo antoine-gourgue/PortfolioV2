@@ -861,7 +861,8 @@ const visibleSteps = computed(() =>
   journeySteps.filter((st) => activeCats[st.cat])
 )
 
-const projects = useProjects()
+// L'accueil (Finder) ne montre que les projets perso ; l'App Store montre tout
+const projects = useProjects().filter((p) => !p.pro)
 const { t } = useI18n()
 
 // ── Finder fonctionnel : recherche, tri, vue, sélection ──

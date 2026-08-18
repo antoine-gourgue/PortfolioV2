@@ -14,11 +14,29 @@ export interface PortfolioProject {
   categoryKey: string
   year: string
   stack: string
+  pro?: boolean
 }
 
 // Source unique des projets mis en avant (accueil, /projects, Spotlight)
 export function useProjects(): PortfolioProject[] {
   return [
+    {
+      key: 'emailEditor',
+      name: 'Éditeur d’email Digitaleo',
+      url: 'https://www.digitaleo.com/',
+      domain: 'digitaleo.com',
+      repoHint: '__private__',
+      image: '/assets/projects/digitaleo-editor.png',
+      icon: '/assets/companies/digitaleo.png',
+      iconPad: true,
+      letter: 'D',
+      colorTop: '#34C1F2',
+      colorBottom: '#1273DE',
+      categoryKey: 'macos.catSaas',
+      year: '2024 — 2026',
+      stack: 'Vue.js 2 · TypeScript · AngularJS · PHP · VML',
+      pro: true,
+    },
     {
       key: 'tailtcg',
       name: 'TailTCG',

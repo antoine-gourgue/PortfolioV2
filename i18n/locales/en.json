@@ -162,6 +162,9 @@
       },
       "tailtcg": {
         "description": "Pokémon card collection tracker: condition, value, photo-based pre-grading, binders and a shareable showcase. Free, ad-free. Built with Next.js and TypeScript."
+      },
+      "emailEditor": {
+        "description": "Digitaleo's platform email editor, used daily by retail networks. My apprenticeship playground: dynamic blocks, preheader and emoji picker, Outlook compatibility through VML and conditional HTML, mobile column reordering, Vue.js Design System components integrated into the AngularJS legacy, campaign archiving and the Direct Marketing statistics revamp."
       }
     },
     "all": "All",
@@ -310,6 +313,8 @@
     "wxHourly": "HOURLY FORECAST",
     "wxDaily": "6-DAY FORECAST",
     "wxNow": "Now",
-    "openInContacts": "Open in Contacts"
+    "openInContacts": "Open in Contacts",
+    "sidebarWork": "Apprenticeship",
+    "catSaas": "Marketing SaaS"
   }
 }
