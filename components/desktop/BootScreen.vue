@@ -11,8 +11,10 @@
       ref="bootEl"
       class="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-black"
     >
-      <AgLogo class="h-20 w-24 text-white" />
-      <div class="mt-14 h-[5px] w-56 overflow-hidden rounded-full bg-white/20">
+      <AgLogo class="h-24 w-28 text-white lg:h-20 lg:w-24" />
+      <div
+        class="mt-16 h-[4px] w-40 overflow-hidden rounded-full bg-white/20 lg:mt-14 lg:h-[5px] lg:w-56"
+      >
         <div ref="barEl" class="h-full w-0 rounded-full bg-white"></div>
       </div>
     </div>
