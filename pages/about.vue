@@ -48,6 +48,12 @@
                   class="h-5 w-6"
                   :class="selected === 'antoine' ? 'text-white' : 'text-aink'"
                 />
+                <img
+                  v-else-if="entry.logo"
+                  :src="entry.logo"
+                  :alt="entry.name"
+                  class="h-7 w-7 rounded-full bg-white object-contain p-0.5 ring-1 ring-black/10"
+                />
                 <template v-else>{{ entry.initials }}</template>
               </span>
               {{ entry.name }}
@@ -77,6 +83,12 @@
               <AgLogo
                 v-if="current.id === 'antoine'"
                 class="h-16 w-20 shrink-0 text-aink"
+              />
+              <img
+                v-else-if="current.logo"
+                :src="current.logo"
+                :alt="current.name"
+                class="h-20 w-20 shrink-0 rounded-full bg-white object-contain p-2 shadow-md ring-1 ring-black/10"
               />
               <span
                 v-else
@@ -182,6 +194,7 @@ interface ContactEntry {
   name: string
   initials: string
   avatarBg: string
+  logo?: string
   roleKey: string
   periodKey?: string
   noteKey: string
@@ -200,7 +213,8 @@ const entries: ContactEntry[] = [
     id: 'digitaleo',
     name: 'Digitaleo',
     initials: 'D',
-    avatarBg: 'linear-gradient(to bottom, #34C1F2, #1273DE)',
+    avatarBg: '#ffffff',
+    logo: '/assets/companies/digitaleo.png',
     roleKey: 'about.digitaleo.role',
     periodKey: 'home.journey2024.period',
     noteKey: 'about.digitaleo.description',
@@ -209,7 +223,8 @@ const entries: ContactEntry[] = [
     id: 'epitech',
     name: 'Epitech Rennes',
     initials: 'E',
-    avatarBg: 'linear-gradient(to bottom, #3ECF8E, #0E9F6E)',
+    avatarBg: '#ffffff',
+    logo: '/assets/companies/epitech.png',
     roleKey: 'about.epitech.role',
     periodKey: 'home.journey2023.period',
     noteKey: 'about.epitech.description',
