@@ -2,8 +2,8 @@
   <Teleport to="body">
     <!--
       Rendu visible dès le HTML serveur : il couvre la page avant toute
-      hydratation. Le script inline (head) le masque instantanément si la
-      session a déjà démarré — aucun flash dans un sens comme dans l'autre.
+      hydratation. Recharger la page = redémarrer la machine : le boot
+      se joue à chaque chargement complet (jamais lors de la navigation SPA).
     -->
     <div
       v-if="visible"
@@ -26,34 +26,13 @@ import AgLogo from '~/components/ui/AGLogo.vue'
 
 const { gsap } = useGsap()
 
-// Masque l'écran de boot avant la première peinture si déjà démarré
-useHead({
-  script: [
-    {
-      innerHTML:
-        "try{if(sessionStorage.getItem('ag-booted')){document.documentElement.classList.add('ag-booted')}}catch(e){}",
-      tagPosition: 'head',
-    },
-  ],
-  style: [
-    {
-      innerHTML: '.ag-booted #boot-screen{display:none!important}',
-      tagPosition: 'head',
-    },
-  ],
-})
-
 const visible = ref(true)
 const bootEl = ref<HTMLElement | null>(null)
 const barEl = ref<HTMLElement | null>(null)
 
 onMounted(() => {
-  const alreadyBooted = document.documentElement.classList.contains('ag-booted')
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-  if (alreadyBooted || reduced) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     visible.value = false
-    sessionStorage.setItem('ag-booted', '1')
     return
   }
 
@@ -64,7 +43,6 @@ onMounted(() => {
     .timeline({
       onComplete: () => {
         visible.value = false
-        sessionStorage.setItem('ag-booted', '1')
       },
     })
     .to(barEl.value, { width: '40%', duration: 0.7, ease: 'power1.in' })
