@@ -75,24 +75,67 @@
             </button>
           </aside>
 
-          <!-- Fiche de l'app -->
-          <div v-if="current" :key="current.key" class="min-w-0 flex-1 p-6 sm:p-8">
-            <!-- Sélecteur mobile -->
-            <div class="mb-6 flex gap-2 overflow-x-auto pb-1 lg:hidden">
+          <!-- Liste iOS (mobile) -->
+          <div
+            v-if="!mobileOpen"
+            class="min-w-0 flex-1 px-4 pb-6 pt-4 lg:hidden"
+          >
+            <h1 class="px-1 text-[28px] font-bold tracking-tight">App Store</h1>
+            <p class="mt-0.5 px-1 text-[13px] text-black/40">
+              {{ $t('macos.projectsSub') }}
+            </p>
+            <div class="mt-4">
               <button
-                v-for="project in projects"
+                v-for="(project, i) in projects"
                 :key="project.key"
-                class="shrink-0 rounded-full px-3.5 py-1.5 text-[13px] font-medium"
-                :class="
-                  selected === project.key
-                    ? 'bg-ablue text-white'
-                    : 'bg-black/5 text-aink'
-                "
-                @click="selected = project.key"
+                class="flex w-full items-center gap-3.5 py-2.5 text-left"
+                :class="i > 0 ? 'border-t border-black/5' : ''"
+                @click="openMobile(project.key)"
               >
-                {{ project.name }}
+                <span class="block h-16 w-16 shrink-0">
+                  <DesktopProjectIcon
+                    :icon="project.icon"
+                    :name="project.name"
+                    :bg="project.iconBg"
+                    :pad="project.iconPad"
+                    :letter="project.letter"
+                    :color-top="project.colorTop"
+                    :color-bottom="project.colorBottom"
+                  />
+                </span>
+                <span class="min-w-0 flex-1">
+                  <span class="block truncate text-[15px] font-semibold">{{
+                    project.name
+                  }}</span>
+                  <span class="block truncate text-[12px] text-black/40">{{
+                    $t(project.categoryKey)
+                  }}</span>
+                </span>
+                <a
+                  :href="project.url"
+                  target="_blank"
+                  class="shrink-0 rounded-full bg-black/5 px-4 py-1 text-[13px] font-bold text-ablue"
+                  @click.stop
+                  >{{ $t('macos.get') }}</a
+                >
               </button>
             </div>
+          </div>
+
+          <!-- Fiche de l'app -->
+          <div
+            v-if="current"
+            :key="current.key"
+            class="min-w-0 flex-1 p-6 sm:p-8"
+            :class="mobileOpen ? '' : 'hidden lg:block'"
+          >
+            <!-- Retour (mobile) -->
+            <button
+              class="mb-4 flex items-center gap-0.5 text-[15px] font-medium text-ablue lg:hidden"
+              @click="mobileOpen = false"
+            >
+              <span class="text-[19px] leading-none">‹</span> Apps
+            </button>
 
             <!-- En-tête -->
             <div class="flex items-start gap-5">
@@ -221,6 +264,15 @@ const proProjects = projects.filter((p) => p.pro)
 const persoProjects = projects.filter((p) => !p.pro)
 const selected = ref(projects[0].key)
 const current = computed(() => projects.find((p) => p.key === selected.value))
+
+// Mobile : liste iOS d'abord, fiche au tap
+const mobileOpen = ref(false)
+const sfxStore = useSfx()
+const openMobile = (key: string) => {
+  selected.value = key
+  mobileOpen.value = true
+  sfxStore.click()
+}
 
 // Étoiles GitHub réelles via l'API du site
 interface GithubRepo {

@@ -31,7 +31,9 @@
         :class="dark ? 'text-white/80' : 'text-aink'"
         >{{ title }}</span
       >
-      <span class="w-16"></span>
+      <span class="flex w-16 justify-end">
+        <slot name="ios-action" />
+      </span>
     </div>
 
     <!-- Barre de titre (desktop) -->

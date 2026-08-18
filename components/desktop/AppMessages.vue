@@ -3,17 +3,18 @@
     <div
       v-if="desktop.state.value.apps.messages"
       ref="winEl"
-      class="fixed left-1/2 top-20 z-40 flex h-[480px] w-[92vw] max-w-[370px] -translate-x-1/2 flex-col overflow-hidden rounded-2xl bg-white shadow-[0_30px_70px_-15px_rgba(0,0,0,0.55)] ring-1 ring-black/10 lg:left-auto lg:right-[8%] lg:top-24 lg:translate-x-0"
+      class="fixed inset-0 z-40 flex flex-col overflow-hidden bg-white lg:inset-auto lg:right-[8%] lg:top-24 lg:h-[480px] lg:w-[370px] lg:rounded-2xl lg:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.55)] lg:ring-1 lg:ring-black/10"
       :style="{ zIndex: z }"
       @pointerdown="bringToFront"
     >
       <!-- En-tête iMessage -->
       <div
-        class="msg-drag flex flex-col items-center border-b border-black/5 bg-[#F5F5F7]/90 px-3 pb-2 pt-2.5 backdrop-blur"
+        class="msg-drag flex flex-col items-center border-b border-black/5 bg-[#F5F5F7]/90 px-3 pb-2 pt-10 backdrop-blur lg:pt-2.5"
       >
         <div class="flex w-full items-center">
+          <!-- Fermer (desktop : pastille / mobile : chevron iOS) -->
           <button
-            class="group flex h-3 w-3 items-center justify-center rounded-full border border-[#E0443E] bg-[#FF5F57]"
+            class="group hidden h-3 w-3 items-center justify-center rounded-full border border-[#E0443E] bg-[#FF5F57] lg:flex"
             aria-label="close"
             @click.stop="sfx.minimize(), desktop.closeApp('messages')"
             @pointerdown.stop
@@ -21,6 +22,13 @@
             <svg viewBox="0 0 12 12" class="h-full w-full p-[1px] opacity-0 group-hover:opacity-100">
               <path d="M3.6 3.6 L8.4 8.4 M8.4 3.6 L3.6 8.4" stroke="#820005" stroke-width="1.2" stroke-linecap="round" />
             </svg>
+          </button>
+          <button
+            class="flex items-center gap-0.5 text-[15px] font-medium text-[#0A84FF] lg:hidden"
+            @click.stop="sfx.minimize(), desktop.closeApp('messages')"
+          >
+            <span class="text-[19px] leading-none">‹</span>
+            {{ $t('macos.close') }}
           </button>
         </div>
         <div

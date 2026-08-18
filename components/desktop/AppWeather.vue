@@ -3,17 +3,17 @@
     <div
       v-if="desktop.state.value.apps.weather"
       ref="winEl"
-      class="fixed left-1/2 top-20 z-40 w-[350px] -translate-x-1/2 overflow-hidden rounded-2xl shadow-[0_30px_70px_-15px_rgba(0,0,0,0.55)] ring-1 ring-white/20 lg:left-[12%] lg:top-28 lg:translate-x-0"
+      class="fixed inset-0 z-40 overflow-y-auto lg:inset-auto lg:left-[12%] lg:top-28 lg:w-[350px] lg:overflow-hidden lg:rounded-2xl lg:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.55)] lg:ring-1 lg:ring-white/20"
       :style="{ zIndex: z }"
       @pointerdown="bringToFront"
     >
       <div
-        class="bg-gradient-to-b from-[#22509E] via-[#2E67BE] to-[#4A86D8] pb-3 text-white"
+        class="min-h-full bg-gradient-to-b from-[#22509E] via-[#2E67BE] to-[#4A86D8] pb-6 text-white lg:min-h-0 lg:pb-3"
       >
-        <!-- Barre de titre transparente -->
-        <div class="wx-drag flex items-center gap-2 px-3 pb-0 pt-2.5">
+        <!-- Barre de titre (desktop : pastilles / mobile : chevron iOS) -->
+        <div class="wx-drag flex items-center gap-2 px-3 pb-0 pt-10 lg:pt-2.5">
           <button
-            class="group flex h-3 w-3 items-center justify-center rounded-full border border-[#E0443E] bg-[#FF5F57]"
+            class="group hidden h-3 w-3 items-center justify-center rounded-full border border-[#E0443E] bg-[#FF5F57] lg:flex"
             aria-label="close"
             @click.stop="sfx.minimize(), desktop.closeApp('weather')"
             @pointerdown.stop
@@ -22,8 +22,15 @@
               <path d="M3.6 3.6 L8.4 8.4 M8.4 3.6 L3.6 8.4" stroke="#820005" stroke-width="1.2" stroke-linecap="round" />
             </svg>
           </button>
-          <span class="h-3 w-3 rounded-full border border-white/20 bg-white/25"></span>
-          <span class="h-3 w-3 rounded-full border border-white/20 bg-white/25"></span>
+          <span class="hidden h-3 w-3 rounded-full border border-white/20 bg-white/25 lg:block"></span>
+          <span class="hidden h-3 w-3 rounded-full border border-white/20 bg-white/25 lg:block"></span>
+          <button
+            class="flex items-center gap-0.5 text-[15px] font-medium text-white/90 lg:hidden"
+            @click.stop="sfx.minimize(), desktop.closeApp('weather')"
+          >
+            <span class="text-[19px] leading-none">‹</span>
+            {{ $t('macos.close') }}
+          </button>
         </div>
 
         <!-- En-tête : ville, température géante, condition, H/L -->

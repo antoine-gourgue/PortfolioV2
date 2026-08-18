@@ -7,10 +7,22 @@
         @minimize="closeToDesktop"
         @zoom="toggleZoom"
       >
+        <!-- Envoi dans la barre de navigation iOS (mobile) -->
+        <template #ios-action>
+          <button
+            class="flex h-7 w-7 items-center justify-center rounded-full bg-ablue text-[14px] text-white disabled:opacity-40"
+            :disabled="loading"
+            :aria-label="$t('contact.send')"
+            @click="submitForm"
+          >
+            ↑
+          </button>
+        </template>
+
         <form @submit.prevent="submitForm">
-          <!-- Barre d'outils de composition -->
+          <!-- Barre d'outils de composition (desktop) -->
           <div
-            class="flex items-center gap-5 border-b border-black/5 bg-white/60 px-5 py-2.5"
+            class="hidden items-center gap-5 border-b border-black/5 bg-white/60 px-5 py-2.5 lg:flex"
           >
             <button
               type="submit"
@@ -227,12 +239,12 @@ onUnmounted(() => ctx?.revert())
 
 <style scoped>
 .mail-row {
-  @apply flex items-center gap-3 border-b border-black/5 py-2.5;
+  @apply flex items-center gap-3 border-b border-black/5 py-3 lg:py-2.5;
 }
 .mail-label {
-  @apply w-14 shrink-0 text-[13px] text-agray;
+  @apply w-14 shrink-0 text-[15px] text-agray lg:text-[13px];
 }
 .mail-input {
-  @apply flex-1 bg-transparent text-[14px] text-aink outline-none placeholder:text-black/30;
+  @apply flex-1 bg-transparent text-[15px] text-aink outline-none placeholder:text-black/30 lg:text-[14px];
 }
 </style>

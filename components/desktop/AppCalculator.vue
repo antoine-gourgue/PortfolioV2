@@ -3,15 +3,15 @@
     <div
       v-if="desktop.state.value.apps.calculator"
       ref="winEl"
-      class="app-cal fixed left-1/2 top-24 z-40 w-[232px] -translate-x-1/2 overflow-hidden rounded-xl shadow-[0_30px_70px_-15px_rgba(0,0,0,0.55)] ring-1 ring-white/10 lg:left-auto lg:right-[16%] lg:top-32 lg:translate-x-0"
+      class="app-cal fixed inset-0 z-40 overflow-hidden lg:inset-auto lg:right-[16%] lg:top-32 lg:w-[232px] lg:rounded-xl lg:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.55)] lg:ring-1 lg:ring-white/10"
       :style="{ zIndex: z }"
       @pointerdown="bringToFront"
     >
-      <div class="bg-[#2a2a2c]">
-        <!-- Barre de titre translucide (pastilles seules, comme la vraie app) -->
-        <div class="cal-drag flex items-center gap-2 px-3 pb-1 pt-2.5">
+      <div class="flex h-full flex-col bg-black lg:h-auto lg:bg-[#2a2a2c]">
+        <!-- Barre de titre (desktop : pastilles / mobile : chevron iOS) -->
+        <div class="cal-drag flex items-center gap-2 px-4 pb-1 pt-10 lg:px-3 lg:pt-2.5">
           <button
-            class="group flex h-3 w-3 items-center justify-center rounded-full border border-[#E0443E] bg-[#FF5F57]"
+            class="group hidden h-3 w-3 items-center justify-center rounded-full border border-[#E0443E] bg-[#FF5F57] lg:flex"
             aria-label="close"
             @click.stop="sfx.minimize(), desktop.closeApp('calculator')"
             @pointerdown.stop
@@ -20,20 +20,27 @@
               <path d="M3.6 3.6 L8.4 8.4 M8.4 3.6 L3.6 8.4" stroke="#820005" stroke-width="1.2" stroke-linecap="round" />
             </svg>
           </button>
-          <span class="h-3 w-3 rounded-full border border-black/20 bg-[#4a4a4c]"></span>
-          <span class="h-3 w-3 rounded-full border border-black/20 bg-[#4a4a4c]"></span>
+          <span class="hidden h-3 w-3 rounded-full border border-black/20 bg-[#4a4a4c] lg:block"></span>
+          <span class="hidden h-3 w-3 rounded-full border border-black/20 bg-[#4a4a4c] lg:block"></span>
+          <button
+            class="flex items-center gap-0.5 text-[15px] font-medium text-[#FF9F0A] lg:hidden"
+            @click.stop="sfx.minimize(), desktop.closeApp('calculator')"
+          >
+            <span class="text-[19px] leading-none">‹</span>
+            {{ $t('macos.close') }}
+          </button>
         </div>
 
         <!-- Affichage -->
         <div
-          class="cal-drag select-none truncate px-4 pb-2 pt-3 text-right text-[38px] font-light leading-none text-white"
+          class="cal-drag flex flex-1 select-none items-end justify-end truncate px-6 pb-3 pt-3 text-[76px] font-light leading-none text-white lg:flex-none lg:px-4 lg:pb-2 lg:text-[38px]"
         >
           {{ display }}
         </div>
 
         <!-- Clavier -->
         <div
-          class="grid grid-cols-4 gap-px bg-[#2a2a2c] p-px pt-0"
+          class="grid grid-cols-4 gap-3 p-4 pb-8 lg:gap-px lg:bg-[#2a2a2c] lg:p-px lg:pt-0"
           @click.capture="sfx.key()"
         >
           <button class="key key-fn" @click="clear">
@@ -58,7 +65,12 @@
           <button class="key" @click="digit('3')">3</button>
           <button class="key key-op" :class="opActive('+')" @click="setOp('+')">+</button>
 
-          <button class="key col-span-2 !text-left !pl-6" @click="digit('0')">0</button>
+          <button
+            class="key key-zero col-span-2 !text-left !pl-8 lg:!pl-6"
+            @click="digit('0')"
+          >
+            0
+          </button>
           <button class="key" @click="digit(',')">,</button>
           <button class="key key-op" @click="equals">=</button>
         </div>
@@ -183,13 +195,17 @@ watch(
 </script>
 
 <style scoped>
+/* Mobile-first : boutons ronds iOS ; desktop (lg:) : tuiles macOS */
 .key {
-  @apply bg-[#5A5A5E] py-3 text-center text-[17px] font-normal text-white transition-colors duration-100 hover:bg-[#6b6b70] active:bg-[#7d7d83];
+  @apply aspect-square rounded-full bg-[#333336] text-center text-[30px] font-normal text-white transition-colors duration-100 active:bg-[#7d7d83] lg:aspect-auto lg:rounded-none lg:bg-[#5A5A5E] lg:py-3 lg:text-[17px] lg:hover:bg-[#6b6b70];
+}
+.key-zero {
+  @apply aspect-auto rounded-full lg:rounded-none;
 }
 .key-fn {
-  @apply bg-[#3F3F42] hover:bg-[#4d4d51] active:bg-[#5b5b60];
+  @apply bg-[#A5A5A5] text-black active:bg-[#d4d4d2] lg:bg-[#3F3F42] lg:text-white lg:hover:bg-[#4d4d51] lg:active:bg-[#5b5b60];
 }
 .key-op {
-  @apply bg-[#FF9F0A] text-[20px] hover:bg-[#ffb340] active:bg-[#ffc463];
+  @apply bg-[#FF9F0A] text-[34px] text-white active:bg-[#ffc463] lg:text-[20px] lg:hover:bg-[#ffb340];
 }
 </style>

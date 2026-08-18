@@ -319,6 +319,7 @@
     "messagesTitle": "Messages",
     "errTitle": "File not found",
     "errDesc": "The requested item doesn't exist on this Mac.",
-    "errBack": "Back to desktop"
+    "errBack": "Back to desktop",
+    "close": "Close"
   }
 }

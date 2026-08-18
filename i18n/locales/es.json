@@ -319,6 +319,7 @@
     "messagesTitle": "Messages",
     "errTitle": "Archivo no encontrado",
     "errDesc": "El elemento solicitado no existe en este Mac.",
-    "errBack": "Volver al escritorio"
+    "errBack": "Volver al escritorio",
+    "close": "Cerrar"
   }
 }
