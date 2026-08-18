@@ -1,443 +1,236 @@
 <template>
-  <main
-    class="bg-gray-50 min-h-screen flex flex-col justify-between px-6 lg:px-20 py-32 pb-24 lg:pb-32 relative overflow-hidden"
-  >
-    <div class="absolute inset-0 opacity-70 pointer-events-none fade-in-up">
-      <img
-        src="/assets/shape.svg"
-        alt="background"
-        class="w-full h-full object-cover"
-      />
-    </div>
-
-    <div class="relative z-10 fade-in-up">
-      <h1 class="text-6xl font-extrabold text-center mb-6">
-        {{ $t('projects.title') }}
-      </h1>
-
-      <p
-        class="text-center text-gray-600 max-w-2xl mx-auto mb-12 leading-relaxed"
-      >
-        {{ $t('projects.description') }}
-      </p>
-
-      <!-- GitHub Statistics Section -->
-      <div
-        v-if="projects && projects.length > 0"
-        class="max-w-4xl mx-auto mb-16 fade-in-up"
-      >
-        <div class="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
-          <h2 class="text-2xl font-bold text-center mb-8">
-            {{ $t('projects.stats.title') }}
-          </h2>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <div class="flex flex-col items-center">
-              <div class="text-4xl font-bold text-black mb-2">
-                {{ totalRepos }}
-              </div>
-              <div class="text-sm text-gray-600">
-                {{ $t('projects.stats.repositories') }}
-              </div>
+  <main ref="container" class="mx-auto w-full max-w-6xl px-4 pt-16 lg:px-8">
+    <div class="win">
+      <UiMacWindow title="App Store">
+        <div class="flex min-h-[70vh]">
+          <!-- Sidebar -->
+          <aside
+            class="hidden w-56 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:block"
+          >
+            <div
+              class="mb-4 flex items-center gap-2 rounded-lg bg-black/5 px-3 py-1.5 text-[13px] text-black/40"
+            >
+              <i class="fas fa-magnifying-glass text-[11px]"></i>
+              {{ $t('macos.search') }}
             </div>
-            <div class="flex flex-col items-center">
-              <div class="text-4xl font-bold text-black mb-2">
-                {{ totalStars }}
-              </div>
-              <div class="text-sm text-gray-600">
-                {{ $t('projects.stats.stars') }}
-              </div>
-            </div>
-            <div class="flex flex-col items-center">
-              <div class="text-4xl font-bold text-black mb-2">
-                {{ totalForks }}
-              </div>
-              <div class="text-sm text-gray-600">
-                {{ $t('projects.stats.forks') }}
-              </div>
-            </div>
-            <div class="flex flex-col items-center">
-              <div class="text-4xl font-bold text-black mb-2">
-                {{ topLanguages.length }}
-              </div>
-              <div class="text-sm text-gray-600">
-                {{ $t('projects.stats.languages') }}
-              </div>
-            </div>
-          </div>
-
-          <!-- Top Languages -->
-          <div v-if="topLanguages.length > 0" class="mt-8">
-            <h3 class="text-lg font-semibold mb-4 text-center">
-              {{ $t('projects.stats.topLanguages') }}
-            </h3>
-            <div class="flex flex-wrap justify-center gap-3">
-              <div
-                v-for="lang in topLanguages.slice(0, 5)"
-                :key="lang.name"
-                class="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-full border border-gray-200"
-              >
-                <img
-                  v-if="languageSVGs[lang.name]"
-                  :src="`/assets/${languageSVGs[lang.name]}`"
-                  :alt="lang.name"
-                  class="w-5 h-5 object-contain"
+            <p class="px-2 pb-1.5 text-[11px] font-semibold text-black/35">
+              {{ $t('macos.finderProjects') }}
+            </p>
+            <button
+              v-for="project in projects"
+              :key="project.key"
+              class="flex w-full items-center gap-2.5 rounded-lg px-2 py-1.5 text-left text-[13px] font-medium transition-colors"
+              :class="
+                selected === project.key
+                  ? 'bg-ablue text-white'
+                  : 'text-aink hover:bg-black/5'
+              "
+              @click="selected = project.key"
+            >
+              <span class="block h-7 w-7 shrink-0">
+                <DesktopMacAppIcon
+                  :letter="project.letter"
+                  :color-top="project.colorTop"
+                  :color-bottom="project.colorBottom"
                 />
-                <span class="text-sm font-medium text-gray-700">{{
-                  lang.name
-                }}</span>
-                <span class="text-xs text-gray-500">({{ lang.count }})</span>
+              </span>
+              {{ project.name }}
+            </button>
+          </aside>
+
+          <!-- Fiche de l'app -->
+          <div v-if="current" :key="current.key" class="min-w-0 flex-1 p-6 sm:p-8">
+            <!-- Sélecteur mobile -->
+            <div class="mb-6 flex gap-2 overflow-x-auto pb-1 lg:hidden">
+              <button
+                v-for="project in projects"
+                :key="project.key"
+                class="shrink-0 rounded-full px-3.5 py-1.5 text-[13px] font-medium"
+                :class="
+                  selected === project.key
+                    ? 'bg-ablue text-white'
+                    : 'bg-black/5 text-aink'
+                "
+                @click="selected = project.key"
+              >
+                {{ project.name }}
+              </button>
+            </div>
+
+            <!-- En-tête -->
+            <div class="flex items-start gap-5">
+              <span class="block h-24 w-24 shrink-0 sm:h-28 sm:w-28">
+                <DesktopMacAppIcon
+                  :letter="current.letter"
+                  :color-top="current.colorTop"
+                  :color-bottom="current.colorBottom"
+                />
+              </span>
+              <div class="min-w-0 flex-1 pt-1">
+                <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">
+                  {{ current.name }}
+                </h1>
+                <p class="mt-0.5 text-[15px] text-agray">Antoine Gourgue</p>
+                <div class="mt-4 flex items-center gap-4">
+                  <a
+                    :href="current.url"
+                    target="_blank"
+                    class="rounded-full bg-ablue px-6 py-1.5 text-[14px] font-bold text-white transition-colors hover:bg-[#0077ed]"
+                  >
+                    {{ $t('macos.get') }}
+                  </a>
+                  <a
+                    href="https://github.com/antoine-gourgue"
+                    target="_blank"
+                    class="text-[13px] font-medium text-ablue hover:underline"
+                  >
+                    {{ $t('macos.sourceCode') }} ↗
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      <div class="flex flex-wrap justify-center gap-4 mb-12 fade-in-up">
-        <button
-          v-for="lang in languages"
-          :key="lang"
-          :class="[
-            'px-4 py-2 rounded-full border transition',
-            selectedLang === lang
-              ? 'bg-black text-white border-black'
-              : 'border-gray-300 text-gray-700 hover:bg-gray-100',
-          ]"
-          @click="selectLanguage(lang)"
-        >
-          {{ lang }}
-        </button>
-      </div>
-    </div>
+            <!-- Rangée de stats -->
+            <div
+              class="mt-8 flex divide-x divide-black/10 border-y border-black/10 py-4"
+            >
+              <div class="stat-col">
+                <p class="stat-label">{{ $t('macos.ghStars') }}</p>
+                <p class="stat-value">
+                  {{ starsFor(current) }}
+                  <i class="fas fa-star text-[13px] text-black/30"></i>
+                </p>
+              </div>
+              <div class="stat-col">
+                <p class="stat-label">{{ $t('macos.category') }}</p>
+                <p class="stat-value">{{ $t(current.categoryKey) }}</p>
+              </div>
+              <div class="stat-col hidden sm:block">
+                <p class="stat-label">{{ $t('macos.year') }}</p>
+                <p class="stat-value">{{ current.year }}</p>
+              </div>
+              <div class="stat-col hidden md:block">
+                <p class="stat-label">{{ $t('macos.age') }}</p>
+                <p class="stat-value truncate">{{ current.stack }}</p>
+              </div>
+            </div>
 
-    <div
-      v-if="error"
-      class="flex flex-col items-center justify-center text-center text-red-500 mb-12 space-y-4"
-    >
-      <i class="fas fa-exclamation-triangle text-4xl"></i>
-      <p class="text-lg font-semibold">{{ $t('projects.error') }}</p>
-      <p class="text-sm text-gray-500">
-        {{ $t('projects.errorDescription') }}
-      </p>
-    </div>
-
-    <div
-      v-else-if="!projects"
-      class="flex flex-col items-center justify-center text-center text-gray-400 mb-12 space-y-4 animate-pulse"
-    >
-      <i class="fas fa-spinner fa-spin text-4xl"></i>
-      <p class="text-lg font-semibold">{{ $t('projects.loading') }}</p>
-      <p class="text-sm text-gray-500">
-        {{ $t('projects.loadingDescription') }}
-      </p>
-    </div>
-
-    <div
-      v-else
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 fade-in-up min-h-[calc(100vh-480px)]"
-    >
-      <a
-        v-for="project in paginatedProjects"
-        :key="project.id"
-        :href="project.html_url"
-        target="_blank"
-        class="border border-gray-200 rounded-2xl bg-white p-6 shadow-sm hover:shadow-lg transition transform hover:-translate-y-1 hover:border-gray-400 flex flex-col justify-between min-h-[220px] group"
-      >
-        <div>
-          <h3
-            class="font-bold text-lg mb-6 text-gray-800 truncate group-hover:underline"
-          >
-            {{ project.name }}
-          </h3>
-        </div>
-
-        <div class="flex justify-between items-center">
-          <div class="flex items-center space-x-3">
-            <div class="w-7 h-7 flex items-center justify-center rounded">
+            <!-- Aperçu -->
+            <h2 class="mt-8 text-lg font-bold">{{ $t('macos.preview') }}</h2>
+            <a :href="current.url" target="_blank" class="mt-3 block">
               <img
-                v-if="project.language && languageSVGs[project.language]"
-                :src="`/assets/${languageSVGs[project.language]}`"
-                :alt="project.language"
-                class="w-5 h-5 object-contain"
+                :src="current.image"
+                :alt="current.name"
+                class="w-full rounded-xl border border-black/10 bg-white object-contain shadow-sm transition-transform duration-300 hover:scale-[1.01]"
               />
-            </div>
-            <span class="text-sm text-gray-500">{{
-              project.language || t('projects.other')
-            }}</span>
-          </div>
+            </a>
 
-          <div
-            class="flex items-center space-x-4 text-gray-400 group-hover:text-black"
-          >
-            <div
-              v-if="project.stargazers_count > 0"
-              class="flex items-center space-x-1"
-              :title="`${project.stargazers_count} stars`"
-            >
-              <i class="fas fa-star text-sm"></i>
-              <span class="text-xs">{{ project.stargazers_count }}</span>
-            </div>
-            <div
-              v-if="project.forks_count > 0"
-              class="flex items-center space-x-1"
-              :title="`${project.forks_count} forks`"
-            >
-              <i class="fas fa-code-branch text-sm"></i>
-              <span class="text-xs">{{ project.forks_count }}</span>
-            </div>
-            <i class="fab fa-github text-lg"></i>
+            <!-- À propos -->
+            <h2 class="mt-8 text-lg font-bold">{{ $t('macos.aboutApp') }}</h2>
+            <p class="mt-2 max-w-3xl text-[15px] leading-relaxed text-agray">
+              {{ $t(`projects.items.${current.key}.description`) }}
+            </p>
+
+            <!-- Informations -->
+            <h2 class="mt-8 text-lg font-bold">
+              {{ $t('macos.information') }}
+            </h2>
+            <dl class="mt-2 max-w-3xl text-[14px]">
+              <div class="info-row">
+                <dt>{{ $t('macos.developer') }}</dt>
+                <dd>Antoine Gourgue</dd>
+              </div>
+              <div class="info-row">
+                <dt>{{ $t('macos.category') }}</dt>
+                <dd>{{ $t(current.categoryKey) }}</dd>
+              </div>
+              <div class="info-row">
+                <dt>{{ $t('macos.role') }}</dt>
+                <dd>{{ $t('macos.roleFull') }}</dd>
+              </div>
+              <div class="info-row">
+                <dt>Stack</dt>
+                <dd>{{ current.stack }}</dd>
+              </div>
+              <div class="info-row">
+                <dt>{{ $t('macos.website') }}</dt>
+                <dd>
+                  <a
+                    :href="current.url"
+                    target="_blank"
+                    class="text-ablue hover:underline"
+                    >{{ current.domain }}</a
+                  >
+                </dd>
+              </div>
+            </dl>
           </div>
         </div>
-      </a>
-    </div>
-
-    <div
-      v-if="showIndicator"
-      class="fixed bottom-6 left-1/2 transform -translate-x-1/2 hidden lg:block z-50"
-    >
-      <div
-        class="w-8 h-14 border-2 border-gray-400 rounded-full flex items-start justify-center p-1 animate-bounce"
-      >
-        <div class="w-1 h-1 bg-gray-400 rounded-full mb-1"></div>
-      </div>
-    </div>
-
-    <div
-      v-if="projects && totalPages > 1"
-      class="flex justify-center mt-20 space-x-4"
-    >
-      <button
-        :disabled="currentPage === 1"
-        class="px-4 py-2 rounded-full border border-gray-300 hover:bg-gray-100 disabled:opacity-50"
-        @click="prevPage"
-      >
-        {{ $t('projects.previous') }}
-      </button>
-      <button
-        :disabled="currentPage === totalPages"
-        class="px-4 py-2 rounded-full border border-gray-300 hover:bg-gray-100 disabled:opacity-50"
-        @click="nextPage"
-      >
-        {{ $t('projects.next') }}
-      </button>
-    </div>
-
-    <div class="relative z-10 fade-in-up mt-20">
-      <h2 class="text-4xl font-bold text-center mb-10">
-        {{ $t('projects.onlineProjects') }}
-      </h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-        <a
-          v-for="project in onlineProjects"
-          :key="project.url"
-          :href="project.url"
-          target="_blank"
-          class="border border-gray-200 rounded-2xl bg-white p-6 shadow-sm hover:shadow-lg transition transform hover:-translate-y-1 hover:border-gray-400 flex flex-col justify-between min-h-[220px] group"
-        >
-          <div>
-            <h3
-              class="font-bold text-lg mb-4 text-gray-800 group-hover:underline"
-            >
-              {{ project.name }}
-            </h3>
-            <p class="text-sm text-gray-600">{{ project.description }}</p>
-          </div>
-
-          <div v-if="project.image" class="mt-4">
-            <img
-              :src="project.image"
-              :alt="project.name"
-              class="rounded-lg w-full object-cover"
-            />
-          </div>
-        </a>
-      </div>
+      </UiMacWindow>
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useI18n } from '#imports'
+const { gsap } = useGsap()
 
-const { t } = useI18n()
+const projects = useProjects()
+const selected = ref(projects[0].key)
+const current = computed(() => projects.find((p) => p.key === selected.value))
 
+// Étoiles GitHub réelles via l'API du site
 interface GithubRepo {
-  id: number
   name: string
-  html_url: string
-  language: string | null
-  updated_at: string
   stargazers_count: number
-  forks_count: number
-  watchers_count: number
 }
-interface OnlineProject {
-  name: string
-  url: string
-  description: string
-  image?: string
-}
+const { data: repos } = useFetch<GithubRepo[]>('/api/github', { server: true })
 
-const onlineProjects = computed<OnlineProject[]>(() => [
-  {
-    name: 'Mosaic',
-    url: 'https://mosaic.antoinegourgue.dev/',
-    description: t('projects.items.mosaic.description'),
-    image: '/assets/mosaic.png',
-  },
-  {
-    name: 'Portfolio',
-    url: 'https://antoinegourgue.dev/',
-    description: t('projects.items.portfolio.description'),
-    image: '/assets/portfolio-thumb.png',
-  },
-  {
-    name: 'Design System Storybook',
-    url: 'https://design-system-storybook.antoinegourgue.dev/',
-    description: t('projects.items.designSystem.description'),
-    image: '/assets/design-system.png',
-  },
-  {
-    name: 'Sapia',
-    url: 'https://sapia.antoinegourgue.dev/',
-    description: t('projects.items.sapia.description'),
-    image: '/assets/sapia.png',
-  },
-  {
-    name: 'AuroraHome - Documentation',
-    url: 'https://aurora-home-documentation.vercel.app/fr/docs',
-    description: t('projects.items.aurora.description'),
-    image: '/assets/aurora-home.png',
-  },
-])
-
-const selectedLang = ref(t('projects.all'))
-const languages = computed(() => [
-  t('projects.all'),
-  'Vue',
-  'TypeScript',
-  t('projects.other'),
-])
-
-const languageSVGs: Record<string, string> = {
-  Vue: 'vuedotjs.svg',
-  TypeScript: 'typescript.svg',
-  Elixir: 'elixir.svg',
-  Python: 'python.svg',
-  PHP: 'php.svg',
-  Docker: 'docker.svg',
-  'Jupyter Notebook': 'jupyter.svg',
-  JavaScript: 'javascript.svg',
-  'C++': 'cplusplus.svg',
-  Java: 'java.svg',
-  Twig: 'twig.svg',
-}
-
-const currentPage = ref(1)
-const itemsPerPage = 6
-const { data: projects, error } = useFetch<GithubRepo[]>('/api/github', {
-  server: true,
-})
-
-const sortedProjects = computed(() => {
-  if (!projects.value) return []
-  return [...projects.value].sort(
-    (a, b) =>
-      new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+const starsFor = (p: { repoHint: string }) => {
+  const repo = repos.value?.find((r) =>
+    r.name.toLowerCase().includes(p.repoHint)
   )
-})
-
-const filteredProjects = computed(() => {
-  if (!sortedProjects.value) return []
-  if (selectedLang.value === t('projects.all')) return sortedProjects.value
-  return sortedProjects.value.filter(
-    (p) =>
-      p.language === selectedLang.value ||
-      (!languages.value.includes(p.language || '') &&
-        selectedLang.value === t('projects.other'))
-  )
-})
-
-const showIndicator = ref(true)
-const handleScroll = () => {
-  showIndicator.value = window.scrollY < 50
+  return repo ? repo.stargazers_count : '—'
 }
+
+const container = ref<HTMLElement | null>(null)
+let ctx: gsap.Context | undefined
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
+  if (!container.value) return
+  ctx = gsap.context(() => {
+    const mm = gsap.matchMedia()
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      gsap.from('.win', {
+        autoAlpha: 0,
+        scale: 0.94,
+        y: 30,
+        duration: 0.65,
+        ease: 'back.out(1.2)',
+      })
+    })
+  }, container.value)
 })
 
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
-
-const totalPages = computed(() =>
-  Math.ceil(filteredProjects.value.length / itemsPerPage)
-)
-const paginatedProjects = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage
-  return filteredProjects.value.slice(start, start + itemsPerPage)
-})
-
-const selectLanguage = (lang: string) => {
-  selectedLang.value = lang
-  currentPage.value = 1
-}
-
-const nextPage = () => {
-  if (currentPage.value < totalPages.value) currentPage.value++
-}
-const prevPage = () => {
-  if (currentPage.value > 1) currentPage.value--
-}
-
-// GitHub Statistics
-const totalRepos = computed(() => {
-  return projects.value?.length || 0
-})
-
-const totalStars = computed(() => {
-  if (!projects.value) return 0
-  return projects.value.reduce(
-    (sum, repo) => sum + (repo.stargazers_count || 0),
-    0
-  )
-})
-
-const totalForks = computed(() => {
-  if (!projects.value) return 0
-  return projects.value.reduce((sum, repo) => sum + (repo.forks_count || 0), 0)
-})
-
-const topLanguages = computed(() => {
-  if (!projects.value) return []
-
-  const langCount: Record<string, number> = {}
-  projects.value.forEach((repo) => {
-    if (repo.language) {
-      langCount[repo.language] = (langCount[repo.language] || 0) + 1
-    }
-  })
-
-  return Object.entries(langCount)
-    .map(([name, count]) => ({ name, count }))
-    .sort((a, b) => b.count - a.count)
-})
+onUnmounted(() => ctx?.revert())
 </script>
 
 <style scoped>
-.fade-in-up {
-  animation: fadeInUp 0.8s ease-out both;
+.stat-col {
+  @apply flex-1 px-4 text-center first:pl-0 last:pr-0;
 }
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.stat-label {
+  @apply text-[10px] font-semibold tracking-wide text-black/35;
+}
+.stat-value {
+  @apply mt-1 text-[15px] font-semibold text-black/60;
+}
+.info-row {
+  @apply flex items-baseline justify-between gap-6 border-b border-black/5 py-2.5;
+}
+.info-row dt {
+  @apply shrink-0 text-agray;
+}
+.info-row dd {
+  @apply min-w-0 truncate text-right font-medium text-aink;
 }
 </style>

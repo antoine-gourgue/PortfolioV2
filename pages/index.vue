@@ -4,22 +4,6 @@
     class="relative font-sans text-aink"
     @contextmenu.prevent="openContext"
   >
-    <!-- ═══ Fond d'écran macOS : dégradé riche + logo AG en filigrane ═══ -->
-    <div
-      class="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
-      :style="{ backgroundImage: WALLPAPERS[desktop.state.value.wallpaper] }"
-    >
-      <div
-        class="wall-1 absolute -left-[10%] top-[-15%] h-[36rem] w-[36rem] rounded-full bg-white/10 blur-[130px]"
-      ></div>
-      <div
-        class="wall-2 absolute right-[-8%] top-[25%] h-[32rem] w-[32rem] rounded-full bg-white/10 blur-[130px]"
-      ></div>
-      <AgLogo
-        class="absolute left-1/2 top-1/2 h-72 w-80 -translate-x-1/2 -translate-y-1/2 text-white opacity-[0.07]"
-      />
-    </div>
-
     <!-- ═══ Bureau ═══ -->
     <section
       ref="heroEl"
@@ -188,52 +172,68 @@
       </p>
     </section>
 
-    <!-- ═══ Projets ═══ -->
-    <section class="mx-auto w-full max-w-6xl px-5 pt-20 lg:px-8">
-      <div data-reveal class="mb-10 text-center">
-        <h2
-          class="text-3xl font-bold tracking-tight text-white drop-shadow-md sm:text-4xl"
-        >
-          {{ $t('macos.projectsTitle') }}
-        </h2>
-        <p class="mt-2 text-[15px] font-medium text-white/80 drop-shadow">
-          {{ $t('macos.projectsSub') }}
-        </p>
-      </div>
-
-      <div class="grid gap-8 md:grid-cols-2">
-        <div
-          v-for="project in projects"
-          :key="project.name"
-          data-reveal
-          class="transition-transform duration-300 hover:-translate-y-1.5"
-        >
-          <UiMacWindow :url="project.domain">
-            <a :href="project.url" target="_blank" class="block">
-              <img
-                :src="project.image"
-                :alt="project.name"
-                class="aspect-[16/10] w-full bg-white object-cover object-top"
-              />
-            </a>
-            <div
-              class="flex items-center justify-between gap-4 border-t border-black/5 bg-white/70 px-5 py-3.5"
+    <!-- ═══ Projets : fenêtre Finder + Quick Look ═══ -->
+    <section class="mx-auto w-full max-w-5xl px-5 pt-20 lg:px-8">
+      <div data-reveal>
+        <UiMacWindow :title="$t('macos.finderProjects')">
+          <div class="flex min-h-[380px]">
+            <!-- Sidebar Finder -->
+            <aside
+              class="hidden w-48 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 sm:block"
             >
-              <div class="min-w-0">
-                <h3 class="font-semibold tracking-tight">{{ project.name }}</h3>
-                <p class="truncate text-xs text-agray">
-                  {{ project.description }}
-                </p>
-              </div>
-              <a
-                :href="project.url"
-                target="_blank"
-                class="shrink-0 text-sm font-medium text-ablue hover:underline"
-                >{{ $t('macos.visit') }} ›</a
+              <p
+                class="px-2 pb-1.5 text-[11px] font-semibold text-black/35"
               >
+                {{ $t('macos.finderFavorites') }}
+              </p>
+              <div
+                class="flex items-center gap-2 rounded-md bg-ablue/90 px-2 py-1 text-[13px] font-medium text-white"
+              >
+                <i class="fas fa-folder text-[12px]"></i>
+                {{ $t('macos.finderProjects') }}
+              </div>
+              <div class="sidebar-item">
+                <i class="fas fa-clock text-[12px] text-ablue"></i>
+                {{ $t('macos.finderApps') }}
+              </div>
+              <div class="sidebar-item">
+                <i class="fas fa-arrow-down text-[12px] text-ablue"></i>
+                {{ $t('macos.finderDownloads') }}
+              </div>
+            </aside>
+
+            <!-- Grille de projets -->
+            <div class="flex-1 p-6">
+              <div
+                class="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 lg:grid-cols-4"
+              >
+                <button
+                  v-for="project in projects"
+                  :key="project.key"
+                  class="group flex flex-col items-center gap-2"
+                  @click="quicklook = project.key"
+                >
+                  <span
+                    class="block h-16 w-16 rounded-[18px] p-0 transition-transform duration-300 group-hover:scale-105"
+                  >
+                    <DesktopMacAppIcon
+                      :letter="project.letter"
+                      :color-top="project.colorTop"
+                      :color-bottom="project.colorBottom"
+                    />
+                  </span>
+                  <span
+                    class="max-w-full truncate rounded px-1.5 text-[12.5px] font-medium text-aink group-hover:bg-ablue group-hover:text-white"
+                    >{{ project.name }}</span
+                  >
+                </button>
+              </div>
+              <p class="mt-8 text-center text-[12px] text-black/35">
+                {{ $t('macos.projectsSub') }}
+              </p>
             </div>
-          </UiMacWindow>
-        </div>
+          </div>
+        </UiMacWindow>
       </div>
     </section>
 
@@ -306,6 +306,64 @@
       </div>
     </section>
 
+    <!-- ═══ Quick Look ═══ -->
+    <Teleport to="body">
+      <Transition name="ql">
+        <div
+          v-if="qlProject"
+          class="fixed inset-0 z-[95] flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm"
+          @click.self="quicklook = ''"
+        >
+          <div
+            class="ql-panel w-full max-w-3xl overflow-hidden rounded-2xl border border-white/20 bg-[#f5f5f7] shadow-2xl"
+          >
+            <div
+              class="relative flex items-center justify-between border-b border-black/5 bg-white/80 px-4 py-2.5"
+            >
+              <button
+                class="flex h-3 w-3 items-center justify-center rounded-full bg-[#ff5f57] text-[8px] text-black/50"
+                aria-label="close"
+                @click="quicklook = ''"
+              ></button>
+              <span
+                class="absolute left-1/2 -translate-x-1/2 text-[13px] font-medium text-black/50"
+                >{{ qlProject.name }}</span
+              >
+              <a
+                :href="qlProject.url"
+                target="_blank"
+                class="text-[13px] font-medium text-ablue hover:underline"
+                >{{ $t('macos.openInSafari') }} ↗</a
+              >
+            </div>
+            <img
+              :src="qlProject.image"
+              :alt="qlProject.name"
+              class="max-h-[52vh] w-full bg-white object-contain"
+            />
+            <div
+              class="flex flex-col gap-3 border-t border-black/5 bg-white/80 px-6 py-5 sm:flex-row sm:items-center sm:justify-between"
+            >
+              <div class="min-w-0">
+                <p class="text-sm leading-relaxed text-agray">
+                  {{ $t(`projects.items.${qlProject.key}.description`) }}
+                </p>
+                <p class="mt-2 text-[12px] font-medium text-black/40">
+                  {{ qlProject.stack }}
+                </p>
+              </div>
+              <NuxtLink
+                :to="localePath('/projects')"
+                class="shrink-0 rounded-md bg-ablue px-4 py-1.5 text-[13px] font-medium text-white shadow-sm hover:bg-[#0077ed]"
+              >
+                {{ $t('macos.aboutApp') }} ›
+              </NuxtLink>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
+
     <!-- ═══ Menu contextuel du bureau ═══ -->
     <Teleport to="body">
       <div
@@ -336,7 +394,6 @@ import type { Ref } from 'vue'
 import AgLogo from '~/components/ui/AGLogo.vue'
 
 const localePath = useLocalePath()
-const { t } = useI18n()
 const { gsap } = useGsap()
 const desktop = useDesktop()
 
@@ -356,36 +413,13 @@ const winEls: Record<string, Ref<HTMLElement | null>> = {
 
 const journey = ['journey2024', 'journey2023']
 
-const projects = computed(() => [
-  {
-    name: 'Mosaic',
-    url: 'https://mosaic.antoinegourgue.dev/',
-    domain: 'mosaic.antoinegourgue.dev',
-    description: t('projects.items.mosaic.description'),
-    image: '/assets/mosaic.png',
-  },
-  {
-    name: 'Sapia',
-    url: 'https://sapia.antoinegourgue.dev/',
-    domain: 'sapia.antoinegourgue.dev',
-    description: t('projects.items.sapia.description'),
-    image: '/assets/sapia.png',
-  },
-  {
-    name: 'Design System',
-    url: 'https://design-system-storybook.antoinegourgue.dev/',
-    domain: 'design-system-storybook.antoinegourgue.dev',
-    description: t('projects.items.designSystem.description'),
-    image: '/assets/design-system.png',
-  },
-  {
-    name: 'AuroraHome',
-    url: 'https://aurora-home-documentation.vercel.app/fr/docs',
-    domain: 'aurora-home-documentation.vercel.app',
-    description: t('projects.items.aurora.description'),
-    image: '/assets/aurora-home.png',
-  },
-])
+const projects = useProjects()
+
+// Quick Look
+const quicklook = ref('')
+const qlProject = computed(() =>
+  projects.find((p) => p.key === quicklook.value)
+)
 
 // ── Icônes du bureau ──
 const selectedIcon = ref('')
@@ -415,6 +449,10 @@ const deskIcons = [
 ]
 
 // ── Menu contextuel ──
+const onEsc = (e: KeyboardEvent) => {
+  if (e.key === 'Escape') quicklook.value = ''
+}
+
 const ctx = reactive({ show: false, x: 0, y: 0 })
 const openContext = (e: MouseEvent) => {
   ctx.show = true
@@ -490,6 +528,7 @@ onMounted(() => {
 
   document.addEventListener('click', closeContext)
   document.addEventListener('click', () => (selectedIcon.value = ''))
+  document.addEventListener('keydown', onEsc)
 
   ctxGsap = gsap.context(() => {
     const mm = gsap.matchMedia()
@@ -509,23 +548,6 @@ onMounted(() => {
         duration: 0.25,
         stagger: 0.22,
         delay: 0.7,
-      })
-
-      gsap.to('.wall-1', {
-        x: 60,
-        y: 40,
-        duration: 10,
-        ease: 'sine.inOut',
-        yoyo: true,
-        repeat: -1,
-      })
-      gsap.to('.wall-2', {
-        x: -50,
-        y: 60,
-        duration: 12,
-        ease: 'sine.inOut',
-        yoyo: true,
-        repeat: -1,
       })
 
       gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
@@ -560,6 +582,7 @@ onMounted(() => {
 onUnmounted(() => {
   ctxGsap?.revert()
   document.removeEventListener('click', closeContext)
+  document.removeEventListener('keydown', onEsc)
 })
 </script>
 
@@ -574,5 +597,28 @@ onUnmounted(() => {
 }
 .ctx-item {
   @apply flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-[13px] text-aink transition-colors hover:bg-ablue hover:text-white;
+}
+.sidebar-item {
+  @apply mt-0.5 flex items-center gap-2 rounded-md px-2 py-1 text-[13px] text-aink/70;
+}
+
+.ql-enter-active,
+.ql-leave-active {
+  transition: opacity 0.22s ease;
+}
+.ql-enter-active .ql-panel,
+.ql-leave-active .ql-panel {
+  transition:
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.22s ease;
+}
+.ql-enter-from,
+.ql-leave-to {
+  opacity: 0;
+}
+.ql-enter-from .ql-panel,
+.ql-leave-to .ql-panel {
+  opacity: 0;
+  transform: scale(0.94);
 }
 </style>
