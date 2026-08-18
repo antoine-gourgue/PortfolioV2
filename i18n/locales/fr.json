@@ -316,6 +316,9 @@
     "openInContacts": "Ouvrir dans Contacts",
     "sidebarWork": "Alternance",
     "catSaas": "Marketing SaaS",
-    "messagesTitle": "Messages"
+    "messagesTitle": "Messages",
+    "errTitle": "Fichier introuvable",
+    "errDesc": "L'élément demandé n'existe pas sur ce Mac.",
+    "errBack": "Retour au bureau"
   }
 }

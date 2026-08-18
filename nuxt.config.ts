@@ -55,6 +55,12 @@ export default defineNuxtConfig({
       alwaysRedirect: false,
     },
   },
+  routeRules: {
+    // Ancienne page fusionnée dans À propos
+    '/services': { redirect: '/about' },
+    '/en/services': { redirect: '/en/about' },
+    '/es/services': { redirect: '/es/about' },
+  },
   site: {
     url: 'https://antoinegourgue.dev',
     name: 'Antoine Gourgue',

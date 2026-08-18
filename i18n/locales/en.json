@@ -316,6 +316,9 @@
     "openInContacts": "Open in Contacts",
     "sidebarWork": "Apprenticeship",
     "catSaas": "Marketing SaaS",
-    "messagesTitle": "Messages"
+    "messagesTitle": "Messages",
+    "errTitle": "File not found",
+    "errDesc": "The requested item doesn't exist on this Mac.",
+    "errBack": "Back to desktop"
   }
 }
