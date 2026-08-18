@@ -142,6 +142,64 @@
     />
   </svg>
 
+  <!-- Météo -->
+  <svg v-else-if="name === 'weather'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
+    <defs>
+      <linearGradient :id="`wx-${uid}`" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#3F9BF4" /><stop offset="1" stop-color="#1263C9" />
+      </linearGradient>
+      <linearGradient :id="`wxs-${uid}`" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#FFE066" /><stop offset="1" stop-color="#FFB300" />
+      </linearGradient>
+    </defs>
+    <rect width="100" height="100" rx="22" :fill="`url(#wx-${uid})`" />
+    <circle cx="40" cy="40" r="16" :fill="`url(#wxs-${uid})`" />
+    <path
+      d="M34 72 a11 11 0 0 1 1.5-21.9 a14 14 0 0 1 27 -0.5 a10.5 10.5 0 0 1 3.5 20.8 q-1 .6 -3 .6 h-26 q-2 0 -3 0 z"
+      fill="#FDFDFE"
+    />
+  </svg>
+
+  <!-- Calculatrice -->
+  <svg v-else-if="name === 'calculator'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
+    <defs>
+      <linearGradient :id="`cc-${uid}`" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#2E2E30" /><stop offset="1" stop-color="#151517" />
+      </linearGradient>
+    </defs>
+    <rect width="100" height="100" rx="22" :fill="`url(#cc-${uid})`" />
+    <rect x="24" y="20" width="52" height="16" rx="4" fill="#3A3A3D" />
+    <g>
+      <rect x="24" y="44" width="14" height="14" rx="4" fill="#5A5A5E" />
+      <rect x="43" y="44" width="14" height="14" rx="4" fill="#5A5A5E" />
+      <rect x="62" y="44" width="14" height="14" rx="4" fill="#FF9F0A" />
+      <rect x="24" y="63" width="14" height="14" rx="4" fill="#5A5A5E" />
+      <rect x="43" y="63" width="14" height="14" rx="4" fill="#5A5A5E" />
+      <rect x="62" y="63" width="14" height="14" rx="4" fill="#FF9F0A" />
+    </g>
+  </svg>
+
+  <!-- LinkedIn -->
+  <svg v-else-if="name === 'linkedin'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
+    <defs>
+      <linearGradient :id="`li-${uid}`" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#1B84D6" /><stop offset="1" stop-color="#0A66C2" />
+      </linearGradient>
+    </defs>
+    <rect width="100" height="100" rx="22" :fill="`url(#li-${uid})`" />
+    <text
+      x="50"
+      y="68"
+      text-anchor="middle"
+      font-size="46"
+      font-weight="700"
+      fill="#fff"
+      font-family="-apple-system, BlinkMacSystemFont, sans-serif"
+    >
+      in
+    </text>
+  </svg>
+
   <!-- App Store -->
   <svg v-else-if="name === 'appstore'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
     <defs>

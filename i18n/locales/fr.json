@@ -278,6 +278,19 @@
     "sortBy": "Trier par",
     "sortName": "Nom",
     "asc": "Croissant",
-    "desc": "Décroissant"
+    "desc": "Décroissant",
+    "weatherTitle": "Météo",
+    "calcTitle": "Calculatrice",
+    "wxLoading": "Chargement…",
+    "wxError": "Météo indisponible",
+    "wxClear": "Ensoleillé",
+    "wxPartly": "Éclaircies",
+    "wxCloudy": "Nuageux",
+    "wxFog": "Brouillard",
+    "wxRain": "Pluie",
+    "wxSnow": "Neige",
+    "wxStorm": "Orage",
+    "wxToday": "Auj.",
+    "deskLinkedin": "LinkedIn"
   }
 }

@@ -826,6 +826,12 @@ const deskIcons = [
     icon: 'github',
     action: () => openUrl('https://github.com/antoine-gourgue'),
   },
+  {
+    id: 'linkedin',
+    label: 'macos.deskLinkedin',
+    icon: 'linkedin',
+    action: () => openUrl('https://linkedin.com/in/antoine-gourgue'),
+  },
 ]
 
 // ── Menu contextuel ──

@@ -278,6 +278,19 @@
     "sortBy": "Ordenar por",
     "sortName": "Nombre",
     "asc": "Ascendente",
-    "desc": "Descendente"
+    "desc": "Descendente",
+    "weatherTitle": "Tiempo",
+    "calcTitle": "Calculadora",
+    "wxLoading": "Cargando…",
+    "wxError": "Tiempo no disponible",
+    "wxClear": "Soleado",
+    "wxPartly": "Intervalos nubosos",
+    "wxCloudy": "Nublado",
+    "wxFog": "Niebla",
+    "wxRain": "Lluvia",
+    "wxSnow": "Nieve",
+    "wxStorm": "Tormenta",
+    "wxToday": "Hoy",
+    "deskLinkedin": "LinkedIn"
   }
 }

@@ -10,6 +10,7 @@ interface DesktopState {
   activeWin: string
   wallpaper: number
   spotlightOpen: boolean
+  apps: Record<string, boolean>
 }
 
 // Fonds d'écran façon macOS : dégradés riches multi-couches (radial + linear)
@@ -31,7 +32,15 @@ export function useDesktop() {
     activeWin: '',
     wallpaper: 0,
     spotlightOpen: false,
+    apps: { weather: false, calculator: false },
   }))
+
+  const toggleApp = (id: string) => {
+    state.value.apps[id] = !state.value.apps[id]
+  }
+  const closeApp = (id: string) => {
+    state.value.apps[id] = false
+  }
 
   const register = (id: string) => {
     if (!state.value.wins[id]) {
@@ -87,5 +96,7 @@ export function useDesktop() {
     toggleZoom,
     cycleWallpaper,
     minimized,
+    toggleApp,
+    closeApp,
   }
 }

@@ -29,6 +29,22 @@
       ></span>
     </component>
 
+    <!-- Apps utilitaires (Météo, Calculatrice) -->
+    <button
+      v-for="app in utilApps"
+      :key="app.id"
+      :ref="setItemRef"
+      class="dock-icon group"
+      @click="toggleApp(app.id), bounce($event)"
+    >
+      <DesktopMacAppIcon :name="app.icon" />
+      <span class="dock-tip">{{ $t(app.label) }}</span>
+      <span
+        v-if="state.apps[app.id]"
+        class="absolute -bottom-[7px] left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-white/80"
+      ></span>
+    </button>
+
     <!-- Fenêtres réduites -->
     <template v-if="minimized.length">
       <div class="mx-1 h-11 w-px self-center bg-white/30"></div>
@@ -63,7 +79,12 @@ import type { ComponentPublicInstance } from 'vue'
 const localePath = useLocalePath()
 const route = useRoute()
 const { gsap } = useGsap()
-const { minimized, restore } = useDesktop()
+const { minimized, restore, toggleApp, state } = useDesktop()
+
+const utilApps = [
+  { id: 'weather', label: 'macos.weatherTitle', icon: 'weather' },
+  { id: 'calculator', label: 'macos.calcTitle', icon: 'calculator' },
+]
 
 // Résolution explicite : une chaîne 'NuxtLink' dans <component :is> ne se résout pas
 const NuxtLinkComponent = resolveComponent('NuxtLink')

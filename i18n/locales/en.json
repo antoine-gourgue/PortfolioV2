@@ -278,6 +278,19 @@
     "sortBy": "Sort by",
     "sortName": "Name",
     "asc": "Ascending",
-    "desc": "Descending"
+    "desc": "Descending",
+    "weatherTitle": "Weather",
+    "calcTitle": "Calculator",
+    "wxLoading": "Loading…",
+    "wxError": "Weather unavailable",
+    "wxClear": "Sunny",
+    "wxPartly": "Partly cloudy",
+    "wxCloudy": "Cloudy",
+    "wxFog": "Fog",
+    "wxRain": "Rain",
+    "wxSnow": "Snow",
+    "wxStorm": "Thunderstorm",
+    "wxToday": "Today",
+    "deskLinkedin": "LinkedIn"
   }
 }

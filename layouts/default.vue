@@ -26,6 +26,8 @@
     <MacDock />
     <DesktopSpotlight />
     <DesktopBootScreen />
+    <DesktopAppWeather />
+    <DesktopAppCalculator />
   </div>
 </template>
 
@@ -35,6 +37,8 @@ import MacMenuBar from '~/components/menus/MacMenuBar.vue'
 import MacDock from '~/components/menus/MacDock.vue'
 import DesktopSpotlight from '~/components/desktop/Spotlight.vue'
 import DesktopBootScreen from '~/components/desktop/BootScreen.vue'
+import DesktopAppWeather from '~/components/desktop/AppWeather.vue'
+import DesktopAppCalculator from '~/components/desktop/AppCalculator.vue'
 import AgLogo from '~/components/ui/AGLogo.vue'
 
 const desktop = useDesktop()

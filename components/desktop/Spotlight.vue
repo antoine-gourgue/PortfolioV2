@@ -133,6 +133,8 @@ const items = computed<Item[]>(() => [
   { id: 'about', label: t('nav.about'), icon: { name: 'contacts' }, kind: 'App', group: 'apps', action: () => go('/about') },
   { id: 'blog', label: t('nav.blog'), icon: { name: 'notes' }, kind: 'App', group: 'apps', action: () => go('/blog') },
   { id: 'contact', label: t('nav.contact'), icon: { name: 'mail' }, kind: 'App', group: 'apps', action: () => go('/contact') },
+  { id: 'weather', label: t('macos.weatherTitle'), icon: { name: 'weather' }, kind: 'App', group: 'apps', action: () => { desktop.state.value.apps.weather = true; close() } },
+  { id: 'calculator', label: t('macos.calcTitle'), icon: { name: 'calculator' }, kind: 'App', group: 'apps', action: () => { desktop.state.value.apps.calculator = true; close() } },
   ...portfolioProjects.map((p) => ({
     id: p.key,
     label: p.name,
