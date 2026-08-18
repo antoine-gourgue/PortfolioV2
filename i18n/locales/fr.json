@@ -20,9 +20,9 @@
     "technologies": "Technologies avec lesquelles je travaille",
     "journey": "Mon parcours",
     "journey2024": {
-      "title": "Développeur Fullstack - Digitaleo",
-      "period": "2024 - 2026",
-      "description": "En charge du développement et de la maintenance de l'éditeur d'email de la plateforme, garantissant une UX fluide et une forte compatibilité (Outlook, responsive...)."
+      "title": "Développeur Full Stack — Digitaleo",
+      "period": "janv. 2024 — 2026",
+      "description": "Éditeur d'email de la plateforme (blocs dynamiques, compatibilité Outlook/VML), Design System, archivage des campagnes, statistiques Marketing Direct."
     },
     "journey2023": {
       "title": "Master - Epitech Rennes",
@@ -41,8 +41,8 @@
     "journey": "Mon parcours.",
     "digitaleo": {
       "title": "Digitaleo",
-      "role": "Apprenti Développeur Fullstack",
-      "description": "En charge de l'éditeur d'email (AngularJS, intégration VML Outlook), de l'archivage des campagnes (Vue.js 2 & TypeScript) et du backend PHP legacy."
+      "role": "Développeur Full Stack (alternance)",
+      "description": "Éditeur d'email de la plateforme : blocs dynamiques, préheader, sélecteur d'émojis, compatibilité Outlook (VML, HTML conditionnel), inversion de colonnes mobile. Archivage des campagnes et des opérations, refonte des statistiques Marketing Direct, gestion des domaines d'expéditeur, intégration du Design System Vue.js dans le legacy AngularJS. Stack : Vue.js 2 · TypeScript · AngularJS · PHP · GitLab CI/CD."
     },
     "epitech": {
       "title": "Epitech Rennes",
@@ -50,8 +50,10 @@
       "description": "Spécialisation en IA & Data, axée sur le Machine Learning, la Science des Données et les solutions innovantes."
     },
     "education": {
-      "title": "Bac STL / Bac S / BTS SNIR",
-      "description": "Solides bases en sciences, réseaux & fondamentaux informatiques avant de passer complètement à l'ingénierie logicielle."
+      "title": "Lycée Saint Joseph — Hasparren",
+      "description": "Formation technique aux systèmes numériques, option informatique et réseaux — les fondations avant le passage à l'ingénierie logicielle.",
+      "role": "BTS SNIR (Informatique & Réseaux)",
+      "period": "2021 — 2023"
     },
     "skills": {
       "line1": "Compétences.",
@@ -72,7 +74,19 @@
       "line2": "Montres.",
       "line3": "Projets."
     },
-    "interestsDescription": "En dehors du code, j'aime explorer l'horlogerie, suivre le football et travailler sur des projets personnels pour affiner mes compétences."
+    "interestsDescription": "En dehors du code, j'aime explorer l'horlogerie, suivre le football et travailler sur des projets personnels pour affiner mes compétences.",
+    "kpme": {
+      "title": "KPME-Development",
+      "role": "Développeur web",
+      "period": "mai — juin 2022",
+      "description": "Création de site web pour KPME-Development à Boucau — première expérience professionnelle en développement."
+    },
+    "bac": {
+      "title": "Lycée André Malraux — Biarritz",
+      "role": "Bac S & Bac STL",
+      "period": "2016 — 2020",
+      "description": "Baccalauréats scientifique et sciences de laboratoire — les bases scientifiques du parcours."
+    }
   },
   "contact": {
     "title": "Restons en contact.",
@@ -145,6 +159,12 @@
       },
       "aurora": {
         "description": "Documentation technique complète de l'écosystème Aurora Home — architecture, installation, API, base de données, CI/CD, et guides de contribution pour tous les projets."
+      },
+      "tailtcg": {
+        "description": "Suivi de collection de cartes Pokémon : état, valeur, pré-gradation sur photos, classeurs et vitrine partageable. Gratuit, sans pub. Conçu avec Next.js et TypeScript."
+      },
+      "emailEditor": {
+        "description": "L'éditeur d'email de la plateforme Digitaleo, utilisé au quotidien par des réseaux d'enseignes. Mon terrain de jeu en alternance : blocs dynamiques, préheader et sélecteur d'émojis, compatibilité Outlook via VML et HTML conditionnel, inversion de colonnes sur mobile, intégration des composants du Design System Vue.js dans le legacy AngularJS, archivage des campagnes et refonte des statistiques Marketing Direct."
       }
     },
     "all": "Tous",
@@ -181,5 +201,146 @@
     "detectedFr": "🇫🇷 On dirait que tu parles français.",
     "detectedEn": "🇬🇧 It looks like you're speaking English.",
     "detectedEs": "🇪🇸 Parece que estás hablando español."
+  },
+  "macos": {
+    "projectsTitle": "Mes projets",
+    "projectsSub": "Chaque fenêtre est un vrai site en ligne.",
+    "visit": "Visiter",
+    "terminalStatus": "disponible — opportunités 2026",
+    "mailTitle": "Nouveau message",
+    "mailTo": "À : vous{'@'}entreprise.com",
+    "mailSubject": "Objet : Travaillons ensemble",
+    "mailBody": "Un projet, une opportunité, une question — je réponds vite.",
+    "mailSend": "M'écrire",
+    "journeyFile": "parcours.md",
+    "dragHint": "Déplacez les fenêtres",
+    "menuFile": "Fichier",
+    "menuGo": "Aller",
+    "menuHelp": "Aide",
+    "menuNewProject": "Nouveau projet…",
+    "menuDownloadCv": "Télécharger le CV",
+    "menuAboutSite": "À propos de ce portfolio",
+    "spotlightPlaceholder": "Recherche Spotlight",
+    "spotlightApps": "Applications",
+    "spotlightProjects": "Projets",
+    "spotlightActions": "Actions",
+    "spotlightEmpty": "Aucun résultat",
+    "deskCv": "CV.pdf",
+    "deskProjects": "Projets",
+    "deskGithub": "GitHub",
+    "ctxWallpaper": "Modifier le fond d'écran",
+    "ctxCv": "Télécharger le CV",
+    "ctxGithub": "Ouvrir GitHub",
+    "trash": "Corbeille",
+    "aboutTitle": "À propos d'Antoine",
+    "specStack": "Stack",
+    "specBackend": "Backend",
+    "specTools": "Outils",
+    "specTraining": "Formation",
+    "specStatus": "Statut",
+    "specTrainingVal": "Master IA & Data — Epitech Rennes",
+    "specStatusVal": "Disponible — opportunités 2026",
+    "get": "OBTENIR",
+    "sourceCode": "Code source",
+    "preview": "Aperçu",
+    "aboutApp": "À propos",
+    "information": "Informations",
+    "developer": "Développeur",
+    "category": "Catégorie",
+    "year": "Année",
+    "role": "Rôle",
+    "website": "Site web",
+    "ghStars": "ÉTOILES GITHUB",
+    "age": "STACK",
+    "search": "Rechercher",
+    "finderFavorites": "Favoris",
+    "finderProjects": "Projets",
+    "finderApps": "Applications",
+    "finderDownloads": "Téléchargements",
+    "openInSafari": "Ouvrir dans Safari",
+    "allContacts": "Tous les contacts",
+    "sendMessage": "Envoyer un message",
+    "position": "Poste",
+    "location": "Localisation",
+    "note": "Note",
+    "mailFrom": "De :",
+    "mailName": "Nom :",
+    "mailToShort": "À :",
+    "mailSubjectShort": "Objet :",
+    "mailRecipient": "Antoine Gourgue",
+    "mailDefaultSubject": "Contact depuis le portfolio",
+    "catProductivity": "Productivité",
+    "catAI": "Assistant IA",
+    "catDesign": "Design system",
+    "catDocs": "Documentation",
+    "roleFull": "Conception & développement",
+    "notesCount": "{count} notes",
+    "catGames": "Jeux & collection",
+    "terminalNow": "éditeur d'email chez digitaleo · master ia & data à epitech rennes",
+    "finderRecents": "Récents",
+    "finderDesktop": "Bureau",
+    "finderDocs": "Documents",
+    "finderAirdrop": "AirDrop",
+    "finderLocations": "Emplacements",
+    "finderMac": "MacBook d'Antoine",
+    "finderStatus": "{count} éléments · 42,3 Go disponibles",
+    "calTitle": "Calendrier",
+    "calWork": "Travail",
+    "calStudies": "Études sup",
+    "calTraining": "Lycée",
+    "calDay": "Jour",
+    "calWeek": "Semaine",
+    "calMonth": "Mois",
+    "calYear": "Année",
+    "sortBy": "Trier par",
+    "sortName": "Nom",
+    "asc": "Croissant",
+    "desc": "Décroissant",
+    "weatherTitle": "Météo",
+    "calcTitle": "Calculatrice",
+    "wxLoading": "Chargement…",
+    "wxError": "Météo indisponible",
+    "wxClear": "Ensoleillé",
+    "wxPartly": "Éclaircies",
+    "wxCloudy": "Nuageux",
+    "wxFog": "Brouillard",
+    "wxRain": "Pluie",
+    "wxSnow": "Neige",
+    "wxStorm": "Orage",
+    "wxToday": "Auj.",
+    "deskLinkedin": "LinkedIn",
+    "wxMyLocation": "MA POSITION",
+    "wxHourly": "PRÉVISIONS HORAIRES",
+    "wxDaily": "PRÉVISIONS SUR 6 JOURS",
+    "wxNow": "Maint.",
+    "openInContacts": "Ouvrir dans Contacts",
+    "sidebarWork": "Alternance",
+    "catSaas": "Marketing SaaS",
+    "messagesTitle": "Messages",
+    "errTitle": "Fichier introuvable",
+    "errDesc": "L'élément demandé n'existe pas sur ce Mac.",
+    "errBack": "Retour au bureau",
+    "close": "Fermer"
+  },
+  "notesApp": {
+    "foldersTitle": "iCloud",
+    "folderNotes": "Notes",
+    "folderMentions": "Mentions",
+    "pinned": "Épinglées",
+    "searchNotes": "Rechercher",
+    "items": {
+      "colophon": {
+        "title": "Comment ce site est fait",
+        "body": "Ce portfolio est un clone de macOS (et d'iOS sur mobile), codé main de bout en bout — aucun template.\n\nLa base : Nuxt 3, Vue, TypeScript et Tailwind. Les animations sont pilotées par GSAP : fenêtres déplaçables (Draggable), réductions vers le dock, révélations au scroll (ScrollTrigger).\n\nLes apps sont réelles : la Météo interroge open-meteo avec la position du visiteur, la Calculatrice calcule vraiment, Messages fait tourner mon chatbot maison, Spotlight (⌘K) navigue partout, et les stats GitHub de l'App Store sont en direct.\n\nLes bruitages système sont synthétisés en Web Audio (zéro fichier son), les icônes sont dessinées en SVG ou issues de Framework7 Icons (MIT), et l'écran de démarrage est rendu côté serveur pour éviter tout flash.\n\nTrois langues, SEO propre, build vérifié. Le code dit le reste."
+      },
+      "digitaleo": {
+        "title": "Ce que j'apprends chez Digitaleo",
+        "body": "Deux ans et demi d'alternance sur un vrai produit SaaS utilisé quotidiennement, ça forge.\n\nLe plus formateur : l'éditeur d'email. Rendre un email beau dans Outlook, c'est plonger dans le VML et le HTML conditionnel — un monde où les standards modernes n'existent pas. J'y ai livré les blocs dynamiques, le préheader, le sélecteur d'émojis, l'inversion de colonnes sur mobile.\n\nAutre leçon : cohabiter avec du legacy. Réutiliser les composants du Design System Vue.js dans des écrans AngularJS plutôt que tout réécrire, c'est apprendre à créer de la valeur sans casser l'existant.\n\nEt autour du code : GitLab CI/CD, feature flipping, code reviews exigeantes, collaboration quotidienne avec les Product Owners et les designers sur Figma."
+      },
+      "stack": {
+        "title": "Ma stack en 2026",
+        "body": "Front : Vue et Nuxt d'abord — c'est là que je suis le plus productif. TypeScript partout, Tailwind pour aller vite et rester cohérent, GSAP quand il faut que ça bouge bien.\n\nBack : Node.js, du PHP côté Digitaleo, MongoDB et PostgreSQL selon les projets. Prisma et Auth.js sur mes projets Next.js récents (Mosaic, TailTCG).\n\nOutils : Docker, GitLab CI/CD, et Claude Code qui a changé ma façon de travailler — ce portfolio en est la preuve.\n\nEn ce moment : le Master IA & Data à Epitech me pousse vers le machine learning. La suite logique."
+      }
+    }
   }
 }

@@ -1,52 +1,56 @@
 <template>
   <div
-    class="min-h-screen flex flex-col items-center justify-center px-6 py-24 bg-gray-50 relative overflow-hidden fade-in"
+    class="flex min-h-screen items-center justify-center px-5 font-sans"
+    :style="{
+      backgroundImage:
+        'radial-gradient(110% 85% at 12% 8%, rgba(94,158,240,0.75) 0%, rgba(94,158,240,0) 52%), radial-gradient(130% 100% at 50% 108%, rgba(6,26,74,0.95) 0%, rgba(6,26,74,0) 62%), linear-gradient(165deg, #0b1f4d 0%, #1d4fa8 55%, #3f7fdc 100%)',
+    }"
   >
-    <div class="absolute inset-0 opacity-50 pointer-events-none">
-      <img
-        src="/assets/shape.svg"
-        alt="background"
-        class="w-full h-full object-cover"
-      />
-    </div>
-
-    <div class="relative z-10 text-center max-w-xl fade-in-up">
-      <h1 class="text-6xl md:text-7xl font-extrabold text-black mb-6">
-        {{ error.statusCode }}
-      </h1>
-      <p class="text-gray-700 text-lg mb-6 leading-relaxed">
-        {{
-          error.message || "Oops! Cette page n'existe pas ou a été déplacée."
-        }}
-      </p>
-
-      <NuxtLink
-        to="/"
-        class="inline-block bg-black text-white px-6 py-3 rounded-full text-sm font-medium hover:opacity-90 transition"
-      >
-        Retour à l’accueil
-      </NuxtLink>
+    <!-- Boîte de dialogue Finder -->
+    <div
+      class="w-full max-w-sm overflow-hidden rounded-2xl bg-white/85 text-center shadow-[0_30px_70px_-15px_rgba(0,0,0,0.5)] ring-1 ring-white/40 backdrop-blur-2xl"
+    >
+      <div class="px-8 pb-7 pt-8">
+        <div class="relative mx-auto h-20 w-24">
+          <DesktopMacAppIcon name="folder" />
+          <span
+            class="absolute inset-0 flex items-center justify-center pt-2 text-3xl font-bold text-white/90"
+            >?</span
+          >
+        </div>
+        <p class="mt-4 text-[17px] font-bold text-[#1d1d1f]">
+          {{
+            error?.statusCode === 404
+              ? $t('macos.errTitle')
+              : `Erreur ${error?.statusCode}`
+          }}
+        </p>
+        <p class="mt-1.5 text-[13px] leading-relaxed text-[#1d1d1f]/60">
+          {{ $t('macos.errDesc') }}
+        </p>
+        <p
+          v-if="route.fullPath"
+          class="mx-auto mt-3 max-w-full truncate rounded-md bg-black/5 px-3 py-1 font-mono text-[11px] text-[#1d1d1f]/50"
+        >
+          {{ route.fullPath }}
+        </p>
+        <button
+          class="mt-6 w-full rounded-lg bg-[#0071e3] py-2 text-[13px] font-medium text-white shadow-sm transition-colors hover:bg-[#0077ed]"
+          @click="goHome"
+        >
+          {{ $t('macos.errBack') }}
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-defineProps<{ error: { statusCode: number; message?: string } }>()
+import type { NuxtError } from '#app'
+
+defineProps<{ error?: NuxtError }>()
+
+const route = useRoute()
+
+const goHome = () => clearError({ redirect: '/' })
 </script>
-
-<style scoped>
-.fade-in {
-  animation: fadeIn 0.8s ease-out both;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>

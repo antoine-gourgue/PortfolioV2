@@ -5,7 +5,10 @@ export default defineNuxtConfig({
       script: [{ src: 'https://kit.fontawesome.com/180b0301cc.js' }],
     },
   },
-  css: ['~/assets/css/tailwind.css'],
+  css: [
+    '~/assets/css/tailwind.css',
+    'framework7-icons/css/framework7-icons.css',
+  ],
   postcss: {
     plugins: {
       tailwindcss: {},
@@ -14,6 +17,10 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
+  build: {
+    // vue-toastification est publié en CommonJS : transpilation requise pour le bundle serveur
+    transpile: ['vue-toastification'],
+  },
   modules: [
     '@nuxt/image',
     '@nuxt/icon',
@@ -54,6 +61,12 @@ export default defineNuxtConfig({
       redirectOn: 'root',
       alwaysRedirect: false,
     },
+  },
+  routeRules: {
+    // Ancienne page fusionnée dans À propos
+    '/services': { redirect: '/about' },
+    '/en/services': { redirect: '/en/about' },
+    '/es/services': { redirect: '/es/about' },
   },
   site: {
     url: 'https://antoinegourgue.dev',

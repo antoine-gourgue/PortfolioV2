@@ -20,9 +20,9 @@
     "technologies": "Technologies I Work With",
     "journey": "My Journey",
     "journey2024": {
-      "title": "Fullstack Developer - Digitaleo",
-      "period": "2024 - 2026",
-      "description": "In charge of developing and maintaining the email editor of the platform, ensuring smooth UX and strong compatibility (Outlook, responsive...)."
+      "title": "Full Stack Developer — Digitaleo",
+      "period": "Jan 2024 — 2026",
+      "description": "Platform email editor (dynamic blocks, Outlook/VML compatibility), Design System, campaign archiving, Direct Marketing statistics."
     },
     "journey2023": {
       "title": "Master's Degree - Epitech Rennes",
@@ -41,8 +41,8 @@
     "journey": "My Journey.",
     "digitaleo": {
       "title": "Digitaleo",
-      "role": "Fullstack Developer Apprentice",
-      "description": "In charge of the email editor (AngularJS, VML Outlook integration), campaign archiving (Vue.js 2 & TypeScript) and legacy PHP backend."
+      "role": "Full Stack Developer (apprenticeship)",
+      "description": "Platform email editor: dynamic blocks, preheader, emoji picker, Outlook compatibility (VML, conditional HTML), mobile column reordering. Campaign and operations archiving, Direct Marketing statistics revamp, sender-domain management, Vue.js Design System integration into the AngularJS legacy. Stack: Vue.js 2 · TypeScript · AngularJS · PHP · GitLab CI/CD."
     },
     "epitech": {
       "title": "Epitech Rennes",
@@ -50,8 +50,10 @@
       "description": "Specializing in AI & Data, focusing on Machine Learning, Data Science, and innovative solutions."
     },
     "education": {
-      "title": "Bac STL / Bac S / BTS SNIR",
-      "description": "Strong foundation in science, networking & IT fundamentals before fully transitioning to software engineering."
+      "title": "Lycée Saint Joseph — Hasparren",
+      "description": "Technical training in digital systems, IT & networks track — the foundations before moving to software engineering.",
+      "role": "BTS SNIR (IT & Networks)",
+      "period": "2021 — 2023"
     },
     "skills": {
       "line1": "Skills.",
@@ -72,7 +74,19 @@
       "line2": "Watches.",
       "line3": "Projects."
     },
-    "interestsDescription": "Outside of coding, I enjoy exploring horology, following football, and working on side projects to sharpen my skills."
+    "interestsDescription": "Outside of coding, I enjoy exploring horology, following football, and working on side projects to sharpen my skills.",
+    "kpme": {
+      "title": "KPME-Development",
+      "role": "Web developer",
+      "period": "May — June 2022",
+      "description": "Website build for KPME-Development in Boucau — first professional development experience."
+    },
+    "bac": {
+      "title": "Lycée André Malraux — Biarritz",
+      "role": "Science & Lab-science baccalaureates",
+      "period": "2016 — 2020",
+      "description": "Scientific high-school diplomas — the scientific groundwork of the journey."
+    }
   },
   "contact": {
     "title": "Let's Connect.",
@@ -145,6 +159,12 @@
       },
       "aurora": {
         "description": "Complete technical documentation for the Aurora Home ecosystem—including architecture, installation, APIs, databases, CI/CD, and contribution guides for all projects."
+      },
+      "tailtcg": {
+        "description": "Pokémon card collection tracker: condition, value, photo-based pre-grading, binders and a shareable showcase. Free, ad-free. Built with Next.js and TypeScript."
+      },
+      "emailEditor": {
+        "description": "Digitaleo's platform email editor, used daily by retail networks. My apprenticeship playground: dynamic blocks, preheader and emoji picker, Outlook compatibility through VML and conditional HTML, mobile column reordering, Vue.js Design System components integrated into the AngularJS legacy, campaign archiving and the Direct Marketing statistics revamp."
       }
     },
     "all": "All",
@@ -181,5 +201,146 @@
     "detectedFr": "🇫🇷 It looks like you're speaking French.",
     "detectedEn": "🇬🇧 It looks like you're speaking English.",
     "detectedEs": "🇪🇸 It looks like you're speaking Spanish."
+  },
+  "macos": {
+    "projectsTitle": "My projects",
+    "projectsSub": "Every window is a real, live website.",
+    "visit": "Visit",
+    "terminalStatus": "available — 2026 opportunities",
+    "mailTitle": "New message",
+    "mailTo": "To: you{'@'}company.com",
+    "mailSubject": "Subject: Let’s work together",
+    "mailBody": "A project, an opportunity, a question — I reply fast.",
+    "mailSend": "Email me",
+    "journeyFile": "journey.md",
+    "dragHint": "Drag the windows around",
+    "menuFile": "File",
+    "menuGo": "Go",
+    "menuHelp": "Help",
+    "menuNewProject": "New project…",
+    "menuDownloadCv": "Download resume",
+    "menuAboutSite": "About this portfolio",
+    "spotlightPlaceholder": "Spotlight Search",
+    "spotlightApps": "Applications",
+    "spotlightProjects": "Projects",
+    "spotlightActions": "Actions",
+    "spotlightEmpty": "No results",
+    "deskCv": "Resume.pdf",
+    "deskProjects": "Projects",
+    "deskGithub": "GitHub",
+    "ctxWallpaper": "Change wallpaper",
+    "ctxCv": "Download resume",
+    "ctxGithub": "Open GitHub",
+    "trash": "Trash",
+    "aboutTitle": "About Antoine",
+    "specStack": "Stack",
+    "specBackend": "Backend",
+    "specTools": "Tools",
+    "specTraining": "Education",
+    "specStatus": "Status",
+    "specTrainingVal": "Master's in AI & Data — Epitech Rennes",
+    "specStatusVal": "Available — 2026 opportunities",
+    "get": "GET",
+    "sourceCode": "Source code",
+    "preview": "Preview",
+    "aboutApp": "About",
+    "information": "Information",
+    "developer": "Developer",
+    "category": "Category",
+    "year": "Year",
+    "role": "Role",
+    "website": "Website",
+    "ghStars": "GITHUB STARS",
+    "age": "STACK",
+    "search": "Search",
+    "finderFavorites": "Favorites",
+    "finderProjects": "Projects",
+    "finderApps": "Applications",
+    "finderDownloads": "Downloads",
+    "openInSafari": "Open in Safari",
+    "allContacts": "All contacts",
+    "sendMessage": "Send a message",
+    "position": "Position",
+    "location": "Location",
+    "note": "Note",
+    "mailFrom": "From:",
+    "mailName": "Name:",
+    "mailToShort": "To:",
+    "mailSubjectShort": "Subject:",
+    "mailRecipient": "Antoine Gourgue",
+    "mailDefaultSubject": "Contact from the portfolio",
+    "catProductivity": "Productivity",
+    "catAI": "AI assistant",
+    "catDesign": "Design system",
+    "catDocs": "Documentation",
+    "roleFull": "Design & development",
+    "notesCount": "{count} notes",
+    "catGames": "Games & collecting",
+    "terminalNow": "email editor at digitaleo · master's in ai & data at epitech rennes",
+    "finderRecents": "Recents",
+    "finderDesktop": "Desktop",
+    "finderDocs": "Documents",
+    "finderAirdrop": "AirDrop",
+    "finderLocations": "Locations",
+    "finderMac": "Antoine's MacBook",
+    "finderStatus": "{count} items · 42.3 GB available",
+    "calTitle": "Calendar",
+    "calWork": "Work",
+    "calStudies": "Higher ed",
+    "calTraining": "High school",
+    "calDay": "Day",
+    "calWeek": "Week",
+    "calMonth": "Month",
+    "calYear": "Year",
+    "sortBy": "Sort by",
+    "sortName": "Name",
+    "asc": "Ascending",
+    "desc": "Descending",
+    "weatherTitle": "Weather",
+    "calcTitle": "Calculator",
+    "wxLoading": "Loading…",
+    "wxError": "Weather unavailable",
+    "wxClear": "Sunny",
+    "wxPartly": "Partly cloudy",
+    "wxCloudy": "Cloudy",
+    "wxFog": "Fog",
+    "wxRain": "Rain",
+    "wxSnow": "Snow",
+    "wxStorm": "Thunderstorm",
+    "wxToday": "Today",
+    "deskLinkedin": "LinkedIn",
+    "wxMyLocation": "MY LOCATION",
+    "wxHourly": "HOURLY FORECAST",
+    "wxDaily": "6-DAY FORECAST",
+    "wxNow": "Now",
+    "openInContacts": "Open in Contacts",
+    "sidebarWork": "Apprenticeship",
+    "catSaas": "Marketing SaaS",
+    "messagesTitle": "Messages",
+    "errTitle": "File not found",
+    "errDesc": "The requested item doesn't exist on this Mac.",
+    "errBack": "Back to desktop",
+    "close": "Close"
+  },
+  "notesApp": {
+    "foldersTitle": "iCloud",
+    "folderNotes": "Notes",
+    "folderMentions": "Mentions",
+    "pinned": "Pinned",
+    "searchNotes": "Search",
+    "items": {
+      "colophon": {
+        "title": "How this site is built",
+        "body": "This portfolio is a macOS clone (iOS on mobile), hand-coded end to end — no template.\n\nThe base: Nuxt 3, Vue, TypeScript and Tailwind. Animations run on GSAP: draggable windows, dock minimizing, scroll reveals (ScrollTrigger).\n\nThe apps are real: Weather queries open-meteo with the visitor's location, the Calculator actually computes, Messages runs my home-made chatbot, Spotlight (⌘K) navigates everywhere, and the App Store GitHub stats are live.\n\nSystem sounds are synthesized with Web Audio (zero audio files), icons are hand-drawn SVG or Framework7 Icons (MIT), and the boot screen is server-rendered to avoid any flash.\n\nThree languages, clean SEO, verified build. The code says the rest."
+      },
+      "digitaleo": {
+        "title": "What I'm learning at Digitaleo",
+        "body": "Two and a half years of apprenticeship on a real SaaS product used daily — that shapes you.\n\nThe most formative part: the email editor. Making an email look right in Outlook means diving into VML and conditional HTML — a world without modern standards. I shipped dynamic blocks, the preheader, an emoji picker, mobile column reordering.\n\nAnother lesson: living with legacy. Reusing Vue.js Design System components inside AngularJS screens instead of rewriting everything teaches you to create value without breaking what exists.\n\nAround the code: GitLab CI/CD, feature flipping, demanding code reviews, daily collaboration with Product Owners and designers in Figma."
+      },
+      "stack": {
+        "title": "My 2026 stack",
+        "body": "Front: Vue and Nuxt first — that's where I'm most productive. TypeScript everywhere, Tailwind for speed and consistency, GSAP when things need to move well.\n\nBack: Node.js, PHP at Digitaleo, MongoDB and PostgreSQL depending on the project. Prisma and Auth.js on my recent Next.js projects (Mosaic, TailTCG).\n\nTools: Docker, GitLab CI/CD, and Claude Code, which changed how I work — this portfolio is the proof.\n\nRight now: the AI & Data Master's at Epitech is pushing me toward machine learning. The logical next step."
+      }
+    }
   }
 }
