@@ -274,6 +274,10 @@
     "calDay": "Jour",
     "calWeek": "Semaine",
     "calMonth": "Mois",
-    "calYear": "Année"
+    "calYear": "Année",
+    "sortBy": "Trier par",
+    "sortName": "Nom",
+    "asc": "Croissant",
+    "desc": "Décroissant"
   }
 }

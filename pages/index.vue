@@ -184,33 +184,90 @@
           <!-- Barre d'outils Finder, intégrée à la barre de titre -->
           <template #toolbar>
             <div class="flex items-center gap-3">
-              <div class="flex items-center gap-2 text-black/45">
-                <i class="fas fa-chevron-left text-[13px]"></i>
-                <i class="fas fa-chevron-right text-[13px] text-black/20"></i>
+              <div class="flex items-center gap-1 text-black/45">
+                <button class="tb-btn"><i class="fas fa-chevron-left text-[13px]"></i></button>
+                <button class="tb-btn text-black/20"><i class="fas fa-chevron-right text-[13px]"></i></button>
               </div>
               <span class="text-[14px] font-semibold">{{
                 $t('macos.finderProjects')
               }}</span>
-              <div class="ml-auto flex items-center gap-2.5 text-black/45">
+              <div class="ml-auto flex items-center gap-2 text-black/45">
+                <!-- Vue grille / liste -->
                 <div
                   class="hidden overflow-hidden rounded-md border border-black/10 sm:flex"
                 >
-                  <span class="bg-black/10 px-2 py-0.5"
-                    ><i class="fas fa-border-all text-[11px]"></i
-                  ></span>
-                  <span class="px-2 py-0.5"
-                    ><i class="fas fa-list text-[11px]"></i
-                  ></span>
+                  <button
+                    class="px-2 py-0.5"
+                    :class="finderView === 'grid' ? 'bg-black/10 text-aink' : ''"
+                    @click="finderView = 'grid'"
+                  >
+                    <i class="fas fa-border-all text-[11px]"></i>
+                  </button>
+                  <button
+                    class="px-2 py-0.5"
+                    :class="finderView === 'list' ? 'bg-black/10 text-aink' : ''"
+                    @click="finderView = 'list'"
+                  >
+                    <i class="fas fa-list text-[11px]"></i>
+                  </button>
                 </div>
+
+                <!-- Tri -->
+                <div class="relative hidden sm:block">
+                  <button
+                    class="tb-btn"
+                    :class="sortMenuOpen ? 'bg-black/10 text-aink' : ''"
+                    :title="$t('macos.sortBy')"
+                    @click.stop="sortMenuOpen = !sortMenuOpen"
+                  >
+                    <i class="fas fa-arrow-down-wide-short text-[12px]"></i>
+                  </button>
+                  <transition name="dropdown">
+                    <div
+                      v-if="sortMenuOpen"
+                      class="absolute right-0 top-full z-30 mt-1.5 min-w-[170px] rounded-lg border border-black/10 bg-white/90 p-1 shadow-xl backdrop-blur-xl"
+                      @click.stop
+                    >
+                      <p class="px-2.5 pb-0.5 pt-1 text-[10px] font-semibold text-black/35">
+                        {{ $t('macos.sortBy') }}
+                      </p>
+                      <button
+                        v-for="opt in sortOptions"
+                        :key="opt.key"
+                        class="sort-item"
+                        @click="setSort(opt.key)"
+                      >
+                        {{ $t(opt.labelKey) }}
+                        <span v-if="sortKey === opt.key">✓</span>
+                      </button>
+                      <div class="mx-2 my-1 border-t border-black/10"></div>
+                      <button class="sort-item" @click="sortAsc = true, (sortMenuOpen = false)">
+                        {{ $t('macos.asc') }}
+                        <span v-if="sortAsc">✓</span>
+                      </button>
+                      <button class="sort-item" @click="sortAsc = false, (sortMenuOpen = false)">
+                        {{ $t('macos.desc') }}
+                        <span v-if="!sortAsc">✓</span>
+                      </button>
+                    </div>
+                  </transition>
+                </div>
+
                 <i
-                  class="fas fa-arrow-up-from-bracket hidden text-[12px] sm:block"
+                  class="fas fa-arrow-up-from-bracket hidden text-[12px] md:block"
                 ></i>
-                <i class="fas fa-tag hidden text-[12px] sm:block"></i>
+
+                <!-- Recherche réelle -->
                 <div
-                  class="hidden items-center gap-1.5 rounded-md bg-black/5 px-2.5 py-1 text-[12px] text-black/35 md:flex"
+                  class="hidden items-center gap-1.5 rounded-md bg-black/5 px-2.5 py-1 md:flex"
                 >
-                  <i class="fas fa-magnifying-glass text-[10px]"></i>
-                  {{ $t('macos.search') }}
+                  <i class="fas fa-magnifying-glass text-[10px] text-black/35"></i>
+                  <input
+                    v-model="finderQuery"
+                    type="text"
+                    :placeholder="$t('macos.search')"
+                    class="w-24 bg-transparent text-[12px] text-aink outline-none transition-all placeholder:text-black/35 focus:w-36"
+                  />
                 </div>
               </div>
             </div>
@@ -266,20 +323,26 @@
               </div>
             </aside>
 
-            <!-- Grille + barre de statut -->
+            <!-- Contenu (grille ou liste) + barre de statut -->
             <div class="flex min-w-0 flex-1 flex-col">
-              <div class="flex-1 p-6">
+              <!-- Vue grille -->
+              <div v-if="finderView === 'grid'" class="flex-1 p-6">
                 <div
+                  v-if="finderProjects.length"
                   class="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 lg:grid-cols-4"
                 >
                   <button
-                    v-for="project in projects"
+                    v-for="project in finderProjects"
                     :key="project.key"
                     class="group flex flex-col items-center gap-2"
-                    @click="quicklook = project.key"
+                    @click.stop="finderSelected = project.key"
+                    @dblclick="quicklook = project.key"
                   >
                     <span
-                      class="block h-16 w-16 transition-transform duration-300 group-hover:scale-105"
+                      class="block h-16 w-16 rounded-2xl p-1 transition-transform duration-300 group-hover:scale-105"
+                      :class="
+                        finderSelected === project.key ? 'bg-black/10' : ''
+                      "
                     >
                       <DesktopProjectIcon
                         :icon="project.icon"
@@ -292,19 +355,93 @@
                       />
                     </span>
                     <span
-                      class="max-w-full truncate rounded px-1.5 text-[12.5px] font-medium text-aink group-hover:bg-ablue group-hover:text-white"
+                      class="max-w-full truncate rounded px-1.5 text-[12.5px] font-medium"
+                      :class="
+                        finderSelected === project.key
+                          ? 'bg-ablue text-white'
+                          : 'text-aink'
+                      "
                       >{{ project.name }}</span
                     >
                   </button>
                 </div>
-                <p class="mt-8 text-center text-[12px] text-black/35">
+                <p
+                  v-else
+                  class="py-14 text-center text-[13px] text-black/35"
+                >
+                  {{ $t('macos.spotlightEmpty') }}
+                </p>
+                <p
+                  v-if="finderProjects.length"
+                  class="mt-8 text-center text-[12px] text-black/35"
+                >
                   {{ $t('macos.projectsSub') }}
                 </p>
               </div>
+
+              <!-- Vue liste (colonnes triables) -->
+              <div v-else class="flex-1 py-2">
+                <div class="finder-cols text-[11px] font-medium text-black/45">
+                  <button class="text-left" @click="setSort('name')">
+                    {{ $t('macos.sortName') }}
+                    <span v-if="sortKey === 'name'">{{ sortAsc ? '▲' : '▼' }}</span>
+                  </button>
+                  <button class="text-left" @click="setSort('category')">
+                    {{ $t('macos.category') }}
+                    <span v-if="sortKey === 'category'">{{ sortAsc ? '▲' : '▼' }}</span>
+                  </button>
+                  <button class="text-left" @click="setSort('year')">
+                    {{ $t('macos.year') }}
+                    <span v-if="sortKey === 'year'">{{ sortAsc ? '▲' : '▼' }}</span>
+                  </button>
+                </div>
+                <button
+                  v-for="(project, i) in finderProjects"
+                  :key="project.key"
+                  class="finder-cols w-full border-0 text-left text-[13px]"
+                  :class="
+                    finderSelected === project.key
+                      ? 'bg-ablue text-white'
+                      : i % 2 === 1
+                        ? 'bg-black/[0.03] text-aink'
+                        : 'text-aink'
+                  "
+                  @click.stop="finderSelected = project.key"
+                  @dblclick="quicklook = project.key"
+                >
+                  <span class="flex min-w-0 items-center gap-2.5 font-medium">
+                    <span class="block h-6 w-6 shrink-0">
+                      <DesktopProjectIcon
+                        :icon="project.icon"
+                        :name="project.name"
+                        :bg="project.iconBg"
+                        :pad="project.iconPad"
+                        :letter="project.letter"
+                      />
+                    </span>
+                    <span class="truncate">{{ project.name }}</span>
+                  </span>
+                  <span
+                    :class="finderSelected === project.key ? 'text-white/80' : 'text-black/45'"
+                    >{{ $t(project.categoryKey) }}</span
+                  >
+                  <span
+                    :class="finderSelected === project.key ? 'text-white/80' : 'text-black/45'"
+                    >{{ project.year }}</span
+                  >
+                </button>
+                <p
+                  v-if="!finderProjects.length"
+                  class="py-14 text-center text-[13px] text-black/35"
+                >
+                  {{ $t('macos.spotlightEmpty') }}
+                </p>
+              </div>
+
               <div
                 class="border-t border-black/5 bg-white/60 px-4 py-1.5 text-center text-[11px] text-black/40"
               >
-                {{ $t('macos.finderStatus', { count: projects.length }) }}
+                {{ $t('macos.finderStatus', { count: finderProjects.length }) }}
               </div>
             </div>
           </div>
@@ -612,6 +749,50 @@ const journeySteps = [
 ]
 
 const projects = useProjects()
+const { t } = useI18n()
+
+// ── Finder fonctionnel : recherche, tri, vue, sélection ──
+const finderView = ref<'grid' | 'list'>('grid')
+const finderQuery = ref('')
+const finderSelected = ref('')
+const sortMenuOpen = ref(false)
+const sortKey = ref<'name' | 'category' | 'year'>('name')
+const sortAsc = ref(true)
+
+const sortOptions = [
+  { key: 'name' as const, labelKey: 'macos.sortName' },
+  { key: 'category' as const, labelKey: 'macos.category' },
+  { key: 'year' as const, labelKey: 'macos.year' },
+]
+
+const setSort = (key: 'name' | 'category' | 'year') => {
+  if (sortKey.value === key) {
+    sortAsc.value = !sortAsc.value
+  } else {
+    sortKey.value = key
+    sortAsc.value = true
+  }
+  sortMenuOpen.value = false
+}
+
+const finderProjects = computed(() => {
+  const q = finderQuery.value.trim().toLowerCase()
+  const list = projects.filter(
+    (p) =>
+      !q ||
+      p.name.toLowerCase().includes(q) ||
+      t(p.categoryKey).toLowerCase().includes(q)
+  )
+  const field = (p: (typeof projects)[number]) =>
+    sortKey.value === 'name'
+      ? p.name
+      : sortKey.value === 'year'
+        ? p.year
+        : t(p.categoryKey)
+  return [...list].sort(
+    (a, b) => field(a).localeCompare(field(b)) * (sortAsc.value ? 1 : -1)
+  )
+})
 
 // Quick Look
 const quicklook = ref('')
@@ -726,7 +907,10 @@ onMounted(() => {
   const { Draggable } = useGsap()
 
   document.addEventListener('click', closeContext)
-  document.addEventListener('click', () => (selectedIcon.value = ''))
+  document.addEventListener('click', () => {
+    selectedIcon.value = ''
+    sortMenuOpen.value = false
+  })
   document.addEventListener('keydown', onEsc)
 
   ctxGsap = gsap.context(() => {
@@ -799,6 +983,27 @@ onUnmounted(() => {
 }
 .sidebar-item {
   @apply mt-0.5 flex items-center gap-2 rounded-md px-2 py-1 text-[13px] text-aink/70;
+}
+
+/* Barre d'outils Finder */
+.tb-btn {
+  @apply rounded px-1.5 py-0.5 transition-colors hover:bg-black/5;
+}
+.sort-item {
+  @apply flex w-full items-center justify-between rounded-md px-2.5 py-1 text-left text-[13px] text-aink transition-colors hover:bg-ablue hover:text-white;
+}
+.finder-cols {
+  @apply grid grid-cols-[1fr_130px_60px] items-center gap-3 border-b border-black/5 px-4 py-1.5;
+}
+
+.dropdown-enter-active,
+.dropdown-leave-active {
+  transition: all 0.15s ease;
+}
+.dropdown-enter-from,
+.dropdown-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
 }
 
 .ql-enter-active,
