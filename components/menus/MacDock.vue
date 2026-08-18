@@ -7,7 +7,7 @@
   >
     <!-- Apps -->
     <component
-      :is="item.href ? 'a' : 'NuxtLink'"
+      :is="item.href ? 'a' : NuxtLinkComponent"
       v-for="item in apps"
       :key="item.id"
       :ref="setItemRef"
@@ -64,6 +64,9 @@ const localePath = useLocalePath()
 const route = useRoute()
 const { gsap } = useGsap()
 const { minimized, restore } = useDesktop()
+
+// Résolution explicite : une chaîne 'NuxtLink' dans <component :is> ne se résout pas
+const NuxtLinkComponent = resolveComponent('NuxtLink')
 
 interface DockApp {
   id: string
