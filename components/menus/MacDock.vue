@@ -17,6 +17,7 @@
           : { to: localePath(item.path!) }
       "
       class="dock-icon group"
+      :aria-label="item.raw ?? $t(item.label)"
       @click="bounce"
     >
       <DesktopMacAppIcon :name="item.icon" />

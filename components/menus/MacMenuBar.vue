@@ -54,10 +54,19 @@
       </div>
 
       <!-- Mobile : juste le nom -->
-      <span class="font-bold lg:hidden">Antoine Gourgue</span>
+      <span class="ml-1 font-bold lg:hidden">Antoine Gourgue</span>
     </div>
 
     <div class="flex items-center gap-1">
+      <!-- Mobile : bascule de langue en cycle -->
+      <button
+        class="menu-btn rounded px-2 py-0.5 uppercase lg:hidden"
+        aria-label="language"
+        @click.stop="cycleLocale"
+      >
+        {{ currentLocale }}
+      </button>
+
       <div class="relative hidden lg:block">
         <button
           class="menu-btn rounded px-2 py-0.5 uppercase"
@@ -209,6 +218,13 @@ const availableLocales = computed(() => locales.value)
 const selectLanguage = (code: string) => {
   router.push(switchLocalePath(code as 'fr' | 'es' | 'en'))
   openMenu.value = ''
+}
+
+const cycleLocale = () => {
+  const order = ['fr', 'en', 'es'] as const
+  const next =
+    order[(order.indexOf(locale.value as (typeof order)[number]) + 1) % order.length]
+  router.push(switchLocalePath(next))
 }
 
 // Horloge macOS en direct
