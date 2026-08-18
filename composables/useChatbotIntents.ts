@@ -44,9 +44,35 @@ export const useChatbotIntents = (): Intent[] => [
   {
     intent: 'dispo',
     keywords: {
-      fr: ['disponible', 'dispo', 'embauche', 'recrutement', 'recruter', 'opportunité', 'poste', 'cdi', 'emploi', 'job'],
-      es: ['disponible', 'contratar', 'oportunidad', 'puesto', 'empleo', 'trabajo'],
-      en: ['available', 'availability', 'hire', 'hiring', 'opportunity', 'position', 'job'],
+      fr: [
+        'disponible',
+        'dispo',
+        'embauche',
+        'recrutement',
+        'recruter',
+        'opportunité',
+        'poste',
+        'cdi',
+        'emploi',
+        'job',
+      ],
+      es: [
+        'disponible',
+        'contratar',
+        'oportunidad',
+        'puesto',
+        'empleo',
+        'trabajo',
+      ],
+      en: [
+        'available',
+        'availability',
+        'hire',
+        'hiring',
+        'opportunity',
+        'position',
+        'job',
+      ],
     },
     response: {
       fr: `🟢 Oui ! Mon alternance chez Digitaleo se termine à l'été 2026, en même temps que mon Master — je suis ouvert aux opportunités pour la suite (basé à Anglet, télétravail bienvenu). Parlons-en via ${link('/contact', 'Contact')} !`,
@@ -57,7 +83,17 @@ export const useChatbotIntents = (): Intent[] => [
   {
     intent: 'localisation',
     keywords: {
-      fr: ['où', 'habites', 'ville', 'localisation', 'anglet', 'rennes', 'basque', 'biarritz', 'région'],
+      fr: [
+        'où',
+        'habites',
+        'ville',
+        'localisation',
+        'anglet',
+        'rennes',
+        'basque',
+        'biarritz',
+        'région',
+      ],
       es: ['dónde', 'vives', 'ciudad', 'ubicación', 'anglet', 'rennes'],
       en: ['where', 'live', 'located', 'location', 'city', 'anglet', 'rennes'],
     },
@@ -156,9 +192,35 @@ export const useChatbotIntents = (): Intent[] => [
   {
     intent: 'site',
     keywords: {
-      fr: ['site', 'macos', 'design', 'fenêtres', 'dock', 'comment', 'fait', 'construit'],
-      es: ['sitio', 'web', 'macos', 'diseño', 'ventanas', 'construido', 'hecho'],
-      en: ['site', 'website', 'macos', 'design', 'windows', 'dock', 'built', 'made'],
+      fr: [
+        'site',
+        'macos',
+        'design',
+        'fenêtres',
+        'dock',
+        'comment',
+        'fait',
+        'construit',
+      ],
+      es: [
+        'sitio',
+        'web',
+        'macos',
+        'diseño',
+        'ventanas',
+        'construido',
+        'hecho',
+      ],
+      en: [
+        'site',
+        'website',
+        'macos',
+        'design',
+        'windows',
+        'dock',
+        'built',
+        'made',
+      ],
     },
     response: {
       fr: `💻 Ce site est un clone de macOS (et d'iOS sur mobile) codé main : Nuxt 3, GSAP, fenêtres déplaçables, Spotlight (⌘K), apps fonctionnelles, sons Web Audio… J'ai tout raconté dans une note : ${link('/blog', 'Comment ce site est fait')}.`,
@@ -182,8 +244,25 @@ export const useChatbotIntents = (): Intent[] => [
   {
     intent: 'formation',
     keywords: {
-      fr: ['formation', 'études', 'école', 'epitech', 'master', 'bts', 'lycée', 'diplôme'],
-      es: ['formación', 'estudios', 'escuela', 'epitech', 'máster', 'bts', 'diploma'],
+      fr: [
+        'formation',
+        'études',
+        'école',
+        'epitech',
+        'master',
+        'bts',
+        'lycée',
+        'diplôme',
+      ],
+      es: [
+        'formación',
+        'estudios',
+        'escuela',
+        'epitech',
+        'máster',
+        'bts',
+        'diploma',
+      ],
       en: ['education', 'studies', 'school', 'epitech', 'master', 'degree'],
     },
     response: {
@@ -216,9 +295,32 @@ export const useChatbotIntents = (): Intent[] => [
   {
     intent: 'alternance',
     keywords: {
-      fr: ['alternance', 'digitaleo', 'travail', 'entreprise', 'expérience', 'éditeur', 'email'],
-      es: ['alternancia', 'digitaleo', 'trabajo', 'empresa', 'experiencia', 'editor'],
-      en: ['apprenticeship', 'digitaleo', 'work', 'company', 'experience', 'editor', 'email'],
+      fr: [
+        'alternance',
+        'digitaleo',
+        'travail',
+        'entreprise',
+        'expérience',
+        'éditeur',
+        'email',
+      ],
+      es: [
+        'alternancia',
+        'digitaleo',
+        'trabajo',
+        'empresa',
+        'experiencia',
+        'editor',
+      ],
+      en: [
+        'apprenticeship',
+        'digitaleo',
+        'work',
+        'company',
+        'experience',
+        'editor',
+        'email',
+      ],
     },
     response: {
       fr: `💼 Développeur Full Stack en alternance chez Digitaleo (Rennes) depuis janvier 2024, sur un SaaS de marketing local. Mon terrain : l'éditeur d'email — blocs dynamiques, compatibilité Outlook/VML, Design System — plus l'archivage des campagnes et les stats Marketing Direct. La fiche complète est dans l'${link('/projects', 'App Store')}.`,
@@ -373,7 +475,14 @@ export const useChatbotIntents = (): Intent[] => [
     intent: 'qui',
     keywords: {
       fr: ['qui', 'es-tu', 'présente', 'créateur', 'développeur', 'antoine'],
-      es: ['quién', 'eres', 'preséntate', 'creador', 'desarrollador', 'antoine'],
+      es: [
+        'quién',
+        'eres',
+        'preséntate',
+        'creador',
+        'desarrollador',
+        'antoine',
+      ],
       en: ['who', 'are you', 'introduce', 'creator', 'developer', 'antoine'],
     },
     response: {

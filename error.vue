@@ -19,7 +19,11 @@
           >
         </div>
         <p class="mt-4 text-[17px] font-bold text-[#1d1d1f]">
-          {{ error?.statusCode === 404 ? $t('macos.errTitle') : `Erreur ${error?.statusCode}` }}
+          {{
+            error?.statusCode === 404
+              ? $t('macos.errTitle')
+              : `Erreur ${error?.statusCode}`
+          }}
         </p>
         <p class="mt-1.5 text-[13px] leading-relaxed text-[#1d1d1f]/60">
           {{ $t('macos.errDesc') }}

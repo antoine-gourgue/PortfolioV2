@@ -22,33 +22,72 @@
   </svg>
 
   <!-- Finder -->
-  <svg v-else-if="name === 'finder'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
+  <svg
+    v-else-if="name === 'finder'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
     <defs>
-      <clipPath :id="`sq-${uid}`"><rect width="100" height="100" rx="22" /></clipPath>
+      <clipPath :id="`sq-${uid}`">
+        <rect width="100" height="100" rx="22" />
+      </clipPath>
       <linearGradient :id="`fa-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#63C6F7" /><stop offset="1" stop-color="#2E7DE9" />
+        <stop offset="0" stop-color="#63C6F7" />
+        <stop offset="1" stop-color="#2E7DE9" />
       </linearGradient>
       <linearGradient :id="`fb-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#2A6FE0" /><stop offset="1" stop-color="#1450B8" />
+        <stop offset="0" stop-color="#2A6FE0" />
+        <stop offset="1" stop-color="#1450B8" />
       </linearGradient>
     </defs>
     <g :clip-path="`url(#sq-${uid})`">
       <rect width="100" height="100" :fill="`url(#fa-${uid})`" />
-      <path d="M57 0 C48 33 48 67 57 100 L100 100 L100 0 Z" :fill="`url(#fb-${uid})`" />
-      <line x1="33" y1="34" x2="33" y2="50" stroke="#fff" stroke-width="4.5" stroke-linecap="round" />
-      <line x1="67" y1="34" x2="67" y2="50" stroke="#fff" stroke-width="4.5" stroke-linecap="round" />
-      <path d="M28 64 Q50 80 72 64" stroke="#fff" stroke-width="4.5" fill="none" stroke-linecap="round" />
+      <path
+        d="M57 0 C48 33 48 67 57 100 L100 100 L100 0 Z"
+        :fill="`url(#fb-${uid})`"
+      />
+      <line
+        x1="33"
+        y1="34"
+        x2="33"
+        y2="50"
+        stroke="#fff"
+        stroke-width="4.5"
+        stroke-linecap="round"
+      />
+      <line
+        x1="67"
+        y1="34"
+        x2="67"
+        y2="50"
+        stroke="#fff"
+        stroke-width="4.5"
+        stroke-linecap="round"
+      />
+      <path
+        d="M28 64 Q50 80 72 64"
+        stroke="#fff"
+        stroke-width="4.5"
+        fill="none"
+        stroke-linecap="round"
+      />
     </g>
   </svg>
 
   <!-- Safari -->
-  <svg v-else-if="name === 'safari'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
+  <svg
+    v-else-if="name === 'safari'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
     <defs>
       <linearGradient :id="`sa-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#F8F9FB" /><stop offset="1" stop-color="#D9DDE3" />
+        <stop offset="0" stop-color="#F8F9FB" />
+        <stop offset="1" stop-color="#D9DDE3" />
       </linearGradient>
       <linearGradient :id="`sb-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#3DA5F5" /><stop offset="1" stop-color="#0D5FD8" />
+        <stop offset="0" stop-color="#3DA5F5" />
+        <stop offset="1" stop-color="#0D5FD8" />
       </linearGradient>
     </defs>
     <rect width="100" height="100" rx="22" :fill="`url(#sa-${uid})`" />
@@ -69,24 +108,42 @@
   </svg>
 
   <!-- Contacts (carnet d'adresses) -->
-  <svg v-else-if="name === 'contacts'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
+  <svg
+    v-else-if="name === 'contacts'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
     <defs>
       <linearGradient :id="`ca-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#FFFFFF" /><stop offset="1" stop-color="#EAECEF" />
+        <stop offset="0" stop-color="#FFFFFF" />
+        <stop offset="1" stop-color="#EAECEF" />
       </linearGradient>
       <linearGradient :id="`cb-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#C98F55" /><stop offset="1" stop-color="#A6713C" />
+        <stop offset="0" stop-color="#C98F55" />
+        <stop offset="1" stop-color="#A6713C" />
       </linearGradient>
       <linearGradient :id="`cs-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#AAB1BC" /><stop offset="1" stop-color="#8A919D" />
+        <stop offset="0" stop-color="#AAB1BC" />
+        <stop offset="1" stop-color="#8A919D" />
       </linearGradient>
-      <clipPath :id="`cc-${uid}`"><rect width="100" height="100" rx="22" /></clipPath>
+      <clipPath :id="`cc-${uid}`">
+        <rect width="100" height="100" rx="22" />
+      </clipPath>
     </defs>
     <g :clip-path="`url(#cc-${uid})`">
       <rect width="100" height="100" :fill="`url(#ca-${uid})`" />
       <!-- Bande cuir + couture -->
       <rect width="100" height="17" :fill="`url(#cb-${uid})`" />
-      <line x1="6" y1="13" x2="94" y2="13" stroke="#8A5A2B" stroke-width="1.4" stroke-dasharray="3 3.4" stroke-linecap="round" />
+      <line
+        x1="6"
+        y1="13"
+        x2="94"
+        y2="13"
+        stroke="#8A5A2B"
+        stroke-width="1.4"
+        stroke-dasharray="3 3.4"
+        stroke-linecap="round"
+      />
       <!-- Silhouette (glyphe SF person_fill, Framework7 Icons MIT) -->
       <path
         transform="translate(17 24) scale(1.18)"
@@ -102,17 +159,32 @@
   </svg>
 
   <!-- Notes -->
-  <svg v-else-if="name === 'notes'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
+  <svg
+    v-else-if="name === 'notes'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
     <defs>
-      <clipPath :id="`nc-${uid}`"><rect width="100" height="100" rx="22" /></clipPath>
+      <clipPath :id="`nc-${uid}`">
+        <rect width="100" height="100" rx="22" />
+      </clipPath>
       <linearGradient :id="`na-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#FDD44D" /><stop offset="1" stop-color="#FBBF24" />
+        <stop offset="0" stop-color="#FDD44D" />
+        <stop offset="1" stop-color="#FBBF24" />
       </linearGradient>
     </defs>
     <g :clip-path="`url(#nc-${uid})`">
       <rect width="100" height="100" fill="#FDFDFD" />
       <rect width="100" height="27" :fill="`url(#na-${uid})`" />
-      <line x1="10" y1="33" x2="90" y2="33" stroke="#E3E4E8" stroke-width="2.5" stroke-dasharray="4 5" />
+      <line
+        x1="10"
+        y1="33"
+        x2="90"
+        y2="33"
+        stroke="#E3E4E8"
+        stroke-width="2.5"
+        stroke-dasharray="4 5"
+      />
       <rect x="20" y="46" width="60" height="5" rx="2.5" fill="#C9CBD1" />
       <rect x="20" y="60" width="46" height="5" rx="2.5" fill="#D7D9DE" />
       <rect x="20" y="74" width="53" height="5" rx="2.5" fill="#D7D9DE" />
@@ -120,35 +192,77 @@
   </svg>
 
   <!-- Mail -->
-  <svg v-else-if="name === 'mail'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
+  <svg
+    v-else-if="name === 'mail'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
     <defs>
       <linearGradient :id="`ma-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#2CA8F6" /><stop offset="1" stop-color="#0A5BCB" />
+        <stop offset="0" stop-color="#2CA8F6" />
+        <stop offset="1" stop-color="#0A5BCB" />
       </linearGradient>
     </defs>
     <rect width="100" height="100" rx="22" :fill="`url(#ma-${uid})`" />
     <rect x="20" y="30" width="60" height="42" rx="7" fill="#FBFCFE" />
-    <path d="M23 35 L50 57 L77 35" fill="none" stroke="#C4D2E4" stroke-width="3" stroke-linejoin="round" />
-    <path d="M25 69 L41 53 M75 69 L59 53" fill="none" stroke="#C4D2E4" stroke-width="3" stroke-linecap="round" />
+    <path
+      d="M23 35 L50 57 L77 35"
+      fill="none"
+      stroke="#C4D2E4"
+      stroke-width="3"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M25 69 L41 53 M75 69 L59 53"
+      fill="none"
+      stroke="#C4D2E4"
+      stroke-width="3"
+      stroke-linecap="round"
+    />
   </svg>
 
   <!-- Terminal -->
-  <svg v-else-if="name === 'terminal'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
+  <svg
+    v-else-if="name === 'terminal'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
     <defs>
       <linearGradient :id="`ta-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#3A3B40" /><stop offset="1" stop-color="#131316" />
+        <stop offset="0" stop-color="#3A3B40" />
+        <stop offset="1" stop-color="#131316" />
       </linearGradient>
     </defs>
     <rect width="100" height="100" rx="22" :fill="`url(#ta-${uid})`" />
-    <path d="M22 32 L38 47 L22 62" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
-    <line x1="46" y1="64" x2="72" y2="64" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" />
+    <path
+      d="M22 32 L38 47 L22 62"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="6"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <line
+      x1="46"
+      y1="64"
+      x2="72"
+      y2="64"
+      stroke="#FFFFFF"
+      stroke-width="6"
+      stroke-linecap="round"
+    />
   </svg>
 
   <!-- GitHub -->
-  <svg v-else-if="name === 'github'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
+  <svg
+    v-else-if="name === 'github'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
     <defs>
       <linearGradient :id="`ga-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#2F3136" /><stop offset="1" stop-color="#101114" />
+        <stop offset="0" stop-color="#2F3136" />
+        <stop offset="1" stop-color="#101114" />
       </linearGradient>
     </defs>
     <rect width="100" height="100" rx="22" :fill="`url(#ga-${uid})`" />
@@ -160,10 +274,15 @@
   </svg>
 
   <!-- Messages -->
-  <svg v-else-if="name === 'messages'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
+  <svg
+    v-else-if="name === 'messages'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
     <defs>
       <linearGradient :id="`ms-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#6BE36F" /><stop offset="1" stop-color="#18B663" />
+        <stop offset="0" stop-color="#6BE36F" />
+        <stop offset="1" stop-color="#18B663" />
       </linearGradient>
     </defs>
     <rect width="100" height="100" rx="22" :fill="`url(#ms-${uid})`" />
@@ -174,13 +293,19 @@
   </svg>
 
   <!-- Météo -->
-  <svg v-else-if="name === 'weather'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
+  <svg
+    v-else-if="name === 'weather'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
     <defs>
       <linearGradient :id="`wx-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#3F9BF4" /><stop offset="1" stop-color="#1263C9" />
+        <stop offset="0" stop-color="#3F9BF4" />
+        <stop offset="1" stop-color="#1263C9" />
       </linearGradient>
       <linearGradient :id="`wxs-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#FFE066" /><stop offset="1" stop-color="#FFB300" />
+        <stop offset="0" stop-color="#FFE066" />
+        <stop offset="1" stop-color="#FFB300" />
       </linearGradient>
     </defs>
     <rect width="100" height="100" rx="22" :fill="`url(#wx-${uid})`" />
@@ -192,10 +317,15 @@
   </svg>
 
   <!-- Calculatrice -->
-  <svg v-else-if="name === 'calculator'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
+  <svg
+    v-else-if="name === 'calculator'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
     <defs>
       <linearGradient :id="`cc-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#2E2E30" /><stop offset="1" stop-color="#151517" />
+        <stop offset="0" stop-color="#2E2E30" />
+        <stop offset="1" stop-color="#151517" />
       </linearGradient>
     </defs>
     <rect width="100" height="100" rx="22" :fill="`url(#cc-${uid})`" />
@@ -211,10 +341,15 @@
   </svg>
 
   <!-- LinkedIn -->
-  <svg v-else-if="name === 'linkedin'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
+  <svg
+    v-else-if="name === 'linkedin'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
     <defs>
       <linearGradient :id="`li-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#1B84D6" /><stop offset="1" stop-color="#0A66C2" />
+        <stop offset="0" stop-color="#1B84D6" />
+        <stop offset="1" stop-color="#0A66C2" />
       </linearGradient>
     </defs>
     <rect width="100" height="100" rx="22" :fill="`url(#li-${uid})`" />
@@ -232,10 +367,15 @@
   </svg>
 
   <!-- App Store -->
-  <svg v-else-if="name === 'appstore'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
+  <svg
+    v-else-if="name === 'appstore'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
     <defs>
       <linearGradient :id="`as-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#1D9BF6" /><stop offset="1" stop-color="#0D5FE3" />
+        <stop offset="0" stop-color="#1D9BF6" />
+        <stop offset="1" stop-color="#0D5FE3" />
       </linearGradient>
     </defs>
     <rect width="100" height="100" rx="22" :fill="`url(#as-${uid})`" />
@@ -247,9 +387,15 @@
   </svg>
 
   <!-- Calendrier -->
-  <svg v-else-if="name === 'calendar'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
+  <svg
+    v-else-if="name === 'calendar'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
     <defs>
-      <clipPath :id="`cal-${uid}`"><rect width="100" height="100" rx="22" /></clipPath>
+      <clipPath :id="`cal-${uid}`">
+        <rect width="100" height="100" rx="22" />
+      </clipPath>
     </defs>
     <g :clip-path="`url(#cal-${uid})`">
       <rect width="100" height="100" fill="#FDFDFD" />
@@ -280,38 +426,100 @@
   </svg>
 
   <!-- Corbeille -->
-  <svg v-else-if="name === 'trash'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
+  <svg
+    v-else-if="name === 'trash'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
     <defs>
       <linearGradient :id="`tr-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#EDEFF2" /><stop offset="1" stop-color="#C3C9D1" />
+        <stop offset="0" stop-color="#EDEFF2" />
+        <stop offset="1" stop-color="#C3C9D1" />
       </linearGradient>
     </defs>
     <rect width="100" height="100" rx="22" :fill="`url(#tr-${uid})`" />
-    <rect x="43" y="22" width="14" height="7" rx="3.5" fill="none" stroke="#8B939F" stroke-width="3" />
+    <rect
+      x="43"
+      y="22"
+      width="14"
+      height="7"
+      rx="3.5"
+      fill="none"
+      stroke="#8B939F"
+      stroke-width="3"
+    />
     <rect x="28" y="30" width="44" height="6" rx="3" fill="#8B939F" />
-    <path d="M32 40 L36 78 Q36.5 82 41 82 H59 Q63.5 82 64 78 L68 40 Z" fill="#A5ADB8" />
-    <line x1="43" y1="46" x2="44.5" y2="74" stroke="#EDEFF2" stroke-width="2.5" stroke-linecap="round" />
-    <line x1="50" y1="46" x2="50" y2="74" stroke="#EDEFF2" stroke-width="2.5" stroke-linecap="round" />
-    <line x1="57" y1="46" x2="55.5" y2="74" stroke="#EDEFF2" stroke-width="2.5" stroke-linecap="round" />
+    <path
+      d="M32 40 L36 78 Q36.5 82 41 82 H59 Q63.5 82 64 78 L68 40 Z"
+      fill="#A5ADB8"
+    />
+    <line
+      x1="43"
+      y1="46"
+      x2="44.5"
+      y2="74"
+      stroke="#EDEFF2"
+      stroke-width="2.5"
+      stroke-linecap="round"
+    />
+    <line
+      x1="50"
+      y1="46"
+      x2="50"
+      y2="74"
+      stroke="#EDEFF2"
+      stroke-width="2.5"
+      stroke-linecap="round"
+    />
+    <line
+      x1="57"
+      y1="46"
+      x2="55.5"
+      y2="74"
+      stroke="#EDEFF2"
+      stroke-width="2.5"
+      stroke-linecap="round"
+    />
   </svg>
 
   <!-- Dossier -->
-  <svg v-else-if="name === 'folder'" viewBox="0 0 100 84" class="h-full w-full drop-shadow-md">
+  <svg
+    v-else-if="name === 'folder'"
+    viewBox="0 0 100 84"
+    class="h-full w-full drop-shadow-md"
+  >
     <defs>
       <linearGradient :id="`fo-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#4FB0F8" /><stop offset="1" stop-color="#1E7BE8" />
+        <stop offset="0" stop-color="#4FB0F8" />
+        <stop offset="1" stop-color="#1E7BE8" />
       </linearGradient>
       <linearGradient :id="`fp-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#77C4FA" /><stop offset="1" stop-color="#3D95F2" />
+        <stop offset="0" stop-color="#77C4FA" />
+        <stop offset="1" stop-color="#3D95F2" />
       </linearGradient>
     </defs>
-    <path d="M4 20 Q4 12 12 12 H34 L42 20 H88 Q96 20 96 28 V66 Q96 74 88 74 H12 Q4 74 4 66 Z" :fill="`url(#fo-${uid})`" />
-    <path d="M4 30 H96 V66 Q96 74 88 74 H12 Q4 74 4 66 Z" :fill="`url(#fp-${uid})`" />
+    <path
+      d="M4 20 Q4 12 12 12 H34 L42 20 H88 Q96 20 96 28 V66 Q96 74 88 74 H12 Q4 74 4 66 Z"
+      :fill="`url(#fo-${uid})`"
+    />
+    <path
+      d="M4 30 H96 V66 Q96 74 88 74 H12 Q4 74 4 66 Z"
+      :fill="`url(#fp-${uid})`"
+    />
   </svg>
 
   <!-- Fichier PDF -->
-  <svg v-else-if="name === 'pdf'" viewBox="0 0 80 100" class="h-full w-full drop-shadow-md">
-    <path d="M8 8 Q8 2 14 2 H50 L72 24 V92 Q72 98 66 98 H14 Q8 98 8 92 Z" fill="#FDFDFE" stroke="#D5D7DC" stroke-width="1.5" />
+  <svg
+    v-else-if="name === 'pdf'"
+    viewBox="0 0 80 100"
+    class="h-full w-full drop-shadow-md"
+  >
+    <path
+      d="M8 8 Q8 2 14 2 H50 L72 24 V92 Q72 98 66 98 H14 Q8 98 8 92 Z"
+      fill="#FDFDFE"
+      stroke="#D5D7DC"
+      stroke-width="1.5"
+    />
     <path d="M50 2 L72 24 H55 Q50 24 50 19 Z" fill="#E4E7EC" />
     <rect x="14" y="56" width="52" height="22" rx="5" fill="#E5484D" />
     <text

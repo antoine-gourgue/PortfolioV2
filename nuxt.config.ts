@@ -5,7 +5,10 @@ export default defineNuxtConfig({
       script: [{ src: 'https://kit.fontawesome.com/180b0301cc.js' }],
     },
   },
-  css: ['~/assets/css/tailwind.css', 'framework7-icons/css/framework7-icons.css'],
+  css: [
+    '~/assets/css/tailwind.css',
+    'framework7-icons/css/framework7-icons.css',
+  ],
   postcss: {
     plugins: {
       tailwindcss: {},

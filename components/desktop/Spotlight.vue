@@ -128,18 +128,90 @@ const open = (url: string) => {
 }
 
 const items = computed<Item[]>(() => [
-  { id: 'home', label: t('nav.home'), icon: { name: 'finder' }, kind: 'App', group: 'apps', action: () => go('/') },
-  { id: 'projects', label: t('nav.projects'), icon: { name: 'appstore' }, kind: 'App', group: 'apps', action: () => go('/projects') },
-  { id: 'about', label: t('nav.about'), icon: { name: 'contacts' }, kind: 'App', group: 'apps', action: () => go('/about') },
-  { id: 'blog', label: t('nav.blog'), icon: { name: 'notes' }, kind: 'App', group: 'apps', action: () => go('/blog') },
-  { id: 'contact', label: t('nav.contact'), icon: { name: 'mail' }, kind: 'App', group: 'apps', action: () => go('/contact') },
-  { id: 'messages', label: t('macos.messagesTitle'), icon: { name: 'messages' }, kind: 'App', group: 'apps', action: () => { desktop.state.value.apps.messages = true; close() } },
-  { id: 'weather', label: t('macos.weatherTitle'), icon: { name: 'weather' }, kind: 'App', group: 'apps', action: () => { desktop.state.value.apps.weather = true; close() } },
-  { id: 'calculator', label: t('macos.calcTitle'), icon: { name: 'calculator' }, kind: 'App', group: 'apps', action: () => { desktop.state.value.apps.calculator = true; close() } },
+  {
+    id: 'home',
+    label: t('nav.home'),
+    icon: { name: 'finder' },
+    kind: 'App',
+    group: 'apps',
+    action: () => go('/'),
+  },
+  {
+    id: 'projects',
+    label: t('nav.projects'),
+    icon: { name: 'appstore' },
+    kind: 'App',
+    group: 'apps',
+    action: () => go('/projects'),
+  },
+  {
+    id: 'about',
+    label: t('nav.about'),
+    icon: { name: 'contacts' },
+    kind: 'App',
+    group: 'apps',
+    action: () => go('/about'),
+  },
+  {
+    id: 'blog',
+    label: t('nav.blog'),
+    icon: { name: 'notes' },
+    kind: 'App',
+    group: 'apps',
+    action: () => go('/blog'),
+  },
+  {
+    id: 'contact',
+    label: t('nav.contact'),
+    icon: { name: 'mail' },
+    kind: 'App',
+    group: 'apps',
+    action: () => go('/contact'),
+  },
+  {
+    id: 'messages',
+    label: t('macos.messagesTitle'),
+    icon: { name: 'messages' },
+    kind: 'App',
+    group: 'apps',
+    action: () => {
+      desktop.state.value.apps.messages = true
+      close()
+    },
+  },
+  {
+    id: 'weather',
+    label: t('macos.weatherTitle'),
+    icon: { name: 'weather' },
+    kind: 'App',
+    group: 'apps',
+    action: () => {
+      desktop.state.value.apps.weather = true
+      close()
+    },
+  },
+  {
+    id: 'calculator',
+    label: t('macos.calcTitle'),
+    icon: { name: 'calculator' },
+    kind: 'App',
+    group: 'apps',
+    action: () => {
+      desktop.state.value.apps.calculator = true
+      close()
+    },
+  },
   ...portfolioProjects.map((p) => ({
     id: p.key,
     label: p.name,
-    icon: { img: p.icon, bg: p.iconBg, pad: p.iconPad, letter: p.letter, top: p.colorTop, bottom: p.colorBottom } as Icon,
+    icon: {
+      img: p.icon,
+      bg: p.iconBg,
+      pad: p.iconPad,
+      letter: p.letter,
+      top: p.colorTop,
+      bottom: p.colorBottom,
+    } as Icon,
     kind: 'Web',
     group: 'projects' as const,
     action: () => open(p.url),
@@ -158,8 +230,22 @@ const items = computed<Item[]>(() => [
       close()
     },
   },
-  { id: 'github', label: 'GitHub', icon: { name: 'github' }, kind: 'Web', group: 'actions', action: () => open('https://github.com/antoine-gourgue') },
-  { id: 'linkedin', label: 'LinkedIn', icon: { letter: 'in', top: '#2D8FD5', bottom: '#0A66C2' }, kind: 'Web', group: 'actions', action: () => open('https://linkedin.com/in/antoine-gourgue') },
+  {
+    id: 'github',
+    label: 'GitHub',
+    icon: { name: 'github' },
+    kind: 'Web',
+    group: 'actions',
+    action: () => open('https://github.com/antoine-gourgue'),
+  },
+  {
+    id: 'linkedin',
+    label: 'LinkedIn',
+    icon: { letter: 'in', top: '#2D8FD5', bottom: '#0A66C2' },
+    kind: 'Web',
+    group: 'actions',
+    action: () => open('https://linkedin.com/in/antoine-gourgue'),
+  },
 ])
 
 const filtered = computed(() =>
@@ -169,9 +255,18 @@ const filtered = computed(() =>
 )
 
 const groups = computed(() => [
-  { label: t('macos.spotlightApps'), items: filtered.value.filter((i) => i.group === 'apps') },
-  { label: t('macos.spotlightProjects'), items: filtered.value.filter((i) => i.group === 'projects') },
-  { label: t('macos.spotlightActions'), items: filtered.value.filter((i) => i.group === 'actions') },
+  {
+    label: t('macos.spotlightApps'),
+    items: filtered.value.filter((i) => i.group === 'apps'),
+  },
+  {
+    label: t('macos.spotlightProjects'),
+    items: filtered.value.filter((i) => i.group === 'projects'),
+  },
+  {
+    label: t('macos.spotlightActions'),
+    items: filtered.value.filter((i) => i.group === 'actions'),
+  },
 ])
 
 const flat = computed(() => groups.value.flatMap((g) => g.items))

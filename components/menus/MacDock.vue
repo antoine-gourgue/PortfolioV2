@@ -36,7 +36,7 @@
       :key="app.id"
       :ref="setItemRef"
       class="dock-icon group"
-      @click="toggleApp(app.id), bounce($event)"
+      @click="(toggleApp(app.id), bounce($event))"
     >
       <DesktopMacAppIcon :name="app.icon" />
       <span class="dock-tip">{{ $t(app.label) }}</span>
@@ -54,11 +54,12 @@
         :key="id"
         :ref="setItemRef"
         class="dock-icon group"
-        @click="sfx.restore(), restore(id)"
+        @click="(sfx.restore(), restore(id))"
       >
         <DesktopMacAppIcon :name="minimizedMeta[id]?.icon ?? 'contacts'" />
         <span class="dock-tip">{{
-          minimizedMeta[id]?.raw ?? $t(minimizedMeta[id]?.label ?? 'macos.aboutTitle')
+          minimizedMeta[id]?.raw ??
+          $t(minimizedMeta[id]?.label ?? 'macos.aboutTitle')
         }}</span>
       </button>
     </template>
@@ -114,7 +115,12 @@ interface DockApp {
 
 const apps: DockApp[] = [
   { id: 'finder', label: 'nav.home', path: '/', icon: 'finder' },
-  { id: 'appstore', label: 'nav.projects', path: '/projects', icon: 'appstore' },
+  {
+    id: 'appstore',
+    label: 'nav.projects',
+    path: '/projects',
+    icon: 'appstore',
+  },
   { id: 'contacts', label: 'nav.about', path: '/about', icon: 'contacts' },
   { id: 'notes', label: 'nav.blog', path: '/blog', icon: 'notes' },
   { id: 'mail', label: 'nav.contact', path: '/contact', icon: 'mail' },
@@ -205,7 +211,14 @@ const wiggleTrash = (e: Event) => {
     gsap.fromTo(
       el,
       { rotate: -8 },
-      { rotate: 8, duration: 0.09, repeat: 5, yoyo: true, ease: 'none', clearProps: 'rotate' }
+      {
+        rotate: 8,
+        duration: 0.09,
+        repeat: 5,
+        yoyo: true,
+        ease: 'none',
+        clearProps: 'rotate',
+      }
     )
 }
 
@@ -227,7 +240,8 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  if (dockEl.value && onMove) dockEl.value.removeEventListener('mousemove', onMove)
+  if (dockEl.value && onMove)
+    dockEl.value.removeEventListener('mousemove', onMove)
   magnifiers = new Map()
 })
 </script>

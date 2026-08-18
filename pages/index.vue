@@ -50,7 +50,9 @@
               {{ wxWidget.city }}
             </p>
             <p class="text-[40px] font-thin leading-tight">
-              {{ wxWidget.temp !== null ? Math.round(wxWidget.temp) + '°' : '—' }}
+              {{
+                wxWidget.temp !== null ? Math.round(wxWidget.temp) + '°' : '—'
+              }}
             </p>
             <div class="mt-auto">
               <p v-if="wxWidget.code !== null" class="text-[24px] leading-none">
@@ -68,7 +70,9 @@
         </div>
       </ClientOnly>
 
-      <div class="mx-auto mt-9 grid w-full max-w-sm grid-cols-4 gap-x-4 gap-y-6">
+      <div
+        class="mx-auto mt-9 grid w-full max-w-sm grid-cols-4 gap-x-4 gap-y-6"
+      >
         <component
           :is="app.to ? NuxtLinkComponent : app.href ? 'a' : 'button'"
           v-for="app in springboard"
@@ -95,10 +99,7 @@
     </section>
 
     <!-- ═══ Bureau (desktop) ═══ -->
-    <section
-      ref="heroEl"
-      class="relative hidden min-h-[92vh] w-full lg:block"
-    >
+    <section ref="heroEl" class="relative hidden min-h-[92vh] w-full lg:block">
       <!-- Icônes du bureau -->
       <div
         class="absolute right-6 top-14 z-[5] hidden flex-col items-center gap-5 lg:flex"
@@ -164,7 +165,9 @@
               <span class="text-right font-semibold">{{
                 $t('macos.specTools')
               }}</span>
-              <span class="text-agray">Docker · GitLab CI/CD · Claude Code</span>
+              <span class="text-agray"
+                >Docker · GitLab CI/CD · Claude Code</span
+              >
               <span class="text-right font-semibold">{{
                 $t('macos.specTraining')
               }}</span>
@@ -173,7 +176,9 @@
                 $t('macos.specStatus')
               }}</span>
               <span class="text-agray"
-                ><span class="mr-1.5 inline-block h-2 w-2 rounded-full bg-emerald-500"></span
+                ><span
+                  class="mr-1.5 inline-block h-2 w-2 rounded-full bg-emerald-500"
+                ></span
                 >{{ $t('macos.specStatusVal') }}</span
               >
             </div>
@@ -275,8 +280,12 @@
           <template #toolbar>
             <div class="flex items-center gap-3">
               <div class="flex items-center gap-1 text-black/45">
-                <button class="tb-btn text-[15px]"><DesktopSfIcon name="chevron-left" /></button>
-                <button class="tb-btn text-[15px] text-black/20"><DesktopSfIcon name="chevron-right" /></button>
+                <button class="tb-btn text-[15px]">
+                  <DesktopSfIcon name="chevron-left" />
+                </button>
+                <button class="tb-btn text-[15px] text-black/20">
+                  <DesktopSfIcon name="chevron-right" />
+                </button>
               </div>
               <span class="text-[14px] font-semibold">{{
                 $t('macos.finderProjects')
@@ -288,14 +297,18 @@
                 >
                   <button
                     class="px-2 py-1 text-[13px]"
-                    :class="finderView === 'grid' ? 'bg-black/10 text-aink' : ''"
+                    :class="
+                      finderView === 'grid' ? 'bg-black/10 text-aink' : ''
+                    "
                     @click="finderView = 'grid'"
                   >
                     <DesktopSfIcon name="grid" />
                   </button>
                   <button
                     class="px-2 py-1 text-[13px]"
-                    :class="finderView === 'list' ? 'bg-black/10 text-aink' : ''"
+                    :class="
+                      finderView === 'list' ? 'bg-black/10 text-aink' : ''
+                    "
                     @click="finderView = 'list'"
                   >
                     <DesktopSfIcon name="list" />
@@ -318,7 +331,9 @@
                       class="absolute right-0 top-full z-30 mt-1.5 min-w-[170px] rounded-lg border border-black/10 bg-white/90 p-1 shadow-xl backdrop-blur-xl"
                       @click.stop
                     >
-                      <p class="px-2.5 pb-0.5 pt-1 text-[10px] font-semibold text-black/35">
+                      <p
+                        class="px-2.5 pb-0.5 pt-1 text-[10px] font-semibold text-black/35"
+                      >
                         {{ $t('macos.sortBy') }}
                       </p>
                       <button
@@ -331,11 +346,17 @@
                         <span v-if="sortKey === opt.key">✓</span>
                       </button>
                       <div class="mx-2 my-1 border-t border-black/10"></div>
-                      <button class="sort-item" @click="sortAsc = true, (sortMenuOpen = false)">
+                      <button
+                        class="sort-item"
+                        @click="((sortAsc = true), (sortMenuOpen = false))"
+                      >
                         {{ $t('macos.asc') }}
                         <span v-if="sortAsc">✓</span>
                       </button>
-                      <button class="sort-item" @click="sortAsc = false, (sortMenuOpen = false)">
+                      <button
+                        class="sort-item"
+                        @click="((sortAsc = false), (sortMenuOpen = false))"
+                      >
                         {{ $t('macos.desc') }}
                         <span v-if="!sortAsc">✓</span>
                       </button>
@@ -457,10 +478,7 @@
                     >
                   </button>
                 </div>
-                <p
-                  v-else
-                  class="py-14 text-center text-[13px] text-black/35"
-                >
+                <p v-else class="py-14 text-center text-[13px] text-black/35">
                   {{ $t('macos.spotlightEmpty') }}
                 </p>
                 <p
@@ -476,15 +494,21 @@
                 <div class="finder-cols text-[11px] font-medium text-black/45">
                   <button class="text-left" @click="setSort('name')">
                     {{ $t('macos.sortName') }}
-                    <span v-if="sortKey === 'name'">{{ sortAsc ? '▲' : '▼' }}</span>
+                    <span v-if="sortKey === 'name'">{{
+                      sortAsc ? '▲' : '▼'
+                    }}</span>
                   </button>
                   <button class="text-left" @click="setSort('category')">
                     {{ $t('macos.category') }}
-                    <span v-if="sortKey === 'category'">{{ sortAsc ? '▲' : '▼' }}</span>
+                    <span v-if="sortKey === 'category'">{{
+                      sortAsc ? '▲' : '▼'
+                    }}</span>
                   </button>
                   <button class="text-left" @click="setSort('year')">
                     {{ $t('macos.year') }}
-                    <span v-if="sortKey === 'year'">{{ sortAsc ? '▲' : '▼' }}</span>
+                    <span v-if="sortKey === 'year'">{{
+                      sortAsc ? '▲' : '▼'
+                    }}</span>
                   </button>
                 </div>
                 <button
@@ -514,11 +538,19 @@
                     <span class="truncate">{{ project.name }}</span>
                   </span>
                   <span
-                    :class="finderSelected === project.key ? 'text-white/80' : 'text-black/45'"
+                    :class="
+                      finderSelected === project.key
+                        ? 'text-white/80'
+                        : 'text-black/45'
+                    "
                     >{{ $t(project.categoryKey) }}</span
                   >
                   <span
-                    :class="finderSelected === project.key ? 'text-white/80' : 'text-black/45'"
+                    :class="
+                      finderSelected === project.key
+                        ? 'text-white/80'
+                        : 'text-black/45'
+                    "
                     >{{ project.year }}</span
                   >
                 </button>
@@ -626,7 +658,9 @@
                   <span
                     class="shrink-0 text-[12px] font-medium"
                     :style="{ color: step.color }"
-                    >{{ step.periodKey ? $t(step.periodKey) : step.period }}</span
+                    >{{
+                      step.periodKey ? $t(step.periodKey) : step.period
+                    }}</span
                   >
                 </div>
                 <p class="mt-1 text-[13px] leading-relaxed text-black/55">
@@ -724,7 +758,10 @@
               {{ $t(evtStep.descKey) }}
             </p>
             <NuxtLink
-              :to="{ path: localePath('/about'), query: { c: evtStep.aboutId } }"
+              :to="{
+                path: localePath('/about'),
+                query: { c: evtStep.aboutId },
+              }"
               class="mt-3 inline-block rounded-md bg-ablue px-3.5 py-1.5 text-[12.5px] font-medium text-white shadow-sm transition-colors hover:bg-[#0077ed]"
             >
               {{ $t('macos.openInContacts') }} ›
@@ -799,16 +836,21 @@
         class="fixed z-[90] min-w-[220px] rounded-lg border border-black/10 bg-white/80 p-1 shadow-2xl backdrop-blur-2xl"
         :style="{ left: ctx.x + 'px', top: ctx.y + 'px' }"
       >
-        <button class="ctx-item" @click="desktop.cycleWallpaper(), closeContext()">
+        <button
+          class="ctx-item"
+          @click="(desktop.cycleWallpaper(), closeContext())"
+        >
           {{ $t('macos.ctxWallpaper') }}
         </button>
         <div class="mx-2.5 my-1 border-t border-black/10"></div>
-        <button class="ctx-item" @click="downloadCv(), closeContext()">
+        <button class="ctx-item" @click="(downloadCv(), closeContext())">
           {{ $t('macos.ctxCv') }}
         </button>
         <button
           class="ctx-item"
-          @click="openUrl('https://github.com/antoine-gourgue'), closeContext()"
+          @click="
+            (openUrl('https://github.com/antoine-gourgue'), closeContext())
+          "
         >
           {{ $t('macos.ctxGithub') }}
         </button>
@@ -875,9 +917,7 @@ const openEvent = (e: MouseEvent, id: string) => {
   evt.x = Math.min(Math.max(e.clientX - 150, 12), window.innerWidth - 312)
   evt.y = Math.min(e.clientY + 14, window.innerHeight - 300)
 }
-const evtStep = computed(() =>
-  journeySteps.find((s) => s.id === evt.id)
-)
+const evtStep = computed(() => journeySteps.find((s) => s.id === evt.id))
 
 const journeySteps = [
   {
@@ -1066,11 +1106,36 @@ const springboard: SpringboardApp[] = [
   { id: 'about', icon: 'contacts', label: 'nav.about', to: '/about' },
   { id: 'blog', icon: 'notes', label: 'nav.blog', to: '/blog' },
   { id: 'contact', icon: 'mail', label: 'nav.contact', to: '/contact' },
-  { id: 'messages', icon: 'messages', label: 'macos.messagesTitle', action: () => (desktop.state.value.apps.messages = true) },
-  { id: 'weather', icon: 'weather', label: 'macos.weatherTitle', action: () => (desktop.state.value.apps.weather = true) },
-  { id: 'calculator', icon: 'calculator', label: 'macos.calcTitle', action: () => (desktop.state.value.apps.calculator = true) },
-  { id: 'github', icon: 'github', raw: 'GitHub', href: 'https://github.com/antoine-gourgue' },
-  { id: 'linkedin', icon: 'linkedin', raw: 'LinkedIn', href: 'https://linkedin.com/in/antoine-gourgue' },
+  {
+    id: 'messages',
+    icon: 'messages',
+    label: 'macos.messagesTitle',
+    action: () => (desktop.state.value.apps.messages = true),
+  },
+  {
+    id: 'weather',
+    icon: 'weather',
+    label: 'macos.weatherTitle',
+    action: () => (desktop.state.value.apps.weather = true),
+  },
+  {
+    id: 'calculator',
+    icon: 'calculator',
+    label: 'macos.calcTitle',
+    action: () => (desktop.state.value.apps.calculator = true),
+  },
+  {
+    id: 'github',
+    icon: 'github',
+    raw: 'GitHub',
+    href: 'https://github.com/antoine-gourgue',
+  },
+  {
+    id: 'linkedin',
+    icon: 'linkedin',
+    raw: 'LinkedIn',
+    href: 'https://linkedin.com/in/antoine-gourgue',
+  },
   { id: 'cv', icon: 'pdf', label: 'macos.deskCv', action: () => downloadCv() },
 ]
 
@@ -1225,7 +1290,10 @@ const animateZoom = (id: string) => {
 
 // Le dock appelle desktop.restore() : on intercepte pour animer
 watch(
-  () => Object.entries(desktop.state.value.wins).map(([id, w]) => `${id}:${w.min}`).join(','),
+  () =>
+    Object.entries(desktop.state.value.wins)
+      .map(([id, w]) => `${id}:${w.min}`)
+      .join(','),
   (val, old) => {
     if (!old) return
     const oldMin = new Set(old.split(',').filter((s) => s.endsWith('true')))

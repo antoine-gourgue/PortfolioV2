@@ -19,16 +19,16 @@ On mobile, the site turns into an **iPhone**: iOS status bar, springboard home s
 
 ## Real apps, really working
 
-| App | What it does |
-| --- | --- |
-| **App Store** | My projects as full product pages — live GitHub stars, categories, screenshots, and my Digitaleo apprenticeship as a case study |
-| **Messages** | An iMessage clone running my home-made intent-based chatbot (FR/EN/ES, language detection) |
-| **Weather** | Real forecast for the visitor's location (open-meteo + IP/GPS geolocation), hourly + 6-day views with Apple-style range bars |
-| **Calculator** | Fully functional — macOS tiles on desktop, iOS round buttons on mobile |
-| **Contacts** | My background as an address book (Digitaleo, Epitech, schools) with deep links |
-| **Calendar** | My journey as filterable, clickable colored events |
-| **Notes** | Real first-person notes (how this site is built, what I learn at Digitaleo) + press mentions, with folders, pinned notes and working search |
-| **Mail** | The actual contact form (honeypot + SMTP) styled as a compose window |
+| App            | What it does                                                                                                                                |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **App Store**  | My projects as full product pages — live GitHub stars, categories, screenshots, and my Digitaleo apprenticeship as a case study             |
+| **Messages**   | An iMessage clone running my home-made intent-based chatbot (FR/EN/ES, language detection)                                                  |
+| **Weather**    | Real forecast for the visitor's location (open-meteo + IP/GPS geolocation), hourly + 6-day views with Apple-style range bars                |
+| **Calculator** | Fully functional — macOS tiles on desktop, iOS round buttons on mobile                                                                      |
+| **Contacts**   | My background as an address book (Digitaleo, Epitech, schools) with deep links                                                              |
+| **Calendar**   | My journey as filterable, clickable colored events                                                                                          |
+| **Notes**      | Real first-person notes (how this site is built, what I learn at Digitaleo) + press mentions, with folders, pinned notes and working search |
+| **Mail**       | The actual contact form (honeypot + SMTP) styled as a compose window                                                                        |
 
 Every UI sound (clicks, whooshes, sent-mail swoosh, boot chord) is **synthesized with Web Audio** — zero audio files.
 

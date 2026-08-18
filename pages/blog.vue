@@ -81,7 +81,9 @@
               v-for="note in pinnedList"
               :key="note.id"
               class="note-cell"
-              :class="selectedId === note.id ? 'bg-[#FBD75B]/60' : 'hover:bg-black/5'"
+              :class="
+                selectedId === note.id ? 'bg-[#FBD75B]/60' : 'hover:bg-black/5'
+              "
               @click="openNote(note.id)"
             >
               <p class="truncate text-[13.5px] font-semibold text-aink">
@@ -115,7 +117,9 @@
               v-for="note in normalList"
               :key="note.id"
               class="note-cell"
-              :class="selectedId === note.id ? 'bg-[#FBD75B]/60' : 'hover:bg-black/5'"
+              :class="
+                selectedId === note.id ? 'bg-[#FBD75B]/60' : 'hover:bg-black/5'
+              "
               @click="openNote(note.id)"
             >
               <p class="truncate text-[13.5px] font-semibold text-aink">

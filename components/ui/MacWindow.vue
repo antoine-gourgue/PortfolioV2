@@ -49,11 +49,9 @@
         <!-- Fermer -->
         <button
           class="light border"
-          :class="
-            active ? 'border-[#E0443E] bg-[#FF5F57]' : lightOff
-          "
+          :class="active ? 'border-[#E0443E] bg-[#FF5F57]' : lightOff"
           aria-label="close"
-          @click.stop="sfx.minimize(), $emit('close')"
+          @click.stop="(sfx.minimize(), $emit('close'))"
           @pointerdown.stop
         >
           <svg viewBox="0 0 12 12" class="glyph">
@@ -68,11 +66,9 @@
         <!-- Réduire -->
         <button
           class="light border"
-          :class="
-            active ? 'border-[#D89E24] bg-[#FEBC2E]' : lightOff
-          "
+          :class="active ? 'border-[#D89E24] bg-[#FEBC2E]' : lightOff"
           aria-label="minimize"
-          @click.stop="sfx.minimize(), $emit('minimize')"
+          @click.stop="(sfx.minimize(), $emit('minimize'))"
           @pointerdown.stop
         >
           <svg viewBox="0 0 12 12" class="glyph">
@@ -87,11 +83,9 @@
         <!-- Agrandir -->
         <button
           class="light border"
-          :class="
-            active ? 'border-[#1AAB29] bg-[#28C840]' : lightOff
-          "
+          :class="active ? 'border-[#1AAB29] bg-[#28C840]' : lightOff"
           aria-label="zoom"
-          @click.stop="sfx.pop(), $emit('zoom')"
+          @click.stop="(sfx.pop(), $emit('zoom'))"
           @pointerdown.stop
         >
           <svg viewBox="0 0 12 12" class="glyph">

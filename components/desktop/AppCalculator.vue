@@ -9,22 +9,36 @@
     >
       <div class="flex h-full flex-col bg-black lg:h-auto lg:bg-[#2a2a2c]">
         <!-- Barre de titre (desktop : pastilles / mobile : chevron iOS) -->
-        <div class="cal-drag flex items-center gap-2 px-4 pb-1 pt-10 lg:px-3 lg:pt-2.5">
+        <div
+          class="cal-drag flex items-center gap-2 px-4 pb-1 pt-10 lg:px-3 lg:pt-2.5"
+        >
           <button
             class="group hidden h-3 w-3 items-center justify-center rounded-full border border-[#E0443E] bg-[#FF5F57] lg:flex"
             aria-label="close"
-            @click.stop="sfx.minimize(), desktop.closeApp('calculator')"
+            @click.stop="(sfx.minimize(), desktop.closeApp('calculator'))"
             @pointerdown.stop
           >
-            <svg viewBox="0 0 12 12" class="h-full w-full p-[1px] opacity-0 group-hover:opacity-100">
-              <path d="M3.6 3.6 L8.4 8.4 M8.4 3.6 L3.6 8.4" stroke="#820005" stroke-width="1.2" stroke-linecap="round" />
+            <svg
+              viewBox="0 0 12 12"
+              class="h-full w-full p-[1px] opacity-0 group-hover:opacity-100"
+            >
+              <path
+                d="M3.6 3.6 L8.4 8.4 M8.4 3.6 L3.6 8.4"
+                stroke="#820005"
+                stroke-width="1.2"
+                stroke-linecap="round"
+              />
             </svg>
           </button>
-          <span class="hidden h-3 w-3 rounded-full border border-black/20 bg-[#4a4a4c] lg:block"></span>
-          <span class="hidden h-3 w-3 rounded-full border border-black/20 bg-[#4a4a4c] lg:block"></span>
+          <span
+            class="hidden h-3 w-3 rounded-full border border-black/20 bg-[#4a4a4c] lg:block"
+          ></span>
+          <span
+            class="hidden h-3 w-3 rounded-full border border-black/20 bg-[#4a4a4c] lg:block"
+          ></span>
           <button
             class="flex items-center gap-0.5 text-[15px] font-medium text-[#FF9F0A] lg:hidden"
-            @click.stop="sfx.minimize(), desktop.closeApp('calculator')"
+            @click.stop="(sfx.minimize(), desktop.closeApp('calculator'))"
           >
             <span class="text-[19px] leading-none">‹</span>
             {{ $t('macos.close') }}
@@ -48,22 +62,30 @@
           </button>
           <button class="key key-fn" @click="negate">⁺∕₋</button>
           <button class="key key-fn" @click="percent">%</button>
-          <button class="key key-op" :class="opActive('÷')" @click="setOp('÷')">÷</button>
+          <button class="key key-op" :class="opActive('÷')" @click="setOp('÷')">
+            ÷
+          </button>
 
           <button class="key" @click="digit('7')">7</button>
           <button class="key" @click="digit('8')">8</button>
           <button class="key" @click="digit('9')">9</button>
-          <button class="key key-op" :class="opActive('×')" @click="setOp('×')">×</button>
+          <button class="key key-op" :class="opActive('×')" @click="setOp('×')">
+            ×
+          </button>
 
           <button class="key" @click="digit('4')">4</button>
           <button class="key" @click="digit('5')">5</button>
           <button class="key" @click="digit('6')">6</button>
-          <button class="key key-op" :class="opActive('−')" @click="setOp('−')">−</button>
+          <button class="key key-op" :class="opActive('−')" @click="setOp('−')">
+            −
+          </button>
 
           <button class="key" @click="digit('1')">1</button>
           <button class="key" @click="digit('2')">2</button>
           <button class="key" @click="digit('3')">3</button>
-          <button class="key key-op" :class="opActive('+')" @click="setOp('+')">+</button>
+          <button class="key key-op" :class="opActive('+')" @click="setOp('+')">
+            +
+          </button>
 
           <button
             class="key key-zero col-span-2 !text-left !pl-8 lg:!pl-6"

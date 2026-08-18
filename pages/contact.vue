@@ -31,7 +31,9 @@
               :title="$t('contact.send')"
             >
               <i
-                :class="loading ? 'fas fa-spinner fa-spin' : 'fas fa-paper-plane'"
+                :class="
+                  loading ? 'fas fa-spinner fa-spin' : 'fas fa-paper-plane'
+                "
               ></i>
             </button>
             <i class="fas fa-paperclip text-[14px] text-black/30"></i>

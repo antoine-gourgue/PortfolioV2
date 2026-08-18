@@ -81,7 +81,10 @@ export function useSfx() {
     filter.type = opts.highpass ? 'highpass' : 'lowpass'
     filter.frequency.setValueAtTime(opts.filterFrom ?? 1000, t0)
     if (opts.filterTo)
-      filter.frequency.exponentialRampToValueAtTime(opts.filterTo, t0 + opts.dur)
+      filter.frequency.exponentialRampToValueAtTime(
+        opts.filterTo,
+        t0 + opts.dur
+      )
     const gain = c.createGain()
     gain.gain.setValueAtTime(0, t0)
     gain.gain.linearRampToValueAtTime(opts.peak ?? 0.1, t0 + 0.01)
@@ -116,7 +119,13 @@ export function useSfx() {
     /** Touche de la calculatrice */
     key() {
       if (!enabled()) return
-      tone({ from: 680, dur: 0.045, peak: 0.1, type: 'triangle', lowpass: 1400 })
+      tone({
+        from: 680,
+        dur: 0.045,
+        peak: 0.1,
+        type: 'triangle',
+        lowpass: 1400,
+      })
     },
     /** Corbeille (froissement) */
     trash() {
@@ -128,7 +137,13 @@ export function useSfx() {
     /** Envoi du message (swoosh Mail) */
     send() {
       if (!enabled()) return
-      noise({ dur: 0.35, peak: 0.09, filterFrom: 500, filterTo: 5000, highpass: true })
+      noise({
+        dur: 0.35,
+        peak: 0.09,
+        filterFrom: 500,
+        filterTo: 5000,
+        highpass: true,
+      })
       tone({ from: 480, to: 980, dur: 0.32, peak: 0.1 })
     },
     /** Erreur (bonk) */

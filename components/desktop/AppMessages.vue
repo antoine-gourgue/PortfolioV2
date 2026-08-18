@@ -16,16 +16,24 @@
           <button
             class="group hidden h-3 w-3 items-center justify-center rounded-full border border-[#E0443E] bg-[#FF5F57] lg:flex"
             aria-label="close"
-            @click.stop="sfx.minimize(), desktop.closeApp('messages')"
+            @click.stop="(sfx.minimize(), desktop.closeApp('messages'))"
             @pointerdown.stop
           >
-            <svg viewBox="0 0 12 12" class="h-full w-full p-[1px] opacity-0 group-hover:opacity-100">
-              <path d="M3.6 3.6 L8.4 8.4 M8.4 3.6 L3.6 8.4" stroke="#820005" stroke-width="1.2" stroke-linecap="round" />
+            <svg
+              viewBox="0 0 12 12"
+              class="h-full w-full p-[1px] opacity-0 group-hover:opacity-100"
+            >
+              <path
+                d="M3.6 3.6 L8.4 8.4 M8.4 3.6 L3.6 8.4"
+                stroke="#820005"
+                stroke-width="1.2"
+                stroke-linecap="round"
+              />
             </svg>
           </button>
           <button
             class="flex items-center gap-0.5 text-[15px] font-medium text-[#0A84FF] lg:hidden"
-            @click.stop="sfx.minimize(), desktop.closeApp('messages')"
+            @click.stop="(sfx.minimize(), desktop.closeApp('messages'))"
           >
             <span class="text-[19px] leading-none">‹</span>
             {{ $t('macos.close') }}
@@ -196,7 +204,10 @@ const getBotResponse = (msg: string): string => {
 
 const scrollDown = async () => {
   await nextTick()
-  chatBody.value?.scrollTo({ top: chatBody.value.scrollHeight, behavior: 'smooth' })
+  chatBody.value?.scrollTo({
+    top: chatBody.value.scrollHeight,
+    behavior: 'smooth',
+  })
 }
 
 const sendMessage = async () => {
@@ -212,7 +223,8 @@ const sendMessage = async () => {
   const reply = () => {
     let raw: string
     if (detectedLang !== selectedLang.value) {
-      const key = detectedLang === 'en' ? 'En' : detectedLang === 'es' ? 'Es' : 'Fr'
+      const key =
+        detectedLang === 'en' ? 'En' : detectedLang === 'es' ? 'Es' : 'Fr'
       raw = `${t(`chatbot.detected${key}`)} <span class='lang-switch underline cursor-pointer' data-lang="${detectedLang}">${t(`chatbot.switchTo${key}`)}</span>`
     } else {
       raw = getBotResponse(userText)

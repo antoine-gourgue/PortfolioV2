@@ -22,7 +22,9 @@
             menu.bold ? 'font-bold' : '',
             openMenu === menu.id ? 'rounded bg-white/20' : '',
           ]"
-          @click="sfx.click(), (openMenu = openMenu === menu.id ? '' : menu.id)"
+          @click="
+            (sfx.click(), (openMenu = openMenu === menu.id ? '' : menu.id))
+          "
           @mouseenter="openMenu && (openMenu = menu.id)"
         >
           {{ menu.bold ? menu.label : $t(menu.label) }}
@@ -164,15 +166,27 @@ const menus: Array<{
     items: [
       { label: 'macos.menuAboutSite', action: () => go('/about') },
       'sep',
-      { label: 'GitHub', raw: true, action: () => open('https://github.com/antoine-gourgue') },
-      { label: 'LinkedIn', raw: true, action: () => open('https://linkedin.com/in/antoine-gourgue') },
+      {
+        label: 'GitHub',
+        raw: true,
+        action: () => open('https://github.com/antoine-gourgue'),
+      },
+      {
+        label: 'LinkedIn',
+        raw: true,
+        action: () => open('https://linkedin.com/in/antoine-gourgue'),
+      },
     ],
   },
   {
     id: 'file',
     label: 'macos.menuFile',
     items: [
-      { label: 'macos.menuNewProject', hint: '⌘N', action: () => go('/contact') },
+      {
+        label: 'macos.menuNewProject',
+        hint: '⌘N',
+        action: () => go('/contact'),
+      },
       'sep',
       { label: 'macos.menuDownloadCv', hint: '⌘S', action: downloadCv },
     ],
@@ -227,7 +241,9 @@ const selectLanguage = (code: string) => {
 const cycleLocale = () => {
   const order = ['fr', 'en', 'es'] as const
   const next =
-    order[(order.indexOf(locale.value as (typeof order)[number]) + 1) % order.length]
+    order[
+      (order.indexOf(locale.value as (typeof order)[number]) + 1) % order.length
+    ]
   router.push(switchLocalePath(next))
 }
 

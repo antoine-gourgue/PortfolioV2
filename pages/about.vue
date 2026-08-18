@@ -61,7 +61,10 @@
           </aside>
 
           <!-- Liste iOS (mobile) -->
-          <div v-if="!mobileOpen" class="min-w-0 flex-1 px-4 pb-6 pt-4 lg:hidden">
+          <div
+            v-if="!mobileOpen"
+            class="min-w-0 flex-1 px-4 pb-6 pt-4 lg:hidden"
+          >
             <h1 class="px-1 text-[28px] font-bold tracking-tight">Contacts</h1>
             <div
               class="mt-3 flex items-center gap-2 rounded-[10px] bg-black/5 px-3 py-2 text-[15px] text-black/40"
@@ -77,7 +80,9 @@
                 :class="i > 0 ? 'border-t border-black/5' : ''"
                 @click="openMobile(entry.id)"
               >
-                <span class="flex h-10 w-10 shrink-0 items-center justify-center">
+                <span
+                  class="flex h-10 w-10 shrink-0 items-center justify-center"
+                >
                   <AgLogo
                     v-if="entry.id === 'antoine'"
                     class="h-6 w-8 text-aink"
