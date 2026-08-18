@@ -71,28 +71,37 @@
         {{ currentLocale }}
       </button>
 
+      <!-- Menu de saisie macOS : drapeau + liste des langues cochée -->
       <div class="relative hidden lg:block">
         <button
-          class="menu-btn rounded px-2 py-0.5 uppercase"
+          class="menu-btn rounded px-1.5 py-0.5 text-[15px] leading-none"
           :class="openMenu === 'lang' ? 'bg-white/20' : ''"
-          @click="openMenu = openMenu === 'lang' ? '' : 'lang'"
+          aria-label="language"
+          @click="(sfx.click(), (openMenu = openMenu === 'lang' ? '' : 'lang'))"
         >
-          {{ currentLocale }}
+          {{ FLAGS[currentLocale] }}
         </button>
         <transition name="menu-pop">
           <div
             v-if="openMenu === 'lang'"
-            class="absolute right-0 top-full mt-1.5 min-w-[140px] rounded-lg border border-black/10 bg-white/80 p-1 shadow-2xl backdrop-blur-2xl"
+            class="absolute right-0 top-full mt-1.5 min-w-[170px] rounded-lg border border-black/10 bg-white/80 p-1 shadow-2xl backdrop-blur-2xl"
           >
             <button
               v-for="loc in availableLocales"
               :key="loc.code"
-              class="flex w-full items-center justify-between rounded-md px-2.5 py-1 text-left text-[13px] transition-colors hover:bg-ablue hover:text-white"
-              :class="currentLocale === loc.code ? 'font-semibold' : ''"
+              class="flex w-full items-center gap-2.5 rounded-md px-2.5 py-1 text-left text-[13px] text-aink transition-colors hover:bg-ablue hover:text-white"
               @click="selectLanguage(loc.code)"
             >
-              {{ loc.name }}
-              <span v-if="currentLocale === loc.code">✓</span>
+              <span class="w-3 text-[12px]">{{
+                currentLocale === loc.code ? '✓' : ''
+              }}</span>
+              <span class="text-[15px] leading-none">{{
+                FLAGS[loc.code]
+              }}</span>
+              <span
+                :class="currentLocale === loc.code ? 'font-semibold' : ''"
+                >{{ loc.name }}</span
+              >
             </button>
           </div>
         </transition>
@@ -217,6 +226,13 @@ const menus: Array<{
 
 const openMenu = ref('')
 const sfx = useSfx()
+
+// Drapeaux du menu de saisie (comme le sélecteur de clavier macOS)
+const FLAGS: Record<string, string> = {
+  fr: '🇫🇷',
+  en: '🇬🇧',
+  es: '🇪🇸',
+}
 
 const toggleSfx = () => {
   desktop.state.value.sfxMuted = !desktop.state.value.sfxMuted
