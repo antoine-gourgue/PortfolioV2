@@ -71,28 +71,38 @@
         {{ currentLocale }}
       </button>
 
+      <!-- Menu de saisie macOS : drapeau + liste des langues cochée -->
       <div class="relative hidden lg:block">
         <button
-          class="menu-btn rounded px-2 py-0.5 uppercase"
+          class="menu-btn flex items-center rounded px-2 py-1"
           :class="openMenu === 'lang' ? 'bg-white/20' : ''"
-          @click="openMenu = openMenu === 'lang' ? '' : 'lang'"
+          aria-label="language"
+          @click="(sfx.click(), (openMenu = openMenu === 'lang' ? '' : 'lang'))"
         >
-          {{ currentLocale }}
+          <DesktopFlagIcon :code="currentLocale" class="h-[14px] w-[21px]" />
         </button>
         <transition name="menu-pop">
           <div
             v-if="openMenu === 'lang'"
-            class="absolute right-0 top-full mt-1.5 min-w-[140px] rounded-lg border border-black/10 bg-white/80 p-1 shadow-2xl backdrop-blur-2xl"
+            class="absolute right-0 top-full mt-1.5 min-w-[170px] rounded-lg border border-black/10 bg-white/80 p-1 shadow-2xl backdrop-blur-2xl"
           >
             <button
               v-for="loc in availableLocales"
               :key="loc.code"
-              class="flex w-full items-center justify-between rounded-md px-2.5 py-1 text-left text-[13px] transition-colors hover:bg-ablue hover:text-white"
-              :class="currentLocale === loc.code ? 'font-semibold' : ''"
+              class="flex w-full items-center gap-2.5 rounded-md px-2.5 py-1 text-left text-[13px] text-aink transition-colors hover:bg-ablue hover:text-white"
               @click="selectLanguage(loc.code)"
             >
-              {{ loc.name }}
-              <span v-if="currentLocale === loc.code">✓</span>
+              <span class="w-3 text-[12px]">{{
+                currentLocale === loc.code ? '✓' : ''
+              }}</span>
+              <DesktopFlagIcon
+                :code="loc.code"
+                class="h-[13px] w-[20px] shrink-0"
+              />
+              <span
+                :class="currentLocale === loc.code ? 'font-semibold' : ''"
+                >{{ loc.name }}</span
+              >
             </button>
           </div>
         </transition>
