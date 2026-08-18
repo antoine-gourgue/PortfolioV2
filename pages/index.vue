@@ -7,7 +7,7 @@
     <!-- ═══ Bureau ═══ -->
     <section
       ref="heroEl"
-      class="relative mx-auto min-h-[92vh] w-full max-w-6xl px-5 pt-20 lg:px-8 lg:pt-0"
+      class="relative min-h-[92vh] w-full px-5 pt-20 lg:px-0 lg:pt-0"
     >
       <!-- Icônes du bureau -->
       <div
@@ -40,7 +40,7 @@
       <div
         v-show="!desktop.state.value.wins.about?.min"
         ref="aboutEl"
-        class="win relative z-10 mx-auto max-w-lg lg:absolute lg:left-8 lg:top-32 lg:mx-0 lg:w-[500px] lg:max-w-none"
+        class="win relative z-10 mx-auto max-w-lg lg:absolute lg:left-12 lg:top-28 lg:mx-0 lg:w-[500px] lg:max-w-none xl:left-[7%]"
         :style="{ zIndex: desktop.state.value.wins.about?.z ?? 10 }"
         @pointerdown="desktop.focus('about')"
       >
@@ -111,7 +111,7 @@
       <div
         v-show="!desktop.state.value.wins.terminal?.min"
         ref="termEl"
-        class="win relative z-10 mx-auto mt-8 max-w-lg lg:absolute lg:right-40 lg:top-64 lg:mx-0 lg:mt-0 lg:w-[440px] lg:max-w-none"
+        class="win relative z-10 mx-auto mt-8 max-w-lg lg:absolute lg:right-36 lg:top-60 lg:mx-0 lg:mt-0 lg:w-[440px] lg:max-w-none xl:right-[12%]"
         :style="{ zIndex: desktop.state.value.wins.terminal?.z ?? 10 }"
         @pointerdown="desktop.focus('terminal')"
       >
