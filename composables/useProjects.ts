@@ -5,6 +5,7 @@ export interface PortfolioProject {
   domain: string
   repoHint: string
   image: string
+  icon: string
   letter: string
   colorTop: string
   colorBottom: string
@@ -17,12 +18,28 @@ export interface PortfolioProject {
 export function useProjects(): PortfolioProject[] {
   return [
     {
+      key: 'tailtcg',
+      name: 'TailTCG',
+      url: 'https://tailtcg.vercel.app',
+      domain: 'tailtcg.vercel.app',
+      repoHint: 'tailtcg',
+      image: '/assets/projects/tailtcg-og.png',
+      icon: '/assets/projects/tailtcg-icon.png',
+      letter: 'T',
+      colorTop: '#F87171',
+      colorBottom: '#DC2626',
+      categoryKey: 'macos.catGames',
+      year: '2025',
+      stack: 'Next.js · TypeScript',
+    },
+    {
       key: 'mosaic',
       name: 'Mosaic',
       url: 'https://mosaic.antoinegourgue.dev/',
       domain: 'mosaic.antoinegourgue.dev',
-      repoHint: 'mosaic',
+      repoHint: 'mosa',
       image: '/assets/mosaic.png',
+      icon: '/assets/projects/mosaic-icon.png',
       letter: 'M',
       colorTop: '#34C1F2',
       colorBottom: '#1273DE',
@@ -37,6 +54,7 @@ export function useProjects(): PortfolioProject[] {
       domain: 'sapia.antoinegourgue.dev',
       repoHint: 'sapia',
       image: '/assets/sapia.png',
+      icon: '/assets/projects/sapia-icon.png',
       letter: 'S',
       colorTop: '#3ECF8E',
       colorBottom: '#0E9F6E',
@@ -51,6 +69,7 @@ export function useProjects(): PortfolioProject[] {
       domain: 'design-system-storybook.antoinegourgue.dev',
       repoHint: 'design-system',
       image: '/assets/design-system.png',
+      icon: '/assets/projects/designSystem-icon.png',
       letter: 'D',
       colorTop: '#B37CF5',
       colorBottom: '#7C3AED',
@@ -65,6 +84,7 @@ export function useProjects(): PortfolioProject[] {
       domain: 'aurora-home-documentation.vercel.app',
       repoHint: 'aurora',
       image: '/assets/aurora-home.png',
+      icon: '/assets/projects/aurora-icon.png',
       letter: 'A',
       colorTop: '#FB923C',
       colorBottom: '#EA580C',

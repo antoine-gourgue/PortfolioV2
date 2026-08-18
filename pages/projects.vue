@@ -28,7 +28,9 @@
               @click="selected = project.key"
             >
               <span class="block h-7 w-7 shrink-0">
-                <DesktopMacAppIcon
+                <DesktopProjectIcon
+                  :icon="project.icon"
+                  :name="project.name"
                   :letter="project.letter"
                   :color-top="project.colorTop"
                   :color-bottom="project.colorBottom"
@@ -60,7 +62,9 @@
             <!-- En-tête -->
             <div class="flex items-start gap-5">
               <span class="block h-24 w-24 shrink-0 sm:h-28 sm:w-28">
-                <DesktopMacAppIcon
+                <DesktopProjectIcon
+                  :icon="current.icon"
+                  :name="current.name"
                   :letter="current.letter"
                   :color-top="current.colorTop"
                   :color-bottom="current.colorBottom"

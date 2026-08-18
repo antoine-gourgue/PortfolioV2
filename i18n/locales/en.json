@@ -145,6 +145,9 @@
       },
       "aurora": {
         "description": "Complete technical documentation for the Aurora Home ecosystem—including architecture, installation, APIs, databases, CI/CD, and contribution guides for all projects."
+      },
+      "tailtcg": {
+        "description": "Pokémon card collection tracker: condition, value, photo-based pre-grading, binders and a shareable showcase. Free, ad-free. Built with Next.js and TypeScript."
       }
     },
     "all": "All",
@@ -254,6 +257,7 @@
     "catDesign": "Design system",
     "catDocs": "Documentation",
     "roleFull": "Design & development",
-    "notesCount": "{count} notes"
+    "notesCount": "{count} notes",
+    "catGames": "Games & collecting"
   }
 }

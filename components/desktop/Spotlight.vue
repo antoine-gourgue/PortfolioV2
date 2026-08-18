@@ -47,7 +47,13 @@
                 @mousemove="selected = flat.indexOf(item)"
               >
                 <span class="block h-6 w-6 shrink-0">
+                  <DesktopProjectIcon
+                    v-if="item.icon.img"
+                    :icon="item.icon.img"
+                    :name="item.label"
+                  />
                   <DesktopMacAppIcon
+                    v-else
                     :name="item.icon.name"
                     :letter="item.icon.letter"
                     :color-top="item.icon.top"
@@ -88,12 +94,14 @@ const router = useRouter()
 const query = ref('')
 const selected = ref(0)
 const inputEl = ref<HTMLInputElement | null>(null)
+const portfolioProjects = useProjects()
 
 interface Icon {
   name?: string
   letter?: string
   top?: string
   bottom?: string
+  img?: string
 }
 
 interface Item {
@@ -121,10 +129,14 @@ const items = computed<Item[]>(() => [
   { id: 'about', label: t('nav.about'), icon: { name: 'contacts' }, kind: 'App', group: 'apps', action: () => go('/about') },
   { id: 'blog', label: t('nav.blog'), icon: { name: 'notes' }, kind: 'App', group: 'apps', action: () => go('/blog') },
   { id: 'contact', label: t('nav.contact'), icon: { name: 'mail' }, kind: 'App', group: 'apps', action: () => go('/contact') },
-  { id: 'mosaic', label: 'Mosaic', icon: { letter: 'M', top: '#34C1F2', bottom: '#1273DE' }, kind: 'Web', group: 'projects', action: () => open('https://mosaic.antoinegourgue.dev/') },
-  { id: 'sapia', label: 'Sapia', icon: { letter: 'S', top: '#3ECF8E', bottom: '#0E9F6E' }, kind: 'Web', group: 'projects', action: () => open('https://sapia.antoinegourgue.dev/') },
-  { id: 'ds', label: 'Design System', icon: { letter: 'D', top: '#B37CF5', bottom: '#7C3AED' }, kind: 'Web', group: 'projects', action: () => open('https://design-system-storybook.antoinegourgue.dev/') },
-  { id: 'aurora', label: 'AuroraHome', icon: { letter: 'A', top: '#FB923C', bottom: '#EA580C' }, kind: 'Web', group: 'projects', action: () => open('https://aurora-home-documentation.vercel.app/fr/docs') },
+  ...portfolioProjects.map((p) => ({
+    id: p.key,
+    label: p.name,
+    icon: { img: p.icon, letter: p.letter, top: p.colorTop, bottom: p.colorBottom } as Icon,
+    kind: 'Web',
+    group: 'projects' as const,
+    action: () => open(p.url),
+  })),
   {
     id: 'cv',
     label: t('macos.menuDownloadCv'),

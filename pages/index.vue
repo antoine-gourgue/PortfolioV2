@@ -214,9 +214,11 @@
                   @click="quicklook = project.key"
                 >
                   <span
-                    class="block h-16 w-16 rounded-[18px] p-0 transition-transform duration-300 group-hover:scale-105"
+                    class="block h-16 w-16 transition-transform duration-300 group-hover:scale-105"
                   >
-                    <DesktopMacAppIcon
+                    <DesktopProjectIcon
+                      :icon="project.icon"
+                      :name="project.name"
                       :letter="project.letter"
                       :color-top="project.colorTop"
                       :color-bottom="project.colorBottom"
