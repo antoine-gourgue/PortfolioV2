@@ -10,7 +10,33 @@ export default {
     './app.{js,ts,vue}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        aink: '#1d1d1f',
+        agray: '#86868b',
+        ablue: '#0071e3',
+      },
+      fontFamily: {
+        sans: [
+          '-apple-system',
+          'BlinkMacSystemFont',
+          'SF Pro Display',
+          'SF Pro Text',
+          'Segoe UI',
+          'Roboto',
+          'Helvetica Neue',
+          'Arial',
+          'sans-serif',
+        ],
+        mono: [
+          'SF Mono',
+          'ui-monospace',
+          'Menlo',
+          'Monaco',
+          'monospace',
+        ],
+      },
+    },
   },
   plugins: [],
 }

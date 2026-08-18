@@ -1,104 +1,5 @@
 <template>
-  <nav
-    class="hidden lg:flex fixed top-6 left-1/2 transform -translate-x-1/2 z-50 bg-white bg-opacity-80 backdrop-blur-md text-black rounded-full px-6 py-3 items-center space-x-9 border border-gray-200 shadow-md"
-  >
-    <div class="flex items-center space-x-4">
-      <NuxtLink :to="localePath('/')" class="nav-link" :class="isActive('/')">{{
-        $t('nav.home')
-      }}</NuxtLink>
-      <NuxtLink
-        :to="localePath('/about')"
-        class="nav-link"
-        :class="isActive('/about')"
-        >{{ $t('nav.about') }}</NuxtLink
-      >
-      <NuxtLink
-        :to="localePath('/blog')"
-        class="nav-link"
-        :class="isActive('/blog')"
-        >{{ $t('nav.blog') }}</NuxtLink
-      >
-    </div>
-
-    <NuxtLink :to="localePath('/')">
-      <div
-        class="relative flex items-center group cursor-pointer"
-        @mouseenter="hovered = true"
-        @mouseleave="hovered = false"
-      >
-        <AgLogo
-          class="w-12 h-10 transition-transform duration-300 ease-in-out"
-          :class="{ '-translate-x-8': hovered }"
-        />
-        <transition name="fade-slide">
-          <div
-            v-if="hovered"
-            class="absolute left-0 ml-2 flex flex-col text-gray-700 text-xs font-light whitespace-nowrap transition-all duration-300 ease-in-out"
-          >
-            <span>Made by</span>
-            <span class="font-semibold">Antoine</span>
-          </div>
-        </transition>
-      </div>
-    </NuxtLink>
-
-    <div class="flex items-center space-x-4">
-      <NuxtLink
-        :to="localePath('/projects')"
-        class="nav-link"
-        :class="isActive('/projects')"
-        >{{ $t('nav.projects') }}</NuxtLink
-      >
-      <NuxtLink
-        :to="localePath('/contact')"
-        class="nav-link"
-        :class="isActive('/contact')"
-        >{{ $t('nav.contact') }}</NuxtLink
-      >
-      <div
-        class="relative ml-4 language-dropdown"
-        @mouseenter="showLangDropdown = true"
-        @mouseleave="showLangDropdown = false"
-      >
-        <button
-          class="nav-link flex items-center space-x-1"
-          @click.stop="showLangDropdown = !showLangDropdown"
-        >
-          <span>{{ $t('nav.language') }}</span>
-          <i
-            class="fas fa-chevron-down text-xs transition-transform duration-200"
-            :class="{ 'rotate-180': showLangDropdown }"
-          ></i>
-        </button>
-        <transition name="dropdown">
-          <div
-            v-if="showLangDropdown"
-            class="absolute top-full mt-2 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[120px] z-50"
-            @click.stop
-          >
-            <button
-              v-for="loc in availableLocales"
-              :key="loc.code"
-              class="w-full text-left px-4 py-2 text-sm transition hover:bg-gray-100 flex items-center justify-between"
-              :class="
-                currentLocale === loc.code
-                  ? 'text-black font-medium'
-                  : 'text-gray-600'
-              "
-              @click="selectLanguage(loc.code)"
-            >
-              <span>{{ loc.name }}</span>
-              <i
-                v-if="currentLocale === loc.code"
-                class="fas fa-check text-black"
-              ></i>
-            </button>
-          </div>
-        </transition>
-      </div>
-    </div>
-  </nav>
-
+  <!-- Navigation mobile uniquement — sur desktop, MacMenuBar + MacDock prennent le relais -->
   <nav
     class="lg:hidden fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white bg-opacity-80 backdrop-blur-md shadow-xl rounded-full px-6 py-3 flex justify-between items-center w-[90%] max-w-md border border-gray-200 z-50"
   >
@@ -187,15 +88,12 @@
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from '#imports'
-import AgLogo from '~/components/ui/AGLogo.vue'
 
 const route = useRoute()
 const { locale, locales } = useI18n()
 const localePath = useLocalePath()
 const switchLocalePath = useSwitchLocalePath()
 const router = useRouter()
-const hovered = ref(false)
-const showLangDropdown = ref(false)
 const showLangDropdownMobile = ref(false)
 
 const currentLocale = computed(() => locale.value)
@@ -204,13 +102,7 @@ const availableLocales = computed(() => locales.value)
 const selectLanguage = (code: string) => {
   const path = switchLocalePath(code as 'fr' | 'es' | 'en')
   router.push(path)
-  showLangDropdown.value = false
   showLangDropdownMobile.value = false
-}
-
-const isActive = (path: string) => {
-  const currentPath = route.path.replace(/^\/[a-z]{2}(\/|$)/, '/')
-  return currentPath === path ? 'active-link' : ''
 }
 
 const isActiveMobile = (path: string) => {
@@ -218,61 +110,19 @@ const isActiveMobile = (path: string) => {
   return currentPath === path ? 'text-black scale-95' : 'text-gray-500'
 }
 
-const closeDropdowns = () => {
-  showLangDropdown.value = false
-  showLangDropdownMobile.value = false
-}
-
 onMounted(() => {
   document.addEventListener('click', (e) => {
     const target = e.target as HTMLElement
     if (!target.closest('.language-dropdown')) {
-      closeDropdowns()
+      showLangDropdownMobile.value = false
     }
   })
 })
 </script>
 
 <style scoped>
-.nav-link {
-  @apply relative px-4 py-2 rounded-full text-sm transition duration-300;
-}
-
-.nav-link::after {
-  content: '';
-  @apply absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-black transition-all duration-300;
-}
-
-.nav-link:hover::after,
-.nav-link.active-link::after {
-  @apply w-6;
-}
-
 .bottom-link {
   @apply flex flex-col items-center transition-all duration-300;
-}
-
-.bottom-link.active-link {
-  @apply text-black;
-}
-
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
-}
-
-.fade-slide-enter-from,
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
-.fade-slide-enter-to,
-.fade-slide-leave-from {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .dropdown-enter-active,
