@@ -1,7 +1,12 @@
 <template>
   <main ref="container" class="mx-auto w-full max-w-5xl px-4 pt-16 lg:px-8">
-    <div class="win">
-      <UiMacWindow title="Contacts">
+    <div ref="winEl" class="win">
+      <UiMacWindow
+        title="Contacts"
+        @close="closeToDesktop"
+        @minimize="closeToDesktop"
+        @zoom="toggleZoom"
+      >
         <div class="flex min-h-[62vh]">
           <!-- Liste des contacts -->
           <aside
@@ -208,6 +213,8 @@ const selected = ref('antoine')
 const current = computed(() => entries.find((e) => e.id === selected.value))
 
 const container = ref<HTMLElement | null>(null)
+const winEl = ref<HTMLElement | null>(null)
+const { closeToDesktop, toggleZoom } = usePageWindow(winEl)
 let ctx: gsap.Context | undefined
 
 onMounted(() => {

@@ -39,9 +39,9 @@
         class="dock-icon group"
         @click="restore(id)"
       >
-        <DesktopMacAppIcon :name="id === 'terminal' ? 'terminal' : 'contacts'" />
+        <DesktopMacAppIcon :name="minimizedMeta[id]?.icon ?? 'contacts'" />
         <span class="dock-tip">{{
-          id === 'terminal' ? 'Terminal' : $t('macos.aboutTitle')
+          minimizedMeta[id]?.raw ?? $t(minimizedMeta[id]?.label ?? 'macos.aboutTitle')
         }}</span>
       </button>
     </template>
@@ -67,6 +67,18 @@ const { minimized, restore } = useDesktop()
 
 // Résolution explicite : une chaîne 'NuxtLink' dans <component :is> ne se résout pas
 const NuxtLinkComponent = resolveComponent('NuxtLink')
+
+// Icône et libellé des fenêtres réduites, par identifiant
+const minimizedMeta: Record<
+  string,
+  { icon: string; label?: string; raw?: string }
+> = {
+  about: { icon: 'contacts', label: 'macos.aboutTitle' },
+  terminal: { icon: 'terminal', raw: 'Terminal' },
+  finder: { icon: 'finder', label: 'macos.finderProjects' },
+  notes: { icon: 'notes', label: 'macos.journeyFile' },
+  mail: { icon: 'mail', label: 'macos.mailTitle' },
+}
 
 interface DockApp {
   id: string

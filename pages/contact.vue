@@ -1,7 +1,12 @@
 <template>
   <main ref="container" class="mx-auto w-full max-w-3xl px-4 pt-16 lg:px-8">
-    <div class="win">
-      <UiMacWindow :title="$t('macos.mailTitle')">
+    <div ref="winEl" class="win">
+      <UiMacWindow
+        :title="$t('macos.mailTitle')"
+        @close="closeToDesktop"
+        @minimize="closeToDesktop"
+        @zoom="toggleZoom"
+      >
         <form @submit.prevent="submitForm">
           <!-- Barre d'outils de composition -->
           <div
@@ -194,6 +199,8 @@ const submitForm = async () => {
 }
 
 const container = ref<HTMLElement | null>(null)
+const winEl = ref<HTMLElement | null>(null)
+const { closeToDesktop, toggleZoom } = usePageWindow(winEl)
 let ctx: gsap.Context | undefined
 
 onMounted(() => {

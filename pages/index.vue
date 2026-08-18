@@ -49,7 +49,7 @@
           :active="desktop.state.value.activeWin === 'about'"
           @close="animateMinimize('about')"
           @minimize="animateMinimize('about')"
-          @zoom="animateZoom('about')"
+          @zoom="go('/about')"
         >
           <div class="px-8 pb-8 pt-7 text-center">
             <div
@@ -132,26 +132,28 @@
           >
             <p class="term-line">
               <span class="text-emerald-400">antoine@macbook</span>
-              <span class="text-white/40">~ %</span> whoami
+              <span class="text-white/40">~ %</span> ls ~/projets
             </p>
-            <p class="term-line text-white/75">
-              {{ $t('home.subtitle') }} — Rennes, France
-            </p>
-            <p class="term-line mt-3">
-              <span class="text-emerald-400">antoine@macbook</span>
-              <span class="text-white/40">~ %</span> cat stack.txt
-            </p>
-            <p class="term-line text-white/75">
-              Vue · Nuxt · TypeScript · Node.js · Docker
+            <p class="term-line text-sky-300">
+              tailtcg/&nbsp;&nbsp;mosaic/&nbsp;&nbsp;sapia/&nbsp;&nbsp;design-system/&nbsp;&nbsp;aurora-home/
             </p>
             <p class="term-line mt-3">
               <span class="text-emerald-400">antoine@macbook</span>
-              <span class="text-white/40">~ %</span> status
+              <span class="text-white/40">~ %</span> cat now.txt
+            </p>
+            <p class="term-line text-white/75">
+              {{ $t('macos.terminalNow') }}
+            </p>
+            <p class="term-line mt-3">
+              <span class="text-emerald-400">antoine@macbook</span>
+              <span class="text-white/40">~ %</span> open contact
             </p>
             <p class="term-line">
-              <span class="text-emerald-400">●</span>
-              <span class="text-white/75">
-                {{ $t('macos.terminalStatus') }}</span
+              <span class="text-emerald-400">→</span>
+              <NuxtLink
+                :to="localePath('/contact')"
+                class="text-white/75 underline decoration-white/30 underline-offset-2 hover:text-white"
+                >antoinegourgue.dev/contact</NuxtLink
               >
             </p>
             <p class="term-line mt-3">
@@ -173,9 +175,17 @@
     </section>
 
     <!-- ═══ Projets : fenêtre Finder + Quick Look ═══ -->
-    <section class="mx-auto w-full max-w-5xl px-5 pt-20 lg:px-8">
-      <div data-reveal>
-        <UiMacWindow :title="$t('macos.finderProjects')">
+    <section
+      v-show="!desktop.state.value.wins.finder?.min"
+      class="mx-auto w-full max-w-5xl px-5 pt-20 lg:px-8"
+    >
+      <div ref="finderEl" data-reveal>
+        <UiMacWindow
+          :title="$t('macos.finderProjects')"
+          @close="animateMinimize('finder')"
+          @minimize="animateMinimize('finder')"
+          @zoom="go('/projects')"
+        >
           <div class="flex min-h-[380px]">
             <!-- Sidebar Finder -->
             <aside
@@ -240,9 +250,17 @@
     </section>
 
     <!-- ═══ Parcours (Notes) ═══ -->
-    <section class="mx-auto w-full max-w-3xl px-5 pt-20 lg:px-8">
-      <div data-reveal>
-        <UiMacWindow :title="$t('macos.journeyFile')">
+    <section
+      v-show="!desktop.state.value.wins.notes?.min"
+      class="mx-auto w-full max-w-3xl px-5 pt-20 lg:px-8"
+    >
+      <div ref="notesEl" data-reveal>
+        <UiMacWindow
+          :title="$t('macos.journeyFile')"
+          @close="animateMinimize('notes')"
+          @minimize="animateMinimize('notes')"
+          @zoom="go('/about')"
+        >
           <div class="p-7">
             <h2 class="text-2xl font-bold tracking-tight">
               {{ $t('home.journey') }}
@@ -268,9 +286,17 @@
     </section>
 
     <!-- ═══ Contact (Mail) ═══ -->
-    <section class="mx-auto w-full max-w-2xl px-5 pb-36 pt-20 lg:px-8">
-      <div data-reveal>
-        <UiMacWindow :title="$t('macos.mailTitle')">
+    <section
+      v-show="!desktop.state.value.wins.mail?.min"
+      class="mx-auto w-full max-w-2xl px-5 pb-36 pt-20 lg:px-8"
+    >
+      <div ref="mailEl" data-reveal>
+        <UiMacWindow
+          :title="$t('macos.mailTitle')"
+          @close="animateMinimize('mail')"
+          @minimize="animateMinimize('mail')"
+          @zoom="go('/contact')"
+        >
           <div
             class="flex items-center gap-5 border-b border-black/5 bg-white/60 px-5 py-2.5 text-black/35"
           >
@@ -403,15 +429,27 @@ const container = ref<HTMLElement | null>(null)
 const heroEl = ref<HTMLElement | null>(null)
 const aboutEl = ref<HTMLElement | null>(null)
 const termEl = ref<HTMLElement | null>(null)
+const finderEl = ref<HTMLElement | null>(null)
+const notesEl = ref<HTMLElement | null>(null)
+const mailEl = ref<HTMLElement | null>(null)
 let ctxGsap: gsap.Context | undefined
 
 desktop.register('about')
 desktop.register('terminal')
+desktop.register('finder')
+desktop.register('notes')
+desktop.register('mail')
 
 const winEls: Record<string, Ref<HTMLElement | null>> = {
   about: aboutEl,
   terminal: termEl,
+  finder: finderEl,
+  notes: notesEl,
+  mail: mailEl,
 }
+
+const router = useRouter()
+const go = (path: string) => router.push(localePath(path))
 
 const journey = ['journey2024', 'journey2023']
 
@@ -432,7 +470,6 @@ const downloadCv = () => {
   a.click()
 }
 const openUrl = (url: string) => window.open(url, '_blank')
-const router = useRouter()
 
 const deskIcons = [
   { id: 'cv', label: 'macos.deskCv', icon: 'pdf', action: downloadCv },
@@ -479,6 +516,7 @@ const animateMinimize = (id: string) => {
     onComplete: () => {
       desktop.minimize(id)
       gsap.set(el, { clearProps: 'x,y,scale,opacity,visibility' })
+      useGsap().ScrollTrigger.refresh()
     },
   })
 }
@@ -516,6 +554,7 @@ watch(
             ease: 'power3.out',
             transformOrigin: 'center bottom',
             clearProps: 'x,y,scale,opacity,visibility',
+            onComplete: () => useGsap().ScrollTrigger.refresh(),
           })
         })
       }

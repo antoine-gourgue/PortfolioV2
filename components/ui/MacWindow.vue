@@ -20,38 +20,58 @@
       "
     >
       <div class="group flex items-center gap-2">
+        <!-- Fermer -->
         <button
-          class="flex h-3 w-3 items-center justify-center rounded-full text-[8px] text-black/50 transition-colors"
-          :class="active ? 'bg-[#ff5f57]' : lightOff"
-          :aria-label="'close'"
+          class="light border"
+          :class="
+            active ? 'border-[#E0443E] bg-[#FF5F57]' : lightOff
+          "
+          aria-label="close"
           @click.stop="$emit('close')"
           @pointerdown.stop
         >
-          <span class="opacity-0 transition-opacity group-hover:opacity-100"
-            >×</span
-          >
+          <svg viewBox="0 0 12 12" class="glyph">
+            <path
+              d="M3.6 3.6 L8.4 8.4 M8.4 3.6 L3.6 8.4"
+              stroke="#820005"
+              stroke-width="1.2"
+              stroke-linecap="round"
+            />
+          </svg>
         </button>
+        <!-- Réduire -->
         <button
-          class="flex h-3 w-3 items-center justify-center rounded-full text-[8px] text-black/50 transition-colors"
-          :class="active ? 'bg-[#febc2e]' : lightOff"
-          :aria-label="'minimize'"
+          class="light border"
+          :class="
+            active ? 'border-[#D89E24] bg-[#FEBC2E]' : lightOff
+          "
+          aria-label="minimize"
           @click.stop="$emit('minimize')"
           @pointerdown.stop
         >
-          <span class="opacity-0 transition-opacity group-hover:opacity-100"
-            >−</span
-          >
+          <svg viewBox="0 0 12 12" class="glyph">
+            <path
+              d="M2.8 6 H9.2"
+              stroke="#985712"
+              stroke-width="1.4"
+              stroke-linecap="round"
+            />
+          </svg>
         </button>
+        <!-- Agrandir -->
         <button
-          class="flex h-3 w-3 items-center justify-center rounded-full text-[8px] text-black/50 transition-colors"
-          :class="active ? 'bg-[#28c840]' : lightOff"
-          :aria-label="'zoom'"
+          class="light border"
+          :class="
+            active ? 'border-[#1AAB29] bg-[#28C840]' : lightOff
+          "
+          aria-label="zoom"
           @click.stop="$emit('zoom')"
           @pointerdown.stop
         >
-          <span class="opacity-0 transition-opacity group-hover:opacity-100"
-            >+</span
-          >
+          <svg viewBox="0 0 12 12" class="glyph">
+            <path d="M3 6.4 V3 h3.4 Z" fill="#006500" />
+            <path d="M9 5.6 V9 H5.6 Z" fill="#006500" />
+          </svg>
         </button>
       </div>
       <span
@@ -96,5 +116,14 @@ defineEmits<{
   zoom: []
 }>()
 
-const lightOff = 'bg-black/20 dark-light-off'
+const lightOff = 'border-black/10 bg-[#DBDBDB] dark:bg-[#4a4a4c]'
 </script>
+
+<style scoped>
+.light {
+  @apply flex h-3 w-3 items-center justify-center rounded-full transition-colors;
+}
+.glyph {
+  @apply h-full w-full p-[1px] opacity-0 transition-opacity duration-150 group-hover:opacity-100;
+}
+</style>

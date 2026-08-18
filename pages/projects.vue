@@ -1,7 +1,12 @@
 <template>
   <main ref="container" class="mx-auto w-full max-w-6xl px-4 pt-16 lg:px-8">
-    <div class="win">
-      <UiMacWindow title="App Store">
+    <div ref="winEl" class="win">
+      <UiMacWindow
+        title="App Store"
+        @close="closeToDesktop"
+        @minimize="closeToDesktop"
+        @zoom="toggleZoom"
+      >
         <div class="flex min-h-[70vh]">
           <!-- Sidebar -->
           <aside
@@ -197,6 +202,8 @@ const starsFor = (p: { repoHint: string }) => {
 }
 
 const container = ref<HTMLElement | null>(null)
+const winEl = ref<HTMLElement | null>(null)
+const { closeToDesktop, toggleZoom } = usePageWindow(winEl)
 let ctx: gsap.Context | undefined
 
 onMounted(() => {
