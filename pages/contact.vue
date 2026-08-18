@@ -120,6 +120,7 @@ import AgLogo from '~/components/ui/AGLogo.vue'
 const toast = useToast()
 const { t } = useI18n()
 const { gsap } = useGsap()
+const sfx = useSfx()
 
 const form = ref({
   name: '',
@@ -175,6 +176,7 @@ const submitForm = async () => {
       },
     })
 
+    sfx.send()
     toast.success(t('contact.success'))
 
     form.value.name = ''
@@ -192,6 +194,7 @@ const submitForm = async () => {
       errorObj?.data?.message ||
       errorObj?.statusMessage ||
       t('contact.errors.failed')
+    sfx.error()
     toast.error(t('contact.errors.failed'))
   } finally {
     loading.value = false

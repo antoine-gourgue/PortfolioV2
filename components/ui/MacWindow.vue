@@ -27,7 +27,7 @@
             active ? 'border-[#E0443E] bg-[#FF5F57]' : lightOff
           "
           aria-label="close"
-          @click.stop="$emit('close')"
+          @click.stop="sfx.minimize(), $emit('close')"
           @pointerdown.stop
         >
           <svg viewBox="0 0 12 12" class="glyph">
@@ -46,7 +46,7 @@
             active ? 'border-[#D89E24] bg-[#FEBC2E]' : lightOff
           "
           aria-label="minimize"
-          @click.stop="$emit('minimize')"
+          @click.stop="sfx.minimize(), $emit('minimize')"
           @pointerdown.stop
         >
           <svg viewBox="0 0 12 12" class="glyph">
@@ -65,7 +65,7 @@
             active ? 'border-[#1AAB29] bg-[#28C840]' : lightOff
           "
           aria-label="zoom"
-          @click.stop="$emit('zoom')"
+          @click.stop="sfx.pop(), $emit('zoom')"
           @pointerdown.stop
         >
           <svg viewBox="0 0 12 12" class="glyph">
@@ -122,6 +122,7 @@ defineEmits<{
 }>()
 
 const lightOff = 'border-black/10 bg-[#DBDBDB] dark:bg-[#4a4a4c]'
+const sfx = useSfx()
 </script>
 
 <style scoped>

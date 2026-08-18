@@ -15,7 +15,7 @@
           <button
             class="group flex h-3 w-3 items-center justify-center rounded-full border border-[#E0443E] bg-[#FF5F57]"
             aria-label="close"
-            @click.stop="desktop.closeApp('weather')"
+            @click.stop="sfx.minimize(), desktop.closeApp('weather')"
             @pointerdown.stop
           >
             <svg viewBox="0 0 12 12" class="h-full w-full p-[1px] opacity-0 group-hover:opacity-100">
@@ -120,6 +120,7 @@
 const desktop = useDesktop()
 const { gsap, Draggable } = useGsap()
 const { locale } = useI18n()
+const sfx = useSfx()
 
 const winEl = ref<HTMLElement | null>(null)
 const z = ref(40)
@@ -349,6 +350,7 @@ watch(
       drags = []
       return
     }
+    sfx.pop()
     load()
     nextTick(() => {
       if (!winEl.value) return

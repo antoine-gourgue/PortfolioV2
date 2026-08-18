@@ -801,6 +801,10 @@ const quicklook = ref('')
 const qlProject = computed(() =>
   projects.find((p) => p.key === quicklook.value)
 )
+const sfx = useSfx()
+watch(quicklook, (v) => {
+  if (v) sfx.pop()
+})
 
 // ── Icônes du bureau ──
 const selectedIcon = ref('')

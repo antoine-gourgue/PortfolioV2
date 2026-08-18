@@ -181,10 +181,13 @@ const move = (dir: number) => {
 }
 const run = (item?: Item) => item?.action()
 
+const sfx = useSfx()
+
 watch(
   () => desktop.state.value.spotlightOpen,
   (v) => {
     if (v) {
+      sfx.click()
       query.value = ''
       selected.value = 0
       nextTick(() => inputEl.value?.focus())

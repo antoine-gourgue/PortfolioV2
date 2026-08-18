@@ -22,7 +22,7 @@
             menu.bold ? 'font-bold' : '',
             openMenu === menu.id ? 'rounded bg-white/20' : '',
           ]"
-          @click="openMenu = openMenu === menu.id ? '' : menu.id"
+          @click="sfx.click(), (openMenu = openMenu === menu.id ? '' : menu.id)"
           @mouseenter="openMenu && (openMenu = menu.id)"
         >
           {{ menu.bold ? menu.label : $t(menu.label) }}
@@ -85,6 +85,15 @@
         </transition>
       </div>
 
+      <button
+        class="menu-btn hidden px-1.5 text-[15px] text-white/85 sm:block"
+        :aria-label="desktop.state.value.sfxMuted ? 'unmute' : 'mute'"
+        @click="toggleSfx"
+      >
+        <i class="f7-icons align-middle" style="font-size: inherit">{{
+          desktop.state.value.sfxMuted ? 'speaker_slash_fill' : 'speaker_2_fill'
+        }}</i>
+      </button>
       <span class="hidden px-1.5 text-[16px] text-white/85 sm:block"
         ><DesktopSfIcon name="battery"
       /></span>
@@ -180,8 +189,16 @@ const menus: Array<{
 ]
 
 const openMenu = ref('')
+const sfx = useSfx()
+
+const toggleSfx = () => {
+  desktop.state.value.sfxMuted = !desktop.state.value.sfxMuted
+  localStorage.setItem('ag-sfx-muted', desktop.state.value.sfxMuted ? '1' : '')
+  sfx.click()
+}
 
 const runItem = (item: MenuItem) => {
+  sfx.click()
   item.action()
   openMenu.value = ''
 }
@@ -236,6 +253,7 @@ const onKeydown = (e: KeyboardEvent) => {
 const closeMenus = () => (openMenu.value = '')
 
 onMounted(() => {
+  desktop.state.value.sfxMuted = !!localStorage.getItem('ag-sfx-muted')
   tick()
   timer = setInterval(tick, 1000)
   document.addEventListener('click', closeMenus)

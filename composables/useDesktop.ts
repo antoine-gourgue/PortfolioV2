@@ -11,6 +11,7 @@ interface DesktopState {
   wallpaper: number
   spotlightOpen: boolean
   apps: Record<string, boolean>
+  sfxMuted: boolean
 }
 
 // Fonds d'écran façon macOS : dégradés riches multi-couches (radial + linear)
@@ -33,6 +34,7 @@ export function useDesktop() {
     wallpaper: 0,
     spotlightOpen: false,
     apps: { weather: false, calculator: false },
+    sfxMuted: false,
   }))
 
   const toggleApp = (id: string) => {

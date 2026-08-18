@@ -53,7 +53,7 @@
         :key="id"
         :ref="setItemRef"
         class="dock-icon group"
-        @click="restore(id)"
+        @click="sfx.restore(), restore(id)"
       >
         <DesktopMacAppIcon :name="minimizedMeta[id]?.icon ?? 'contacts'" />
         <span class="dock-tip">{{
@@ -182,7 +182,10 @@ const captureRestPositions = () => {
   })
 }
 
+const sfx = useSfx()
+
 const bounce = (e: Event) => {
+  sfx.click()
   const el = (e.currentTarget as HTMLElement) || null
   if (el) {
     gsap.fromTo(
@@ -194,6 +197,7 @@ const bounce = (e: Event) => {
 }
 
 const wiggleTrash = (e: Event) => {
+  sfx.trash()
   const el = (e.currentTarget as HTMLElement)?.querySelector('.trash')
   if (el)
     gsap.fromTo(

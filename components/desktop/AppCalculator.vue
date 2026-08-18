@@ -13,7 +13,7 @@
           <button
             class="group flex h-3 w-3 items-center justify-center rounded-full border border-[#E0443E] bg-[#FF5F57]"
             aria-label="close"
-            @click.stop="desktop.closeApp('calculator')"
+            @click.stop="sfx.minimize(), desktop.closeApp('calculator')"
             @pointerdown.stop
           >
             <svg viewBox="0 0 12 12" class="h-full w-full p-[1px] opacity-0 group-hover:opacity-100">
@@ -32,7 +32,10 @@
         </div>
 
         <!-- Clavier -->
-        <div class="grid grid-cols-4 gap-px bg-[#2a2a2c] p-px pt-0">
+        <div
+          class="grid grid-cols-4 gap-px bg-[#2a2a2c] p-px pt-0"
+          @click.capture="sfx.key()"
+        >
           <button class="key key-fn" @click="clear">
             {{ display === '0' && !op ? 'AC' : 'C' }}
           </button>
@@ -67,6 +70,7 @@
 <script setup lang="ts">
 const desktop = useDesktop()
 const { gsap, Draggable } = useGsap()
+const sfx = useSfx()
 
 const winEl = ref<HTMLElement | null>(null)
 const z = ref(40)
@@ -155,6 +159,7 @@ watch(
       drags = []
       return
     }
+    sfx.pop()
     nextTick(() => {
       if (!winEl.value) return
       bringToFront()

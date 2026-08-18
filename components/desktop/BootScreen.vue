@@ -55,6 +55,9 @@ onMounted(() => {
     return
   }
 
+  // Carillon de démarrage (joué seulement si le navigateur l'autorise)
+  useSfx().boot()
+
   gsap
     .timeline({
       onComplete: () => {
