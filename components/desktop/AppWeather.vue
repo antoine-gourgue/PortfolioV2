@@ -270,6 +270,20 @@ const load = async () => {
         } catch {
           /* on garde le nom estimé par IP */
         }
+        // Position précise mémorisée pour le widget de l'écran d'accueil
+        try {
+          localStorage.setItem(
+            'ag-geo',
+            JSON.stringify({
+              lat: latitude,
+              lon: longitude,
+              city: city.value,
+              ts: Date.now(),
+            })
+          )
+        } catch {
+          /* stockage indisponible */
+        }
         await fetchForecast(latitude, longitude)
       },
       () => {

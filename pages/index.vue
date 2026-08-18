@@ -975,17 +975,65 @@ onMounted(async () => {
   let lat = 43.4832
   let lon = -1.514
   wxWidget.city = 'Anglet'
+
+  // 1. Position précise mémorisée par l'app Météo (24 h)
+  let located = false
   try {
-    const geo = await $fetch<{ latitude: string; longitude: string; city?: string }>(
-      'https://get.geojs.io/v1/ip/geo.json'
-    )
-    if (geo.latitude && geo.longitude) {
-      lat = parseFloat(geo.latitude)
-      lon = parseFloat(geo.longitude)
-      if (geo.city) wxWidget.city = geo.city
+    const cached = JSON.parse(localStorage.getItem('ag-geo') || 'null')
+    if (cached && Date.now() - cached.ts < 24 * 3600 * 1000) {
+      lat = cached.lat
+      lon = cached.lon
+      wxWidget.city = cached.city
+      located = true
     }
   } catch {
-    /* repli Anglet */
+    /* cache illisible */
+  }
+
+  // 2. Permission déjà accordée ? Position GPS silencieuse (aucun popup)
+  if (!located && 'permissions' in navigator) {
+    try {
+      const perm = await navigator.permissions.query({ name: 'geolocation' })
+      if (perm.state === 'granted') {
+        const pos = await new Promise<GeolocationPosition>((resolve, reject) =>
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            timeout: 6000,
+            maximumAge: 600000,
+          })
+        )
+        lat = pos.coords.latitude
+        lon = pos.coords.longitude
+        located = true
+        try {
+          const rev = await $fetch<{ locality?: string; city?: string }>(
+            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=${locale.value}`
+          )
+          wxWidget.city = rev.locality || rev.city || wxWidget.city
+        } catch {
+          /* nom de ville indisponible */
+        }
+      }
+    } catch {
+      /* API Permissions indisponible */
+    }
+  }
+
+  // 3. Repli : estimation par IP
+  if (!located) {
+    try {
+      const geo = await $fetch<{
+        latitude: string
+        longitude: string
+        city?: string
+      }>('https://get.geojs.io/v1/ip/geo.json')
+      if (geo.latitude && geo.longitude) {
+        lat = parseFloat(geo.latitude)
+        lon = parseFloat(geo.longitude)
+        if (geo.city) wxWidget.city = geo.city
+      }
+    } catch {
+      /* repli Anglet */
+    }
   }
   try {
     const res = await $fetch<{
