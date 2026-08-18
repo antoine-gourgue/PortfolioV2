@@ -321,5 +321,26 @@
     "errDesc": "L'élément demandé n'existe pas sur ce Mac.",
     "errBack": "Retour au bureau",
     "close": "Fermer"
+  },
+  "notesApp": {
+    "foldersTitle": "iCloud",
+    "folderNotes": "Notes",
+    "folderMentions": "Mentions",
+    "pinned": "Épinglées",
+    "searchNotes": "Rechercher",
+    "items": {
+      "colophon": {
+        "title": "Comment ce site est fait",
+        "body": "Ce portfolio est un clone de macOS (et d'iOS sur mobile), codé main de bout en bout — aucun template.\n\nLa base : Nuxt 3, Vue, TypeScript et Tailwind. Les animations sont pilotées par GSAP : fenêtres déplaçables (Draggable), réductions vers le dock, révélations au scroll (ScrollTrigger).\n\nLes apps sont réelles : la Météo interroge open-meteo avec la position du visiteur, la Calculatrice calcule vraiment, Messages fait tourner mon chatbot maison, Spotlight (⌘K) navigue partout, et les stats GitHub de l'App Store sont en direct.\n\nLes bruitages système sont synthétisés en Web Audio (zéro fichier son), les icônes sont dessinées en SVG ou issues de Framework7 Icons (MIT), et l'écran de démarrage est rendu côté serveur pour éviter tout flash.\n\nTrois langues, SEO propre, build vérifié. Le code dit le reste."
+      },
+      "digitaleo": {
+        "title": "Ce que j'apprends chez Digitaleo",
+        "body": "Deux ans et demi d'alternance sur un vrai produit SaaS utilisé quotidiennement, ça forge.\n\nLe plus formateur : l'éditeur d'email. Rendre un email beau dans Outlook, c'est plonger dans le VML et le HTML conditionnel — un monde où les standards modernes n'existent pas. J'y ai livré les blocs dynamiques, le préheader, le sélecteur d'émojis, l'inversion de colonnes sur mobile.\n\nAutre leçon : cohabiter avec du legacy. Réutiliser les composants du Design System Vue.js dans des écrans AngularJS plutôt que tout réécrire, c'est apprendre à créer de la valeur sans casser l'existant.\n\nEt autour du code : GitLab CI/CD, feature flipping, code reviews exigeantes, collaboration quotidienne avec les Product Owners et les designers sur Figma."
+      },
+      "stack": {
+        "title": "Ma stack en 2026",
+        "body": "Front : Vue et Nuxt d'abord — c'est là que je suis le plus productif. TypeScript partout, Tailwind pour aller vite et rester cohérent, GSAP quand il faut que ça bouge bien.\n\nBack : Node.js, du PHP côté Digitaleo, MongoDB et PostgreSQL selon les projets. Prisma et Auth.js sur mes projets Next.js récents (Mosaic, TailTCG).\n\nOutils : Docker, GitLab CI/CD, et Claude Code qui a changé ma façon de travailler — ce portfolio en est la preuve.\n\nEn ce moment : le Master IA & Data à Epitech me pousse vers le machine learning. La suite logique."
+      }
+    }
   }
 }
