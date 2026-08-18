@@ -82,6 +82,7 @@ const { gsap } = useGsap()
 const { minimized, restore, toggleApp, state } = useDesktop()
 
 const utilApps = [
+  { id: 'messages', label: 'macos.messagesTitle', icon: 'messages' },
   { id: 'weather', label: 'macos.weatherTitle', icon: 'weather' },
   { id: 'calculator', label: 'macos.calcTitle', icon: 'calculator' },
 ]

@@ -28,6 +28,7 @@
     <DesktopBootScreen />
     <DesktopAppWeather />
     <DesktopAppCalculator />
+    <DesktopAppMessages />
   </div>
 </template>
 
@@ -39,6 +40,7 @@ import DesktopSpotlight from '~/components/desktop/Spotlight.vue'
 import DesktopBootScreen from '~/components/desktop/BootScreen.vue'
 import DesktopAppWeather from '~/components/desktop/AppWeather.vue'
 import DesktopAppCalculator from '~/components/desktop/AppCalculator.vue'
+import DesktopAppMessages from '~/components/desktop/AppMessages.vue'
 import AgLogo from '~/components/ui/AGLogo.vue'
 
 const desktop = useDesktop()

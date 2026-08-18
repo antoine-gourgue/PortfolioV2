@@ -159,6 +159,20 @@
     />
   </svg>
 
+  <!-- Messages -->
+  <svg v-else-if="name === 'messages'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
+    <defs>
+      <linearGradient :id="`ms-${uid}`" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#6BE36F" /><stop offset="1" stop-color="#18B663" />
+      </linearGradient>
+    </defs>
+    <rect width="100" height="100" rx="22" :fill="`url(#ms-${uid})`" />
+    <path
+      d="M50 22 C31 22 17 34 17 49 C17 58 22 66 30 71 C30 76 27 81 24 84 C31 84 38 81 42 77 C45 77.6 47.5 78 50 78 C69 78 83 66 83 51 C83 35 69 22 50 22 Z"
+      fill="#FFFFFF"
+    />
+  </svg>
+
   <!-- Météo -->
   <svg v-else-if="name === 'weather'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
     <defs>
