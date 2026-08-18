@@ -74,7 +74,7 @@
               <span class="text-[11px] font-medium text-white/80">{{
                 selectedDay === 0 && i === 0 ? $t('macos.wxNow') : h.label
               }}</span>
-              <span class="text-[15px]"><DesktopSfIcon :name="wxIcon(h.code)" /></span>
+              <span class="text-[15px]"><DesktopWxIcon :code="h.code" /></span>
               <span class="text-[14px] font-semibold">{{ Math.round(h.temp) }}°</span>
             </div>
           </div>
@@ -98,7 +98,7 @@
           >
             <span class="w-12 font-medium capitalize">{{ d.label }}</span>
             <span class="w-6 text-center text-[15px]">
-              <DesktopSfIcon :name="wxIcon(d.code)" />
+              <DesktopWxIcon :code="d.code" />
             </span>
             <span class="w-7 text-right font-medium text-white/60">{{ Math.round(d.min) }}°</span>
             <!-- Barre de plage de température (signature macOS) -->
@@ -219,8 +219,9 @@ const header = computed(() => {
 
 const load = async () => {
   if (loaded) return
+  loaded = true
 
-  // 1. Position par IP (repli : Rennes)
+  // 1. Estimation immédiate par IP (repli : Rennes), le temps que le GPS réponde
   let lat = 48.1173
   let lon = -1.6778
   city.value = 'Rennes'
@@ -238,8 +239,38 @@ const load = async () => {
   } catch {
     /* repli silencieux sur Rennes */
   }
+  await fetchForecast(lat, lon)
 
-  // 2. Prévisions open-meteo
+  // 2. Position précise du navigateur (permission demandée à l'ouverture de l'app)
+  if ('geolocation' in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { latitude, longitude } = pos.coords
+        try {
+          const rev = await $fetch<{
+            city?: string
+            locality?: string
+            principalSubdivision?: string
+          }>(
+            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=${locale.value}`
+          )
+          city.value =
+            rev.locality || rev.city || rev.principalSubdivision || city.value
+        } catch {
+          /* on garde le nom estimé par IP */
+        }
+        await fetchForecast(latitude, longitude)
+      },
+      () => {
+        /* refusé : on reste sur l'estimation IP */
+      },
+      { timeout: 8000, maximumAge: 600000 }
+    )
+  }
+}
+
+// Prévisions open-meteo pour une position donnée
+const fetchForecast = async (lat: number, lon: number) => {
   try {
     const res = await $fetch<{
       current: { time: string; temperature_2m: number; weather_code: number }
@@ -274,7 +305,7 @@ const load = async () => {
       max: res.daily.temperature_2m_max[i],
     }))
     days.value[0].label = todayLabel.value
-    loaded = true
+    error.value = false
   } catch {
     error.value = true
   }
@@ -297,17 +328,7 @@ const rangeBar = (d: Day) => {
   }
 }
 
-// Codes météo WMO → icône SF + libellé
-const wxIcon = (code: number) => {
-  if (code === 0) return 'sun_max_fill'
-  if (code <= 2) return 'cloud_sun_fill'
-  if (code === 3) return 'cloud_fill'
-  if (code === 45 || code === 48) return 'cloud_fog_fill'
-  if (code >= 71 && code <= 86 && code !== 80 && code !== 81 && code !== 82)
-    return 'snow'
-  if (code >= 95) return 'cloud_bolt_fill'
-  return 'cloud_rain_fill'
-}
+// Codes météo WMO → libellé
 const wxLabel = (code: number) => {
   if (code === 0) return 'macos.wxClear'
   if (code <= 2) return 'macos.wxPartly'
