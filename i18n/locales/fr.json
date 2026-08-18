@@ -259,6 +259,21 @@
     "roleFull": "Conception & développement",
     "notesCount": "{count} notes",
     "catGames": "Jeux & collection",
-    "terminalNow": "éditeur d'email chez digitaleo · master ia & data à epitech rennes"
+    "terminalNow": "éditeur d'email chez digitaleo · master ia & data à epitech rennes",
+    "finderRecents": "Récents",
+    "finderDesktop": "Bureau",
+    "finderDocs": "Documents",
+    "finderAirdrop": "AirDrop",
+    "finderLocations": "Emplacements",
+    "finderMac": "MacBook d'Antoine",
+    "finderStatus": "{count} éléments · 42,3 Go disponibles",
+    "calTitle": "Calendrier",
+    "calWork": "Travail",
+    "calStudies": "Études",
+    "calTraining": "Formation",
+    "calDay": "Jour",
+    "calWeek": "Semaine",
+    "calMonth": "Mois",
+    "calYear": "Année"
   }
 }

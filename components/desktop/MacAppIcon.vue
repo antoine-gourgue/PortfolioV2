@@ -142,6 +142,39 @@
     />
   </svg>
 
+  <!-- Calendrier -->
+  <svg v-else-if="name === 'calendar'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
+    <defs>
+      <clipPath :id="`cal-${uid}`"><rect width="100" height="100" rx="22" /></clipPath>
+    </defs>
+    <g :clip-path="`url(#cal-${uid})`">
+      <rect width="100" height="100" fill="#FDFDFD" />
+      <rect width="100" height="26" fill="#FF3B30" />
+      <text
+        x="50"
+        y="19"
+        text-anchor="middle"
+        font-size="12"
+        font-weight="600"
+        fill="#fff"
+        font-family="-apple-system, BlinkMacSystemFont, sans-serif"
+      >
+        MAR
+      </text>
+      <text
+        x="50"
+        y="76"
+        text-anchor="middle"
+        font-size="46"
+        font-weight="300"
+        fill="#1d1d1f"
+        font-family="-apple-system, BlinkMacSystemFont, sans-serif"
+      >
+        18
+      </text>
+    </g>
+  </svg>
+
   <!-- Corbeille -->
   <svg v-else-if="name === 'trash'" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
     <defs>

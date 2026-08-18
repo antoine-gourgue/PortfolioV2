@@ -51,6 +51,8 @@
                     v-if="item.icon.img"
                     :icon="item.icon.img"
                     :name="item.label"
+                    :bg="item.icon.bg"
+                    :pad="item.icon.pad"
                   />
                   <DesktopMacAppIcon
                     v-else
@@ -102,6 +104,8 @@ interface Icon {
   top?: string
   bottom?: string
   img?: string
+  bg?: string
+  pad?: boolean
 }
 
 interface Item {
@@ -132,7 +136,7 @@ const items = computed<Item[]>(() => [
   ...portfolioProjects.map((p) => ({
     id: p.key,
     label: p.name,
-    icon: { img: p.icon, letter: p.letter, top: p.colorTop, bottom: p.colorBottom } as Icon,
+    icon: { img: p.icon, bg: p.iconBg, pad: p.iconPad, letter: p.letter, top: p.colorTop, bottom: p.colorBottom } as Icon,
     kind: 'Web',
     group: 'projects' as const,
     action: () => open(p.url),

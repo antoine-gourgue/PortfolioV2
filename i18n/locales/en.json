@@ -259,6 +259,21 @@
     "roleFull": "Design & development",
     "notesCount": "{count} notes",
     "catGames": "Games & collecting",
-    "terminalNow": "email editor at digitaleo · master's in ai & data at epitech rennes"
+    "terminalNow": "email editor at digitaleo · master's in ai & data at epitech rennes",
+    "finderRecents": "Recents",
+    "finderDesktop": "Desktop",
+    "finderDocs": "Documents",
+    "finderAirdrop": "AirDrop",
+    "finderLocations": "Locations",
+    "finderMac": "Antoine's MacBook",
+    "finderStatus": "{count} items · 42.3 GB available",
+    "calTitle": "Calendar",
+    "calWork": "Work",
+    "calStudies": "Studies",
+    "calTraining": "Training",
+    "calDay": "Day",
+    "calWeek": "Week",
+    "calMonth": "Month",
+    "calYear": "Year"
   }
 }

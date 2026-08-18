@@ -75,7 +75,7 @@
         </button>
       </div>
       <span
-        v-if="title"
+        v-if="title && !$slots.toolbar"
         class="pointer-events-none absolute left-1/2 -translate-x-1/2 text-[13px] font-medium"
         :class="[
           dark ? 'text-white/50' : 'text-black/50',
@@ -83,6 +83,11 @@
         ]"
         >{{ title }}</span
       >
+
+      <!-- Barre d'outils intégrée (style Finder/Calendrier) -->
+      <div v-if="$slots.toolbar" class="ml-4 min-w-0 flex-1">
+        <slot name="toolbar" />
+      </div>
     </div>
 
     <!-- Barre d'adresse (mode Safari) -->

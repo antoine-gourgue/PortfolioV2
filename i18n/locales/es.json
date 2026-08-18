@@ -259,6 +259,21 @@
     "roleFull": "Diseño y desarrollo",
     "notesCount": "{count} notas",
     "catGames": "Juegos y colección",
-    "terminalNow": "editor de email en digitaleo · máster en ia & data en epitech rennes"
+    "terminalNow": "editor de email en digitaleo · máster en ia & data en epitech rennes",
+    "finderRecents": "Recientes",
+    "finderDesktop": "Escritorio",
+    "finderDocs": "Documentos",
+    "finderAirdrop": "AirDrop",
+    "finderLocations": "Ubicaciones",
+    "finderMac": "MacBook de Antoine",
+    "finderStatus": "{count} elementos · 42,3 GB disponibles",
+    "calTitle": "Calendario",
+    "calWork": "Trabajo",
+    "calStudies": "Estudios",
+    "calTraining": "Formación",
+    "calDay": "Día",
+    "calWeek": "Semana",
+    "calMonth": "Mes",
+    "calYear": "Año"
   }
 }

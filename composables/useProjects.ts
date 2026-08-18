@@ -6,6 +6,8 @@ export interface PortfolioProject {
   repoHint: string
   image: string
   icon: string
+  iconBg?: string
+  iconPad?: boolean
   letter: string
   colorTop: string
   colorBottom: string
@@ -84,7 +86,9 @@ export function useProjects(): PortfolioProject[] {
       domain: 'aurora-home-documentation.vercel.app',
       repoHint: 'aurora',
       image: '/assets/aurora-home.png',
-      icon: '/assets/projects/aurora-icon.png',
+      icon: '/assets/projects/aurora-logo.png',
+      iconBg: 'linear-gradient(to bottom, #1e293b, #0b1220)',
+      iconPad: true,
       letter: 'A',
       colorTop: '#FB923C',
       colorBottom: '#EA580C',

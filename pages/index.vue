@@ -177,119 +177,227 @@
     >
       <div ref="finderEl" data-reveal>
         <UiMacWindow
-          :title="$t('macos.finderProjects')"
           @close="animateMinimize('finder')"
           @minimize="animateMinimize('finder')"
           @zoom="go('/projects')"
         >
+          <!-- Barre d'outils Finder, intégrée à la barre de titre -->
+          <template #toolbar>
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-2 text-black/45">
+                <i class="fas fa-chevron-left text-[13px]"></i>
+                <i class="fas fa-chevron-right text-[13px] text-black/20"></i>
+              </div>
+              <span class="text-[14px] font-semibold">{{
+                $t('macos.finderProjects')
+              }}</span>
+              <div class="ml-auto flex items-center gap-2.5 text-black/45">
+                <div
+                  class="hidden overflow-hidden rounded-md border border-black/10 sm:flex"
+                >
+                  <span class="bg-black/10 px-2 py-0.5"
+                    ><i class="fas fa-border-all text-[11px]"></i
+                  ></span>
+                  <span class="px-2 py-0.5"
+                    ><i class="fas fa-list text-[11px]"></i
+                  ></span>
+                </div>
+                <i
+                  class="fas fa-arrow-up-from-bracket hidden text-[12px] sm:block"
+                ></i>
+                <i class="fas fa-tag hidden text-[12px] sm:block"></i>
+                <div
+                  class="hidden items-center gap-1.5 rounded-md bg-black/5 px-2.5 py-1 text-[12px] text-black/35 md:flex"
+                >
+                  <i class="fas fa-magnifying-glass text-[10px]"></i>
+                  {{ $t('macos.search') }}
+                </div>
+              </div>
+            </div>
+          </template>
+
           <div class="flex min-h-[380px]">
             <!-- Sidebar Finder -->
             <aside
               class="hidden w-48 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 sm:block"
             >
-              <p
-                class="px-2 pb-1.5 text-[11px] font-semibold text-black/35"
-              >
+              <p class="px-2 pb-1.5 text-[11px] font-semibold text-black/35">
                 {{ $t('macos.finderFavorites') }}
               </p>
-              <div
-                class="flex items-center gap-2 rounded-md bg-ablue/90 px-2 py-1 text-[13px] font-medium text-white"
-              >
-                <i class="fas fa-folder text-[12px]"></i>
-                {{ $t('macos.finderProjects') }}
+              <div class="sidebar-item">
+                <i class="fas fa-wifi text-[12px] text-ablue"></i>
+                {{ $t('macos.finderAirdrop') }}
               </div>
               <div class="sidebar-item">
                 <i class="fas fa-clock text-[12px] text-ablue"></i>
+                {{ $t('macos.finderRecents') }}
+              </div>
+              <div class="sidebar-item">
+                <i class="fas fa-table-cells-large text-[12px] text-ablue"></i>
                 {{ $t('macos.finderApps') }}
               </div>
               <div class="sidebar-item">
-                <i class="fas fa-arrow-down text-[12px] text-ablue"></i>
+                <i class="fas fa-desktop text-[12px] text-ablue"></i>
+                {{ $t('macos.finderDesktop') }}
+              </div>
+              <div class="sidebar-item">
+                <i class="fas fa-file-lines text-[12px] text-ablue"></i>
+                {{ $t('macos.finderDocs') }}
+              </div>
+              <div class="sidebar-item">
+                <i class="fas fa-circle-down text-[12px] text-ablue"></i>
                 {{ $t('macos.finderDownloads') }}
+              </div>
+              <div
+                class="mt-0.5 flex items-center gap-2 rounded-md bg-black/10 px-2 py-1 text-[13px] font-medium text-aink"
+              >
+                <i class="fas fa-folder text-[12px] text-ablue"></i>
+                {{ $t('macos.finderProjects') }}
+              </div>
+
+              <p
+                class="px-2 pb-1.5 pt-4 text-[11px] font-semibold text-black/35"
+              >
+                {{ $t('macos.finderLocations') }}
+              </p>
+              <div class="sidebar-item">
+                <i class="fas fa-laptop text-[12px] text-ablue"></i>
+                {{ $t('macos.finderMac') }}
               </div>
             </aside>
 
-            <!-- Grille de projets -->
-            <div class="flex-1 p-6">
-              <div
-                class="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 lg:grid-cols-4"
-              >
-                <button
-                  v-for="project in projects"
-                  :key="project.key"
-                  class="group flex flex-col items-center gap-2"
-                  @click="quicklook = project.key"
+            <!-- Grille + barre de statut -->
+            <div class="flex min-w-0 flex-1 flex-col">
+              <div class="flex-1 p-6">
+                <div
+                  class="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 lg:grid-cols-4"
                 >
-                  <span
-                    class="block h-16 w-16 transition-transform duration-300 group-hover:scale-105"
+                  <button
+                    v-for="project in projects"
+                    :key="project.key"
+                    class="group flex flex-col items-center gap-2"
+                    @click="quicklook = project.key"
                   >
-                    <DesktopProjectIcon
-                      :icon="project.icon"
-                      :name="project.name"
-                      :letter="project.letter"
-                      :color-top="project.colorTop"
-                      :color-bottom="project.colorBottom"
-                    />
-                  </span>
-                  <span
-                    class="max-w-full truncate rounded px-1.5 text-[12.5px] font-medium text-aink group-hover:bg-ablue group-hover:text-white"
-                    >{{ project.name }}</span
-                  >
-                </button>
+                    <span
+                      class="block h-16 w-16 transition-transform duration-300 group-hover:scale-105"
+                    >
+                      <DesktopProjectIcon
+                        :icon="project.icon"
+                        :name="project.name"
+                        :bg="project.iconBg"
+                        :pad="project.iconPad"
+                        :letter="project.letter"
+                        :color-top="project.colorTop"
+                        :color-bottom="project.colorBottom"
+                      />
+                    </span>
+                    <span
+                      class="max-w-full truncate rounded px-1.5 text-[12.5px] font-medium text-aink group-hover:bg-ablue group-hover:text-white"
+                      >{{ project.name }}</span
+                    >
+                  </button>
+                </div>
+                <p class="mt-8 text-center text-[12px] text-black/35">
+                  {{ $t('macos.projectsSub') }}
+                </p>
               </div>
-              <p class="mt-8 text-center text-[12px] text-black/35">
-                {{ $t('macos.projectsSub') }}
-              </p>
+              <div
+                class="border-t border-black/5 bg-white/60 px-4 py-1.5 text-center text-[11px] text-black/40"
+              >
+                {{ $t('macos.finderStatus', { count: projects.length }) }}
+              </div>
             </div>
           </div>
         </UiMacWindow>
       </div>
     </section>
 
-    <!-- ═══ Parcours (Notes) ═══ -->
+    <!-- ═══ Parcours (Calendrier) ═══ -->
     <section
       v-show="!desktop.state.value.wins.notes?.min"
-      class="mx-auto w-full max-w-3xl px-5 pt-20 lg:px-8"
+      class="mx-auto w-full max-w-4xl px-5 pt-20 lg:px-8"
     >
       <div ref="notesEl" data-reveal>
         <UiMacWindow
-          :title="$t('macos.journeyFile')"
           @close="animateMinimize('notes')"
           @minimize="animateMinimize('notes')"
           @zoom="go('/about')"
         >
-          <div class="p-7">
-            <h2 class="text-2xl font-bold tracking-tight">
-              {{ $t('home.journey') }}
-            </h2>
+          <template #toolbar>
+            <div class="flex items-center gap-3">
+              <span class="text-[14px] font-semibold">{{
+                $t('home.journey')
+              }}</span>
+              <span class="text-[13px] text-black/40">2016 — 2026</span>
+              <div
+                class="ml-auto hidden overflow-hidden rounded-md border border-black/10 text-[12px] sm:flex"
+              >
+                <span class="px-2.5 py-0.5 text-black/45">{{
+                  $t('macos.calDay')
+                }}</span>
+                <span class="px-2.5 py-0.5 text-black/45">{{
+                  $t('macos.calWeek')
+                }}</span>
+                <span class="px-2.5 py-0.5 text-black/45">{{
+                  $t('macos.calMonth')
+                }}</span>
+                <span class="bg-black/10 px-2.5 py-0.5 font-medium">{{
+                  $t('macos.calYear')
+                }}</span>
+              </div>
+            </div>
+          </template>
 
-            <!-- Frise chronologique -->
-            <div class="relative ml-1 mt-7">
-              <span
-                class="absolute bottom-4 left-[15px] top-2 w-px bg-black/10"
-              ></span>
+          <div class="flex min-h-[300px]">
+            <!-- Sidebar des calendriers -->
+            <aside
+              class="hidden w-44 shrink-0 border-r border-black/5 bg-white/40 px-4 py-4 sm:block"
+            >
+              <p class="pb-2 text-[11px] font-semibold text-black/35">
+                {{ $t('macos.calTitle') }}
+              </p>
+              <div
+                v-for="cat in calCategories"
+                :key="cat.labelKey"
+                class="flex items-center gap-2 py-1 text-[13px] text-aink"
+              >
+                <span
+                  class="flex h-3.5 w-3.5 items-center justify-center rounded-[4px] text-[8px] font-bold text-white"
+                  :style="{ background: cat.color }"
+                  >✓</span
+                >
+                {{ $t(cat.labelKey) }}
+              </div>
+            </aside>
+
+            <!-- Événements -->
+            <div class="min-w-0 flex-1 space-y-3 p-5 sm:p-6">
               <div
                 v-for="step in journeySteps"
                 :key="step.id"
-                class="relative flex gap-5 pb-8 last:pb-0"
+                class="relative overflow-hidden rounded-lg px-4 py-3"
+                :style="{ background: step.tint }"
               >
                 <span
-                  class="z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[12px] font-bold text-white shadow-sm ring-2 ring-white"
-                  :style="{ background: step.bg }"
-                  >{{ step.initial }}</span
-                >
-                <div class="min-w-0 pt-0.5">
-                  <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                    <h3 class="font-semibold">{{ $t(step.titleKey) }}</h3>
-                    <span
-                      v-if="step.periodKey"
-                      class="rounded-full bg-black/5 px-2 py-0.5 text-[11px] font-medium text-black/50"
-                      >{{ $t(step.periodKey) }}</span
-                    >
-                  </div>
-                  <p class="mt-1.5 text-sm leading-relaxed text-agray">
-                    {{ $t(step.descKey) }}
-                  </p>
+                  class="absolute bottom-0 left-0 top-0 w-1"
+                  :style="{ background: step.color }"
+                ></span>
+                <div class="flex items-baseline justify-between gap-3">
+                  <h3
+                    class="min-w-0 truncate text-[14px] font-semibold"
+                    :style="{ color: step.colorDark }"
+                  >
+                    {{ $t(step.titleKey) }}
+                  </h3>
+                  <span
+                    class="shrink-0 text-[12px] font-medium"
+                    :style="{ color: step.color }"
+                    >{{ step.periodKey ? $t(step.periodKey) : step.period }}</span
+                  >
                 </div>
+                <p class="mt-1 text-[13px] leading-relaxed text-black/55">
+                  {{ $t(step.descKey) }}
+                </p>
               </div>
             </div>
           </div>
@@ -463,30 +571,42 @@ const winEls: Record<string, Ref<HTMLElement | null>> = {
 const router = useRouter()
 const go = (path: string) => router.push(localePath(path))
 
-// Parcours en frise chronologique (fenêtre Notes)
+// Parcours façon Calendrier : catégories et blocs d'événements colorés
+const calCategories = [
+  { labelKey: 'macos.calWork', color: '#1273DE' },
+  { labelKey: 'macos.calStudies', color: '#0E9F6E' },
+  { labelKey: 'macos.calTraining', color: '#EA580C' },
+]
+
 const journeySteps = [
   {
     id: 'digitaleo',
-    initial: 'D',
-    bg: 'linear-gradient(to bottom, #34C1F2, #1273DE)',
+    color: '#1273DE',
+    colorDark: '#0B4FA0',
+    tint: 'rgba(18, 115, 222, 0.10)',
     titleKey: 'home.journey2024.title',
     periodKey: 'home.journey2024.period',
+    period: '',
     descKey: 'home.journey2024.description',
   },
   {
     id: 'epitech',
-    initial: 'E',
-    bg: 'linear-gradient(to bottom, #3ECF8E, #0E9F6E)',
+    color: '#0E9F6E',
+    colorDark: '#086A49',
+    tint: 'rgba(14, 159, 110, 0.10)',
     titleKey: 'home.journey2023.title',
     periodKey: 'home.journey2023.period',
+    period: '',
     descKey: 'home.journey2023.description',
   },
   {
     id: 'bts',
-    initial: 'B',
-    bg: 'linear-gradient(to bottom, #FB923C, #EA580C)',
+    color: '#EA580C',
+    colorDark: '#9A3908',
+    tint: 'rgba(234, 88, 12, 0.10)',
     titleKey: 'about.education.title',
     periodKey: '',
+    period: '2016 — 2023',
     descKey: 'about.education.description',
   },
 ]

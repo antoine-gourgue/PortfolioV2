@@ -36,6 +36,8 @@
                 <DesktopProjectIcon
                   :icon="project.icon"
                   :name="project.name"
+                  :bg="project.iconBg"
+                  :pad="project.iconPad"
                   :letter="project.letter"
                   :color-top="project.colorTop"
                   :color-bottom="project.colorBottom"
@@ -70,6 +72,8 @@
                 <DesktopProjectIcon
                   :icon="current.icon"
                   :name="current.name"
+                  :bg="current.iconBg"
+                  :pad="current.iconPad"
                   :letter="current.letter"
                   :color-top="current.colorTop"
                   :color-bottom="current.colorBottom"
