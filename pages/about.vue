@@ -155,7 +155,7 @@
               </div>
               <div class="field-row">
                 <dt>{{ $t('macos.location') }}</dt>
-                <dd>Anglet, France</dd>
+                <dd>{{ current.location }}</dd>
               </div>
               <div class="field-row items-start">
                 <dt>{{ $t('macos.note') }}</dt>
@@ -195,6 +195,7 @@ interface ContactEntry {
   initials: string
   avatarBg: string
   logo?: string
+  location: string
   roleKey: string
   periodKey?: string
   noteKey: string
@@ -206,6 +207,7 @@ const entries: ContactEntry[] = [
     name: 'Antoine Gourgue',
     initials: 'AG',
     avatarBg: 'linear-gradient(to bottom, #3b4048, #17181b)',
+    location: 'Anglet, France',
     roleKey: 'about.subtitle',
     noteKey: 'about.description',
   },
@@ -215,6 +217,7 @@ const entries: ContactEntry[] = [
     initials: 'D',
     avatarBg: '#ffffff',
     logo: '/assets/companies/digitaleo.png',
+    location: 'Rennes, France',
     roleKey: 'about.digitaleo.role',
     periodKey: 'home.journey2024.period',
     noteKey: 'about.digitaleo.description',
@@ -225,17 +228,40 @@ const entries: ContactEntry[] = [
     initials: 'E',
     avatarBg: '#ffffff',
     logo: '/assets/companies/epitech.png',
+    location: 'Rennes, France',
     roleKey: 'about.epitech.role',
     periodKey: 'home.journey2023.period',
     noteKey: 'about.epitech.description',
   },
   {
+    id: 'kpme',
+    name: 'KPME-Development',
+    initials: 'K',
+    avatarBg: 'linear-gradient(to bottom, #8B5CF6, #6D28D9)',
+    location: 'Boucau, France',
+    roleKey: 'about.kpme.role',
+    periodKey: 'about.kpme.period',
+    noteKey: 'about.kpme.description',
+  },
+  {
     id: 'education',
-    name: 'BTS SNIR',
-    initials: 'B',
+    name: 'Lycée Saint Joseph',
+    initials: 'SJ',
     avatarBg: 'linear-gradient(to bottom, #FB923C, #EA580C)',
-    roleKey: 'about.education.title',
+    location: 'Hasparren, France',
+    roleKey: 'about.education.role',
+    periodKey: 'about.education.period',
     noteKey: 'about.education.description',
+  },
+  {
+    id: 'bac',
+    name: 'Lycée André Malraux',
+    initials: 'AM',
+    avatarBg: 'linear-gradient(to bottom, #F472B6, #DB2777)',
+    location: 'Biarritz, France',
+    roleKey: 'about.bac.role',
+    periodKey: 'about.bac.period',
+    noteKey: 'about.bac.description',
   },
 ]
 

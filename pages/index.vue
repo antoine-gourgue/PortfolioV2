@@ -70,11 +70,11 @@
               <span class="text-right font-semibold">{{
                 $t('macos.specBackend')
               }}</span>
-              <span class="text-agray">Node.js · PostgreSQL</span>
+              <span class="text-agray">Node.js · PHP · MongoDB</span>
               <span class="text-right font-semibold">{{
                 $t('macos.specTools')
               }}</span>
-              <span class="text-agray">Docker · Git · CI/CD</span>
+              <span class="text-agray">Docker · GitLab CI/CD · Claude Code</span>
               <span class="text-right font-semibold">{{
                 $t('macos.specTraining')
               }}</span>
@@ -739,14 +739,34 @@ const journeySteps = [
     descKey: 'home.journey2023.description',
   },
   {
+    id: 'kpme',
+    color: '#1273DE',
+    colorDark: '#0B4FA0',
+    tint: 'rgba(18, 115, 222, 0.10)',
+    titleKey: 'about.kpme.title',
+    periodKey: 'about.kpme.period',
+    period: '',
+    descKey: 'about.kpme.description',
+  },
+  {
     id: 'bts',
     color: '#EA580C',
     colorDark: '#9A3908',
     tint: 'rgba(234, 88, 12, 0.10)',
     titleKey: 'about.education.title',
-    periodKey: '',
-    period: '2016 — 2023',
+    periodKey: 'about.education.period',
+    period: '',
     descKey: 'about.education.description',
+  },
+  {
+    id: 'bac',
+    color: '#EA580C',
+    colorDark: '#9A3908',
+    tint: 'rgba(234, 88, 12, 0.10)',
+    titleKey: 'about.bac.title',
+    periodKey: 'about.bac.period',
+    period: '',
+    descKey: 'about.bac.description',
   },
 ]
 

@@ -20,9 +20,9 @@
     "technologies": "Technologies I Work With",
     "journey": "My Journey",
     "journey2024": {
-      "title": "Fullstack Developer - Digitaleo",
-      "period": "2024 - 2026",
-      "description": "In charge of developing and maintaining the email editor of the platform, ensuring smooth UX and strong compatibility (Outlook, responsive...)."
+      "title": "Full Stack Developer — Digitaleo",
+      "period": "Jan 2024 — 2026",
+      "description": "Platform email editor (dynamic blocks, Outlook/VML compatibility), Design System, campaign archiving, Direct Marketing statistics."
     },
     "journey2023": {
       "title": "Master's Degree - Epitech Rennes",
@@ -41,8 +41,8 @@
     "journey": "My Journey.",
     "digitaleo": {
       "title": "Digitaleo",
-      "role": "Fullstack Developer Apprentice",
-      "description": "In charge of the email editor (AngularJS, VML Outlook integration), campaign archiving (Vue.js 2 & TypeScript) and legacy PHP backend."
+      "role": "Full Stack Developer (apprenticeship)",
+      "description": "Platform email editor: dynamic blocks, preheader, emoji picker, Outlook compatibility (VML, conditional HTML), mobile column reordering. Campaign and operations archiving, Direct Marketing statistics revamp, sender-domain management, Vue.js Design System integration into the AngularJS legacy. Stack: Vue.js 2 · TypeScript · AngularJS · PHP · GitLab CI/CD."
     },
     "epitech": {
       "title": "Epitech Rennes",
@@ -50,8 +50,10 @@
       "description": "Specializing in AI & Data, focusing on Machine Learning, Data Science, and innovative solutions."
     },
     "education": {
-      "title": "Bac STL / Bac S / BTS SNIR",
-      "description": "Strong foundation in science, networking & IT fundamentals before fully transitioning to software engineering."
+      "title": "Lycée Saint Joseph — Hasparren",
+      "description": "Technical training in digital systems, IT & networks track — the foundations before moving to software engineering.",
+      "role": "BTS SNIR (IT & Networks)",
+      "period": "2021 — 2023"
     },
     "skills": {
       "line1": "Skills.",
@@ -72,7 +74,19 @@
       "line2": "Watches.",
       "line3": "Projects."
     },
-    "interestsDescription": "Outside of coding, I enjoy exploring horology, following football, and working on side projects to sharpen my skills."
+    "interestsDescription": "Outside of coding, I enjoy exploring horology, following football, and working on side projects to sharpen my skills.",
+    "kpme": {
+      "title": "KPME-Development",
+      "role": "Web developer",
+      "period": "May — June 2022",
+      "description": "Website build for KPME-Development in Boucau — first professional development experience."
+    },
+    "bac": {
+      "title": "Lycée André Malraux — Biarritz",
+      "role": "Science & Lab-science baccalaureates",
+      "period": "2016 — 2020",
+      "description": "Scientific high-school diplomas — the scientific groundwork of the journey."
+    }
   },
   "contact": {
     "title": "Let's Connect.",
