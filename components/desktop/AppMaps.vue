@@ -191,6 +191,7 @@ const initMap = async () => {
   await import('leaflet/dist/leaflet.css')
 
   map = L.map(mapEl.value, { zoomControl: false, attributionControl: true })
+  map!.attributionControl.setPrefix(false)
   L.control.zoom({ position: 'bottomright' }).addTo(map)
   L.tileLayer(
     'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
@@ -266,6 +267,18 @@ onUnmounted(() => {
 </script>
 
 <style>
+/* Attribution licence OSM/CARTO : obligatoire mais discrète */
+.leaflet-control-attribution {
+  font-size: 8.5px !important;
+  background: rgba(255, 255, 255, 0.6) !important;
+  color: rgba(0, 0, 0, 0.45) !important;
+  padding: 1px 5px !important;
+  border-radius: 6px 0 0 0;
+}
+.leaflet-control-attribution a {
+  color: rgba(0, 0, 0, 0.45) !important;
+}
+
 /* Épingle façon Plans (globale : injectée par Leaflet hors du composant) */
 .map-pin {
   width: 34px;
