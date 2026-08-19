@@ -107,7 +107,8 @@
         <button
           v-for="icon in deskIcons"
           :key="icon.id"
-          class="group flex w-24 flex-col items-center gap-1.5"
+          class="desk-icon group flex w-24 flex-col items-center gap-1.5"
+          :data-icon-id="icon.id"
           @click.stop="selectedIcon = icon.id"
           @dblclick="icon.action"
         >
@@ -806,6 +807,9 @@
         >
           {{ $t('macos.ctxWallpaper') }}
         </button>
+        <button class="ctx-item" @click="(arrangeIcons(), closeContext())">
+          {{ $t('macos.ctxArrange') }}
+        </button>
         <div class="mx-2.5 my-1 border-t border-black/10"></div>
         <button class="ctx-item" @click="(downloadCv(), closeContext())">
           {{ $t('macos.ctxCv') }}
@@ -1228,6 +1232,12 @@ const deskIcons = [
   },
 ]
 
+// Remet les icônes du bureau à leur place d'origine
+const arrangeIcons = () => {
+  localStorage.removeItem('ag-icon-pos')
+  gsap.to('.desk-icon', { x: 0, y: 0, duration: 0.35, ease: 'power2.out' })
+}
+
 // ── Menu contextuel ──
 const onEsc = (e: KeyboardEvent) => {
   if (e.key === 'Escape') {
@@ -1366,7 +1376,37 @@ onMounted(() => {
         )
         .flat()
 
-      return () => draggables.forEach((d) => d.kill())
+      // ── Icônes du bureau déplaçables, position mémorisée ──
+      let iconPos: Record<string, { x: number; y: number }> = {}
+      try {
+        iconPos = JSON.parse(localStorage.getItem('ag-icon-pos') || '{}')
+      } catch {
+        iconPos = {}
+      }
+      const iconEls = gsap.utils.toArray<HTMLElement>('.desk-icon')
+      iconEls.forEach((el) => {
+        const pos = iconPos[el.dataset.iconId ?? '']
+        if (pos) gsap.set(el, { x: pos.x, y: pos.y })
+      })
+      const iconDrags = iconEls
+        .map((el) =>
+          Draggable.create(el, {
+            bounds: heroEl.value,
+            cursor: 'grab',
+            activeCursor: 'grabbing',
+            zIndexBoost: false,
+            onPress() {
+              selectedIcon.value = el.dataset.iconId ?? ''
+            },
+            onDragEnd() {
+              iconPos[el.dataset.iconId ?? ''] = { x: this.x, y: this.y }
+              localStorage.setItem('ag-icon-pos', JSON.stringify(iconPos))
+            },
+          })
+        )
+        .flat()
+
+      return () => [...draggables, ...iconDrags].forEach((d) => d.kill())
     })
   }, container.value)
 })
