@@ -41,7 +41,7 @@
       <DesktopMacAppIcon :name="app.icon" />
       <span class="dock-tip">{{ $t(app.label) }}</span>
       <span
-        v-if="state.apps[app.id]"
+        v-if="state.apps[app.id] || (app.id === 'music' && musicPlaying)"
         class="absolute -bottom-[7px] left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-white/80"
       ></span>
     </button>
@@ -83,10 +83,13 @@ const route = useRoute()
 const { gsap } = useGsap()
 const { minimized, restore, toggleApp, state } = useDesktop()
 
+const musicPlaying = computed(() => useMusic().state.value.playing)
+
 const utilApps = [
   { id: 'messages', label: 'macos.messagesTitle', icon: 'messages' },
   { id: 'weather', label: 'macos.weatherTitle', icon: 'weather' },
   { id: 'calculator', label: 'macos.calcTitle', icon: 'calculator' },
+  { id: 'music', label: 'macos.musicTitle', icon: 'music' },
 ]
 
 // Résolution explicite : une chaîne 'NuxtLink' dans <component :is> ne se résout pas

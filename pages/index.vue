@@ -1125,6 +1125,12 @@ const springboard: SpringboardApp[] = [
     action: () => (desktop.state.value.apps.calculator = true),
   },
   {
+    id: 'music',
+    icon: 'music',
+    label: 'macos.musicTitle',
+    action: () => (desktop.state.value.apps.music = true),
+  },
+  {
     id: 'github',
     icon: 'github',
     raw: 'GitHub',
@@ -1237,6 +1243,12 @@ const deskIcons = [
     label: 'macos.calcTitle',
     icon: 'calculator',
     action: () => (desktop.state.value.apps.calculator = true),
+  },
+  {
+    id: 'music',
+    label: 'macos.musicTitle',
+    icon: 'music',
+    action: () => (desktop.state.value.apps.music = true),
   },
 ]
 

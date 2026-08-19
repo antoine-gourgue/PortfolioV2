@@ -29,6 +29,7 @@
     <DesktopAppWeather />
     <DesktopAppCalculator />
     <DesktopAppMessages />
+    <DesktopAppMusic />
     <DesktopNotificationBanner />
   </div>
 </template>
@@ -42,6 +43,7 @@ import DesktopBootScreen from '~/components/desktop/BootScreen.vue'
 import DesktopAppWeather from '~/components/desktop/AppWeather.vue'
 import DesktopAppCalculator from '~/components/desktop/AppCalculator.vue'
 import DesktopAppMessages from '~/components/desktop/AppMessages.vue'
+import DesktopAppMusic from '~/components/desktop/AppMusic.vue'
 import DesktopNotificationBanner from '~/components/desktop/NotificationBanner.vue'
 import AgLogo from '~/components/ui/AGLogo.vue'
 

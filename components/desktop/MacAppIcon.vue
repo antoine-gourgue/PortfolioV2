@@ -292,6 +292,25 @@
     />
   </svg>
 
+  <!-- Musique -->
+  <svg
+    v-else-if="name === 'music'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
+    <defs>
+      <linearGradient :id="`mu-${uid}`" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#FB5C74" />
+        <stop offset="1" stop-color="#FA233B" />
+      </linearGradient>
+    </defs>
+    <rect width="100" height="100" rx="22" :fill="`url(#mu-${uid})`" />
+    <path
+      d="M68 22 L40 28 q-3 .8 -3 4 v28.5 a10 10 0 1 0 4 8 V40 l24 -5.2 v17.7 a10 10 0 1 0 4 8 V26 q0 -4.8 -1 -4 z"
+      fill="#FFFFFF"
+    />
+  </svg>
+
   <!-- Météo -->
   <svg
     v-else-if="name === 'weather'"

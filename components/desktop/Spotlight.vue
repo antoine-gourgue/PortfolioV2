@@ -201,6 +201,17 @@ const items = computed<Item[]>(() => [
       close()
     },
   },
+  {
+    id: 'music',
+    label: t('macos.musicTitle'),
+    icon: { name: 'music' },
+    kind: 'App',
+    group: 'apps',
+    action: () => {
+      desktop.state.value.apps.music = true
+      close()
+    },
+  },
   ...portfolioProjects.map((p) => ({
     id: p.key,
     label: p.name,

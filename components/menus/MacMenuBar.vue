@@ -108,6 +108,132 @@
         </transition>
       </div>
 
+      <!-- Musique : contrôles de lecture dans la barre de menu -->
+      <div class="relative hidden sm:block">
+        <button
+          class="menu-btn flex items-center rounded px-2 py-1 text-white/85"
+          :class="openMenu === 'music' ? 'bg-white/20' : ''"
+          aria-label="music controls"
+          @click.stop="
+            (sfx.click(), (openMenu = openMenu === 'music' ? '' : 'music'))
+          "
+        >
+          <span
+            v-if="musicPlaying"
+            class="menu-eq flex h-3 items-end gap-[2px]"
+          >
+            <i></i><i></i><i></i>
+          </span>
+          <i v-else class="f7-icons align-middle" style="font-size: 14px"
+            >music_note_2</i
+          >
+        </button>
+        <transition name="menu-pop">
+          <div
+            v-if="openMenu === 'music'"
+            class="absolute right-0 top-full mt-1.5 w-[250px] rounded-lg border border-black/10 bg-white/85 p-3 shadow-2xl backdrop-blur-2xl"
+            @click.stop
+          >
+            <div class="flex items-center gap-2.5">
+              <img
+                :src="musicTrack.cover"
+                :alt="musicTrack.title"
+                class="h-10 w-10 rounded-md shadow"
+              />
+              <div class="min-w-0 flex-1">
+                <p class="truncate text-[13px] font-semibold text-aink">
+                  {{ musicTrack.title }}
+                </p>
+                <p class="truncate text-[11px] text-aink/60">
+                  {{ musicTrack.artist }}
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="mt-2.5 flex items-center justify-center gap-7 text-aink"
+            >
+              <button
+                class="transition hover:opacity-70 active:scale-90"
+                aria-label="previous"
+                @click="music.prev()"
+              >
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor">
+                  <path d="M6 5h2v14H6zM20 5v14L9.5 12z" />
+                </svg>
+              </button>
+              <button
+                class="transition hover:opacity-70 active:scale-90"
+                aria-label="play-pause"
+                @click="music.toggle()"
+              >
+                <svg
+                  v-if="!musicPlaying"
+                  viewBox="0 0 24 24"
+                  class="h-7 w-7"
+                  fill="currentColor"
+                >
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                <svg
+                  v-else
+                  viewBox="0 0 24 24"
+                  class="h-7 w-7"
+                  fill="currentColor"
+                >
+                  <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" />
+                </svg>
+              </button>
+              <button
+                class="transition hover:opacity-70 active:scale-90"
+                aria-label="next"
+                @click="music.next()"
+              >
+                <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor">
+                  <path d="M16 5h2v14h-2zM4 5v14l10.5-7z" />
+                </svg>
+              </button>
+            </div>
+
+            <div class="mt-2.5 flex items-center gap-2 text-aink/50">
+              <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="currentColor">
+                <path d="M4 9v6h4l5 4V5L8 9z" />
+              </svg>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                :value="music.state.value.volume"
+                class="menu-vol flex-1"
+                @input="
+                  music.setVolume(
+                    parseFloat(($event.target as HTMLInputElement).value)
+                  )
+                "
+              />
+              <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="currentColor">
+                <path d="M4 9v6h4l5 4V5L8 9z" />
+                <path
+                  d="M16 8a5 5 0 0 1 0 8M18.5 5.5a9 9 0 0 1 0 13"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  fill="none"
+                />
+              </svg>
+            </div>
+
+            <button
+              class="mt-2 flex w-full items-center justify-center gap-1.5 rounded-md py-1 text-[12px] font-medium text-aink transition-colors hover:bg-ablue hover:text-white"
+              @click="
+                ((desktop.state.value.apps.music = true), (openMenu = ''))
+              "
+            >
+              {{ $t('macos.musicOpen') }}
+            </button>
+          </div>
+        </transition>
+      </div>
       <button
         class="menu-btn hidden px-1.5 text-[15px] text-white/85 sm:block"
         :aria-label="desktop.state.value.sfxMuted ? 'unmute' : 'mute'"
@@ -145,6 +271,9 @@ const { locale, locales } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
 const router = useRouter()
 const desktop = useDesktop()
+const music = useMusic()
+const musicPlaying = computed(() => music.state.value.playing)
+const musicTrack = music.track
 
 interface MenuItem {
   label: string
@@ -330,5 +459,56 @@ onUnmounted(() => {
 .menu-pop-leave-to {
   opacity: 0;
   transform: translateY(-4px) scale(0.98);
+}
+
+.menu-vol {
+  height: 4px;
+  cursor: pointer;
+  appearance: none;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.18);
+}
+.menu-vol::-webkit-slider-thumb {
+  appearance: none;
+  height: 12px;
+  width: 12px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+.menu-vol::-moz-range-thumb {
+  height: 12px;
+  width: 12px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.menu-eq i {
+  width: 2.5px;
+  border-radius: 1px;
+  background: #ffffffd9;
+  animation: menu-eq-bounce 0.9s ease-in-out infinite;
+}
+.menu-eq i:nth-child(1) {
+  height: 55%;
+  animation-delay: -0.3s;
+}
+.menu-eq i:nth-child(2) {
+  height: 100%;
+}
+.menu-eq i:nth-child(3) {
+  height: 40%;
+  animation-delay: -0.6s;
+}
+@keyframes menu-eq-bounce {
+  0%,
+  100% {
+    transform: scaleY(0.4);
+  }
+  50% {
+    transform: scaleY(1);
+  }
 }
 </style>

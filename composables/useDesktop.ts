@@ -33,7 +33,7 @@ export function useDesktop() {
     activeWin: '',
     wallpaper: 0,
     spotlightOpen: false,
-    apps: { weather: false, calculator: false, messages: false },
+    apps: { weather: false, calculator: false, messages: false, music: false },
     sfxMuted: false,
   }))
 
