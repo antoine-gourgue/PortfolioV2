@@ -163,6 +163,9 @@
       "tailtcg": {
         "description": "Seguimiento de colecciones de cartas Pokémon: estado, valor, pre-gradación sobre fotos, archivadores y vitrina compartible. Gratis y sin anuncios. Hecho con Next.js y TypeScript."
       },
+      "thor": {
+        "description": "THOR (Travel Order Resolver): di « Quiero ir de París a Lyon » por voz o texto — el sistema lo transcribe (Speech-to-Text), extrae origen y destino (NLP spaCy) y calcula la mejor ruta ferroviaria sobre datos SNCF con mapa interactivo. Proyecto Epitech — front Next.js, API Flask, pipeline Python, desplegado con Docker en mi VPS con CI/CD."
+      },
       "trinity": {
         "description": "Supermercado online completo hecho en Epitech: catálogo de productos reales con Nutri-Score, búsqueda por secciones, carrito, pedidos y facturas PDF, back office de administración con estadísticas, PWA instalable (con app Android) y pago simulado. Next.js 15, Prisma y PostgreSQL."
       },
@@ -327,6 +330,7 @@
     "catSaas": "Marketing SaaS",
     "catChat": "Mensajería",
     "catJobs": "Empleo",
+    "catNlp": "IA y viajes",
     "catShop": "E-commerce",
     "messagesTitle": "Messages",
     "errTitle": "Archivo no encontrado",
