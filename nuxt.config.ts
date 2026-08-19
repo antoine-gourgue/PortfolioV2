@@ -94,6 +94,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     githubToken: process.env.VITE_GITHUB_TOKEN,
+    groqApiKey: process.env.GROQ_API_KEY,
   },
   ssr: true,
 })

@@ -292,6 +292,42 @@
     />
   </svg>
 
+  <!-- Siri -->
+  <svg
+    v-else-if="name === 'siri'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
+    <defs>
+      <linearGradient :id="`si-${uid}`" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#2C2C2E" />
+        <stop offset="1" stop-color="#111113" />
+      </linearGradient>
+      <radialGradient :id="`sia-${uid}`" cx="0.32" cy="0.3" r="0.75">
+        <stop offset="0" stop-color="#5AC8FA" />
+        <stop offset="1" stop-color="#5AC8FA" stop-opacity="0" />
+      </radialGradient>
+      <radialGradient :id="`sib-${uid}`" cx="0.7" cy="0.4" r="0.75">
+        <stop offset="0" stop-color="#BF5AF2" />
+        <stop offset="1" stop-color="#BF5AF2" stop-opacity="0" />
+      </radialGradient>
+      <radialGradient :id="`sic-${uid}`" cx="0.5" cy="0.78" r="0.7">
+        <stop offset="0" stop-color="#FF375F" />
+        <stop offset="1" stop-color="#FF375F" stop-opacity="0" />
+      </radialGradient>
+      <radialGradient :id="`sid-${uid}`" cx="0.5" cy="0.5" r="0.6">
+        <stop offset="0" stop-color="#0A84FF" />
+        <stop offset="1" stop-color="#1C1C6E" />
+      </radialGradient>
+    </defs>
+    <rect width="100" height="100" rx="22" :fill="`url(#si-${uid})`" />
+    <circle cx="50" cy="50" r="31" :fill="`url(#sid-${uid})`" />
+    <circle cx="50" cy="50" r="31" :fill="`url(#sia-${uid})`" />
+    <circle cx="50" cy="50" r="31" :fill="`url(#sib-${uid})`" />
+    <circle cx="50" cy="50" r="31" :fill="`url(#sic-${uid})`" />
+    <ellipse cx="42" cy="38" rx="14" ry="10" fill="#FFFFFF" opacity="0.35" />
+  </svg>
+
   <!-- Plans -->
   <svg
     v-else-if="name === 'maps'"

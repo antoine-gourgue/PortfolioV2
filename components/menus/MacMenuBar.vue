@@ -316,6 +316,18 @@
       >
         <DesktopSfIcon name="search" />
       </button>
+      <!-- Siri -->
+      <button
+        class="menu-btn hidden h-full items-center px-2 lg:flex"
+        aria-label="Siri"
+        @click.stop="
+          desktop.state.value.apps.siri = !desktop.state.value.apps.siri
+        "
+      >
+        <span class="block h-[15px] w-[15px]">
+          <DesktopMacAppIcon name="siri" />
+        </span>
+      </button>
       <button
         class="menu-btn hidden h-full items-center rounded px-2 tabular-nums text-white/90 lg:flex"
         :class="desktop.state.value.notifOpen ? 'bg-white/20' : ''"

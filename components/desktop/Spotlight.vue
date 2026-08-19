@@ -224,6 +224,17 @@ const items = computed<Item[]>(() => [
     },
   },
   {
+    id: 'siri',
+    label: 'Siri',
+    icon: { name: 'siri' },
+    kind: 'App',
+    group: 'apps',
+    action: () => {
+      desktop.state.value.apps.siri = true
+      close()
+    },
+  },
+  {
     id: 'maps',
     label: t('macos.mapsTitle'),
     icon: { name: 'maps' },

@@ -45,6 +45,7 @@ export function useDesktop() {
       trash: false,
       airdrop: false,
       maps: false,
+      siri: false,
     },
     wallpaperAuto: true,
     notifOpen: false,

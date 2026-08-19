@@ -98,6 +98,7 @@ const COMMANDS = [
   'neofetch',
   'lock',
   'airdrop',
+  'siri',
   'settings',
   'date',
   'echo',
@@ -209,6 +210,9 @@ const execute = (raw: string) => {
       return printOut("→ fond d'écran suivant 🎨")
     case 'neofetch':
       return neofetch()
+    case 'siri':
+      desktop.state.value.apps.siri = true
+      return printOut('→ Siri vous écoute 🎙️')
     case 'airdrop':
       desktop.state.value.apps.airdrop = true
       return printOut('→ AirDrop : réception en cours… 📡')

@@ -1117,6 +1117,12 @@ const springboard: SpringboardApp[] = [
     action: () => (desktop.state.value.apps.maps = true),
   },
   {
+    id: 'siri',
+    icon: 'siri',
+    raw: 'Siri',
+    action: () => (desktop.state.value.apps.siri = true),
+  },
+  {
     id: 'github',
     icon: 'github',
     raw: 'GitHub',

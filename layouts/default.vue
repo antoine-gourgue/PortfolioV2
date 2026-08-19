@@ -35,6 +35,7 @@
     <DesktopAirDropModal />
     <DesktopNotificationCenter />
     <DesktopAppMaps />
+    <DesktopAppSiri />
     <DesktopLockScreen />
     <DesktopNotificationBanner />
   </div>
@@ -55,6 +56,7 @@ import DesktopAppTrash from '~/components/desktop/AppTrash.vue'
 import DesktopAirDropModal from '~/components/desktop/AirDropModal.vue'
 import DesktopNotificationCenter from '~/components/desktop/NotificationCenter.vue'
 import DesktopAppMaps from '~/components/desktop/AppMaps.vue'
+import DesktopAppSiri from '~/components/desktop/AppSiri.vue'
 import DesktopLockScreen from '~/components/desktop/LockScreen.vue'
 import DesktopNotificationBanner from '~/components/desktop/NotificationBanner.vue'
 import AgLogo from '~/components/ui/AGLogo.vue'
