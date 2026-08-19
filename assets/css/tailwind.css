@@ -9,4 +9,14 @@
     outline-offset: 2px;
     border-radius: 4px;
   }
+
+  /* iOS Safari zoome au focus si la font-size d'un champ est < 16px :
+     on impose le minimum recommandé sur mobile uniquement */
+  @media (max-width: 1023px) {
+    input,
+    select,
+    textarea {
+      font-size: 16px !important;
+    }
+  }
 }
