@@ -218,43 +218,7 @@
           @minimize="animateMinimize('terminal')"
           @zoom="animateZoom('terminal')"
         >
-          <div
-            class="p-5 font-mono text-[12.5px] leading-relaxed text-white/90"
-          >
-            <p class="term-line">
-              <span class="text-emerald-400">antoine@macbook</span>
-              <span class="text-white/40">~ %</span> ls ~/projets
-            </p>
-            <p class="term-line text-sky-300">
-              tailtcg/&nbsp;&nbsp;mosaic/&nbsp;&nbsp;sapia/&nbsp;&nbsp;design-system/&nbsp;&nbsp;aurora-home/
-            </p>
-            <p class="term-line mt-3">
-              <span class="text-emerald-400">antoine@macbook</span>
-              <span class="text-white/40">~ %</span> cat now.txt
-            </p>
-            <p class="term-line text-white/75">
-              {{ $t('macos.terminalNow') }}
-            </p>
-            <p class="term-line mt-3">
-              <span class="text-emerald-400">antoine@macbook</span>
-              <span class="text-white/40">~ %</span> open contact
-            </p>
-            <p class="term-line">
-              <span class="text-emerald-400">→</span>
-              <NuxtLink
-                :to="localePath('/contact')"
-                class="text-white/75 underline decoration-white/30 underline-offset-2 hover:text-white"
-                >antoinegourgue.dev/contact</NuxtLink
-              >
-            </p>
-            <p class="term-line mt-3">
-              <span class="text-emerald-400">antoine@macbook</span>
-              <span class="text-white/40">~ %</span>
-              <span
-                class="caret ml-1 inline-block h-[1em] w-[8px] translate-y-[2px] bg-white/80"
-              ></span>
-            </p>
-          </div>
+          <DesktopTerminalShell @exit="animateMinimize('terminal')" />
         </UiMacWindow>
       </div>
 
