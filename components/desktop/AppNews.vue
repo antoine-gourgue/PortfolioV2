@@ -76,11 +76,6 @@
           >
             Tech
           </button>
-          <span
-            v-if="items.length"
-            class="ml-auto text-[10.5px] text-black/35"
-            >{{ $t('macos.newsUpdated') }}</span
-          >
         </div>
 
         <!-- Articles -->
