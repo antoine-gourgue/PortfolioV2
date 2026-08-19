@@ -3,7 +3,7 @@
     <!-- Fond d'écran macOS partagé par toutes les pages -->
     <div
       class="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
-      :style="{ backgroundImage: WALLPAPERS[desktop.state.value.wallpaper] }"
+      :style="{ backgroundImage: wallpaper.style.value }"
     >
       <div
         class="absolute -left-[10%] top-[-15%] h-[36rem] w-[36rem] rounded-full bg-white/10 blur-[130px]"
@@ -32,6 +32,9 @@
     <DesktopAppMusic />
     <DesktopAppSettings />
     <DesktopAppTrash />
+    <DesktopAirDropModal />
+    <DesktopNotificationCenter />
+    <DesktopAppMaps />
     <DesktopLockScreen />
     <DesktopNotificationBanner />
   </div>
@@ -49,9 +52,20 @@ import DesktopAppMessages from '~/components/desktop/AppMessages.vue'
 import DesktopAppMusic from '~/components/desktop/AppMusic.vue'
 import DesktopAppSettings from '~/components/desktop/AppSettings.vue'
 import DesktopAppTrash from '~/components/desktop/AppTrash.vue'
+import DesktopAirDropModal from '~/components/desktop/AirDropModal.vue'
+import DesktopNotificationCenter from '~/components/desktop/NotificationCenter.vue'
+import DesktopAppMaps from '~/components/desktop/AppMaps.vue'
 import DesktopLockScreen from '~/components/desktop/LockScreen.vue'
 import DesktopNotificationBanner from '~/components/desktop/NotificationBanner.vue'
 import AgLogo from '~/components/ui/AGLogo.vue'
 
-const desktop = useDesktop()
+const wallpaper = useWallpaper()
+
+let wallpaperTimer = null
+onMounted(() => {
+  wallpaperTimer = setInterval(() => wallpaper.refresh(), 60_000)
+})
+onUnmounted(() => {
+  if (wallpaperTimer) clearInterval(wallpaperTimer)
+})
 </script>

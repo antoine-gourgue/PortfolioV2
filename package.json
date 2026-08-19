@@ -31,6 +31,7 @@
     "dompurify": "^3.2.4",
     "framework7-icons": "^5.0.5",
     "gsap": "^3.15.0",
+    "leaflet": "^1.9.4",
     "nodemailer": "^6.10.0",
     "nuxt": "^3.16.1",
     "vue": "^3.5.13",

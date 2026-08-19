@@ -143,10 +143,31 @@
                   </p>
                   <div class="mt-3 grid grid-cols-2 gap-3">
                     <button
+                      class="relative flex aspect-video items-center justify-center overflow-hidden rounded-lg shadow-sm transition"
+                      :class="
+                        desktop.state.value.wallpaperAuto
+                          ? 'ring-2 ring-[#0A84FF] ring-offset-2 ring-offset-[#f2f2f7]'
+                          : 'opacity-85 hover:opacity-100'
+                      "
+                      :style="{ backgroundImage: wallpaper.style.value }"
+                      aria-label="wallpaper auto"
+                      @click="
+                        (sfx.click(),
+                        (desktop.state.value.wallpaperAuto = true))
+                      "
+                    >
+                      <span
+                        class="rounded-full bg-black/35 px-2 py-0.5 text-[11px] font-semibold text-white backdrop-blur"
+                      >
+                        {{ $t('macos.settingsWallpaperAuto') }}
+                      </span>
+                    </button>
+                    <button
                       v-for="(wp, i) in WALLPAPERS"
                       :key="i"
                       class="aspect-video rounded-lg shadow-sm transition"
                       :class="
+                        !desktop.state.value.wallpaperAuto &&
                         desktop.state.value.wallpaper === i
                           ? 'ring-2 ring-[#0A84FF] ring-offset-2 ring-offset-[#f2f2f7]'
                           : 'opacity-85 hover:opacity-100'
@@ -154,7 +175,9 @@
                       :style="{ backgroundImage: wp }"
                       :aria-label="`wallpaper ${i + 1}`"
                       @click="
-                        (sfx.click(), (desktop.state.value.wallpaper = i))
+                        (sfx.click(),
+                        (desktop.state.value.wallpaperAuto = false),
+                        (desktop.state.value.wallpaper = i))
                       "
                     ></button>
                   </div>
@@ -278,6 +301,7 @@ import { WALLPAPERS } from '~/composables/useDesktop'
 
 const desktop = useDesktop()
 const music = useMusic()
+const wallpaper = useWallpaper()
 const sfx = useSfx()
 const { gsap, Draggable } = useGsap()
 const { locale, locales } = useI18n()
@@ -355,6 +379,7 @@ const resetDesktop = () => {
   sfx.trash()
   const state = desktop.state.value
   state.wallpaper = 0
+  state.wallpaperAuto = true
   state.sfxMuted = false
   localStorage.setItem('ag-sfx-muted', '')
   for (const id of Object.keys(state.apps)) {

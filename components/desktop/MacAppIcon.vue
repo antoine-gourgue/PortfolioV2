@@ -292,6 +292,75 @@
     />
   </svg>
 
+  <!-- Plans -->
+  <svg
+    v-else-if="name === 'maps'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
+    <defs>
+      <clipPath :id="`mp-${uid}`">
+        <rect width="100" height="100" rx="22" />
+      </clipPath>
+    </defs>
+    <g :clip-path="`url(#mp-${uid})`">
+      <rect width="100" height="100" fill="#F3F1EA" />
+      <path
+        d="M-5 -5 H34 C30 20 34 40 26 62 C22 74 14 88 8 105 H-5 Z"
+        fill="#AFDB88"
+      />
+      <path
+        d="M-5 -5 H30 C27 16 30 36 23 56 C19 68 12 84 6 105 H-5 Z"
+        fill="#9ED273"
+        opacity="0.7"
+      />
+      <path
+        d="M62 -5 C58 8 70 14 82 12 C92 10 98 14 105 12 V-5 Z"
+        fill="#9AD2F2"
+      />
+      <path
+        d="M34 22 H105 M38 44 H105 M30 66 H105 M26 84 H105"
+        stroke="#E2DFD5"
+        stroke-width="3"
+      />
+      <path d="M56 -5 V105 M78 8 V105" stroke="#E2DFD5" stroke-width="3" />
+      <path
+        d="M44 -6 C40 22 56 34 52 58 C49 76 38 88 40 106"
+        stroke="#F7B500"
+        stroke-width="11"
+        fill="none"
+      />
+      <path
+        d="M44 -6 C40 22 56 34 52 58 C49 76 38 88 40 106"
+        stroke="#FFD54D"
+        stroke-width="7.5"
+        fill="none"
+      />
+      <path
+        d="M-6 52 C18 46 40 58 66 52 C82 48 94 52 106 48"
+        stroke="#FFFFFF"
+        stroke-width="8"
+        fill="none"
+      />
+      <path
+        d="M-6 52 C18 46 40 58 66 52 C82 48 94 52 106 48"
+        stroke="#D9D6CC"
+        stroke-width="0.8"
+        fill="none"
+        stroke-dasharray="4 4"
+      />
+      <g transform="translate(70 70) rotate(40)">
+        <path
+          d="M0 -16 L11 12 L0 5 L-11 12 Z"
+          fill="#2F7CF6"
+          stroke="#FFFFFF"
+          stroke-width="2.6"
+          stroke-linejoin="round"
+        />
+      </g>
+    </g>
+  </svg>
+
   <!-- Réglages -->
   <svg
     v-else-if="name === 'settings'"

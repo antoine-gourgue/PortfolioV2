@@ -19,7 +19,143 @@
           </button>
         </template>
 
-        <form @submit.prevent="submitForm">
+        <!-- Bascule Boîte de réception / Nouveau message -->
+        <div
+          class="flex items-center gap-1.5 border-b border-black/5 bg-white/60 px-5 py-2"
+        >
+          <button
+            class="rounded-full px-3 py-1 text-[12.5px] font-semibold transition"
+            :class="
+              mailView === 'inbox'
+                ? 'bg-ablue text-white'
+                : 'text-black/50 hover:bg-black/5'
+            "
+            @click="mailView = 'inbox'"
+          >
+            {{ $t('macos.mailInbox') }}
+            <span
+              v-if="mailView !== 'inbox'"
+              class="ml-1 rounded-full bg-ablue px-1.5 text-[10px] text-white"
+              >{{ inboxMails.length }}</span
+            >
+          </button>
+          <button
+            class="rounded-full px-3 py-1 text-[12.5px] font-semibold transition"
+            :class="
+              mailView === 'compose'
+                ? 'bg-ablue text-white'
+                : 'text-black/50 hover:bg-black/5'
+            "
+            @click="mailView = 'compose'"
+          >
+            ✏️ {{ $t('macos.mailCompose') }}
+          </button>
+        </div>
+
+        <!-- ── Boîte de réception ── -->
+        <div v-if="mailView === 'inbox'" class="min-h-[380px]">
+          <!-- Liste -->
+          <div v-if="!openedMail" class="divide-y divide-black/5">
+            <button
+              v-for="mail in inboxMails"
+              :key="mail.id"
+              class="flex w-full items-start gap-3 px-5 py-3.5 text-left transition hover:bg-black/[0.03]"
+              @click="openedMail = mail.id"
+            >
+              <span
+                class="mt-0.5 h-2 w-2 shrink-0 rounded-full"
+                :class="
+                  readMails.includes(mail.id) ? 'bg-transparent' : 'bg-ablue'
+                "
+              ></span>
+              <span
+                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-[#3b4048] to-[#17181b]"
+              >
+                <AgLogo class="h-4 w-5 text-white" />
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="flex items-baseline justify-between gap-2">
+                  <span class="truncate text-[13.5px] font-semibold text-aink">
+                    Antoine Gourgue
+                  </span>
+                  <span class="shrink-0 text-[11px] text-black/35">{{
+                    mail.date
+                  }}</span>
+                </span>
+                <span
+                  class="block truncate text-[13px] font-medium text-aink/90"
+                >
+                  {{ $t(mail.subjectKey) }}
+                </span>
+                <span class="block truncate text-[12px] text-black/45">
+                  {{ $t(mail.previewKey) }}
+                </span>
+              </span>
+            </button>
+          </div>
+
+          <!-- Lecture -->
+          <div v-else class="px-5 py-4 sm:px-7">
+            <button
+              class="mb-3 flex items-center gap-0.5 text-[13.5px] font-medium text-ablue"
+              @click="openedMail = ''"
+            >
+              <span class="text-lg leading-none">‹</span>
+              {{ $t('macos.mailInbox') }}
+            </button>
+            <h2 class="text-[17px] font-bold text-aink">
+              {{ $t(currentMail!.subjectKey) }}
+            </h2>
+            <div
+              class="mt-2 flex items-center gap-2.5 border-b border-black/5 pb-3"
+            >
+              <span
+                class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-b from-[#3b4048] to-[#17181b]"
+              >
+                <AgLogo class="h-4 w-5 text-white" />
+              </span>
+              <span>
+                <span class="block text-[13px] font-semibold text-aink"
+                  >Antoine Gourgue</span
+                >
+                <span class="block text-[11.5px] text-black/40"
+                  >antoine&#64;antoinegourgue.dev</span
+                >
+              </span>
+              <span class="ml-auto text-[11.5px] text-black/35">{{
+                currentMail!.date
+              }}</span>
+            </div>
+            <p
+              class="mt-4 whitespace-pre-line text-[13.5px] leading-relaxed text-aink/90"
+            >
+              {{ $t(currentMail!.bodyKey) }}
+            </p>
+            <button
+              v-if="currentMail!.attachment"
+              class="mt-5 flex items-center gap-2.5 rounded-xl border border-black/10 bg-white px-3.5 py-2.5 shadow-sm transition hover:bg-black/[0.03]"
+              @click="downloadCv"
+            >
+              <span class="text-[22px]">📄</span>
+              <span class="text-left">
+                <span class="block text-[12.5px] font-semibold text-aink"
+                  >antoinegourgue-cv.pdf</span
+                >
+                <span class="block text-[10.5px] text-black/40">PDF</span>
+              </span>
+              <i class="fas fa-arrow-down ml-2 text-[12px] text-ablue"></i>
+            </button>
+            <button
+              class="mt-6 rounded-md bg-ablue px-4 py-1.5 text-[13px] font-medium text-white shadow-sm transition-colors hover:bg-[#0077ed]"
+              @click="mailView = 'compose'"
+            >
+              ↩︎ {{ $t('macos.mailReply') }}
+            </button>
+          </div>
+        </div>
+
+        <!-- ── Nouveau message ── -->
+        <form v-else @submit.prevent="submitForm">
           <!-- Barre d'outils de composition (desktop) -->
           <div
             class="hidden items-center gap-5 border-b border-black/5 bg-white/60 px-5 py-2.5 lg:flex"
@@ -144,6 +280,51 @@ const form = ref({
 
 const loading = ref(false)
 const errorMessage = ref<string | null>(null)
+
+// ── Boîte de réception ──
+interface InboxMail {
+  id: string
+  subjectKey: string
+  previewKey: string
+  bodyKey: string
+  date: string
+  attachment?: boolean
+}
+
+const inboxMails: InboxMail[] = [
+  {
+    id: 'welcome',
+    subjectKey: 'macos.mailWelcomeSubject',
+    previewKey: 'macos.mailWelcomePreview',
+    bodyKey: 'macos.mailWelcomeBody',
+    date: '09:41',
+  },
+  {
+    id: 'cv',
+    subjectKey: 'macos.mailCvSubject',
+    previewKey: 'macos.mailCvPreview',
+    bodyKey: 'macos.mailCvBody',
+    date: '09:38',
+    attachment: true,
+  },
+]
+
+const mailView = ref<'inbox' | 'compose'>('inbox')
+const openedMail = ref('')
+const readMails = ref<string[]>([])
+const currentMail = computed(() =>
+  inboxMails.find((m) => m.id === openedMail.value)
+)
+watch(openedMail, (id) => {
+  if (id && !readMails.value.includes(id)) readMails.value.push(id)
+})
+
+const downloadCv = () => {
+  const a = document.createElement('a')
+  a.href = '/assets/antoinegourgue-cv.pdf'
+  a.download = ''
+  a.click()
+}
 
 const validateClient = () => {
   errorMessage.value = null

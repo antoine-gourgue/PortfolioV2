@@ -11,6 +11,8 @@ interface DesktopState {
   wallpaper: number
   spotlightOpen: boolean
   apps: Record<string, boolean>
+  wallpaperAuto: boolean
+  notifOpen: boolean
   locked: boolean
   sfxMuted: boolean
 }
@@ -41,7 +43,11 @@ export function useDesktop() {
       music: false,
       settings: false,
       trash: false,
+      airdrop: false,
+      maps: false,
     },
+    wallpaperAuto: true,
+    notifOpen: false,
     locked: false,
     sfxMuted: false,
   }))
@@ -89,6 +95,8 @@ export function useDesktop() {
   }
 
   const cycleWallpaper = () => {
+    // Le choix manuel désactive le mode automatique (selon l'heure)
+    state.value.wallpaperAuto = false
     state.value.wallpaper = (state.value.wallpaper + 1) % WALLPAPERS.length
   }
 

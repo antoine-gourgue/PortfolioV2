@@ -816,6 +816,12 @@
         </button>
         <button
           class="ctx-item"
+          @click="((desktop.state.value.apps.airdrop = true), closeContext())"
+        >
+          {{ $t('macos.ctxAirdrop') }}
+        </button>
+        <button
+          class="ctx-item"
           @click="
             (openUrl('https://github.com/antoine-gourgue'), closeContext())
           "
@@ -1103,6 +1109,12 @@ const springboard: SpringboardApp[] = [
     icon: 'settings',
     label: 'macos.settingsTitle',
     action: () => (desktop.state.value.apps.settings = true),
+  },
+  {
+    id: 'maps',
+    icon: 'maps',
+    label: 'macos.mapsTitle',
+    action: () => (desktop.state.value.apps.maps = true),
   },
   {
     id: 'github',

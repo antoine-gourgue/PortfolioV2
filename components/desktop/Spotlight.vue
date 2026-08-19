@@ -223,6 +223,28 @@ const items = computed<Item[]>(() => [
       close()
     },
   },
+  {
+    id: 'maps',
+    label: t('macos.mapsTitle'),
+    icon: { name: 'maps' },
+    kind: 'App',
+    group: 'apps',
+    action: () => {
+      desktop.state.value.apps.maps = true
+      close()
+    },
+  },
+  {
+    id: 'airdrop',
+    label: 'AirDrop',
+    icon: { name: 'folder' },
+    kind: 'App',
+    group: 'apps',
+    action: () => {
+      desktop.state.value.apps.airdrop = true
+      close()
+    },
+  },
   ...portfolioProjects.map((p) => ({
     id: p.key,
     label: p.name,

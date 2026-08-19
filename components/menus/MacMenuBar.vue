@@ -61,11 +61,11 @@
       }}</span>
     </div>
 
-    <div class="flex items-center gap-1">
+    <div class="flex h-full items-stretch gap-0.5">
       <!-- Mobile : indicateur lecture en cours, comme le ♪ de la barre iOS -->
       <button
         v-if="musicPlaying"
-        class="menu-btn px-1.5 sm:hidden"
+        class="menu-btn flex h-full items-center px-2 sm:hidden"
         aria-label="now playing"
         @click.stop="desktop.state.value.apps.music = true"
       >
@@ -76,7 +76,7 @@
 
       <!-- Mobile : bascule de langue en cycle -->
       <button
-        class="menu-btn rounded px-2 py-0.5 uppercase lg:hidden"
+        class="menu-btn flex h-full items-center rounded px-2 uppercase lg:hidden"
         aria-label="language"
         @click.stop="cycleLocale"
       >
@@ -84,9 +84,9 @@
       </button>
 
       <!-- Menu de saisie macOS : drapeau + liste des langues cochée -->
-      <div class="relative hidden lg:block">
+      <div class="relative hidden h-full lg:block">
         <button
-          class="menu-btn flex items-center rounded px-2 py-1"
+          class="menu-btn flex h-full items-center rounded px-2"
           :class="openMenu === 'lang' ? 'bg-white/20' : ''"
           aria-label="language"
           @click="(sfx.click(), (openMenu = openMenu === 'lang' ? '' : 'lang'))"
@@ -121,9 +121,9 @@
       </div>
 
       <!-- Musique : contrôles de lecture dans la barre de menu -->
-      <div class="relative hidden sm:block">
+      <div class="relative hidden h-full sm:block">
         <button
-          class="menu-btn flex items-center rounded px-2 py-1 text-white/85"
+          class="menu-btn flex h-full items-center rounded px-2 text-white/85"
           :class="openMenu === 'music' ? 'bg-white/20' : ''"
           aria-label="music controls"
           @click.stop="
@@ -247,7 +247,7 @@
         </transition>
       </div>
       <button
-        class="menu-btn hidden px-1.5 text-[15px] text-white/85 sm:block"
+        class="menu-btn hidden h-full items-center px-2 text-[15px] text-white/85 sm:flex"
         :aria-label="desktop.state.value.sfxMuted ? 'unmute' : 'mute'"
         @click="toggleSfx"
       >
@@ -255,22 +255,77 @@
           desktop.state.value.sfxMuted ? 'speaker_slash_fill' : 'speaker_2_fill'
         }}</i>
       </button>
-      <span class="px-1.5 text-[16px] text-white/85"
-        ><DesktopSfIcon name="battery"
-      /></span>
-      <span class="px-1.5 text-[15px] text-white/85"
+      <!-- Batterie : niveau réel du visiteur (Battery API), icône pleine sinon -->
+      <span
+        class="flex h-full items-center gap-1.5 px-2 text-white/85"
+        :title="battery.level !== null ? `${battery.level} %` : ''"
+      >
+        <span
+          v-if="battery.level !== null"
+          class="text-[11px] font-medium tabular-nums text-white/70"
+          >{{ battery.level }} %</span
+        >
+        <span v-if="battery.level !== null" class="relative flex items-center">
+          <svg viewBox="0 0 27 13" class="h-[13px] w-[27px]">
+            <rect
+              x="0.5"
+              y="0.5"
+              width="23"
+              height="12"
+              rx="3.5"
+              fill="none"
+              stroke="currentColor"
+              stroke-opacity="0.45"
+            />
+            <rect
+              x="2"
+              y="2"
+              :width="Math.max(1.5, (battery.level / 100) * 20)"
+              height="9"
+              rx="2"
+              :fill="battery.charging ? '#32D74B' : 'currentColor'"
+            />
+            <path
+              d="M25 4.5v4a2.2 2.2 0 0 0 0-4z"
+              fill="currentColor"
+              fill-opacity="0.45"
+            />
+          </svg>
+          <svg
+            v-if="battery.charging"
+            viewBox="0 0 12 16"
+            class="absolute left-1/2 top-1/2 h-[11px] -translate-x-[60%] -translate-y-1/2 drop-shadow"
+          >
+            <path
+              d="M7 0 1 9h3.5L5 16l6-9H7.5z"
+              fill="#fff"
+              stroke="#00000055"
+              stroke-width="0.8"
+            />
+          </svg>
+        </span>
+        <span v-else class="text-[16px]"><DesktopSfIcon name="battery" /></span>
+      </span>
+      <span class="flex h-full items-center px-2 text-[15px] text-white/85"
         ><DesktopSfIcon name="wifi"
       /></span>
       <button
-        class="menu-btn hidden px-1.5 text-[14px] text-white/85 lg:block"
+        class="menu-btn hidden h-full items-center px-2 text-[14px] text-white/85 lg:flex"
         aria-label="Spotlight"
         @click="desktop.state.value.spotlightOpen = true"
       >
         <DesktopSfIcon name="search" />
       </button>
-      <span class="hidden px-1.5 tabular-nums text-white/90 lg:block">{{
-        clock
-      }}</span>
+      <button
+        class="menu-btn hidden h-full items-center rounded px-2 tabular-nums text-white/90 lg:flex"
+        :class="desktop.state.value.notifOpen ? 'bg-white/20' : ''"
+        aria-label="notification center"
+        @click.stop="
+          desktop.state.value.notifOpen = !desktop.state.value.notifOpen
+        "
+      >
+        {{ clock }}
+      </button>
     </div>
   </header>
 </template>
@@ -454,12 +509,37 @@ const onKeydown = (e: KeyboardEvent) => {
   }
 }
 
+// ── Batterie réelle du visiteur (API non supportée par Safari/Firefox) ──
+const battery = reactive<{ level: number | null; charging: boolean }>({
+  level: null,
+  charging: false,
+})
+
+const initBattery = async () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const nav = navigator as any
+  if (!nav.getBattery) return
+  try {
+    const b = await nav.getBattery()
+    const sync = () => {
+      battery.level = Math.round(b.level * 100)
+      battery.charging = b.charging
+    }
+    sync()
+    b.addEventListener('levelchange', sync)
+    b.addEventListener('chargingchange', sync)
+  } catch {
+    battery.level = null
+  }
+}
+
 const closeMenus = () => (openMenu.value = '')
 
 onMounted(() => {
   desktop.state.value.sfxMuted = !!localStorage.getItem('ag-sfx-muted')
   tick()
   timer = setInterval(tick, 1000)
+  initBattery()
   document.addEventListener('click', closeMenus)
   window.addEventListener('keydown', onKeydown)
 })

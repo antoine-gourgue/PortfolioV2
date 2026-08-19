@@ -8,7 +8,7 @@
     <div
       v-if="desktop.state.value.locked"
       class="fixed inset-0 z-[95] flex select-none flex-col items-center justify-between overflow-hidden py-16 text-white lg:py-20"
-      :style="{ backgroundImage: WALLPAPERS[desktop.state.value.wallpaper] }"
+      :style="{ backgroundImage: wallpaper.style.value }"
       @click="unlock"
       @keydown="unlock"
     >
@@ -42,9 +42,8 @@
 
 <script setup lang="ts">
 import AgLogo from '~/components/ui/AGLogo.vue'
-import { WALLPAPERS } from '~/composables/useDesktop'
-
 const desktop = useDesktop()
+const wallpaper = useWallpaper()
 const music = useMusic()
 const sfx = useSfx()
 const { locale } = useI18n()
