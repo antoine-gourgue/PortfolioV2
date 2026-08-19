@@ -90,6 +90,7 @@ const utilApps = [
   { id: 'weather', label: 'macos.weatherTitle', icon: 'weather' },
   { id: 'calculator', label: 'macos.calcTitle', icon: 'calculator' },
   { id: 'music', label: 'macos.musicTitle', icon: 'music' },
+  { id: 'settings', label: 'macos.settingsTitle', icon: 'settings' },
 ]
 
 // Résolution explicite : une chaîne 'NuxtLink' dans <component :is> ne se résout pas

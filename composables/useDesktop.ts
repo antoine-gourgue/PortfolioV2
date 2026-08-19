@@ -11,6 +11,7 @@ interface DesktopState {
   wallpaper: number
   spotlightOpen: boolean
   apps: Record<string, boolean>
+  locked: boolean
   sfxMuted: boolean
 }
 
@@ -33,7 +34,14 @@ export function useDesktop() {
     activeWin: '',
     wallpaper: 0,
     spotlightOpen: false,
-    apps: { weather: false, calculator: false, messages: false, music: false },
+    apps: {
+      weather: false,
+      calculator: false,
+      messages: false,
+      music: false,
+      settings: false,
+    },
+    locked: false,
     sfxMuted: false,
   }))
 

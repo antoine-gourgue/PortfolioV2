@@ -96,6 +96,8 @@ const COMMANDS = [
   'calc',
   'wallpaper',
   'neofetch',
+  'lock',
+  'settings',
   'date',
   'echo',
   'clear',
@@ -147,6 +149,7 @@ const help = () => {
     ['weather · calc', 'ouvre les apps'],
     ['wallpaper', "change le fond d'écran"],
     ['neofetch', 'fiche système'],
+    ['settings · lock', "réglages · verrouille l'écran"],
     ['clear · exit', 'nettoie · réduit la fenêtre'],
   ]
   rows.forEach(([cmd, desc]) =>
@@ -205,6 +208,14 @@ const execute = (raw: string) => {
       return printOut("→ fond d'écran suivant 🎨")
     case 'neofetch':
       return neofetch()
+    case 'lock':
+      printOut('🔒 verrouillage…', 'text-white/50')
+      setTimeout(() => (desktop.state.value.locked = true), 400)
+      return
+    case 'settings':
+    case 'reglages':
+      desktop.state.value.apps.settings = true
+      return printOut('→ Réglages ouverts')
     case 'music': {
       if (arg === 'play' || arg === '') {
         music.play()

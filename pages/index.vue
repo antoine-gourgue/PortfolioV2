@@ -1095,6 +1095,12 @@ const springboard: SpringboardApp[] = [
     action: () => (desktop.state.value.apps.music = true),
   },
   {
+    id: 'settings',
+    icon: 'settings',
+    label: 'macos.settingsTitle',
+    action: () => (desktop.state.value.apps.settings = true),
+  },
+  {
     id: 'github',
     icon: 'github',
     raw: 'GitHub',
@@ -1213,6 +1219,12 @@ const deskIcons = [
     label: 'macos.musicTitle',
     icon: 'music',
     action: () => (desktop.state.value.apps.music = true),
+  },
+  {
+    id: 'settings',
+    label: 'macos.settingsTitle',
+    icon: 'settings',
+    action: () => (desktop.state.value.apps.settings = true),
   },
 ]
 

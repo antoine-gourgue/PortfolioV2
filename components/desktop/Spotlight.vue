@@ -212,6 +212,17 @@ const items = computed<Item[]>(() => [
       close()
     },
   },
+  {
+    id: 'settings',
+    label: t('macos.settingsTitle'),
+    icon: { name: 'settings' },
+    kind: 'App',
+    group: 'apps',
+    action: () => {
+      desktop.state.value.apps.settings = true
+      close()
+    },
+  },
   ...portfolioProjects.map((p) => ({
     id: p.key,
     label: p.name,

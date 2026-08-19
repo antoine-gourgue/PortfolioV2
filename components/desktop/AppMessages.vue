@@ -94,10 +94,29 @@
           ref="inputRef"
           v-model="newMessage"
           type="text"
-          placeholder="iMessage"
-          class="flex-1 rounded-full border border-black/15 px-3.5 py-1.5 text-[13.5px] text-aink outline-none placeholder:text-black/30 focus:border-[#0A84FF]/60"
+          :placeholder="isListening ? $t('macos.dictating') : 'iMessage'"
+          class="flex-1 rounded-full border px-3.5 py-1.5 text-[13.5px] text-aink outline-none placeholder:text-black/30"
+          :class="
+            isListening
+              ? 'border-[#FF453A]/60 bg-[#FF453A]/5'
+              : 'border-black/15 focus:border-[#0A84FF]/60'
+          "
           :disabled="isBotTyping"
         />
+        <!-- Dictée vocale (Web Speech API) -->
+        <button
+          type="button"
+          class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[14px] transition-colors"
+          :class="
+            isListening
+              ? 'animate-pulse bg-[#FF453A] text-white'
+              : 'bg-black/5 text-black/50 hover:bg-black/10'
+          "
+          :aria-label="isListening ? 'stop dictation' : 'dictation'"
+          @click="toggleDictation"
+        >
+          <i class="f7-icons" style="font-size: 14px">mic_fill</i>
+        </button>
         <button
           type="submit"
           class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#0A84FF] text-[13px] text-white transition-opacity disabled:opacity-30"
@@ -136,6 +155,66 @@ const todayLabel = computed(() =>
     minute: '2-digit',
   }).format(new Date())
 )
+
+// ── Dictée vocale (Web Speech API, reconnaissance native du navigateur) ──
+const isListening = ref(false)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let recognition: any = null
+
+const initRecognition = () => {
+  if (recognition) return true
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const w = window as any
+  const SpeechRecognitionCtor = w.SpeechRecognition || w.webkitSpeechRecognition
+  if (!SpeechRecognitionCtor) return false
+  recognition = new SpeechRecognitionCtor()
+  recognition.continuous = false
+  recognition.interimResults = true
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  recognition.onresult = (event: any) => {
+    let text = ''
+    for (const result of event.results) {
+      text += result[0].transcript
+    }
+    newMessage.value = text
+    if (event.results[event.results.length - 1].isFinal) {
+      isListening.value = false
+      if (newMessage.value.trim()) sendMessage()
+    }
+  }
+  recognition.onend = () => (isListening.value = false)
+  recognition.onerror = () => (isListening.value = false)
+  return true
+}
+
+const toggleDictation = () => {
+  if (!initRecognition()) {
+    messages.value.push({
+      from: 'bot',
+      text: t('macos.dictationUnsupported'),
+    })
+    return
+  }
+  if (isListening.value) {
+    recognition.stop()
+    isListening.value = false
+    return
+  }
+  const langs: Record<string, string> = {
+    fr: 'fr-FR',
+    en: 'en-US',
+    es: 'es-ES',
+  }
+  recognition.lang = langs[locale.value] ?? 'fr-FR'
+  newMessage.value = ''
+  sfx.pop()
+  isListening.value = true
+  try {
+    recognition.start()
+  } catch {
+    isListening.value = false
+  }
+}
 
 // ── Logique du chatbot (intents existants) ──
 const newMessage = ref('')

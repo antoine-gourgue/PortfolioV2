@@ -292,6 +292,58 @@
     />
   </svg>
 
+  <!-- Réglages -->
+  <svg
+    v-else-if="name === 'settings'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
+    <defs>
+      <linearGradient :id="`st-${uid}`" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#83858C" />
+        <stop offset="1" stop-color="#54565C" />
+      </linearGradient>
+      <linearGradient :id="`stg-${uid}`" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#FAFBFC" />
+        <stop offset="0.55" stop-color="#D2D4D9" />
+        <stop offset="1" stop-color="#A9ACB3" />
+      </linearGradient>
+      <linearGradient :id="`sth-${uid}`" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#43454B" />
+        <stop offset="1" stop-color="#5C5E65" />
+      </linearGradient>
+    </defs>
+    <rect width="100" height="100" rx="22" :fill="`url(#st-${uid})`" />
+    <circle cx="50" cy="50" r="41.5" fill="#3E4046" opacity="0.35" />
+    <path
+      d="M42.88,20.34 L44.16,10.93 L55.84,10.93 L57.12,20.34 L63.61,22.70 L70.64,16.32 L79.58,23.83 L74.52,31.86 L77.97,37.84 L87.46,37.47 L89.49,48.97 L80.44,51.86 L79.24,58.66 L86.75,64.48 L80.91,74.59 L72.12,70.99 L66.83,75.43 L68.85,84.71 L57.88,88.71 L53.45,80.30 L46.55,80.30 L42.12,88.71 L31.15,84.71 L33.17,75.43 L27.88,70.99 L19.09,74.59 L13.25,64.48 L20.76,58.66 L19.56,51.86 L10.51,48.97 L12.54,37.47 L22.03,37.84 L25.48,31.86 L20.42,23.83 L29.36,16.32 L36.39,22.70 Z"
+      :fill="`url(#stg-${uid})`"
+      :stroke="`url(#stg-${uid})`"
+      stroke-width="5"
+      stroke-linejoin="round"
+    />
+    <circle cx="50" cy="50" r="26" :fill="`url(#stg-${uid})`" />
+    <circle
+      cx="50"
+      cy="50"
+      r="21.5"
+      fill="none"
+      stroke="#8F929A"
+      stroke-width="1"
+      opacity="0.6"
+    />
+    <circle cx="50" cy="50" r="12.5" :fill="`url(#sth-${uid})`" />
+    <circle
+      cx="50"
+      cy="50"
+      r="12.5"
+      fill="none"
+      stroke="#33353A"
+      stroke-width="1"
+      opacity="0.5"
+    />
+  </svg>
+
   <!-- Musique -->
   <svg
     v-else-if="name === 'music'"
