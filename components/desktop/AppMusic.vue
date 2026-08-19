@@ -180,32 +180,34 @@
             </button>
           </template>
           <template v-else-if="tab === 'radio'">
-            <button
-              v-for="(station, i) in RADIO_STATIONS"
-              :key="station.id"
-              class="flex w-full items-center gap-3 rounded-lg px-2 py-1.5 text-left transition"
-              :class="{ 'bg-white/10': track.id === station.id }"
-              @click="music.play(i, RADIO_STATIONS)"
-            >
-              <img
-                :src="station.cover"
-                :alt="station.title"
-                class="h-9 w-9 rounded-md"
-              />
-              <span class="flex-1">
-                <span class="block text-[13px] font-medium text-white">{{
-                  station.title
-                }}</span>
-                <span class="block text-[11px] text-white/45">{{
-                  station.artist
-                }}</span>
-              </span>
-              <span
-                v-if="track.id === station.id && music.state.value.playing"
-                class="text-[9px] font-bold text-[#FA586A]"
-                >● {{ $t('macos.musicLive') }}</span
+            <div class="music-scroll max-h-48 overflow-y-auto pr-1">
+              <button
+                v-for="(station, i) in RADIO_STATIONS"
+                :key="station.id"
+                class="flex w-full items-center gap-3 rounded-lg px-2 py-1.5 text-left transition"
+                :class="{ 'bg-white/10': track.id === station.id }"
+                @click="music.play(i, RADIO_STATIONS)"
               >
-            </button>
+                <img
+                  :src="station.cover"
+                  :alt="station.title"
+                  class="h-9 w-9 rounded-md"
+                />
+                <span class="flex-1">
+                  <span class="block text-[13px] font-medium text-white">{{
+                    station.title
+                  }}</span>
+                  <span class="block text-[11px] text-white/45">{{
+                    station.artist
+                  }}</span>
+                </span>
+                <span
+                  v-if="track.id === station.id && music.state.value.playing"
+                  class="text-[9px] font-bold text-[#FA586A]"
+                  >● {{ $t('macos.musicLive') }}</span
+                >
+              </button>
+            </div>
           </template>
           <template v-else>
             <div class="px-1 pb-1.5">
