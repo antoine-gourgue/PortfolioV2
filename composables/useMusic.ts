@@ -80,6 +80,42 @@ export function useMusic() {
     audio.addEventListener('play', () => {
       state.value.playing = true
     })
+
+    // Media Session : contrôles natifs (écran verrouillé, centre de contrôle,
+    // boutons des écouteurs) comme une vraie app musique
+    if ('mediaSession' in navigator) {
+      const handlers: Array<[MediaSessionAction, MediaSessionActionHandler]> = [
+        ['play', () => play()],
+        ['pause', () => pause()],
+        ['previoustrack', () => prev()],
+        ['nexttrack', () => next()],
+      ]
+      for (const [action, handler] of handlers) {
+        try {
+          navigator.mediaSession.setActionHandler(action, handler)
+        } catch {
+          // action non supportée par ce navigateur
+        }
+      }
+    }
+  }
+
+  const updateMediaSession = (item: MusicTrack) => {
+    if (import.meta.server || !('mediaSession' in navigator)) return
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: item.title,
+      artist: item.artist,
+      album: item.preview ? 'iTunes — extrait 30 s' : 'Portfolio',
+      artwork: [
+        {
+          src: item.cover.startsWith('http')
+            ? item.cover
+            : `${location.origin}${item.cover}`,
+          sizes: '300x300',
+          type: 'image/jpeg',
+        },
+      ],
+    })
   }
 
   const play = (index?: number, queue?: MusicTrack[]) => {
@@ -96,6 +132,7 @@ export function useMusic() {
       state.value.progress = 0
       state.value.duration = 0
     }
+    updateMediaSession(item)
     audio.play()
   }
 

@@ -62,6 +62,18 @@
     </div>
 
     <div class="flex items-center gap-1">
+      <!-- Mobile : indicateur lecture en cours, comme le ♪ de la barre iOS -->
+      <button
+        v-if="musicPlaying"
+        class="menu-btn px-1.5 sm:hidden"
+        aria-label="now playing"
+        @click.stop="desktop.state.value.apps.music = true"
+      >
+        <span class="menu-eq flex h-3 items-end gap-[2px]">
+          <i></i><i></i><i></i>
+        </span>
+      </button>
+
       <!-- Mobile : bascule de langue en cycle -->
       <button
         class="menu-btn rounded px-2 py-0.5 uppercase lg:hidden"

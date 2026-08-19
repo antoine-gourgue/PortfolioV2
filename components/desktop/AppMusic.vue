@@ -173,8 +173,8 @@
             </button>
           </div>
 
-          <!-- Volume -->
-          <div class="mt-4 flex items-center gap-3 lg:mt-3">
+          <!-- Volume (desktop uniquement : iOS impose le volume matériel) -->
+          <div class="mt-4 hidden items-center gap-3 lg:mt-3 lg:flex">
             <svg
               viewBox="0 0 24 24"
               class="h-4 w-4 text-white/40"
