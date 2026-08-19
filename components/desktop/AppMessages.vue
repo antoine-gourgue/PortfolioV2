@@ -289,6 +289,50 @@ const scrollDown = async () => {
   })
 }
 
+// ── Cerveau LLM (même endpoint que Siri), intents locaux en secours ──
+const llmHistory: Array<{ role: 'user' | 'assistant'; content: string }> = []
+
+const escapeHtml = (text: string) =>
+  text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+
+// Rend cliquables les URLs et les domaines des projets dans la réponse
+const linkify = (text: string) =>
+  escapeHtml(text)
+    .replace(/\*+/g, '')
+    .replace(
+      /(https?:\/\/[^\s<]+|[\w-]+\.(?:vercel\.app|antoinegourgue\.dev)(?:\/[^\s<]*)?)/g,
+      (url) => {
+        const href = url.startsWith('http') ? url : `https://${url}`
+        return `<a href="${href}" target="_blank" rel="noopener noreferrer" class="underline decoration-white/50 underline-offset-2">${url}</a>`
+      }
+    )
+
+const askLlm = async (question: string): Promise<string> => {
+  llmHistory.push({ role: 'user', content: question })
+  try {
+    const res = await $fetch<{ reply: string }>('/api/siri', {
+      method: 'POST',
+      body: { messages: llmHistory.slice(-8) },
+    })
+    llmHistory.push({ role: 'assistant', content: res.reply })
+    return linkify(res.reply)
+  } catch (error) {
+    llmHistory.pop()
+    throw error
+  }
+}
+
+// Ancien moteur à intents : conservé comme repli hors-ligne
+const localResponse = (userText: string): string => {
+  const detectedLang = detectLang(userText)
+  if (detectedLang !== selectedLang.value) {
+    const key =
+      detectedLang === 'en' ? 'En' : detectedLang === 'es' ? 'Es' : 'Fr'
+    return `${t(`chatbot.detected${key}`)} <span class='lang-switch underline cursor-pointer' data-lang="${detectedLang}">${t(`chatbot.switchTo${key}`)}</span>`
+  }
+  return getBotResponse(userText)
+}
+
 const sendMessage = async () => {
   if (!newMessage.value.trim() || isBotTyping.value) return
   const userText = newMessage.value.trim()
@@ -298,23 +342,21 @@ const sendMessage = async () => {
   isBotTyping.value = true
   await scrollDown()
 
-  const detectedLang = detectLang(userText)
-  const reply = () => {
-    let raw: string
-    if (detectedLang !== selectedLang.value) {
-      const key =
-        detectedLang === 'en' ? 'En' : detectedLang === 'es' ? 'Es' : 'Fr'
-      raw = `${t(`chatbot.detected${key}`)} <span class='lang-switch underline cursor-pointer' data-lang="${detectedLang}">${t(`chatbot.switchTo${key}`)}</span>`
-    } else {
-      raw = getBotResponse(userText)
-    }
-    messages.value.push({ from: 'bot', text: sanitizeHtml(raw) })
-    sfx.pop()
-    isBotTyping.value = false
-    scrollDown()
-    inputRef.value?.focus()
+  // Petit délai minimum pour laisser vivre l'indicateur « écrit… »
+  const minDelay = new Promise((resolve) => setTimeout(resolve, 700))
+  let raw: string
+  try {
+    const [reply] = await Promise.all([askLlm(userText), minDelay])
+    raw = reply
+  } catch {
+    raw = localResponse(userText)
   }
-  setTimeout(reply, 900 + Math.min(userText.length * 15, 900))
+
+  messages.value.push({ from: 'bot', text: sanitizeHtml(raw) })
+  sfx.pop()
+  isBotTyping.value = false
+  scrollDown()
+  inputRef.value?.focus()
 }
 
 watch(selectedLang, () => {
