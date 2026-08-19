@@ -15,7 +15,9 @@
             <div
               class="mb-4 flex items-center gap-2 rounded-lg bg-black/5 px-3 py-1.5 text-[13px] text-black/40"
             >
-              <i class="fas fa-magnifying-glass text-[11px]"></i>
+              <i aria-hidden="true" class="f7-icons" style="font-size: 11px"
+                >search</i
+              >
               {{ $t('macos.search') }}
             </div>
             <p class="px-2 pb-1.5 text-[11px] font-semibold text-black/35">
@@ -165,7 +167,12 @@
               <!-- Mobile : tuiles iOS -->
               <div class="mt-5 grid grid-cols-4 gap-2 lg:hidden">
                 <NuxtLink :to="localePath('/contact')" class="ios-tile">
-                  <i class="fas fa-envelope"></i>
+                  <i
+                    aria-hidden="true"
+                    class="f7-icons"
+                    style="font-size: inherit"
+                    >envelope_fill</i
+                  >
                   <span>Message</span>
                 </NuxtLink>
                 <a
@@ -173,7 +180,12 @@
                   target="_blank"
                   class="ios-tile"
                 >
-                  <i class="fab fa-github"></i>
+                  <i
+                    aria-hidden="true"
+                    class="f7-icons"
+                    style="font-size: inherit"
+                    >logo_github</i
+                  >
                   <span>GitHub</span>
                 </a>
                 <a
@@ -181,7 +193,12 @@
                   target="_blank"
                   class="ios-tile"
                 >
-                  <i class="fab fa-linkedin-in"></i>
+                  <i
+                    aria-hidden="true"
+                    class="f7-icons"
+                    style="font-size: inherit"
+                    >logo_linkedin</i
+                  >
                   <span>LinkedIn</span>
                 </a>
                 <a
@@ -189,7 +206,12 @@
                   download
                   class="ios-tile"
                 >
-                  <i class="fas fa-file-arrow-down"></i>
+                  <i
+                    aria-hidden="true"
+                    class="f7-icons"
+                    style="font-size: inherit"
+                    >arrow_down_doc_fill</i
+                  >
                   <span>CV</span>
                 </a>
               </div>
@@ -200,7 +222,12 @@
                   class="action-btn"
                   :title="$t('macos.sendMessage')"
                 >
-                  <i class="fas fa-envelope"></i>
+                  <i
+                    aria-hidden="true"
+                    class="f7-icons"
+                    style="font-size: inherit"
+                    >envelope_fill</i
+                  >
                 </NuxtLink>
                 <a
                   href="https://github.com/antoine-gourgue"
@@ -208,7 +235,12 @@
                   class="action-btn"
                   title="GitHub"
                 >
-                  <i class="fab fa-github"></i>
+                  <i
+                    aria-hidden="true"
+                    class="f7-icons"
+                    style="font-size: inherit"
+                    >logo_github</i
+                  >
                 </a>
                 <a
                   href="https://linkedin.com/in/antoine-gourgue"
@@ -216,7 +248,12 @@
                   class="action-btn"
                   title="LinkedIn"
                 >
-                  <i class="fab fa-linkedin-in"></i>
+                  <i
+                    aria-hidden="true"
+                    class="f7-icons"
+                    style="font-size: inherit"
+                    >logo_linkedin</i
+                  >
                 </a>
                 <a
                   href="/assets/antoinegourgue-cv.pdf"
@@ -224,7 +261,12 @@
                   class="action-btn"
                   title="CV"
                 >
-                  <i class="fas fa-file-arrow-down"></i>
+                  <i
+                    aria-hidden="true"
+                    class="f7-icons"
+                    style="font-size: inherit"
+                    >arrow_down_doc_fill</i
+                  >
                 </a>
               </div>
             </template>

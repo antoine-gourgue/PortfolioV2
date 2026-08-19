@@ -2,8 +2,8 @@
   <Teleport to="body">
     <!--
       Rendu visible dès le HTML serveur : il couvre la page avant toute
-      hydratation. Recharger la page = redémarrer la machine : le boot
-      se joue à chaque chargement complet (jamais lors de la navigation SPA).
+      hydratation. Séquence complète à la première visite de la session,
+      boot express (~0,9 s) sur les rechargements suivants.
     -->
     <div
       v-if="visible"
@@ -36,15 +36,30 @@ onMounted(() => {
     return
   }
 
+  const timeline = gsap.timeline({
+    onComplete: () => {
+      visible.value = false
+    },
+  })
+
+  // Rechargement dans la même session : boot express (bon pour le LCP),
+  // la séquence complète avec carillon reste pour la première visite
+  if (sessionStorage.getItem('ag-booted')) {
+    timeline
+      .to(barEl.value, { width: '100%', duration: 0.55, ease: 'power2.out' })
+      .to(
+        bootEl.value,
+        { autoAlpha: 0, duration: 0.3, ease: 'power2.inOut' },
+        '+=0.05'
+      )
+    return
+  }
+  sessionStorage.setItem('ag-booted', '1')
+
   // Carillon de démarrage (joué seulement si le navigateur l'autorise)
   useSfx().boot()
 
-  gsap
-    .timeline({
-      onComplete: () => {
-        visible.value = false
-      },
-    })
+  timeline
     .to(barEl.value, { width: '40%', duration: 0.7, ease: 'power1.in' })
     .to(barEl.value, { width: '78%', duration: 0.55, ease: 'power1.inOut' })
     .to(barEl.value, { width: '100%', duration: 0.4, ease: 'power2.out' })

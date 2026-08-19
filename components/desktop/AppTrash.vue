@@ -91,7 +91,12 @@
               <span
                 class="flex h-11 w-11 items-center justify-center text-[34px] text-[#8E8E93]"
               >
-                <i class="f7-icons" style="font-size: 34px">{{ item.icon }}</i>
+                <i
+                  aria-hidden="true"
+                  class="f7-icons"
+                  style="font-size: 34px"
+                  >{{ item.icon }}</i
+                >
               </span>
               <span
                 class="w-full break-words rounded px-1 text-[11px] font-medium leading-tight text-aink"

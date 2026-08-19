@@ -79,9 +79,12 @@
                   class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-white"
                   :style="{ background: place.color }"
                 >
-                  <i class="f7-icons" style="font-size: 13px">{{
-                    place.icon
-                  }}</i>
+                  <i
+                    aria-hidden="true"
+                    class="f7-icons"
+                    style="font-size: 13px"
+                    >{{ place.icon }}</i
+                  >
                 </span>
                 <span class="min-w-0">
                   <span
@@ -104,7 +107,10 @@
             <div
               class="mt-1.5 hidden items-center gap-1.5 rounded-lg bg-emerald-500/10 px-2.5 py-1.5 sm:flex"
             >
-              <i class="f7-icons text-emerald-700" style="font-size: 13px"
+              <i
+                aria-hidden="true"
+                class="f7-icons text-emerald-700"
+                style="font-size: 13px"
                 >car_fill</i
               >
               <span
@@ -204,7 +210,7 @@ const initMap = async () => {
   for (const place of places) {
     const icon = L.divIcon({
       className: '',
-      html: `<div class="map-pin" style="background:${place.color}"><i class="f7-icons">${place.icon}</i></div>`,
+      html: `<div class="map-pin" style="background:${place.color}"><i aria-hidden="true" class="f7-icons">${place.icon}</i></div>`,
       iconSize: [34, 42],
       iconAnchor: [17, 40],
     })

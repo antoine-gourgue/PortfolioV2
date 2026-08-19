@@ -251,9 +251,16 @@
         :aria-label="desktop.state.value.sfxMuted ? 'unmute' : 'mute'"
         @click="toggleSfx"
       >
-        <i class="f7-icons align-middle" style="font-size: inherit">{{
-          desktop.state.value.sfxMuted ? 'speaker_slash_fill' : 'speaker_2_fill'
-        }}</i>
+        <i
+          aria-hidden="true"
+          class="f7-icons align-middle"
+          style="font-size: inherit"
+          >{{
+            desktop.state.value.sfxMuted
+              ? 'speaker_slash_fill'
+              : 'speaker_2_fill'
+          }}</i
+        >
       </button>
       <!-- Batterie : niveau réel du visiteur (Battery API), icône pleine sinon -->
       <span

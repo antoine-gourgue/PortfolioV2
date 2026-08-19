@@ -10,7 +10,12 @@
           class="spot-panel w-full max-w-xl overflow-hidden rounded-2xl border border-white/40 bg-white/75 shadow-2xl backdrop-blur-2xl"
         >
           <div class="flex items-center gap-3 px-5 py-3.5">
-            <i class="fas fa-magnifying-glass text-lg text-black/40"></i>
+            <i
+              aria-hidden="true"
+              class="f7-icons text-black/40"
+              style="font-size: 18px"
+              >search</i
+            >
             <input
               ref="inputEl"
               v-model="query"

@@ -115,7 +115,12 @@
       <div
         class="mx-auto flex max-w-[420px] items-center justify-center gap-1.5 rounded-lg bg-black/5 px-3 py-1.5 text-xs text-black/60"
       >
-        <i class="fas fa-lock text-[9px] text-black/40"></i>
+        <i
+          aria-hidden="true"
+          class="f7-icons text-black/40"
+          style="font-size: 9px"
+          >lock_fill</i
+        >
         {{ url }}
       </div>
     </div>

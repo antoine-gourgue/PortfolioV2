@@ -143,7 +143,12 @@
                 >
                 <span class="block text-[10.5px] text-black/40">PDF</span>
               </span>
-              <i class="fas fa-arrow-down ml-2 text-[12px] text-ablue"></i>
+              <i
+                aria-hidden="true"
+                class="f7-icons ml-2 text-ablue"
+                style="font-size: 12px"
+                >arrow_down_circle_fill</i
+              >
             </button>
             <button
               class="mt-6 rounded-md bg-ablue px-4 py-1.5 text-[13px] font-medium text-white shadow-sm transition-colors hover:bg-[#0077ed]"
@@ -167,13 +172,25 @@
               :title="$t('contact.send')"
             >
               <i
-                :class="
-                  loading ? 'fas fa-spinner fa-spin' : 'fas fa-paper-plane'
-                "
-              ></i>
+                aria-hidden="true"
+                class="f7-icons"
+                :class="loading ? 'animate-spin' : ''"
+                style="font-size: 15px"
+                >{{ loading ? 'arrow_2_circlepath' : 'paperplane_fill' }}</i
+              >
             </button>
-            <i class="fas fa-paperclip text-[14px] text-black/30"></i>
-            <i class="fas fa-font text-[14px] text-black/30"></i>
+            <i
+              aria-hidden="true"
+              class="f7-icons text-black/30"
+              style="font-size: 14px"
+              >paperclip</i
+            >
+            <i
+              aria-hidden="true"
+              class="f7-icons text-black/30"
+              style="font-size: 14px"
+              >textformat</i
+            >
             <span class="ml-auto text-[12px] text-black/35">{{
               $t('contact.description')
             }}</span>

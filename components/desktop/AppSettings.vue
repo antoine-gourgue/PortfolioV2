@@ -77,7 +77,12 @@
                 class="flex h-[22px] w-[22px] items-center justify-center rounded-[6px] text-white shadow-sm"
                 :style="{ background: item.tint }"
               >
-                <i class="f7-icons" style="font-size: 13px">{{ item.icon }}</i>
+                <i
+                  aria-hidden="true"
+                  class="f7-icons"
+                  style="font-size: 13px"
+                  >{{ item.icon }}</i
+                >
               </span>
               {{ $t(item.label) }}
             </button>

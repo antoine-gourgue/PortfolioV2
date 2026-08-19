@@ -15,7 +15,9 @@
             <div
               class="mb-4 flex items-center gap-2 rounded-lg bg-black/5 px-3 py-1.5 text-[13px] text-black/40"
             >
-              <i class="fas fa-magnifying-glass text-[11px]"></i>
+              <i aria-hidden="true" class="f7-icons" style="font-size: 11px"
+                >search</i
+              >
               {{ $t('macos.search') }}
             </div>
             <p class="px-2 pb-1.5 text-[11px] font-semibold text-black/35">
@@ -183,7 +185,12 @@
                 <p class="stat-label">{{ $t('macos.ghStars') }}</p>
                 <p class="stat-value">
                   {{ starsFor(current) }}
-                  <i class="fas fa-star text-[13px] text-black/30"></i>
+                  <i
+                    aria-hidden="true"
+                    class="f7-icons text-black/30"
+                    style="font-size: 13px"
+                    >star_fill</i
+                  >
                 </p>
               </div>
               <div class="stat-col">

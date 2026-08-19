@@ -2,7 +2,6 @@
 export default defineNuxtConfig({
   app: {
     head: {
-      script: [{ src: 'https://kit.fontawesome.com/180b0301cc.js' }],
       link: [
         { rel: 'icon', type: 'image/png', href: '/favicon.png' },
         {
@@ -49,6 +48,7 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
   ],
   i18n: {
+    baseUrl: 'https://antoinegourgue.dev',
     locales: [
       {
         code: 'fr',

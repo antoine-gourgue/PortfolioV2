@@ -115,7 +115,9 @@
           :aria-label="isListening ? 'stop dictation' : 'dictation'"
           @click="toggleDictation"
         >
-          <i class="f7-icons" style="font-size: 14px">mic_fill</i>
+          <i aria-hidden="true" class="f7-icons" style="font-size: 14px"
+            >mic_fill</i
+          >
         </button>
         <button
           type="submit"

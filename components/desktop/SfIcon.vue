@@ -4,9 +4,9 @@
     Police à ligatures : la taille suit le font-size du parent.
   -->
   <i
+    aria-hidden="true"
     class="f7-icons align-middle leading-none"
     style="font-size: inherit"
-    aria-hidden="true"
     >{{ ligature }}</i
   >
 </template>

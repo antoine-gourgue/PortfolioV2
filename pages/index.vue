@@ -659,9 +659,18 @@
           <div
             class="flex items-center gap-5 border-b border-black/5 bg-white/60 px-5 py-2.5 text-black/35"
           >
-            <i class="fas fa-paper-plane text-[15px] text-ablue"></i>
-            <i class="fas fa-paperclip text-[14px]"></i>
-            <i class="fas fa-font text-[14px]"></i>
+            <i
+              aria-hidden="true"
+              class="f7-icons text-ablue"
+              style="font-size: 15px"
+              >paperplane_fill</i
+            >
+            <i aria-hidden="true" class="f7-icons" style="font-size: 14px"
+              >paperclip</i
+            >
+            <i aria-hidden="true" class="f7-icons" style="font-size: 14px"
+              >textformat</i
+            >
           </div>
           <div class="p-7 pt-5">
             <p class="border-b border-black/5 pb-2.5 text-sm text-agray">
