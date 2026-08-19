@@ -38,9 +38,11 @@
                 {{ $t('macos.airdropWants') }}
               </p>
               <div
-                class="mx-auto mt-3 flex w-fit items-center gap-2 rounded-lg bg-white px-3 py-2 shadow-sm ring-1 ring-black/5"
+                class="mx-auto mt-3 flex w-fit items-center gap-2.5 rounded-lg bg-white px-3 py-2 shadow-sm ring-1 ring-black/5"
               >
-                <span class="text-[20px]">📄</span>
+                <span class="block h-9 w-9">
+                  <DesktopMacAppIcon name="pdf" />
+                </span>
                 <span class="text-left">
                   <span class="block text-[12px] font-semibold text-aink"
                     >antoinegourgue-cv.pdf</span
@@ -66,8 +68,21 @@
               </div>
             </template>
             <template v-else>
+              <span
+                class="mx-auto mb-2 flex h-11 w-11 items-center justify-center rounded-full bg-[#34C759] shadow-sm"
+              >
+                <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none">
+                  <path
+                    d="M5.5 12.5 10 17l8.5-9.5"
+                    stroke="#FFFFFF"
+                    stroke-width="2.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
               <p class="text-[15px] font-semibold text-aink">
-                ✅ {{ $t('macos.airdropDone') }}
+                {{ $t('macos.airdropDone') }}
               </p>
               <p class="mt-1 text-[12.5px] text-black/55">
                 {{ $t('macos.airdropDoneHint') }}

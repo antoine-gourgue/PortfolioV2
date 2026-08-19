@@ -102,7 +102,7 @@
     <section ref="heroEl" class="relative hidden min-h-[92vh] w-full lg:block">
       <!-- Icônes du bureau -->
       <div
-        class="absolute right-6 top-14 z-[5] hidden flex-col items-center gap-5 lg:flex"
+        class="absolute right-6 top-14 z-[5] hidden grid-flow-col grid-rows-4 gap-x-2 gap-y-5 lg:grid"
       >
         <button
           v-for="icon in deskIcons"
@@ -811,9 +811,6 @@
           {{ $t('macos.ctxArrange') }}
         </button>
         <div class="mx-2.5 my-1 border-t border-black/10"></div>
-        <button class="ctx-item" @click="(downloadCv(), closeContext())">
-          {{ $t('macos.ctxCv') }}
-        </button>
         <button
           class="ctx-item"
           @click="((desktop.state.value.apps.airdrop = true), closeContext())"
@@ -1123,6 +1120,12 @@ const springboard: SpringboardApp[] = [
     action: () => (desktop.state.value.apps.siri = true),
   },
   {
+    id: 'news',
+    icon: 'news',
+    raw: 'News',
+    action: () => (desktop.state.value.apps.news = true),
+  },
+  {
     id: 'github',
     icon: 'github',
     raw: 'GitHub',
@@ -1205,6 +1208,32 @@ const downloadCv = () => {
 const openUrl = (url: string) => window.open(url, '_blank')
 
 const deskIcons = [
+  // Colonne gauche : apps vitrines
+  {
+    id: 'news',
+    label: 'macos.newsTitle',
+    icon: 'news',
+    action: () => (desktop.state.value.apps.news = true),
+  },
+  {
+    id: 'maps',
+    label: 'macos.mapsTitle',
+    icon: 'maps',
+    action: () => (desktop.state.value.apps.maps = true),
+  },
+  {
+    id: 'music',
+    label: 'macos.musicTitle',
+    icon: 'music',
+    action: () => (desktop.state.value.apps.music = true),
+  },
+  {
+    id: 'weather',
+    label: 'macos.weatherTitle',
+    icon: 'weather',
+    action: () => (desktop.state.value.apps.weather = true),
+  },
+  // Colonne droite : fichiers et liens, comme sur un vrai bureau
   { id: 'cv', label: 'macos.deskCv', icon: 'pdf', action: downloadCv },
   {
     id: 'projects',
@@ -1224,35 +1253,11 @@ const deskIcons = [
     icon: 'linkedin',
     action: () => openUrl('https://linkedin.com/in/antoine-gourgue'),
   },
-  {
-    id: 'weather',
-    label: 'macos.weatherTitle',
-    icon: 'weather',
-    action: () => (desktop.state.value.apps.weather = true),
-  },
-  {
-    id: 'calculator',
-    label: 'macos.calcTitle',
-    icon: 'calculator',
-    action: () => (desktop.state.value.apps.calculator = true),
-  },
-  {
-    id: 'music',
-    label: 'macos.musicTitle',
-    icon: 'music',
-    action: () => (desktop.state.value.apps.music = true),
-  },
-  {
-    id: 'settings',
-    label: 'macos.settingsTitle',
-    icon: 'settings',
-    action: () => (desktop.state.value.apps.settings = true),
-  },
 ]
 
 // Remet les icônes du bureau à leur place d'origine
 const arrangeIcons = () => {
-  localStorage.removeItem('ag-icon-pos')
+  localStorage.removeItem('ag-icon-pos-v2')
   gsap.to('.desk-icon', { x: 0, y: 0, duration: 0.35, ease: 'power2.out' })
 }
 
@@ -1397,7 +1402,7 @@ onMounted(() => {
       // ── Icônes du bureau déplaçables, position mémorisée ──
       let iconPos: Record<string, { x: number; y: number }> = {}
       try {
-        iconPos = JSON.parse(localStorage.getItem('ag-icon-pos') || '{}')
+        iconPos = JSON.parse(localStorage.getItem('ag-icon-pos-v2') || '{}')
       } catch {
         iconPos = {}
       }
@@ -1418,7 +1423,7 @@ onMounted(() => {
             },
             onDragEnd() {
               iconPos[el.dataset.iconId ?? ''] = { x: this.x, y: this.y }
-              localStorage.setItem('ag-icon-pos', JSON.stringify(iconPos))
+              localStorage.setItem('ag-icon-pos-v2', JSON.stringify(iconPos))
             },
           })
         )

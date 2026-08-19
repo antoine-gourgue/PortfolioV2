@@ -95,6 +95,7 @@ const utilApps = [
   { id: 'calculator', label: 'macos.calcTitle', icon: 'calculator' },
   { id: 'music', label: 'macos.musicTitle', icon: 'music' },
   { id: 'maps', label: 'macos.mapsTitle', icon: 'maps' },
+  { id: 'news', label: 'macos.newsTitle', icon: 'news' },
   { id: 'settings', label: 'macos.settingsTitle', icon: 'settings' },
 ]
 

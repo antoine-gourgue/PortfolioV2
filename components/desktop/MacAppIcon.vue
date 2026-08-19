@@ -292,6 +292,45 @@
     />
   </svg>
 
+  <!-- News -->
+  <svg
+    v-else-if="name === 'news'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
+    <defs>
+      <linearGradient :id="`nwl-${uid}`" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#FF6E7A" />
+        <stop offset="1" stop-color="#FC4B57" />
+      </linearGradient>
+      <linearGradient :id="`nwd-${uid}`" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#FB3B4E" />
+        <stop offset="1" stop-color="#E01B37" />
+      </linearGradient>
+      <linearGradient :id="`nwr-${uid}`" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#F6293F" />
+        <stop offset="1" stop-color="#D40E2C" />
+      </linearGradient>
+      <filter :id="`nws-${uid}`" x="-30%" y="-30%" width="160%" height="160%">
+        <feDropShadow
+          dx="0"
+          dy="1.2"
+          stdDeviation="1.6"
+          flood-color="#8E0018"
+          flood-opacity="0.35"
+        />
+      </filter>
+    </defs>
+    <rect width="100" height="100" rx="22" fill="#FFFFFF" />
+    <rect x="23" y="23" width="15" height="54" :fill="`url(#nwl-${uid})`" />
+    <rect x="62" y="23" width="15" height="54" :fill="`url(#nwr-${uid})`" />
+    <path
+      d="M23 23 H38 L77 77 H62 Z"
+      :fill="`url(#nwd-${uid})`"
+      :filter="`url(#nws-${uid})`"
+    />
+  </svg>
+
   <!-- Siri -->
   <svg
     v-else-if="name === 'siri'"

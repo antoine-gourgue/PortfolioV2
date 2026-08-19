@@ -224,6 +224,17 @@ const items = computed<Item[]>(() => [
     },
   },
   {
+    id: 'news',
+    label: 'News',
+    icon: { name: 'news' },
+    kind: 'App',
+    group: 'apps',
+    action: () => {
+      desktop.state.value.apps.news = true
+      close()
+    },
+  },
+  {
     id: 'siri',
     label: 'Siri',
     icon: { name: 'siri' },
