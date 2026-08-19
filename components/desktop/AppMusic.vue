@@ -330,7 +330,14 @@
                     class="music-row"
                     @click="openArtist(artist)"
                   >
+                    <img
+                      v-if="artist.cover"
+                      :src="artist.cover"
+                      :alt="artist.name"
+                      class="h-9 w-9 shrink-0 rounded-full object-cover"
+                    />
                     <span
+                      v-else
                       class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#FB5C74] to-[#FA233B] text-[13px] font-bold text-white"
                     >
                       {{ artist.name.charAt(0).toUpperCase() }}
@@ -416,22 +423,17 @@
               <!-- ── Page artiste ── -->
               <template v-else-if="view.kind === 'artist'">
                 <div class="flex items-center gap-3 px-2 pb-2">
+                  <img
+                    v-if="artistCover"
+                    :src="artistCover"
+                    :alt="view.name"
+                    class="h-12 w-12 shrink-0 rounded-full object-cover shadow"
+                  />
                   <span
-                    class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-[18px] font-bold text-white"
-                    :class="
-                      artistAlbums[0]
-                        ? ''
-                        : 'bg-gradient-to-br from-[#FB5C74] to-[#FA233B]'
-                    "
-                    :style="
-                      artistAlbums[0]
-                        ? `background: url(${artistAlbums[0].cover}) center/cover`
-                        : ''
-                    "
+                    v-else
+                    class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#FB5C74] to-[#FA233B] text-[18px] font-bold text-white"
                   >
-                    <template v-if="!artistAlbums[0]">
-                      {{ view.name.charAt(0).toUpperCase() }}
-                    </template>
+                    {{ view.name.charAt(0).toUpperCase() }}
                   </span>
                   <span>
                     <span class="block text-[15px] font-bold text-white">
@@ -593,7 +595,7 @@ const track = music.track
 // ── Recherche iTunes : navigation résultats / artiste / album ──
 type SearchView =
   | { kind: 'results' }
-  | { kind: 'artist'; id: number; name: string; genre: string }
+  | { kind: 'artist'; id: number; name: string; genre: string; cover?: string }
   | { kind: 'album'; album: MusicAlbum; from: 'results' | 'artist' }
 
 const tab = ref<'library' | 'search'>('library')
@@ -607,8 +609,13 @@ const songs = ref<MusicTrack[]>([])
 const artistAlbums = ref<MusicAlbum[]>([])
 const artistSongs = ref<MusicTrack[]>([])
 const albumTracks = ref<MusicTrack[]>([])
-let lastArtist: { id: number; name: string; genre: string } | null = null
+let lastArtist: MusicArtist | null = null
 let searchTimer: ReturnType<typeof setTimeout> | null = null
+
+const artistCover = computed(() => {
+  if (view.value.kind !== 'artist') return undefined
+  return view.value.cover ?? artistAlbums.value[0]?.cover
+})
 
 const backLabel = computed(() => {
   if (view.value.kind === 'album' && view.value.from === 'artist') {

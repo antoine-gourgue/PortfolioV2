@@ -191,6 +191,8 @@ export interface MusicArtist {
   id: number
   name: string
   genre: string
+  /** Visuel dérivé d'une pochette d'album (l'API iTunes n'a pas de photos d'artistes) */
+  cover?: string
 }
 
 export interface MusicAlbum {
@@ -237,21 +239,47 @@ export async function searchItunesAll(term: string): Promise<{
   songs: MusicTrack[]
 }> {
   const q = encodeURIComponent(term)
-  const [artists, albums, songs] = await Promise.all([
+  const [artistResults, albumResults, songResults] = await Promise.all([
     itunes(`/search?term=${q}&entity=musicArtist&limit=4`),
     itunes(`/search?term=${q}&entity=album&limit=6`),
     itunes(`/search?term=${q}&entity=song&limit=8`),
   ])
+
+  // Visuel d'artiste : pochette trouvée dans les albums/titres déjà chargés
+  const coverByArtist = new Map<number, string>()
+  for (const r of [...albumResults, ...songResults]) {
+    if (r.artistId && r.artworkUrl100 && !coverByArtist.has(r.artistId)) {
+      coverByArtist.set(r.artistId, art(r))
+    }
+  }
+
+  const artists: MusicArtist[] = artistResults
+    .filter((r) => r.artistId)
+    .map((r) => ({
+      id: r.artistId as number,
+      name: r.artistName ?? '',
+      genre: r.primaryGenreName ?? '',
+      cover: coverByArtist.get(r.artistId as number),
+    }))
+
+  // Pour les artistes encore sans visuel : un seul lookup groupé (1 album chacun)
+  const missing = artists.filter((a) => !a.cover)
+  if (missing.length) {
+    const lookup = await itunes(
+      `/lookup?id=${missing.map((a) => a.id).join(',')}&entity=album&limit=1`
+    )
+    for (const r of lookup) {
+      if (r.wrapperType === 'collection' && r.artistId && r.artworkUrl100) {
+        const artist = artists.find((a) => a.id === r.artistId && !a.cover)
+        if (artist) artist.cover = art(r)
+      }
+    }
+  }
+
   return {
-    artists: artists
-      .filter((r) => r.artistId)
-      .map((r) => ({
-        id: r.artistId as number,
-        name: r.artistName ?? '',
-        genre: r.primaryGenreName ?? '',
-      })),
-    albums: albums.filter((r) => r.collectionId).map(toAlbum),
-    songs: songs.filter((r) => r.previewUrl).map(toTrack),
+    artists,
+    albums: albumResults.filter((r) => r.collectionId).map(toAlbum),
+    songs: songResults.filter((r) => r.previewUrl).map(toTrack),
   }
 }
 
