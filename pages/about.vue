@@ -2,7 +2,7 @@
   <main ref="container" class="mx-auto w-full max-w-5xl px-4 pt-16 lg:px-8">
     <div ref="winEl" class="win">
       <UiMacWindow
-        title="Contacts"
+        :title="$t('nav.about')"
         @close="closeToDesktop"
         @minimize="closeToDesktop"
         @zoom="toggleZoom"
@@ -65,7 +65,9 @@
             v-if="!mobileOpen"
             class="min-w-0 flex-1 px-4 pb-6 pt-4 lg:hidden"
           >
-            <h1 class="px-1 text-[28px] font-bold tracking-tight">Contacts</h1>
+            <h1 class="px-1 text-[28px] font-bold tracking-tight">
+              {{ $t('nav.about') }}
+            </h1>
             <div
               class="mt-3 flex items-center gap-2 rounded-[10px] bg-black/5 px-3 py-2 text-[15px] text-black/40"
             >
@@ -125,7 +127,8 @@
               class="mb-3 flex items-center gap-0.5 text-[15px] font-medium text-ablue lg:hidden"
               @click="mobileOpen = false"
             >
-              <span class="text-[19px] leading-none">‹</span> Contacts
+              <span class="text-[19px] leading-none">‹</span>
+              {{ $t('nav.about') }}
             </button>
 
             <!-- En-tête : centré sur mobile, en ligne sur desktop -->

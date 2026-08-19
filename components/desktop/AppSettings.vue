@@ -364,6 +364,9 @@ const resetDesktop = () => {
     state.wins[id].min = false
     state.wins[id].zoom = false
   }
+  // Replace aussi les icônes du bureau à leur position d'origine
+  localStorage.removeItem('ag-icon-pos')
+  gsap.to('.desk-icon', { x: 0, y: 0, duration: 0.35, ease: 'power2.out' })
   music.stop()
 }
 

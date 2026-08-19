@@ -66,7 +66,11 @@
 
     <!-- Corbeille -->
     <div class="mx-1 h-11 w-px self-center bg-white/30"></div>
-    <button :ref="setItemRef" class="dock-icon group" @click="wiggleTrash">
+    <button
+      :ref="setItemRef"
+      class="dock-icon group"
+      @click="(wiggleTrash($event), toggleApp('trash'))"
+    >
       <span class="trash block h-full w-full">
         <DesktopMacAppIcon name="trash" />
       </span>

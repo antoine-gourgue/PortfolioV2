@@ -40,6 +40,7 @@ export function useDesktop() {
       messages: false,
       music: false,
       settings: false,
+      trash: false,
     },
     locked: false,
     sfxMuted: false,

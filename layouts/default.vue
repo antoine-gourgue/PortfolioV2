@@ -31,6 +31,7 @@
     <DesktopAppMessages />
     <DesktopAppMusic />
     <DesktopAppSettings />
+    <DesktopAppTrash />
     <DesktopLockScreen />
     <DesktopNotificationBanner />
   </div>
@@ -47,6 +48,7 @@ import DesktopAppCalculator from '~/components/desktop/AppCalculator.vue'
 import DesktopAppMessages from '~/components/desktop/AppMessages.vue'
 import DesktopAppMusic from '~/components/desktop/AppMusic.vue'
 import DesktopAppSettings from '~/components/desktop/AppSettings.vue'
+import DesktopAppTrash from '~/components/desktop/AppTrash.vue'
 import DesktopLockScreen from '~/components/desktop/LockScreen.vue'
 import DesktopNotificationBanner from '~/components/desktop/NotificationBanner.vue'
 import AgLogo from '~/components/ui/AGLogo.vue'

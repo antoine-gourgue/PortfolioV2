@@ -297,6 +297,11 @@ type Entry = MenuItem | 'sep'
 
 const go = (path: string) => router.push(localePath(path))
 const open = (url: string) => window.open(url, '_blank')
+// Mise en veille : déclenche l'écran de verrouillage
+const sleep = () => {
+  setTimeout(() => (desktop.state.value.locked = true), 250)
+}
+
 const downloadCv = () => {
   const a = document.createElement('a')
   a.href = '/assets/antoinegourgue-cv.pdf'
@@ -327,6 +332,12 @@ const menus: Array<{
         raw: true,
         action: () => open('https://linkedin.com/in/antoine-gourgue'),
       },
+      'sep',
+      {
+        label: 'macos.menuSettings',
+        action: () => (desktop.state.value.apps.settings = true),
+      },
+      { label: 'macos.menuSleep', action: sleep },
     ],
   },
   {
