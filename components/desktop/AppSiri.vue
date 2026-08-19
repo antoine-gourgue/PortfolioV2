@@ -84,25 +84,6 @@
           </button>
         </form>
 
-        <!-- Choix de la voix -->
-        <div
-          v-if="voices.length > 1"
-          class="mt-2.5 flex items-center justify-center gap-1.5"
-        >
-          <i class="f7-icons text-white/30" style="font-size: 11px"
-            >speaker_2_fill</i
-          >
-          <select
-            v-model="voiceName"
-            class="max-w-[220px] cursor-pointer rounded bg-transparent text-[10.5px] text-white/45 outline-none [&>option]:bg-[#1c1c1e]"
-            aria-label="voice"
-          >
-            <option v-for="v in voices" :key="v.name" :value="v.name">
-              {{ v.name.replace(/\(.*\)/, '').trim() }}
-            </option>
-          </select>
-        </div>
-
         <p class="mt-2 text-center text-[9.5px] text-white/25">
           {{ $t('macos.siriPowered') }}
         </p>
@@ -184,42 +165,22 @@ const toggleListening = () => {
   }
 }
 
-// ── Synthèse vocale : voix par langue, choix mémorisé ──
-const voices = ref<SpeechSynthesisVoice[]>([])
-const voiceName = ref('')
-
-const refreshVoices = () => {
-  if (!('speechSynthesis' in window)) return
+// ── Synthèse vocale : voix Google de la langue en priorité ──
+const pickVoice = (): SpeechSynthesisVoice | undefined => {
   const lang = (LANGS[locale.value] ?? 'fr-FR').slice(0, 2)
-  voices.value = speechSynthesis
+  const candidates = speechSynthesis
     .getVoices()
     .filter((v) => v.lang.toLowerCase().startsWith(lang))
-  if (!voices.value.length) return
-  const saved = localStorage.getItem('ag-siri-voice')
-  if (saved && voices.value.some((v) => v.name === saved)) {
-    voiceName.value = saved
-    return
-  }
-  // Heuristique : voix Google (Chrome) > voix améliorées > premier choix
-  const preferred =
-    voices.value.find((v) => v.name.includes('Google')) ??
-    voices.value.find((v) => /enhanced|premium|améliorée/i.test(v.name)) ??
-    voices.value[0]
-  voiceName.value = preferred.name
+  return (
+    candidates.find((v) => v.name.includes('Google')) ??
+    candidates.find((v) => /enhanced|premium|améliorée/i.test(v.name)) ??
+    candidates[0]
+  )
 }
 
-watch(voiceName, (name) => {
-  if (name) localStorage.setItem('ag-siri-voice', name)
-})
-watch(locale, () => refreshVoices())
-
 onMounted(() => {
-  refreshVoices()
   // getVoices() est vide tant que le navigateur n'a pas chargé la liste
-  speechSynthesis?.addEventListener?.('voiceschanged', refreshVoices)
-})
-onUnmounted(() => {
-  speechSynthesis?.removeEventListener?.('voiceschanged', refreshVoices)
+  speechSynthesis?.getVoices?.()
 })
 
 const speak = (text: string) => {
@@ -232,11 +193,19 @@ const speak = (text: string) => {
       .replace(/[\p{Emoji_Presentation}]/gu, '')
   )
   utterance.lang = LANGS[locale.value] ?? 'fr-FR'
-  const voice = voices.value.find((v) => v.name === voiceName.value)
+  const voice = pickVoice()
   if (voice) utterance.voice = voice
   utterance.rate = 1.05
   speechSynthesis.speak(utterance)
 }
+
+// Le modèle peut laisser passer du markdown : on l'aplatit en texte brut
+const stripMarkdown = (text: string) =>
+  text
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/[*_`#]+/g, '')
+    .replace(/^\s*[-•]\s+/gm, '')
+    .trim()
 
 // ── Appel du LLM ──
 const ask = async (question: string) => {
@@ -247,9 +216,10 @@ const ask = async (question: string) => {
       method: 'POST',
       body: { messages: history },
     })
-    history.push({ role: 'assistant', content: res.reply })
-    exchanges.value.push({ question, answer: res.reply })
-    speak(res.reply)
+    const reply = stripMarkdown(res.reply)
+    history.push({ role: 'assistant', content: reply })
+    exchanges.value.push({ question, answer: reply })
+    speak(reply)
   } catch {
     history.pop()
     exchanges.value.push({ question, answer: t('macos.siriError') })
@@ -292,37 +262,49 @@ watch(
 </script>
 
 <style scoped>
-/* Orbe Siri : dégradés animés */
+/* Orbe Siri : sphère brillante aux tourbillons colorés (façon icône officielle) */
 .siri-orb {
-  background:
-    radial-gradient(circle at 30% 30%, #5ac8fa 0%, transparent 55%),
-    radial-gradient(circle at 70% 35%, #bf5af2 0%, transparent 55%),
-    radial-gradient(circle at 50% 75%, #ff375f 0%, transparent 55%),
-    radial-gradient(circle at 50% 50%, #0a84ff 0%, #1c1c6e 80%);
+  position: relative;
+  overflow: hidden;
+  background: #eaf6ff;
   box-shadow:
-    0 0 24px rgba(90, 200, 250, 0.35),
-    inset 0 0 18px rgba(255, 255, 255, 0.25);
-  animation: siri-rotate 6s linear infinite;
+    0 6px 22px rgba(46, 109, 246, 0.35),
+    inset 0 0 10px rgba(255, 255, 255, 0.6);
+}
+.siri-orb::before {
+  content: '';
+  position: absolute;
+  inset: -22%;
+  background:
+    radial-gradient(38% 34% at 28% 40%, #12d8f5 0%, transparent 70%),
+    radial-gradient(40% 34% at 72% 30%, #2e6df6 0%, transparent 70%),
+    radial-gradient(36% 32% at 76% 66%, #8a44f2 0%, transparent 70%),
+    radial-gradient(42% 30% at 46% 80%, #e9538f 0%, transparent 70%),
+    radial-gradient(30% 26% at 24% 72%, #ff7a5c 0%, transparent 70%),
+    radial-gradient(30% 26% at 50% 52%, #7ce7f5 0%, transparent 70%);
+  filter: blur(7px);
+  animation: siri-swirl 7s linear infinite;
 }
 .siri-orb::after {
   content: '';
   position: absolute;
-  inset: 4px;
+  inset: 0;
   border-radius: 9999px;
   background: radial-gradient(
-    circle at 35% 30%,
-    rgba(255, 255, 255, 0.55),
-    transparent 45%
+    circle at 38% 25%,
+    rgba(255, 255, 255, 0.9),
+    transparent 48%
   );
 }
-.siri-orb--active {
-  animation:
-    siri-rotate 1.6s linear infinite,
-    siri-breathe 1.1s ease-in-out infinite;
+.siri-orb--active::before {
+  animation-duration: 1.8s;
 }
-@keyframes siri-rotate {
+.siri-orb--active {
+  animation: siri-breathe 1.1s ease-in-out infinite;
+}
+@keyframes siri-swirl {
   to {
-    filter: hue-rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 @keyframes siri-breathe {
@@ -331,7 +313,7 @@ watch(
     transform: scale(1);
   }
   50% {
-    transform: scale(1.12);
+    transform: scale(1.08);
   }
 }
 

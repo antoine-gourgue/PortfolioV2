@@ -299,33 +299,25 @@
     class="h-full w-full drop-shadow-sm"
   >
     <defs>
-      <linearGradient :id="`si-${uid}`" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#2C2C2E" />
-        <stop offset="1" stop-color="#111113" />
-      </linearGradient>
-      <radialGradient :id="`sia-${uid}`" cx="0.32" cy="0.3" r="0.75">
-        <stop offset="0" stop-color="#5AC8FA" />
-        <stop offset="1" stop-color="#5AC8FA" stop-opacity="0" />
-      </radialGradient>
-      <radialGradient :id="`sib-${uid}`" cx="0.7" cy="0.4" r="0.75">
-        <stop offset="0" stop-color="#BF5AF2" />
-        <stop offset="1" stop-color="#BF5AF2" stop-opacity="0" />
-      </radialGradient>
-      <radialGradient :id="`sic-${uid}`" cx="0.5" cy="0.78" r="0.7">
-        <stop offset="0" stop-color="#FF375F" />
-        <stop offset="1" stop-color="#FF375F" stop-opacity="0" />
-      </radialGradient>
-      <radialGradient :id="`sid-${uid}`" cx="0.5" cy="0.5" r="0.6">
-        <stop offset="0" stop-color="#0A84FF" />
-        <stop offset="1" stop-color="#1C1C6E" />
+      <clipPath :id="`sio-${uid}`"><circle cx="50" cy="50" r="47" /></clipPath>
+      <filter :id="`sif-${uid}`" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="10" />
+      </filter>
+      <radialGradient :id="`sis-${uid}`" cx="0.38" cy="0.25" r="0.6">
+        <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.95" />
+        <stop offset="1" stop-color="#FFFFFF" stop-opacity="0" />
       </radialGradient>
     </defs>
-    <rect width="100" height="100" rx="22" :fill="`url(#si-${uid})`" />
-    <circle cx="50" cy="50" r="31" :fill="`url(#sid-${uid})`" />
-    <circle cx="50" cy="50" r="31" :fill="`url(#sia-${uid})`" />
-    <circle cx="50" cy="50" r="31" :fill="`url(#sib-${uid})`" />
-    <circle cx="50" cy="50" r="31" :fill="`url(#sic-${uid})`" />
-    <ellipse cx="42" cy="38" rx="14" ry="10" fill="#FFFFFF" opacity="0.35" />
+    <circle cx="50" cy="50" r="47" fill="#EAF6FF" />
+    <g :clip-path="`url(#sio-${uid})`" :filter="`url(#sif-${uid})`">
+      <ellipse cx="22" cy="39" rx="31" ry="28" fill="#12D8F5" />
+      <ellipse cx="73" cy="27" rx="31" ry="26" fill="#2E6DF6" />
+      <ellipse cx="81" cy="67" rx="28" ry="26" fill="#8A44F2" />
+      <ellipse cx="47" cy="87" rx="34" ry="23" fill="#E9538F" />
+      <ellipse cx="16" cy="78" rx="23" ry="18" fill="#FF7A5C" />
+      <ellipse cx="50" cy="53" rx="23" ry="20" fill="#7CE7F5" opacity="0.75" />
+    </g>
+    <circle cx="50" cy="50" r="47" :fill="`url(#sis-${uid})`" />
   </svg>
 
   <!-- Plans -->
