@@ -6,6 +6,8 @@ export interface MusicTrack {
   cover: string
   /** Extrait 30 s issu du catalogue iTunes (vs morceau complet local) */
   preview?: boolean
+  /** Flux radio en direct (durée infinie, pas de seek) */
+  live?: boolean
 }
 
 // Bibliothèque locale : Kevin MacLeod (incompetech.com) — licence CC BY 4.0
@@ -102,6 +104,14 @@ export function useMusic() {
 
   const updateMediaSession = (item: MusicTrack) => {
     if (import.meta.server || !('mediaSession' in navigator)) return
+    try {
+      setMetadata(item)
+    } catch {
+      // métadonnées non supportées : la lecture ne doit jamais en dépendre
+    }
+  }
+
+  const setMetadata = (item: MusicTrack) => {
     navigator.mediaSession.metadata = new MediaMetadata({
       title: item.title,
       artist: item.artist,
@@ -133,7 +143,9 @@ export function useMusic() {
       state.value.duration = 0
     }
     updateMediaSession(item)
-    audio.play()
+    audio.play().catch(() => {
+      state.value.playing = false
+    })
   }
 
   const pause = () => {
@@ -174,7 +186,7 @@ export function useMusic() {
   }
 
   const seek = (fraction: number) => {
-    if (audio && state.value.duration) {
+    if (audio && state.value.duration && isFinite(state.value.duration)) {
       audio.currentTime = fraction * state.value.duration
     }
   }
@@ -347,4 +359,171 @@ export async function lookupItunesAlbum(
   return results
     .filter((r) => r.wrapperType === 'track' && r.previewUrl)
     .map(toTrack)
+}
+
+// ── Radios en direct (flux publics Radio France) ──
+export const RADIO_STATIONS: MusicTrack[] = [
+  {
+    id: 'radio-fip',
+    title: 'FIP',
+    artist: 'Éclectique',
+    src: 'https://icecast.radiofrance.fr/fip-midfi.mp3',
+    cover: '/assets/radio/fip.jpg',
+    live: true,
+  },
+  {
+    id: 'radio-inter',
+    title: 'France Inter',
+    artist: 'Généraliste',
+    src: 'https://icecast.radiofrance.fr/franceinter-midfi.mp3',
+    cover: '/assets/radio/franceinter.jpg',
+    live: true,
+  },
+  {
+    id: 'radio-info',
+    title: 'franceinfo',
+    artist: 'Actualité en continu',
+    src: 'https://icecast.radiofrance.fr/franceinfo-midfi.mp3',
+    cover: '/assets/radio/franceinfo.jpg',
+    live: true,
+  },
+  {
+    id: 'radio-musique',
+    title: 'France Musique',
+    artist: 'Classique & jazz',
+    src: 'https://icecast.radiofrance.fr/francemusique-midfi.mp3',
+    cover: '/assets/radio/francemusique.jpg',
+    live: true,
+  },
+  {
+    id: 'radio-culture',
+    title: 'France Culture',
+    artist: 'Idées & savoirs',
+    src: 'https://icecast.radiofrance.fr/franceculture-midfi.mp3',
+    cover: '/assets/radio/franceculture.jpg',
+    live: true,
+  },
+  {
+    id: 'radio-mouv',
+    title: 'Mouv',
+    artist: 'Hip-hop & rap',
+    src: 'https://icecast.radiofrance.fr/mouv-midfi.mp3',
+    cover: '/assets/radio/mouv.jpg',
+    live: true,
+  },
+  {
+    id: 'radio-fipjazz',
+    title: 'FIP Jazz',
+    artist: 'Webradio jazz',
+    src: 'https://icecast.radiofrance.fr/fipjazz-midfi.mp3',
+    cover: '/assets/radio/fipjazz.jpg',
+    live: true,
+  },
+  {
+    id: 'radio-fiprock',
+    title: 'FIP Rock',
+    artist: 'Webradio rock',
+    src: 'https://icecast.radiofrance.fr/fiprock-midfi.mp3',
+    cover: '/assets/radio/fiprock.jpg',
+    live: true,
+  },
+  {
+    id: 'radio-fipelectro',
+    title: 'FIP Electro',
+    artist: 'Webradio electro',
+    src: 'https://icecast.radiofrance.fr/fipelectro-midfi.mp3',
+    cover: '/assets/radio/fipelectro.jpg',
+    live: true,
+  },
+  {
+    id: 'radio-fipgroove',
+    title: 'FIP Groove',
+    artist: 'Webradio groove',
+    src: 'https://icecast.radiofrance.fr/fipgroove-midfi.mp3',
+    cover: '/assets/radio/fipgroove.jpg',
+    live: true,
+  },
+  {
+    id: 'radio-fipreggae',
+    title: 'FIP Reggae',
+    artist: 'Webradio reggae',
+    src: 'https://icecast.radiofrance.fr/fipreggae-midfi.mp3',
+    cover: '/assets/radio/fipreggae.jpg',
+    live: true,
+  },
+  {
+    id: 'radio-icipb',
+    title: 'ici Pays basque',
+    artist: 'La radio locale d’Anglet',
+    src: 'https://icecast.radiofrance.fr/fbpaysbasque-midfi.mp3',
+    cover: '/assets/radio/icipaysbasque.jpg',
+    live: true,
+  },
+  {
+    id: 'radio-rmc',
+    title: 'RMC',
+    artist: 'Talk & sport',
+    src: 'https://audio.bfmtv.com/rmcradio_128.mp3',
+    cover: '/assets/radio/rmc.jpg',
+    live: true,
+  },
+  {
+    id: 'radio-skyrock',
+    title: 'Skyrock',
+    artist: 'Premier sur le rap',
+    src: 'https://icecast.skyrock.net/s/natio_mp3_128k',
+    cover: '/assets/radio/skyrock.jpg',
+    live: true,
+  },
+  {
+    id: 'radio-nrj',
+    title: 'NRJ',
+    artist: 'Hit music only',
+    src: 'https://cdn.nrjaudio.fm/audio1/fr/30001/mp3_128.mp3?origine=fluxradios',
+    cover: '/assets/radio/nrj.jpg',
+    live: true,
+  },
+]
+
+/** Nouveautés : top albums France via le flux RSS officiel d'Apple */
+export async function fetchItunesTop(): Promise<{
+  albums: MusicAlbum[]
+  artists: MusicArtist[]
+}> {
+  const data = (await $fetch('/api/music-top')) as {
+    feed?: {
+      results?: Array<{
+        id: string
+        name: string
+        artistName: string
+        artistId?: string
+        artworkUrl100: string
+        releaseDate?: string
+        genres?: Array<{ name: string }>
+      }>
+    }
+  }
+  const results = data.feed?.results ?? []
+  const albums: MusicAlbum[] = results.map((r) => ({
+    id: Number(r.id),
+    title: r.name,
+    artist: r.artistName,
+    cover: r.artworkUrl100.replace('100x100', '300x300'),
+    year: (r.releaseDate ?? '').slice(0, 4),
+    trackCount: 0,
+  }))
+  const seen = new Set<number>()
+  const artists: MusicArtist[] = []
+  for (const r of results) {
+    const artistId = Number(r.artistId)
+    if (!artistId || seen.has(artistId)) continue
+    seen.add(artistId)
+    artists.push({
+      id: artistId,
+      name: r.artistName,
+      genre: r.genres?.[0]?.name ?? '',
+      cover: r.artworkUrl100.replace('100x100', '300x300'),
+    })
+  }
+  return { albums, artists: artists.slice(0, 8) }
 }
