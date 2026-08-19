@@ -229,6 +229,10 @@ watch(
     if (!open) {
       drags.forEach((d) => d.kill())
       drags = []
+      // Le v-if détruit le conteneur : on détruit aussi l'instance Leaflet,
+      // sinon la réouverture retrouve une carte liée à un élément mort (écran blanc)
+      map?.remove()
+      map = null
       return
     }
     sfx.pop()
