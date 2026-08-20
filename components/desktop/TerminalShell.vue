@@ -40,6 +40,7 @@
 const emit = defineEmits(['exit'])
 
 const desktop = useDesktop()
+const track = useTrack()
 const music = useMusic()
 const projects = useProjects()
 const router = useRouter()
@@ -166,6 +167,8 @@ const execute = (raw: string) => {
   const input = raw.trim()
   const [cmd, ...args] = input.split(/\s+/)
   const arg = args.join(' ').toLowerCase()
+
+  if (cmd) track('terminal_command', { command: cmd.toLowerCase() })
 
   switch (cmd.toLowerCase()) {
     case '':

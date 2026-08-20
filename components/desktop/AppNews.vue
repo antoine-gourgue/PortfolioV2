@@ -241,6 +241,7 @@ interface NewsItem {
 
 const desktop = useDesktop()
 const sfx = useSfx()
+const track = useTrack()
 const { gsap, Draggable } = useGsap()
 const { locale, t } = useI18n()
 
@@ -252,6 +253,10 @@ const bringToFront = () => {
 
 const tab = ref<'headlines' | 'tech'>('headlines')
 const opened = ref<NewsItem | null>(null)
+watch(opened, (item) => {
+  if (item)
+    track('news_article_opened', { title: item.title, source: item.source })
+})
 watch(tab, () => (opened.value = null))
 const loading = ref(false)
 const headlines = ref<NewsItem[]>([])

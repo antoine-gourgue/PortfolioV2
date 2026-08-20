@@ -1353,13 +1353,18 @@ const qlProject = computed(() =>
   projects.find((p) => p.key === quicklook.value)
 )
 const sfx = useSfx()
+const track = useTrack()
 watch(quicklook, (v) => {
-  if (v) sfx.pop()
+  if (v) {
+    sfx.pop()
+    track('project_opened', { project: v })
+  }
 })
 
 // ── Icônes du bureau ──
 const selectedIcon = ref('')
 const downloadCv = () => {
+  track('cv_downloaded', { from: 'desktop' })
   const a = document.createElement('a')
   a.href = '/assets/antoinegourgue-cv.pdf'
   a.download = ''

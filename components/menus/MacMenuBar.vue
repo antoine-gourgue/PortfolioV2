@@ -500,6 +500,7 @@ const { locale, locales } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
 const router = useRouter()
 const desktop = useDesktop()
+const track = useTrack()
 const music = useMusic()
 const musicPlaying = computed(() => music.state.value.playing)
 const musicTrack = music.track
@@ -520,6 +521,7 @@ const sleep = () => {
 }
 
 const downloadCv = () => {
+  track('cv_downloaded', { from: 'menubar' })
   const a = document.createElement('a')
   a.href = '/assets/antoinegourgue-cv.pdf'
   a.download = ''
@@ -613,6 +615,7 @@ const currentLocale = computed(() => locale.value)
 const availableLocales = computed(() => locales.value)
 
 const selectLanguage = (code: string) => {
+  track('language_changed', { lang: code })
   router.push(switchLocalePath(code as 'fr' | 'es' | 'en'))
   openMenu.value = ''
 }

@@ -752,6 +752,7 @@
 <script setup lang="ts">
 const desktop = useDesktop()
 const sfx = useSfx()
+const track = useTrack()
 const { gsap, Draggable } = useGsap()
 const { locale, t } = useI18n()
 
@@ -921,6 +922,7 @@ const closeSports = () => {
 const setLeague = (code: string) => {
   if (code === league.value) return
   sfx.click()
+  track('sports_league_selected', { league: code })
   league.value = code
   pane.value = 'main'
   load()
@@ -944,6 +946,10 @@ const detailLoading = ref(false)
 
 const openMatch = async (m: SportsMatch) => {
   sfx.click()
+  track('sports_match_opened', {
+    match: `${m.home.name} – ${m.away.name}`,
+    state: m.state,
+  })
   selMatch.value = m
   matchDetail.value = null
   pane.value = 'match'
@@ -965,6 +971,7 @@ const openTeam = async (
 ) => {
   if (!team.id) return
   sfx.click()
+  track('sports_team_opened', { team: team.name })
   cameFrom.value = from
   selTeamName.value = team.name
   teamDetail.value = null

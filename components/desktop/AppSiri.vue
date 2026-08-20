@@ -95,6 +95,7 @@
 <script setup lang="ts">
 const desktop = useDesktop()
 const sfx = useSfx()
+const track = useTrack()
 const { locale, t } = useI18n()
 
 const listening = ref(false)
@@ -234,6 +235,7 @@ const stripMarkdown = (text: string) =>
 
 // ── Appel du LLM ──
 const ask = async (question: string) => {
+  track('siri_question', { question })
   thinking.value = true
   history.push({ role: 'user', content: question })
   try {

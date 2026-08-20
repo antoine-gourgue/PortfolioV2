@@ -432,6 +432,7 @@ import AgLogo from '~/components/ui/AGLogo.vue'
 const { t } = useI18n()
 const { gsap } = useGsap()
 const sfx = useSfx()
+const track = useTrack()
 const { notify } = useNotify()
 
 const form = ref({
@@ -641,6 +642,7 @@ watch(openedMail, (id) => {
 })
 
 const downloadCv = () => {
+  track('cv_downloaded', { from: 'mail' })
   const a = document.createElement('a')
   a.href = '/assets/antoinegourgue-cv.pdf'
   a.download = ''
@@ -698,6 +700,7 @@ const submitForm = async () => {
     await $fetch('/api/contact', { method: 'POST', body })
 
     sfx.send()
+    track('contact_sent', { attachment: !!attachedFile.value })
     notify({ icon: 'mail', title: 'Mail', message: t('contact.success') })
 
     form.value.name = ''

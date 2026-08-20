@@ -161,6 +161,7 @@ import { sanitizeHtml } from '@/utils/sanitizeHtml'
 const desktop = useDesktop()
 const { gsap, Draggable } = useGsap()
 const sfx = useSfx()
+const track = useTrack()
 const { locale, t } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
 const router = useRouter()
@@ -357,6 +358,7 @@ const localResponse = (userText: string): string => {
 }
 
 const sendMessage = async () => {
+  track('messages_question')
   if (!newMessage.value.trim() || isBotTyping.value) return
   const userText = newMessage.value.trim()
   messages.value.push({ from: 'user', text: userText })
