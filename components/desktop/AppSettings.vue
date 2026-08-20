@@ -3,16 +3,16 @@
     <div
       v-if="desktop.state.value.apps.settings"
       ref="winEl"
-      class="fixed inset-0 z-40 overflow-hidden lg:inset-auto lg:left-[30%] lg:top-32 lg:w-[560px] lg:rounded-xl lg:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.45)] lg:ring-1 lg:ring-black/10"
+      class="fixed inset-0 z-40 overflow-hidden lg:inset-auto lg:left-[28%] lg:top-28 lg:w-[640px] lg:rounded-xl lg:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.45)] lg:ring-1 lg:ring-black/10"
       :style="{ zIndex: z }"
       @pointerdown="bringToFront"
     >
       <div
-        class="flex h-full flex-col bg-[#f2f2f7] lg:h-[400px] lg:flex-row lg:bg-transparent"
+        class="flex h-full flex-col bg-[#f2f2f7] lg:h-[460px] lg:flex-row lg:bg-transparent"
       >
         <!-- ── Desktop : barre latérale translucide ── -->
         <aside
-          class="hidden w-[185px] shrink-0 flex-col border-r border-black/10 bg-[#E9E9EE]/95 backdrop-blur-2xl lg:flex"
+          class="hidden w-[200px] shrink-0 flex-col border-r border-black/10 bg-[#EBEBF0]/95 backdrop-blur-2xl lg:flex"
         >
           <div class="settings-drag flex items-center gap-2 px-4 pt-3">
             <button
@@ -41,10 +41,28 @@
             ></span>
           </div>
 
+          <!-- Recherche -->
+          <div
+            class="mx-2.5 mt-3.5 flex items-center gap-1.5 rounded-[7px] bg-black/[0.07] px-2 py-[3.5px]"
+          >
+            <i
+              aria-hidden="true"
+              class="f7-icons text-black/35"
+              style="font-size: 12px"
+              >search</i
+            >
+            <input
+              v-model="sidebarQuery"
+              type="text"
+              :placeholder="$t('macos.search')"
+              class="w-full bg-transparent text-[12.5px] text-aink outline-none placeholder:text-black/35"
+            />
+          </div>
+
           <!-- Profil -->
           <button
-            class="mx-2.5 mt-4 flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-left transition hover:bg-black/5"
-            @click="section = 'general'"
+            class="mx-2.5 mt-3 flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-left transition hover:bg-black/5"
+            @click="goSection('general')"
           >
             <span
               class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-b from-[#3b4048] to-[#17181b]"
@@ -61,26 +79,28 @@
             </span>
           </button>
 
-          <nav class="mt-3 flex flex-col gap-0.5 px-2.5">
+          <nav class="mt-2.5 flex flex-col gap-px px-2.5">
             <button
-              v-for="item in sections"
+              v-for="item in filteredSections"
               :key="item.id"
-              class="flex items-center gap-2.5 rounded-md px-2 py-[5px] text-left text-[13px] transition"
+              class="flex items-center gap-2 rounded-[7px] px-1.5 py-[4px] text-left text-[13px] transition"
               :class="
                 section === item.id
                   ? 'bg-[#0A84FF] font-medium text-white'
                   : 'text-aink hover:bg-black/5'
               "
-              @click="section = item.id"
+              @click="goSection(item.id)"
             >
               <span
-                class="flex h-[22px] w-[22px] items-center justify-center rounded-[6px] text-white shadow-sm"
-                :style="{ background: item.tint }"
+                class="flex h-[21px] w-[21px] items-center justify-center rounded-[5.5px] text-white shadow-[inset_0_0.5px_0_rgba(255,255,255,0.35),0_0.5px_1.5px_rgba(0,0,0,0.25)]"
+                :style="{
+                  background: `linear-gradient(180deg, ${item.tintLight}, ${item.tint})`,
+                }"
               >
                 <i
                   aria-hidden="true"
                   class="f7-icons"
-                  style="font-size: 13px"
+                  style="font-size: 12px"
                   >{{ item.icon }}</i
                 >
               </span>
@@ -93,206 +113,285 @@
         <div class="relative flex items-center px-4 pb-2 pt-12 lg:hidden">
           <button
             class="flex items-center gap-0.5 text-[15px] font-medium text-[#0A84FF]"
-            @click="desktop.closeApp('settings')"
+            @click="
+              mobileDetail
+                ? (mobileDetail = false)
+                : desktop.closeApp('settings')
+            "
           >
             <span class="text-xl leading-none">‹</span>
-            {{ $t('macos.close') }}
+            {{ mobileDetail ? $t('macos.settingsTitle') : $t('macos.close') }}
           </button>
           <span
             class="absolute left-1/2 -translate-x-1/2 text-[16px] font-semibold text-aink"
           >
-            {{ $t('macos.settingsTitle') }}
+            {{
+              mobileDetail ? $t(activeSection.label) : $t('macos.settingsTitle')
+            }}
           </span>
         </div>
 
         <!-- ── Contenu ── -->
         <div class="flex flex-1 flex-col overflow-hidden bg-[#f2f2f7]">
-          <!-- Desktop : barre de titre de section -->
+          <!-- Desktop : barre de titre avec navigation -->
           <div
-            class="settings-drag hidden h-[46px] shrink-0 items-center border-b border-black/10 px-5 lg:flex"
+            class="settings-drag hidden h-[46px] shrink-0 items-center gap-2 border-b border-black/10 px-4 lg:flex"
           >
-            <span class="text-[14px] font-bold text-aink">
+            <button
+              class="flex h-6 w-6 items-center justify-center rounded-md transition"
+              :class="
+                history.length
+                  ? 'text-aink/70 hover:bg-black/5'
+                  : 'cursor-default text-black/20'
+              "
+              aria-label="back"
+              @pointerdown.stop
+              @click="goBack"
+            >
+              <i aria-hidden="true" class="f7-icons" style="font-size: 15px"
+                >chevron_left</i
+              >
+            </button>
+            <button
+              class="flex h-6 w-6 items-center justify-center rounded-md transition"
+              :class="
+                forward.length
+                  ? 'text-aink/70 hover:bg-black/5'
+                  : 'cursor-default text-black/20'
+              "
+              aria-label="forward"
+              @pointerdown.stop
+              @click="goForward"
+            >
+              <i aria-hidden="true" class="f7-icons" style="font-size: 15px"
+                >chevron_right</i
+              >
+            </button>
+            <span class="ml-1 text-[15px] font-bold text-aink">
               {{ $t(activeSection.label) }}
             </span>
           </div>
 
           <div
-            class="flex-1 overflow-y-auto px-4 pb-8 pt-1 lg:px-5 lg:pb-5 lg:pt-4"
+            class="flex-1 overflow-y-auto px-4 pb-8 pt-1 lg:px-6 lg:pb-6 lg:pt-4"
           >
-            <!-- Mobile : navigation par pilules -->
-            <div class="mb-4 flex gap-1.5 overflow-x-auto lg:hidden">
-              <button
-                v-for="item in sections"
-                :key="item.id"
-                class="shrink-0 rounded-full px-3.5 py-1.5 text-[13px] font-semibold"
-                :class="
-                  section === item.id
-                    ? 'bg-[#0A84FF] text-white'
-                    : 'bg-black/5 text-aink'
-                "
-                @click="section = item.id"
-              >
-                {{ $t(item.label) }}
-              </button>
+            <!-- Mobile : liste iOS des sections -->
+            <div v-if="!mobileDetail" class="mt-2 lg:hidden">
+              <div class="settings-card">
+                <button
+                  v-for="item in sections"
+                  :key="item.id"
+                  class="flex w-full items-center gap-3 px-4 py-2.5 text-left"
+                  @click="((section = item.id), (mobileDetail = true))"
+                >
+                  <span
+                    class="flex h-[28px] w-[28px] items-center justify-center rounded-[7px] text-white"
+                    :style="{
+                      background: `linear-gradient(180deg, ${item.tintLight}, ${item.tint})`,
+                    }"
+                  >
+                    <i
+                      aria-hidden="true"
+                      class="f7-icons"
+                      style="font-size: 15px"
+                      >{{ item.icon }}</i
+                    >
+                  </span>
+                  <span class="settings-label flex-1">{{
+                    $t(item.label)
+                  }}</span>
+                  <span class="text-[15px] text-black/25">›</span>
+                </button>
+              </div>
             </div>
 
-            <!-- Fond d'écran -->
-            <template v-if="section === 'wallpaper'">
-              <div class="settings-card">
-                <div class="px-4 py-3">
-                  <p class="settings-label">
-                    {{ $t('macos.settingsWallpaper') }}
-                  </p>
-                  <p class="mt-0.5 text-[11.5px] text-black/45">
-                    {{ $t('macos.settingsWallpaperHint') }}
-                  </p>
-                  <div class="mt-3 grid grid-cols-2 gap-3">
-                    <button
-                      class="relative flex aspect-video items-center justify-center overflow-hidden rounded-lg shadow-sm transition"
-                      :class="
-                        desktop.state.value.wallpaperAuto
-                          ? 'ring-2 ring-[#0A84FF] ring-offset-2 ring-offset-[#f2f2f7]'
-                          : 'opacity-85 hover:opacity-100'
-                      "
-                      :style="{ backgroundImage: wallpaper.style.value }"
-                      aria-label="wallpaper auto"
-                      @click="
-                        (sfx.click(),
-                        (desktop.state.value.wallpaperAuto = true))
-                      "
-                    >
-                      <span
-                        class="rounded-full bg-black/35 px-2 py-0.5 text-[11px] font-semibold text-white backdrop-blur"
+            <div :class="mobileDetail ? '' : 'hidden lg:block'">
+              <!-- Fond d'écran -->
+              <template v-if="section === 'wallpaper'">
+                <div class="settings-card">
+                  <div class="px-4 py-3.5">
+                    <div class="grid grid-cols-2 gap-3">
+                      <button
+                        class="relative flex aspect-video items-center justify-center overflow-hidden rounded-lg shadow-sm transition"
+                        :class="
+                          desktop.state.value.wallpaperAuto
+                            ? 'ring-2 ring-[#0A84FF] ring-offset-2 ring-offset-white'
+                            : 'opacity-85 hover:opacity-100'
+                        "
+                        :style="{ backgroundImage: wallpaper.style.value }"
+                        aria-label="wallpaper auto"
+                        @click="
+                          (sfx.click(),
+                          (desktop.state.value.wallpaperAuto = true))
+                        "
                       >
-                        {{ $t('macos.settingsWallpaperAuto') }}
-                      </span>
-                    </button>
-                    <button
-                      v-for="(wp, i) in WALLPAPERS"
-                      :key="i"
-                      class="aspect-video rounded-lg shadow-sm transition"
-                      :class="
-                        !desktop.state.value.wallpaperAuto &&
-                        desktop.state.value.wallpaper === i
-                          ? 'ring-2 ring-[#0A84FF] ring-offset-2 ring-offset-[#f2f2f7]'
-                          : 'opacity-85 hover:opacity-100'
-                      "
-                      :style="{ backgroundImage: wp }"
-                      :aria-label="`wallpaper ${i + 1}`"
-                      @click="
-                        (sfx.click(),
-                        (desktop.state.value.wallpaperAuto = false),
-                        (desktop.state.value.wallpaper = i))
-                      "
-                    ></button>
+                        <span
+                          class="rounded-full bg-black/35 px-2 py-0.5 text-[11px] font-semibold text-white backdrop-blur"
+                        >
+                          {{ $t('macos.settingsWallpaperAuto') }}
+                        </span>
+                      </button>
+                      <button
+                        v-for="(wp, i) in WALLPAPERS"
+                        :key="i"
+                        class="aspect-video rounded-lg shadow-sm transition"
+                        :class="
+                          !desktop.state.value.wallpaperAuto &&
+                          desktop.state.value.wallpaper === i
+                            ? 'ring-2 ring-[#0A84FF] ring-offset-2 ring-offset-white'
+                            : 'opacity-85 hover:opacity-100'
+                        "
+                        :style="{ backgroundImage: wp }"
+                        :aria-label="`wallpaper ${i + 1}`"
+                        @click="
+                          (sfx.click(),
+                          (desktop.state.value.wallpaperAuto = false),
+                          (desktop.state.value.wallpaper = i))
+                        "
+                      ></button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </template>
+                <p class="settings-footnote">
+                  {{ $t('macos.settingsWallpaperHint') }}
+                </p>
+              </template>
 
-            <!-- Son -->
-            <template v-else-if="section === 'sound'">
-              <div class="settings-card">
-                <div class="flex items-center justify-between px-4 py-2.5">
-                  <span class="settings-label">{{
-                    $t('macos.settingsSfx')
-                  }}</span>
-                  <button
-                    class="relative h-[26px] w-[46px] rounded-full transition-colors"
-                    :class="
-                      !desktop.state.value.sfxMuted
-                        ? 'bg-[#34C759]'
-                        : 'bg-black/15'
-                    "
-                    role="switch"
-                    :aria-checked="!desktop.state.value.sfxMuted"
-                    @click="toggleSfx"
-                  >
-                    <span
-                      class="absolute top-[2px] h-[22px] w-[22px] rounded-full bg-white shadow transition-all"
+              <!-- Son -->
+              <template v-else-if="section === 'sound'">
+                <div class="settings-card">
+                  <div class="flex items-center justify-between px-4 py-2.5">
+                    <span class="settings-label">{{
+                      $t('macos.settingsSfx')
+                    }}</span>
+                    <button
+                      class="relative h-[15px] w-[26px] rounded-full transition-colors duration-200"
                       :class="
                         !desktop.state.value.sfxMuted
-                          ? 'left-[22px]'
-                          : 'left-[2px]'
+                          ? 'bg-[#0A84FF]'
+                          : 'bg-black/25'
                       "
-                    ></span>
+                      role="switch"
+                      :aria-checked="!desktop.state.value.sfxMuted"
+                      @click="toggleSfx"
+                    >
+                      <span
+                        class="absolute top-[1px] h-[13px] w-[13px] rounded-full bg-white shadow-[0_1px_2px_rgba(0,0,0,0.3)] transition-all duration-200"
+                        :class="
+                          !desktop.state.value.sfxMuted
+                            ? 'left-[12px]'
+                            : 'left-[1px]'
+                        "
+                      ></span>
+                    </button>
+                  </div>
+                  <div class="flex items-center gap-3 px-4 py-3">
+                    <span class="settings-label shrink-0">{{
+                      $t('macos.settingsMusicVolume')
+                    }}</span>
+                    <i
+                      aria-hidden="true"
+                      class="f7-icons ml-auto text-black/35"
+                      style="font-size: 11px"
+                      >speaker_fill</i
+                    >
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.01"
+                      :value="music.state.value.volume"
+                      class="settings-vol w-40"
+                      @input="
+                        music.setVolume(
+                          parseFloat(($event.target as HTMLInputElement).value)
+                        )
+                      "
+                    />
+                    <i
+                      aria-hidden="true"
+                      class="f7-icons text-black/35"
+                      style="font-size: 13px"
+                      >speaker_3_fill</i
+                    >
+                  </div>
+                </div>
+              </template>
+
+              <!-- Langue -->
+              <template v-else-if="section === 'language'">
+                <div class="settings-card">
+                  <button
+                    v-for="loc in availableLocales"
+                    :key="loc.code"
+                    class="flex w-full items-center gap-3 px-4 py-2.5 text-left transition hover:bg-black/[0.03]"
+                    @click="selectLanguage(loc.code)"
+                  >
+                    <span
+                      class="w-8 shrink-0 rounded-[4px] border-[1.3px] border-black/35 px-[3px] pb-px text-center text-[10px] font-bold uppercase leading-[14px] tracking-[0.05em] text-black/55"
+                      >{{ loc.code }}</span
+                    >
+                    <span class="settings-label flex-1">{{ loc.name }}</span>
+                    <i
+                      v-if="locale === loc.code"
+                      aria-hidden="true"
+                      class="f7-icons font-semibold text-[#0A84FF]"
+                      style="font-size: 13px"
+                      >checkmark</i
+                    >
                   </button>
                 </div>
-                <div class="hidden items-center gap-3 px-4 py-3 lg:flex">
-                  <span class="settings-label shrink-0">{{
-                    $t('macos.settingsMusicVolume')
-                  }}</span>
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    :value="music.state.value.volume"
-                    class="settings-vol flex-1"
-                    @input="
-                      music.setVolume(
-                        parseFloat(($event.target as HTMLInputElement).value)
-                      )
-                    "
-                  />
-                </div>
-              </div>
-            </template>
+                <p class="settings-footnote">
+                  {{ $t('macos.settingsLanguageHint') }}
+                </p>
+              </template>
 
-            <!-- Langue -->
-            <template v-else-if="section === 'language'">
-              <div class="settings-card">
-                <button
-                  v-for="loc in availableLocales"
-                  :key="loc.code"
-                  class="flex w-full items-center gap-3 px-4 py-2.5 text-left transition hover:bg-black/[0.03]"
-                  @click="selectLanguage(loc.code)"
-                >
-                  <DesktopFlagIcon :code="loc.code" class="h-[15px] w-[22px]" />
-                  <span class="settings-label flex-1">{{ loc.name }}</span>
-                  <span
-                    v-if="locale === loc.code"
-                    class="text-[15px] font-semibold text-[#0A84FF]"
-                    >✓</span
-                  >
-                </button>
-              </div>
-            </template>
-
-            <!-- Général -->
-            <template v-else>
-              <div class="settings-card">
-                <div class="flex items-center gap-3 px-4 py-3.5">
-                  <span
-                    class="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-b from-[#3b4048] to-[#17181b] shadow-sm"
-                  >
-                    <AgLogo class="h-5 w-6 text-white" />
-                  </span>
-                  <span>
-                    <span class="settings-label block font-semibold"
-                      >AntoineOS 26</span
+              <!-- Général -->
+              <template v-else>
+                <div class="settings-card">
+                  <div class="flex items-center gap-3 px-4 py-3.5">
+                    <span
+                      class="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-b from-[#3b4048] to-[#17181b] shadow-sm"
                     >
-                    <span class="block text-[11.5px] text-black/45">
-                      Nuxt 3 · GSAP · Tailwind
-                      <template v-if="buildSha">
-                        · build {{ buildSha }}</template
-                      >
+                      <AgLogo class="h-5 w-6 text-white" />
                     </span>
-                  </span>
+                    <span>
+                      <span class="settings-label block font-semibold"
+                        >AntoineOS</span
+                      >
+                      <span class="block text-[11.5px] text-black/45">{{
+                        $t('macos.settingsTagline')
+                      }}</span>
+                    </span>
+                  </div>
+                  <div class="settings-row">
+                    <span class="settings-label">{{
+                      $t('macos.settingsVersion')
+                    }}</span>
+                    <span class="settings-value">26.0</span>
+                  </div>
+                  <div class="settings-row">
+                    <span class="settings-label">Frameworks</span>
+                    <span class="settings-value">Nuxt 3 · GSAP · Tailwind</span>
+                  </div>
+                  <div v-if="buildSha" class="settings-row">
+                    <span class="settings-label">Build</span>
+                    <span class="settings-value">{{ buildSha }}</span>
+                  </div>
                 </div>
-              </div>
-              <div class="settings-card mt-4">
-                <button
-                  class="w-full px-4 py-2.5 text-left text-[13.5px] font-medium text-[#FF3B30] transition hover:bg-black/[0.03]"
-                  @click="resetDesktop"
-                >
-                  {{ $t('macos.settingsReset') }}
-                </button>
-              </div>
-              <p class="mt-2 px-1 text-[11.5px] text-black/45">
-                {{ $t('macos.settingsResetHint') }}
-              </p>
-            </template>
+                <div class="settings-card mt-4">
+                  <button
+                    class="w-full px-4 py-2.5 text-left text-[13.5px] font-medium text-[#FF3B30] transition hover:bg-black/[0.03]"
+                    @click="resetDesktop"
+                  >
+                    {{ $t('macos.settingsReset') }}
+                  </button>
+                </div>
+                <p class="settings-footnote">
+                  {{ $t('macos.settingsResetHint') }}
+                </p>
+              </template>
+            </div>
           </div>
         </div>
       </div>
@@ -312,6 +411,7 @@ const { gsap, Draggable } = useGsap()
 const { locale, locales } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
 const router = useRouter()
+const { t } = useI18n()
 const buildSha = (
   useRuntimeConfig().public.gitSha as string | undefined
 )?.slice(0, 7)
@@ -324,38 +424,75 @@ const bringToFront = () => {
 
 type SectionId = 'wallpaper' | 'sound' | 'language' | 'general'
 const section = ref<SectionId>('wallpaper')
+const mobileDetail = ref(false)
 
 const sections: Array<{
   id: SectionId
   label: string
   icon: string
   tint: string
+  tintLight: string
 }> = [
   {
     id: 'wallpaper',
     label: 'macos.settingsWallpaper',
     icon: 'photo_fill',
     tint: '#0A84FF',
+    tintLight: '#55AAFF',
   },
   {
     id: 'sound',
     label: 'macos.settingsSound',
     icon: 'speaker_2_fill',
     tint: '#FF2D55',
+    tintLight: '#FF6482',
   },
   {
     id: 'language',
     label: 'macos.settingsLanguage',
     icon: 'globe',
     tint: '#34C759',
+    tintLight: '#63DE82',
   },
   {
     id: 'general',
     label: 'macos.settingsGeneral',
     icon: 'gear_alt_fill',
     tint: '#8E8E93',
+    tintLight: '#B0B0B5',
   },
 ]
+
+// Recherche de la barre latérale : filtre les sections par libellé traduit
+const sidebarQuery = ref('')
+const filteredSections = computed(() => {
+  const q = sidebarQuery.value.trim().toLowerCase()
+  if (!q) return sections
+  return sections.filter((s) => t(s.label).toLowerCase().includes(q))
+})
+
+// Historique de navigation (chevrons ‹ › comme System Settings)
+const history = ref<SectionId[]>([])
+const forward = ref<SectionId[]>([])
+const goSection = (id: SectionId) => {
+  if (id === section.value) return
+  sfx.click()
+  history.value.push(section.value)
+  forward.value = []
+  section.value = id
+}
+const goBack = () => {
+  const prev = history.value.pop()
+  if (!prev) return
+  forward.value.push(section.value)
+  section.value = prev
+}
+const goForward = () => {
+  const next = forward.value.pop()
+  if (!next) return
+  history.value.push(section.value)
+  section.value = next
+}
 
 const activeSection = computed(
   () => sections.find((s) => s.id === section.value) ?? sections[0]
@@ -411,6 +548,7 @@ watch(
       return
     }
     sfx.pop()
+    mobileDetail.value = false
     nextTick(() => {
       if (!winEl.value) return
       bringToFront()
@@ -435,22 +573,36 @@ watch(
 
 <style scoped>
 .settings-card {
-  @apply overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-black/5;
+  @apply overflow-hidden rounded-[10px] bg-white shadow-sm ring-1 ring-black/5;
 }
+/* Séparateurs en retrait, alignés sur le texte, comme System Settings */
 .settings-card > * + * {
-  @apply border-t border-black/5;
+  @apply relative;
+}
+.settings-card > * + *::before {
+  content: '';
+  @apply absolute left-4 right-0 top-0 border-t border-black/[0.08];
 }
 .settings-label {
-  @apply text-[13.5px] font-medium text-aink;
+  @apply text-[13px] font-normal text-aink;
+}
+.settings-row {
+  @apply flex items-center justify-between px-4 py-2.5;
+}
+.settings-value {
+  @apply text-[13px] text-black/45;
+}
+.settings-footnote {
+  @apply mt-1.5 px-4 text-[11px] leading-snug text-black/40;
 }
 
 .settings-vol {
-  @apply h-[5px] cursor-pointer appearance-none rounded-full bg-black/15;
+  @apply h-[4px] cursor-pointer appearance-none rounded-full bg-black/15;
 }
 .settings-vol::-webkit-slider-thumb {
-  @apply h-3.5 w-3.5 appearance-none rounded-full bg-white shadow ring-1 ring-black/10;
+  @apply h-[15px] w-[15px] appearance-none rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.3)] ring-1 ring-black/5;
 }
 .settings-vol::-moz-range-thumb {
-  @apply h-3.5 w-3.5 rounded-full border-0 bg-white shadow;
+  @apply h-[15px] w-[15px] rounded-full border-0 bg-white shadow;
 }
 </style>
