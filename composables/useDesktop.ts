@@ -11,6 +11,7 @@ interface DesktopState {
   wallpaper: number
   spotlightOpen: boolean
   apps: Record<string, boolean>
+  minimizedApps: Record<string, boolean>
   wallpaperAuto: boolean
   notifOpen: boolean
   locked: boolean
@@ -47,7 +48,9 @@ export function useDesktop() {
       maps: false,
       siri: false,
       news: false,
+      sports: false,
     },
+    minimizedApps: {},
     wallpaperAuto: true,
     notifOpen: false,
     locked: false,
@@ -56,9 +59,16 @@ export function useDesktop() {
 
   const toggleApp = (id: string) => {
     state.value.apps[id] = !state.value.apps[id]
+    state.value.minimizedApps[id] = false
   }
   const closeApp = (id: string) => {
     state.value.apps[id] = false
+    state.value.minimizedApps[id] = false
+  }
+  // Réduite : fenêtre masquée mais app « en cours » (point dans le Dock)
+  const minimizeApp = (id: string) => {
+    state.value.apps[id] = false
+    state.value.minimizedApps[id] = true
   }
 
   // Même échelle de z que les fenêtres d'app (bringToFront : 40 + topZ),
@@ -125,5 +135,6 @@ export function useDesktop() {
     minimized,
     toggleApp,
     closeApp,
+    minimizeApp,
   }
 }

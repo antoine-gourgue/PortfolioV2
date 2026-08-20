@@ -278,7 +278,7 @@
             <button
               class="group flex h-3 w-3 items-center justify-center rounded-full border border-[#D89E24] bg-[#FEBC2E]"
               aria-label="minimize"
-              @click.stop="(sfx.minimize(), desktop.closeApp('music'))"
+              @click.stop="(sfx.minimize(), desktop.minimizeApp('music'))"
               @pointerdown.stop
             >
               <svg

@@ -33,9 +33,24 @@
                 />
               </svg>
             </button>
-            <span
-              class="h-3 w-3 rounded-full border border-black/10 bg-[#DDDDDF]"
-            ></span>
+            <button
+              class="group flex h-3 w-3 items-center justify-center rounded-full border border-[#D89E24] bg-[#FEBC2E]"
+              aria-label="minimize"
+              @click.stop="(sfx.minimize(), desktop.minimizeApp('settings'))"
+              @pointerdown.stop
+            >
+              <svg
+                viewBox="0 0 12 12"
+                class="h-full w-full p-[1px] opacity-0 group-hover:opacity-100"
+              >
+                <path
+                  d="M2.6 6 L9.4 6"
+                  stroke="#985712"
+                  stroke-width="1.4"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
             <span
               class="h-3 w-3 rounded-full border border-black/10 bg-[#DDDDDF]"
             ></span>

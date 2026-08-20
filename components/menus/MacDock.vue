@@ -41,7 +41,11 @@
       <DesktopMacAppIcon :name="app.icon" />
       <span class="dock-tip">{{ $t(app.label) }}</span>
       <span
-        v-if="state.apps[app.id] || (app.id === 'music' && musicPlaying)"
+        v-if="
+          state.apps[app.id] ||
+          state.minimizedApps[app.id] ||
+          (app.id === 'music' && musicPlaying)
+        "
         class="absolute -bottom-[7px] left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-white/80"
       ></span>
     </button>
@@ -96,6 +100,7 @@ const utilApps = [
   { id: 'music', label: 'macos.musicTitle', icon: 'music' },
   { id: 'maps', label: 'macos.mapsTitle', icon: 'maps' },
   { id: 'news', label: 'macos.newsTitle', icon: 'news' },
+  { id: 'sports', label: 'macos.sportsTitle', icon: 'sports' },
   { id: 'settings', label: 'macos.settingsTitle', icon: 'settings' },
 ]
 

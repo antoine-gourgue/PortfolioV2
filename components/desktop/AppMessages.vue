@@ -11,7 +11,7 @@
       <div
         class="msg-drag flex flex-col items-center border-b border-black/5 bg-[#F5F5F7]/90 px-3 pb-2 pt-10 backdrop-blur lg:pt-2.5"
       >
-        <div class="flex w-full items-center">
+        <div class="flex w-full items-center gap-2">
           <!-- Fermer (desktop : pastille / mobile : chevron iOS) -->
           <button
             class="group hidden h-3 w-3 items-center justify-center rounded-full border border-[#E0443E] bg-[#FF5F57] lg:flex"
@@ -31,6 +31,27 @@
               />
             </svg>
           </button>
+          <button
+            class="group hidden h-3 w-3 items-center justify-center rounded-full border border-[#D89E24] bg-[#FEBC2E] lg:flex"
+            aria-label="minimize"
+            @click.stop="(sfx.minimize(), desktop.minimizeApp('messages'))"
+            @pointerdown.stop
+          >
+            <svg
+              viewBox="0 0 12 12"
+              class="h-full w-full p-[1px] opacity-0 group-hover:opacity-100"
+            >
+              <path
+                d="M2.6 6 L9.4 6"
+                stroke="#985712"
+                stroke-width="1.4"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+          <span
+            class="hidden h-3 w-3 rounded-full border border-black/10 bg-[#DDDDDF] lg:block"
+          ></span>
           <button
             class="flex items-center gap-0.5 text-[15px] font-medium text-[#0A84FF] lg:hidden"
             @click.stop="(sfx.minimize(), desktop.closeApp('messages'))"
