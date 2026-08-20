@@ -359,52 +359,144 @@
               <p class="px-2 pb-1.5 text-[11px] font-semibold text-black/35">
                 {{ $t('macos.finderFavorites') }}
               </p>
-              <div class="sidebar-item">
+              <button
+                class="sidebar-item w-full text-left hover:bg-black/5"
+                @click="desktop.state.value.apps.airdrop = true"
+              >
                 <span class="sf"><DesktopSfIcon name="airdrop" /></span>
                 {{ $t('macos.finderAirdrop') }}
-              </div>
-              <div class="sidebar-item">
+              </button>
+              <button
+                class="sidebar-item w-full text-left hover:bg-black/5"
+                :class="
+                  finderSection === 'recents'
+                    ? 'bg-black/10 font-medium !text-aink'
+                    : ''
+                "
+                @click="openFinderSection('recents')"
+              >
                 <span class="sf"><DesktopSfIcon name="clock" /></span>
                 {{ $t('macos.finderRecents') }}
-              </div>
-              <div class="sidebar-item">
+              </button>
+              <button
+                class="sidebar-item w-full text-left hover:bg-black/5"
+                @click="navigateTo(localePath('/projects'))"
+              >
                 <span class="sf"><DesktopSfIcon name="grid" /></span>
                 {{ $t('macos.finderApps') }}
-              </div>
-              <div class="sidebar-item">
+              </button>
+              <button
+                class="sidebar-item w-full text-left hover:bg-black/5"
+                @click="scrollToDesktop()"
+              >
                 <span class="sf"><DesktopSfIcon name="desktop" /></span>
                 {{ $t('macos.finderDesktop') }}
-              </div>
-              <div class="sidebar-item">
+              </button>
+              <button
+                class="sidebar-item w-full text-left hover:bg-black/5"
+                :class="
+                  finderSection === 'docs'
+                    ? 'bg-black/10 font-medium !text-aink'
+                    : ''
+                "
+                @click="openFinderSection('docs')"
+              >
                 <span class="sf"><DesktopSfIcon name="doc" /></span>
                 {{ $t('macos.finderDocs') }}
-              </div>
-              <div class="sidebar-item">
+              </button>
+              <button
+                class="sidebar-item w-full text-left hover:bg-black/5"
+                @click="downloadCv()"
+              >
                 <span class="sf"><DesktopSfIcon name="download" /></span>
                 {{ $t('macos.finderDownloads') }}
-              </div>
-              <div
-                class="mt-0.5 flex items-center gap-2 rounded-md bg-black/10 px-2 py-1 text-[13px] font-medium text-aink"
+              </button>
+              <button
+                class="sidebar-item w-full text-left hover:bg-black/5"
+                :class="
+                  finderSection === 'projects' && !finderTag
+                    ? 'bg-black/10 font-medium !text-aink'
+                    : ''
+                "
+                @click="openFinderSection('projects')"
               >
                 <span class="sf"><DesktopSfIcon name="folder" /></span>
                 {{ $t('macos.finderProjects') }}
-              </div>
+              </button>
 
               <p
                 class="px-2 pb-1.5 pt-4 text-[11px] font-semibold text-black/35"
               >
                 {{ $t('macos.finderLocations') }}
               </p>
-              <div class="sidebar-item">
+              <button
+                class="sidebar-item w-full text-left hover:bg-black/5"
+                @click="navigateTo(localePath('/about'))"
+              >
                 <span class="sf"><DesktopSfIcon name="laptop" /></span>
                 {{ $t('macos.finderMac') }}
-              </div>
+              </button>
+
+              <p
+                class="px-2 pb-1.5 pt-4 text-[11px] font-semibold text-black/35"
+              >
+                {{ $t('macos.finderTagsTitle') }}
+              </p>
+              <button
+                v-for="tag in finderTags"
+                :key="tag.key"
+                class="sidebar-item w-full text-left hover:bg-black/5"
+                :class="
+                  finderTag === tag.key
+                    ? 'bg-black/10 font-medium !text-aink'
+                    : ''
+                "
+                @click="toggleFinderTag(tag.key)"
+              >
+                <span
+                  class="mx-0.5 h-2.5 w-2.5 shrink-0 rounded-full border border-black/10"
+                  :style="{ background: tag.color }"
+                ></span>
+                <span class="truncate">{{ $t(tag.key) }}</span>
+              </button>
             </aside>
 
             <!-- Contenu (grille ou liste) + barre de statut -->
             <div class="flex min-w-0 flex-1 flex-col">
+              <!-- Vue Documents : le CV en fichier -->
+              <div v-if="finderSection === 'docs'" class="flex-1 p-6">
+                <div
+                  class="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 lg:grid-cols-4"
+                >
+                  <button
+                    class="group flex flex-col items-center gap-2"
+                    @click.stop="finderSelected = 'cvdoc'"
+                    @dblclick="openUrl('/assets/antoinegourgue-cv.pdf')"
+                  >
+                    <span
+                      class="block h-16 w-16 rounded-2xl p-1 transition-transform duration-300 group-hover:scale-105"
+                      :class="finderSelected === 'cvdoc' ? 'bg-black/10' : ''"
+                    >
+                      <DesktopMacAppIcon name="pdf" />
+                    </span>
+                    <span
+                      class="max-w-full truncate rounded px-1.5 text-[12.5px] font-medium"
+                      :class="
+                        finderSelected === 'cvdoc'
+                          ? 'bg-ablue text-white'
+                          : 'text-aink'
+                      "
+                      >{{ $t('macos.deskCv') }}</span
+                    >
+                  </button>
+                </div>
+                <p class="pt-8 text-center text-[12px] text-black/35">
+                  {{ $t('macos.finderDocsHint') }}
+                </p>
+              </div>
+
               <!-- Vue grille -->
-              <div v-if="finderView === 'grid'" class="flex-1 p-6">
+              <div v-else-if="finderView === 'grid'" class="flex-1 p-6">
                 <div
                   v-if="finderProjects.length"
                   class="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 lg:grid-cols-4"
@@ -530,7 +622,11 @@
               <div
                 class="border-t border-black/5 bg-white/60 px-4 py-1.5 text-center text-[11px] text-black/40"
               >
-                {{ $t('macos.finderStatus', { count: finderProjects.length }) }}
+                {{
+                  $t('macos.finderStatus', {
+                    count: finderSection === 'docs' ? 1 : finderProjects.length,
+                  })
+                }}
               </div>
             </div>
           </div>
@@ -707,7 +803,7 @@
       <Transition name="ql">
         <div
           v-if="evtStep"
-          class="ql-panel fixed z-[92] w-[300px] overflow-hidden rounded-xl border border-black/10 bg-white shadow-2xl ring-1 ring-white/40"
+          class="ql-panel fixed z-[330] w-[300px] overflow-hidden rounded-xl border border-black/10 bg-white shadow-2xl ring-1 ring-white/40"
           :style="{ left: evt.x + 'px', top: evt.y + 'px' }"
           @click.stop
         >
@@ -750,7 +846,7 @@
       <Transition name="ql">
         <div
           v-if="qlProject"
-          class="fixed inset-0 z-[95] flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm"
+          class="fixed inset-0 z-[340] flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm"
           @click.self="quicklook = ''"
         >
           <div
@@ -807,7 +903,7 @@
     <Teleport to="body">
       <div
         v-if="ctx.show"
-        class="fixed z-[90] min-w-[220px] rounded-lg border border-black/10 bg-white/80 p-1 shadow-2xl backdrop-blur-2xl"
+        class="fixed z-[330] min-w-[220px] rounded-lg border border-black/10 bg-white/80 p-1 shadow-2xl backdrop-blur-2xl"
         :style="{ left: ctx.x + 'px', top: ctx.y + 'px' }"
       >
         <button
@@ -1157,6 +1253,52 @@ const { t } = useI18n()
 const finderView = ref<'grid' | 'list'>('grid')
 const finderQuery = ref('')
 const finderSelected = ref('')
+
+// ── Sidebar Finder cliquable : sections + tags ──
+const finderSection = ref<'projects' | 'recents' | 'docs'>('projects')
+const finderTag = ref('')
+
+const openFinderSection = (s: 'projects' | 'recents' | 'docs') => {
+  finderSection.value = s
+  finderTag.value = ''
+  finderSelected.value = ''
+}
+
+const scrollToDesktop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
+
+const toggleFinderTag = (key: string) => {
+  finderTag.value = finderTag.value === key ? '' : key
+  finderSection.value = 'projects'
+  finderSelected.value = ''
+}
+
+// Dernière année mentionnée ("2024 — 2026" → 2026)
+const yearOf = (p: (typeof projects)[number]) => {
+  const years = p.year.match(/\d{4}/g)
+  return years ? Number(years[years.length - 1]) : 0
+}
+
+// Couleurs de tags macOS, une par catégorie présente
+const TAG_COLORS = [
+  '#007AFF',
+  '#AF52DE',
+  '#FF9500',
+  '#28CD41',
+  '#FF3B30',
+  '#FFCC00',
+  '#5AC8FA',
+  '#FF2D55',
+  '#8E8E93',
+]
+const finderTags = computed(() => {
+  const seen: string[] = []
+  for (const p of projects)
+    if (!seen.includes(p.categoryKey)) seen.push(p.categoryKey)
+  return seen.map((key, i) => ({
+    key,
+    color: TAG_COLORS[i % TAG_COLORS.length],
+  }))
+})
 const sortMenuOpen = ref(false)
 const sortKey = ref<'name' | 'category' | 'year'>('name')
 const sortAsc = ref(true)
@@ -1181,10 +1323,13 @@ const finderProjects = computed(() => {
   const q = finderQuery.value.trim().toLowerCase()
   const list = projects.filter(
     (p) =>
-      !q ||
-      p.name.toLowerCase().includes(q) ||
-      t(p.categoryKey).toLowerCase().includes(q)
+      (!finderTag.value || p.categoryKey === finderTag.value) &&
+      (!q ||
+        p.name.toLowerCase().includes(q) ||
+        t(p.categoryKey).toLowerCase().includes(q))
   )
+  if (finderSection.value === 'recents')
+    return [...list].sort((a, b) => yearOf(b) - yearOf(a))
   const field = (p: (typeof projects)[number]) =>
     sortKey.value === 'name'
       ? p.name
