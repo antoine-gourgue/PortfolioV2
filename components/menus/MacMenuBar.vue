@@ -1,6 +1,6 @@
 <template>
   <header
-    class="fixed inset-x-0 top-0 z-[60] flex h-8 items-center justify-between border-b border-white/10 bg-black/20 px-3 text-[13px] font-medium text-white backdrop-blur-2xl lg:px-4"
+    class="fixed inset-x-0 top-0 z-[300] flex h-8 items-center justify-between border-b border-white/10 bg-black/20 px-3 text-[13px] font-medium text-white backdrop-blur-2xl lg:px-4"
     @click.stop
   >
     <div class="flex items-center">
@@ -83,7 +83,7 @@
         {{ currentLocale }}
       </button>
 
-      <!-- Menu de saisie macOS : drapeau + liste des langues cochée -->
+      <!-- Menu de saisie macOS : badge de langue + liste cochée -->
       <div class="relative hidden h-full lg:block">
         <button
           class="menu-btn flex h-full items-center rounded px-2"
@@ -91,7 +91,10 @@
           aria-label="language"
           @click="(sfx.click(), (openMenu = openMenu === 'lang' ? '' : 'lang'))"
         >
-          <DesktopFlagIcon :code="currentLocale" class="h-[14px] w-[21px]" />
+          <span
+            class="rounded-[4px] border-[1.3px] border-white/80 px-[3.5px] pb-px text-[9.5px] font-bold uppercase leading-[13px] tracking-[0.05em] text-white/90"
+            >{{ currentLocale }}</span
+          >
         </button>
         <transition name="menu-pop">
           <div
@@ -107,10 +110,10 @@
               <span class="w-3 text-[12px]">{{
                 currentLocale === loc.code ? '✓' : ''
               }}</span>
-              <DesktopFlagIcon
-                :code="loc.code"
-                class="h-[13px] w-[20px] shrink-0"
-              />
+              <span
+                class="w-7 shrink-0 rounded-[3.5px] border border-current px-[3px] text-center text-[9px] font-bold uppercase leading-[12px] opacity-70"
+                >{{ loc.code }}</span
+              >
               <span
                 :class="currentLocale === loc.code ? 'font-semibold' : ''"
                 >{{ loc.name }}</span
@@ -263,59 +266,199 @@
         >
       </button>
       <!-- Batterie : niveau réel du visiteur (Battery API), icône pleine sinon -->
-      <span
-        class="flex h-full items-center gap-1.5 px-2 text-white/85"
-        :title="battery.level !== null ? `${battery.level} %` : ''"
-      >
-        <span
-          v-if="battery.level !== null"
-          class="text-[11px] font-medium tabular-nums text-white/70"
-          >{{ battery.level }} %</span
+      <div class="relative h-full">
+        <button
+          class="menu-btn flex h-full items-center gap-1.5 rounded px-2 text-white/85"
+          :class="openMenu === 'battery' ? 'bg-white/20' : ''"
+          aria-label="battery"
+          @click.stop="
+            (sfx.click(), (openMenu = openMenu === 'battery' ? '' : 'battery'))
+          "
         >
-        <span v-if="battery.level !== null" class="relative flex items-center">
-          <svg viewBox="0 0 27 13" class="h-[13px] w-[27px]">
-            <rect
-              x="0.5"
-              y="0.5"
-              width="23"
-              height="12"
-              rx="3.5"
-              fill="none"
-              stroke="currentColor"
-              stroke-opacity="0.45"
-            />
-            <rect
-              x="2"
-              y="2"
-              :width="Math.max(1.5, (battery.level / 100) * 20)"
-              height="9"
-              rx="2"
-              :fill="battery.charging ? '#32D74B' : 'currentColor'"
-            />
-            <path
-              d="M25 4.5v4a2.2 2.2 0 0 0 0-4z"
-              fill="currentColor"
-              fill-opacity="0.45"
-            />
-          </svg>
-          <svg
-            v-if="battery.charging"
-            viewBox="0 0 12 16"
-            class="absolute left-1/2 top-1/2 h-[11px] -translate-x-[60%] -translate-y-1/2 drop-shadow"
+          <span
+            v-if="battery.level !== null"
+            class="text-[11px] font-medium tabular-nums text-white/70"
+            >{{ battery.level }} %</span
           >
-            <path
-              d="M7 0 1 9h3.5L5 16l6-9H7.5z"
-              fill="#fff"
-              stroke="#00000055"
-              stroke-width="0.8"
-            />
-          </svg>
-        </span>
-        <span v-else class="text-[16px]"><DesktopSfIcon name="battery" /></span>
-      </span>
-      <span class="flex h-full items-center px-2 text-[15px] text-white/85"
-        ><DesktopSfIcon name="wifi"
-      /></span>
+          <span
+            v-if="battery.level !== null"
+            class="relative flex items-center"
+          >
+            <svg viewBox="0 0 27 13" class="h-[13px] w-[27px]">
+              <rect
+                x="0.5"
+                y="0.5"
+                width="23"
+                height="12"
+                rx="3.5"
+                fill="none"
+                stroke="currentColor"
+                stroke-opacity="0.45"
+              />
+              <rect
+                x="2"
+                y="2"
+                :width="Math.max(1.5, (battery.level / 100) * 20)"
+                height="9"
+                rx="2"
+                :fill="battery.charging ? '#32D74B' : 'currentColor'"
+              />
+              <path
+                d="M25 4.5v4a2.2 2.2 0 0 0 0-4z"
+                fill="currentColor"
+                fill-opacity="0.45"
+              />
+            </svg>
+            <svg
+              v-if="battery.charging"
+              viewBox="0 0 12 16"
+              class="absolute left-1/2 top-1/2 h-[11px] -translate-x-[60%] -translate-y-1/2 drop-shadow"
+            >
+              <path
+                d="M7 0 1 9h3.5L5 16l6-9H7.5z"
+                fill="#fff"
+                stroke="#00000055"
+                stroke-width="0.8"
+              />
+            </svg>
+          </span>
+          <span v-else class="text-[16px]"
+            ><DesktopSfIcon name="battery"
+          /></span>
+        </button>
+        <transition name="menu-pop">
+          <div
+            v-if="openMenu === 'battery'"
+            class="absolute right-0 top-full mt-1.5 w-[280px] rounded-xl border border-black/10 bg-white/85 p-[5px] shadow-2xl backdrop-blur-2xl"
+            @click.stop
+          >
+            <div class="flex items-baseline justify-between px-2.5 pt-1">
+              <p class="text-[13px] font-bold text-aink">
+                {{ $t('macos.batteryTitle') }}
+              </p>
+              <span class="text-[12px] tabular-nums text-black/45">{{
+                battery.level !== null ? `${battery.level} %` : '—'
+              }}</span>
+            </div>
+            <p class="px-2.5 pb-1.5 pt-px text-[12px] text-black/45">
+              {{
+                battery.level === null
+                  ? $t('macos.batteryUnavailable')
+                  : battery.charging
+                    ? $t('macos.batterySourceAc')
+                    : $t('macos.batterySourceBattery')
+              }}
+            </p>
+            <div class="mx-2.5 my-1 border-t border-black/10"></div>
+            <p
+              class="px-2.5 pb-0.5 pt-1 text-[11px] font-semibold text-black/40"
+            >
+              {{ $t('macos.batteryHighUsage') }}
+            </p>
+            <div class="flex items-center gap-2 px-2.5 py-1">
+              <span
+                class="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-black/[0.07] text-aink/60"
+              >
+                <i aria-hidden="true" class="f7-icons" style="font-size: 12px"
+                  >globe</i
+                >
+              </span>
+              <span class="text-[13px] text-aink">{{ energyApp }}</span>
+            </div>
+            <div class="mx-2.5 my-1 border-t border-black/10"></div>
+            <button
+              class="w-full rounded-md px-2.5 py-1 pb-1.5 text-left text-[13px] text-aink transition-colors hover:bg-black/5"
+              @click="openSettingsFromMenu"
+            >
+              {{ $t('macos.batterySettings') }}
+            </button>
+          </div>
+        </transition>
+      </div>
+
+      <!-- Wi-Fi : menu façon macOS -->
+      <div class="relative h-full">
+        <button
+          class="menu-btn flex h-full items-center rounded px-2 text-[15px] text-white/85"
+          :class="openMenu === 'wifi' ? 'bg-white/20' : ''"
+          aria-label="wifi"
+          @click.stop="
+            (sfx.click(), (openMenu = openMenu === 'wifi' ? '' : 'wifi'))
+          "
+        >
+          <DesktopSfIcon :name="wifiOn ? 'wifi' : 'wifi_slash'" />
+        </button>
+        <transition name="menu-pop">
+          <div
+            v-if="openMenu === 'wifi'"
+            class="absolute right-0 top-full mt-1.5 w-[266px] rounded-xl border border-black/10 bg-white/85 p-[5px] shadow-2xl backdrop-blur-2xl"
+            @click.stop
+          >
+            <div class="flex items-center justify-between px-2.5 py-1">
+              <p class="text-[13px] font-bold text-aink">Wi‑Fi</p>
+              <!-- Interrupteur macOS : 26 × 15, bleu système -->
+              <button
+                class="relative h-[15px] w-[26px] rounded-full transition-colors duration-200"
+                :class="wifiOn ? 'bg-ablue' : 'bg-black/25'"
+                aria-label="toggle wifi"
+                @click="(sfx.click(), (wifiOn = !wifiOn))"
+              >
+                <span
+                  class="absolute top-[1px] h-[13px] w-[13px] rounded-full bg-white shadow-[0_1px_2px_rgba(0,0,0,0.3)] transition-all duration-200"
+                  :class="wifiOn ? 'left-[12px]' : 'left-[1px]'"
+                ></span>
+              </button>
+            </div>
+            <template v-if="wifiOn">
+              <div class="mx-2.5 my-1 border-t border-black/10"></div>
+              <p
+                class="px-2.5 pb-1 pt-0.5 text-[11px] font-semibold text-black/40"
+              >
+                {{ $t('macos.wifiKnown') }}
+              </p>
+              <button
+                v-for="net in WIFI_NETWORKS"
+                :key="net.name"
+                class="flex w-full items-center gap-2.5 rounded-md px-2 py-[3px] text-left transition-colors hover:bg-black/5"
+                @click="(sfx.click(), (wifiNetwork = net.name))"
+              >
+                <span
+                  class="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-full transition-colors"
+                  :class="
+                    wifiNetwork === net.name
+                      ? 'bg-ablue text-white'
+                      : 'bg-black/[0.07] text-aink/55'
+                  "
+                >
+                  <i aria-hidden="true" class="f7-icons" style="font-size: 13px"
+                    >wifi</i
+                  >
+                </span>
+                <span class="min-w-0 flex-1 truncate text-[13px] text-aink">{{
+                  net.name
+                }}</span>
+                <i
+                  v-if="net.secure"
+                  aria-hidden="true"
+                  class="f7-icons text-black/30"
+                  style="font-size: 11px"
+                  >lock_fill</i
+                >
+              </button>
+            </template>
+            <p v-else class="px-2.5 pb-1.5 pt-1 text-[12px] text-black/45">
+              {{ $t('macos.wifiOff') }}
+            </p>
+            <div class="mx-2.5 my-1 border-t border-black/10"></div>
+            <button
+              class="w-full rounded-md px-2.5 py-1 pb-1.5 text-left text-[13px] text-aink transition-colors hover:bg-black/5"
+              @click="openSettingsFromMenu"
+            >
+              {{ $t('macos.wifiSettings') }}
+            </button>
+          </div>
+        </transition>
+      </div>
       <button
         class="menu-btn hidden h-full items-center px-2 text-[14px] text-white/85 lg:flex"
         aria-label="Spotlight"
@@ -528,6 +671,40 @@ const onKeydown = (e: KeyboardEvent) => {
   }
 }
 
+// ── Wi-Fi décoratif façon macOS ──
+const wifiOn = ref(true)
+const wifiNetwork = ref("Livebox d'Antoine")
+const WIFI_NETWORKS = [
+  { name: "Livebox d'Antoine", secure: true, signal: 1 },
+  { name: "iPhone d'Antoine", secure: true, signal: 0.85 },
+  { name: 'Epitech_Etudiants', secure: true, signal: 0.6 },
+  { name: 'Digitaleo-Guest', secure: true, signal: 0.45 },
+  { name: 'freebox_anglet_64', secure: false, signal: 0.3 },
+]
+
+const openSettingsFromMenu = () => {
+  sfx.click()
+  desktop.state.value.apps.settings = true
+  openMenu.value = ''
+}
+
+// Clin d'œil macOS : le navigateur du visiteur « consomme beaucoup d'énergie »
+const energyApp = ref('Navigateur')
+const detectBrowser = () => {
+  const ua = navigator.userAgent
+  energyApp.value = ua.includes('Edg/')
+    ? 'Microsoft Edge'
+    : ua.includes('OPR/')
+      ? 'Opera'
+      : ua.includes('Firefox/')
+        ? 'Firefox'
+        : ua.includes('Chrome/')
+          ? 'Google Chrome'
+          : ua.includes('Safari/')
+            ? 'Safari'
+            : 'Navigateur'
+}
+
 // ── Batterie réelle du visiteur (API non supportée par Safari/Firefox) ──
 const battery = reactive<{ level: number | null; charging: boolean }>({
   level: null,
@@ -559,6 +736,7 @@ onMounted(() => {
   tick()
   timer = setInterval(tick, 1000)
   initBattery()
+  detectBrowser()
   document.addEventListener('click', closeMenus)
   window.addEventListener('keydown', onKeydown)
 })
