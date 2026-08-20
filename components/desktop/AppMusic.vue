@@ -534,9 +534,34 @@
               <h1 class="px-5 pb-1 pt-4 text-[20px] font-bold text-aink">
                 {{ $t('macos.musicNew') }}
               </h1>
-              <p v-if="loadingTop" class="px-5 py-3 text-[13px] text-black/40">
-                …
-              </p>
+              <!-- Skeleton pendant le chargement du top Apple Music -->
+              <template v-if="loadingTop">
+                <div class="px-5 pt-3">
+                  <span class="skel block h-3.5 w-20"></span>
+                </div>
+                <div class="flex gap-4 overflow-hidden px-5 pb-2 pt-3">
+                  <div
+                    v-for="i in 6"
+                    :key="`ska-${i}`"
+                    class="flex w-[86px] shrink-0 flex-col items-center gap-2"
+                  >
+                    <span class="skel h-[76px] w-[76px] !rounded-full"></span>
+                    <span class="skel h-2.5 w-14"></span>
+                  </div>
+                </div>
+                <div class="px-5 pt-3">
+                  <span class="skel block h-3.5 w-24"></span>
+                </div>
+                <div class="grid grid-cols-4 gap-4 px-5 pb-5 pt-3">
+                  <div v-for="i in 8" :key="`skb-${i}`">
+                    <span
+                      class="skel block aspect-square w-full !rounded-lg"
+                    ></span>
+                    <span class="skel mt-1.5 block h-2.5 w-3/4"></span>
+                    <span class="skel mt-1 block h-2.5 w-1/2"></span>
+                  </div>
+                </div>
+              </template>
               <template v-else>
                 <template v-if="topArtists.length">
                   <p class="msection">{{ $t('macos.musicArtists') }}</p>
@@ -711,9 +736,20 @@
                 </button>
               </div>
 
-              <p v-if="searching" class="px-5 py-4 text-[13px] text-black/40">
-                …
-              </p>
+              <!-- Skeleton pendant la recherche / le chargement d'une fiche -->
+              <div v-if="searching" class="px-5 py-4">
+                <div
+                  v-for="i in 6"
+                  :key="`sks-${i}`"
+                  class="flex items-center gap-3 py-1.5"
+                >
+                  <span class="skel h-10 w-10 shrink-0 !rounded-md"></span>
+                  <span class="min-w-0 flex-1">
+                    <span class="skel block h-3 w-1/2"></span>
+                    <span class="skel mt-1.5 block h-2.5 w-1/3"></span>
+                  </span>
+                </div>
+              </div>
 
               <!-- Résultats groupés -->
               <template v-else-if="view.kind === 'results'">
@@ -1304,5 +1340,10 @@ watch(
   50% {
     transform: scaleY(1);
   }
+}
+
+/* Skeleton de chargement (Explorer / recherche) */
+.skel {
+  @apply animate-pulse rounded bg-black/[0.08];
 }
 </style>
