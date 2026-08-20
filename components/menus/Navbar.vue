@@ -2,7 +2,7 @@
   <!-- Dock mobile (iOS) — sur desktop, MacMenuBar + MacDock prennent le relais -->
   <nav
     v-show="!appOpen"
-    class="lg:hidden fixed bottom-3 left-1/2 z-[70] flex -translate-x-1/2 items-center gap-3 rounded-[26px] border border-white/30 bg-white/20 px-4 py-2.5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.45)] backdrop-blur-2xl"
+    class="lg:hidden fixed bottom-3 left-1/2 z-[300] flex -translate-x-1/2 items-center gap-3 rounded-[26px] border border-white/30 bg-white/20 px-4 py-2.5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.45)] backdrop-blur-2xl"
   >
     <NuxtLink
       v-for="item in items"

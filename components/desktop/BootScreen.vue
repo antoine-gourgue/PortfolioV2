@@ -9,7 +9,7 @@
       v-if="visible"
       id="boot-screen"
       ref="bootEl"
-      class="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-black"
+      class="fixed inset-0 z-[500] flex flex-col items-center justify-center bg-black"
     >
       <AgLogo class="h-24 w-28 text-white lg:h-20 lg:w-24" />
       <div

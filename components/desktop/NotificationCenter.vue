@@ -8,7 +8,7 @@
     >
       <aside
         v-if="desktop.state.value.notifOpen"
-        class="fixed bottom-4 right-2 top-10 z-[65] w-[330px] overflow-y-auto rounded-2xl p-3"
+        class="fixed bottom-4 right-2 top-10 z-[310] w-[330px] overflow-y-auto rounded-2xl p-3"
         @click.stop
       >
         <!-- Date -->

@@ -1,7 +1,7 @@
 <template>
   <nav
     ref="dockEl"
-    class="fixed bottom-3 left-1/2 z-[70] hidden h-[70px] -translate-x-1/2 items-end gap-2 overflow-visible rounded-[26px] border border-white/30 bg-white/20 px-3 pb-[9px] shadow-[0_20px_50px_-15px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:flex"
+    class="fixed bottom-3 left-1/2 z-[300] hidden h-[70px] -translate-x-1/2 items-end gap-2 overflow-visible rounded-[26px] border border-white/30 bg-white/20 px-3 pb-[9px] shadow-[0_20px_50px_-15px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:flex"
     @mouseenter="captureRestPositions"
     @mouseleave="resetAll"
   >

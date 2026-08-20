@@ -8,7 +8,7 @@
     >
       <div
         v-if="desktop.state.value.apps.siri"
-        class="fixed inset-x-3 bottom-24 z-[70] mx-auto w-auto max-w-[360px] rounded-3xl bg-[#1c1c1e]/90 p-5 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.6)] ring-1 ring-white/10 backdrop-blur-2xl lg:inset-x-auto lg:right-4 lg:top-10 lg:bottom-auto lg:w-[340px]"
+        class="fixed inset-x-3 bottom-24 z-[320] mx-auto w-auto max-w-[360px] rounded-3xl bg-[#1c1c1e]/90 p-5 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.6)] ring-1 ring-white/10 backdrop-blur-2xl lg:inset-x-auto lg:right-4 lg:top-10 lg:bottom-auto lg:w-[340px]"
         @click.stop
       >
         <!-- Fermer -->

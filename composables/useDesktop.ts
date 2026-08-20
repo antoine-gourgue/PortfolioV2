@@ -61,9 +61,15 @@ export function useDesktop() {
     state.value.apps[id] = false
   }
 
+  // Même échelle de z que les fenêtres d'app (bringToFront : 40 + topZ),
+  // pour qu'un clic fasse toujours passer la fenêtre devant, quel que soit son type
   const register = (id: string) => {
     if (!state.value.wins[id]) {
-      state.value.wins[id] = { min: false, zoom: false, z: ++state.value.topZ }
+      state.value.wins[id] = {
+        min: false,
+        zoom: false,
+        z: 40 + ++state.value.topZ,
+      }
       if (!state.value.activeWin) state.value.activeWin = id
     }
   }
@@ -71,7 +77,7 @@ export function useDesktop() {
   const focus = (id: string) => {
     const win = state.value.wins[id]
     if (!win) return
-    win.z = ++state.value.topZ
+    win.z = 40 + ++state.value.topZ
     state.value.activeWin = id
   }
 

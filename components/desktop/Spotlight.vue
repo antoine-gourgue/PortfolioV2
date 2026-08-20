@@ -3,7 +3,7 @@
     <Transition name="spot">
       <div
         v-if="desktop.state.value.spotlightOpen"
-        class="fixed inset-0 z-[100] flex items-start justify-center bg-black/20 px-4 pt-[22vh]"
+        class="fixed inset-0 z-[350] flex items-start justify-center bg-black/20 px-4 pt-[22vh]"
         @click.self="close"
       >
         <div

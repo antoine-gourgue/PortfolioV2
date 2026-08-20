@@ -7,7 +7,7 @@
   >
     <div
       v-if="desktop.state.value.locked"
-      class="fixed inset-0 z-[95] flex select-none flex-col items-center justify-between overflow-hidden py-16 text-white lg:py-20"
+      class="fixed inset-0 z-[400] flex select-none flex-col items-center justify-between overflow-hidden py-16 text-white lg:py-20"
       :style="{ backgroundImage: wallpaper.style.value }"
       @click="unlock"
       @keydown="unlock"

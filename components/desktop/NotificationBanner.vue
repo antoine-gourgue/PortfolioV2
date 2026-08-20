@@ -4,7 +4,7 @@
       <button
         v-if="current"
         :key="current.id"
-        class="fixed left-1/2 top-11 z-[150] w-[calc(100%-24px)] max-w-[360px] -translate-x-1/2 text-left lg:left-auto lg:right-3 lg:translate-x-0"
+        class="fixed left-1/2 top-11 z-[420] w-[calc(100%-24px)] max-w-[360px] -translate-x-1/2 text-left lg:left-auto lg:right-3 lg:translate-x-0"
         @click="dismiss"
       >
         <div

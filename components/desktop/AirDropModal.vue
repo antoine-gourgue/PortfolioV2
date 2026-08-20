@@ -8,7 +8,7 @@
     >
       <div
         v-if="desktop.state.value.apps.airdrop"
-        class="fixed inset-0 z-[70] flex items-center justify-center bg-black/40 p-6 backdrop-blur-sm"
+        class="fixed inset-0 z-[320] flex items-center justify-center bg-black/40 p-6 backdrop-blur-sm"
         @click.self="close"
       >
         <div
