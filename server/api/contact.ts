@@ -5,11 +5,80 @@ const requests = new Map<string, { count: number; windowStart: number }>()
 const WINDOW_MS = 10 * 60 * 1000 // 10 minutes
 const MAX_REQUESTS = 5
 
+interface ContactAttachment {
+  name: string
+  type: string
+  data: string // base64
+}
+
 interface ContactPayload {
   name: string
   email: string
   message: string
+  messageHtml?: string
   honeypot?: string
+  attachment?: ContactAttachment
+}
+
+// HTML de l'éditeur riche : balises de mise en forme uniquement, aucun attribut
+const ALLOWED_HTML_TAGS = 'b|strong|i|em|u|s|strike|del|ul|ol|li|br|div|p|span'
+const sanitizeMessageHtml = (html: unknown): string | undefined => {
+  if (html === undefined || html === null) return undefined
+  if (typeof html !== 'string' || html.length > 20000) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Invalid message html',
+    })
+  }
+  return html
+    .replace(
+      new RegExp(`<(?!\\/?(?:${ALLOWED_HTML_TAGS})(?=[\\s>/]))[^>]*>`, 'gi'),
+      ''
+    )
+    .replace(new RegExp(`<(\\/?)(${ALLOWED_HTML_TAGS})[^>]*>`, 'gi'), '<$1$2>')
+}
+
+// ~3 Mo une fois décodé (base64 ≈ +33 %), sous la limite de body Vercel
+const MAX_ATTACHMENT_BASE64 = 4_200_000
+const ALLOWED_ATTACHMENT_TYPES = [
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'text/plain',
+  'image/png',
+  'image/jpeg',
+]
+
+const validateAttachment = (
+  attachment: unknown
+): ContactAttachment | undefined => {
+  if (attachment === undefined || attachment === null) return undefined
+  const { name, type, data } = attachment as Partial<ContactAttachment>
+  if (
+    typeof name !== 'string' ||
+    typeof type !== 'string' ||
+    typeof data !== 'string'
+  ) {
+    throw createError({ statusCode: 400, statusMessage: 'Invalid attachment' })
+  }
+  // nom de fichier sans chemin, longueur bornée
+  const safeName = name.replace(/[/\\]/g, '').slice(0, 150).trim()
+  if (!safeName || !ALLOWED_ATTACHMENT_TYPES.includes(type)) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Unsupported attachment type',
+    })
+  }
+  if (
+    data.length > MAX_ATTACHMENT_BASE64 ||
+    !/^[A-Za-z0-9+/]+={0,2}$/.test(data)
+  ) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Attachment too large',
+    })
+  }
+  return { name: safeName, type, data }
 }
 
 // échappement basique pour éviter d'injecter du HTML brut dans l'email
@@ -70,18 +139,22 @@ const validatePayload = (body: Partial<ContactPayload>): ContactPayload => {
     name: trimmedName,
     email: trimmedEmail,
     message: trimmedMessage,
+    messageHtml: sanitizeMessageHtml((body as ContactPayload).messageHtml),
     honeypot,
+    attachment: validateAttachment((body as ContactPayload).attachment),
   }
 }
 
 const generateEmailTemplate = (
   name: string,
   email: string,
-  message: string
+  message: string,
+  messageHtml?: string
 ) => {
   const safeName = escapeHtml(name)
   const safeEmail = escapeHtml(email)
-  const safeMessage = escapeHtml(message).replace(/\r?\n/g, '<br />')
+  const safeMessage =
+    messageHtml || escapeHtml(message).replace(/\r?\n/g, '<br />')
 
   return `
   <!DOCTYPE html>
@@ -171,7 +244,8 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody<Partial<ContactPayload>>(event)
-  const { name, email, message, honeypot } = validatePayload(body)
+  const { name, email, message, messageHtml, honeypot, attachment } =
+    validatePayload(body)
 
   // Honeypot rempli => probablement un bot → on fait comme si tout allait bien
   if (honeypot && honeypot.trim().length > 0) {
@@ -205,7 +279,7 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  const htmlContent = generateEmailTemplate(name, email, message)
+  const htmlContent = generateEmailTemplate(name, email, message, messageHtml)
 
   await transporter.sendMail({
     from: `"Portfolio Contact" <${process.env.MAIL_USER}>`,
@@ -213,6 +287,16 @@ export default defineEventHandler(async (event) => {
     replyTo: `${name} <${email}>`,
     subject: `New message from ${name}`,
     html: htmlContent,
+    attachments: attachment
+      ? [
+          {
+            filename: attachment.name,
+            content: attachment.data,
+            encoding: 'base64',
+            contentType: attachment.type,
+          },
+        ]
+      : undefined,
   })
 
   return { success: true }
