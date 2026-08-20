@@ -167,8 +167,8 @@
           </div>
         </div>
 
-        <!-- ── Nouveau message ── -->
-        <form v-else @submit.prevent="submitForm">
+        <!-- ── Nouveau message ── (ph-no-capture : exclu du session replay) -->
+        <form v-else class="ph-no-capture" @submit.prevent="submitForm">
           <!-- Barre d'outils de composition (desktop) -->
           <div
             class="hidden items-center gap-1 border-b border-black/5 bg-white/60 px-5 py-2.5 lg:flex"

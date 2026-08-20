@@ -95,6 +95,11 @@ export default defineNuxtConfig({
   runtimeConfig: {
     githubToken: process.env.VITE_GITHUB_TOKEN,
     groqApiKey: process.env.GROQ_API_KEY,
+    public: {
+      posthogKey: process.env.NUXT_PUBLIC_POSTHOG_KEY || '',
+      posthogHost:
+        process.env.NUXT_PUBLIC_POSTHOG_HOST || 'https://eu.i.posthog.com',
+    },
   },
   ssr: true,
 })
