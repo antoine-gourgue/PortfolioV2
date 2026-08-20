@@ -141,6 +141,7 @@ const LANGS: Record<string, string> = { fr: 'fr-FR', en: 'en-US', es: 'es-ES' }
 
 const toggleListening = () => {
   if (thinking.value) return
+  unlockSpeech()
   if (!initRecognition()) {
     exchanges.value.push({
       question: '🎤',
@@ -181,11 +182,28 @@ const pickVoice = (): SpeechSynthesisVoice | undefined => {
 onMounted(() => {
   // getVoices() est vide tant que le navigateur n'a pas chargé la liste
   speechSynthesis?.getVoices?.()
+  speechSynthesis?.addEventListener?.('voiceschanged', () =>
+    speechSynthesis.getVoices()
+  )
 })
+
+// iOS n'autorise speak() que débloqué par un geste utilisateur : on parle
+// une utterance muette pendant le clic, les vraies réponses passent ensuite
+let speechUnlocked = false
+const unlockSpeech = () => {
+  if (speechUnlocked || !('speechSynthesis' in window)) return
+  try {
+    const utterance = new SpeechSynthesisUtterance(' ')
+    utterance.volume = 0
+    speechSynthesis.speak(utterance)
+    speechUnlocked = true
+  } catch {
+    /* synthèse indisponible */
+  }
+}
 
 const speak = (text: string) => {
   if (desktop.state.value.sfxMuted || !('speechSynthesis' in window)) return
-  speechSynthesis.cancel()
   const utterance = new SpeechSynthesisUtterance(
     // on ne lit pas les emojis ni les URLs à voix haute
     text
@@ -196,7 +214,14 @@ const speak = (text: string) => {
   const voice = pickVoice()
   if (voice) utterance.voice = voice
   utterance.rate = 1.05
-  speechSynthesis.speak(utterance)
+  const fire = () => speechSynthesis.speak(utterance)
+  if (speechSynthesis.speaking || speechSynthesis.pending) {
+    speechSynthesis.cancel()
+    // iOS : speak() juste après cancel() est avalé sans ce léger délai
+    setTimeout(fire, 150)
+  } else {
+    fire()
+  }
 }
 
 // Le modèle peut laisser passer du markdown : on l'aplatit en texte brut
@@ -234,6 +259,7 @@ const ask = async (question: string) => {
 const submitText = () => {
   const question = textInput.value.trim()
   if (!question) return
+  unlockSpeech()
   textInput.value = ''
   ask(question)
 }
