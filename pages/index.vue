@@ -102,7 +102,7 @@
     <section ref="heroEl" class="relative hidden min-h-[92vh] w-full lg:block">
       <!-- Icônes du bureau -->
       <div
-        class="absolute right-6 top-14 z-[5] hidden grid-flow-col grid-rows-4 gap-x-2 gap-y-5 lg:grid"
+        class="absolute right-6 top-14 z-[5] hidden grid-flow-col grid-rows-5 gap-x-2 gap-y-5 lg:grid"
       >
         <button
           v-for="icon in deskIcons"
@@ -1231,6 +1231,12 @@ const springboard: SpringboardApp[] = [
     action: () => (desktop.state.value.apps.news = true),
   },
   {
+    id: 'sports',
+    icon: 'sports',
+    raw: 'Sports',
+    action: () => (desktop.state.value.apps.sports = true),
+  },
+  {
     id: 'github',
     icon: 'github',
     raw: 'GitHub',
@@ -1387,6 +1393,12 @@ const deskIcons = [
     icon: 'weather',
     action: () => (desktop.state.value.apps.weather = true),
   },
+  {
+    id: 'sports',
+    label: 'macos.sportsTitle',
+    icon: 'sports',
+    action: () => (desktop.state.value.apps.sports = true),
+  },
   // Colonne droite : fichiers et liens, comme sur un vrai bureau
   { id: 'cv', label: 'macos.deskCv', icon: 'pdf', action: downloadCv },
   {
@@ -1498,6 +1510,12 @@ watch(
 
 onMounted(() => {
   if (!container.value) return
+
+  // Deep-link : /?app=sports (ou music, news…) ouvre l'app directement
+  const appParam = useRoute().query.app
+  if (typeof appParam === 'string' && appParam in desktop.state.value.apps) {
+    desktop.state.value.apps[appParam] = true
+  }
 
   const { Draggable } = useGsap()
 

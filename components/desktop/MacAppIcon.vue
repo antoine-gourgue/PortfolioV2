@@ -331,6 +331,33 @@
     />
   </svg>
 
+  <!-- Sports : terrain de foot, réplique de l'icône Apple Sports -->
+  <svg
+    v-else-if="name === 'sports'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
+    <defs>
+      <linearGradient :id="`spb-${uid}`" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#1E9E37" />
+        <stop offset="1" stop-color="#0A691E" />
+      </linearGradient>
+    </defs>
+    <rect width="100" height="100" rx="22.5" :fill="`url(#spb-${uid})`" />
+    <g fill="none" stroke="#FFFFFF" stroke-width="3.6" stroke-linecap="round">
+      <rect x="13" y="24.5" width="74" height="51" rx="10.5" />
+      <path d="M50 24.5 V75.5" />
+      <circle cx="50" cy="50" r="13.2" />
+      <path
+        d="M13 35.5 H21.5 A7.5 7.5 0 0 1 29 43 V57 A7.5 7.5 0 0 1 21.5 64.5 H13"
+      />
+      <path
+        d="M87 35.5 H78.5 A7.5 7.5 0 0 0 71 43 V57 A7.5 7.5 0 0 0 78.5 64.5 H87"
+      />
+    </g>
+    <circle cx="50" cy="50" r="3.4" fill="#FFFFFF" />
+  </svg>
+
   <!-- Siri -->
   <svg
     v-else-if="name === 'siri'"

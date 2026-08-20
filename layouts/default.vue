@@ -37,6 +37,7 @@
     <DesktopAppMaps />
     <DesktopAppSiri />
     <DesktopAppNews />
+    <DesktopAppSports />
     <DesktopLockScreen />
     <DesktopNotificationBanner />
   </div>
@@ -59,6 +60,7 @@ import DesktopNotificationCenter from '~/components/desktop/NotificationCenter.v
 import DesktopAppMaps from '~/components/desktop/AppMaps.vue'
 import DesktopAppSiri from '~/components/desktop/AppSiri.vue'
 import DesktopAppNews from '~/components/desktop/AppNews.vue'
+import DesktopAppSports from '~/components/desktop/AppSports.vue'
 import DesktopLockScreen from '~/components/desktop/LockScreen.vue'
 import DesktopNotificationBanner from '~/components/desktop/NotificationBanner.vue'
 import AgLogo from '~/components/ui/AGLogo.vue'

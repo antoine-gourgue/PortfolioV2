@@ -31,7 +31,11 @@ const bootEl = ref<HTMLElement | null>(null)
 const barEl = ref<HTMLElement | null>(null)
 
 onMounted(() => {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  // ?noboot : saute la séquence (captures d'écran, audits automatisés)
+  if (
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+    new URLSearchParams(window.location.search).has('noboot')
+  ) {
     visible.value = false
     return
   }
