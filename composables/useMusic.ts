@@ -56,7 +56,7 @@ let audio: HTMLAudioElement | null = null
 let loadedId: string | null = null
 
 export function useMusic() {
-  const track = useTrack()
+  const trackEvent = useTrack()
   const state = useState<MusicState>('music', () => ({
     queue: MUSIC_TRACKS,
     current: 0,
@@ -138,7 +138,7 @@ export function useMusic() {
     if (!item) return
     state.value.current = target
     if (loadedId !== item.id) {
-      track('music_played', {
+      trackEvent('music_played', {
         title: item.title,
         artist: item.artist,
         live: !!item.live,
