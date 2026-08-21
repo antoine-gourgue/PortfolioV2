@@ -290,7 +290,7 @@
     "roleFull": "Conception & développement",
     "notesCount": "{count} notes",
     "catGames": "Jeux & collection",
-    "terminalNow": "éditeur d'email chez digitaleo · master ia & data à epitech rennes",
+    "terminalNow": "master of science ia à epitech rennes · ex-digitaleo · dispo en cdi dès octobre 2026",
     "finderRecents": "Récents",
     "finderDesktop": "Bureau",
     "finderDocs": "Documents",
@@ -494,7 +494,7 @@
         "body": "Ce portfolio est un clone de macOS (et d'iOS sur mobile), codé main de bout en bout — aucun template.\n\nLa base : Nuxt 3, Vue, TypeScript et Tailwind. Les animations sont pilotées par GSAP : fenêtres déplaçables (Draggable), réductions vers le dock, révélations au scroll (ScrollTrigger).\n\nLes apps sont réelles : la Météo interroge open-meteo avec la position du visiteur, la Calculatrice calcule vraiment, Messages fait tourner mon chatbot maison, Spotlight (⌘K) navigue partout, et les stats GitHub de l'App Store sont en direct.\n\nLes bruitages système sont synthétisés en Web Audio (zéro fichier son), les icônes sont dessinées en SVG ou issues de Framework7 Icons (MIT), et l'écran de démarrage est rendu côté serveur pour éviter tout flash.\n\nTrois langues, SEO propre, build vérifié. Le code dit le reste."
       },
       "digitaleo": {
-        "title": "Ce que j'apprends chez Digitaleo",
+        "title": "Ce que j'ai appris chez Digitaleo",
         "body": "Deux ans et demi d'alternance sur un vrai produit SaaS utilisé quotidiennement, ça forge.\n\nLe plus formateur : l'éditeur d'email. Rendre un email beau dans Outlook, c'est plonger dans le VML et le HTML conditionnel — un monde où les standards modernes n'existent pas. J'y ai livré les blocs dynamiques, le préheader, le sélecteur d'émojis, l'inversion de colonnes sur mobile.\n\nAutre leçon : cohabiter avec du legacy. Réutiliser les composants du Design System Vue.js dans des écrans AngularJS plutôt que tout réécrire, c'est apprendre à créer de la valeur sans casser l'existant.\n\nEt autour du code : GitLab CI/CD, feature flipping, code reviews exigeantes, collaboration quotidienne avec les Product Owners et les designers sur Figma."
       },
       "stack": {

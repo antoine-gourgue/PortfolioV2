@@ -290,7 +290,7 @@
     "roleFull": "Diseño y desarrollo",
     "notesCount": "{count} notas",
     "catGames": "Juegos y colección",
-    "terminalNow": "editor de email en digitaleo · máster en ia & data en epitech rennes",
+    "terminalNow": "master of science en ia en epitech rennes · ex-digitaleo · disponible desde octubre de 2026",
     "finderRecents": "Recientes",
     "finderDesktop": "Escritorio",
     "finderDocs": "Documentos",
@@ -494,7 +494,7 @@
         "body": "Este portfolio es un clon de macOS (iOS en móvil), programado a mano de principio a fin — sin plantillas.\n\nLa base: Nuxt 3, Vue, TypeScript y Tailwind. Las animaciones funcionan con GSAP: ventanas arrastrables, minimización al dock, revelaciones al hacer scroll (ScrollTrigger).\n\nLas apps son reales: el Tiempo consulta open-meteo con la posición del visitante, la Calculadora calcula de verdad, Mensajes ejecuta mi chatbot casero, Spotlight (⌘K) navega por todo, y las estadísticas de GitHub del App Store son en directo.\n\nLos sonidos del sistema están sintetizados con Web Audio (cero archivos de audio), los iconos son SVG dibujados a mano o Framework7 Icons (MIT), y la pantalla de arranque se renderiza en el servidor para evitar parpadeos.\n\nTres idiomas, SEO limpio, build verificado. El código dice el resto."
       },
       "digitaleo": {
-        "title": "Lo que aprendo en Digitaleo",
+        "title": "Lo que aprendí en Digitaleo",
         "body": "Dos años y medio de alternancia en un producto SaaS real usado a diario — eso te forma.\n\nLo más formativo: el editor de email. Hacer que un email se vea bien en Outlook significa sumergirse en VML y HTML condicional — un mundo sin estándares modernos. Entregué bloques dinámicos, el preheader, un selector de emojis, la inversión de columnas en móvil.\n\nOtra lección: convivir con el legacy. Reutilizar componentes del Design System Vue.js dentro de pantallas AngularJS en lugar de reescribirlo todo enseña a crear valor sin romper lo existente.\n\nAlrededor del código: GitLab CI/CD, feature flipping, code reviews exigentes, colaboración diaria con Product Owners y diseñadores en Figma."
       },
       "stack": {

@@ -290,7 +290,7 @@
     "roleFull": "Design & development",
     "notesCount": "{count} notes",
     "catGames": "Games & collecting",
-    "terminalNow": "email editor at digitaleo · master's in ai & data at epitech rennes",
+    "terminalNow": "master of science in ai at epitech rennes · ex-digitaleo · open to full-time from october 2026",
     "finderRecents": "Recents",
     "finderDesktop": "Desktop",
     "finderDocs": "Documents",
@@ -494,7 +494,7 @@
         "body": "This portfolio is a macOS clone (iOS on mobile), hand-coded end to end — no template.\n\nThe base: Nuxt 3, Vue, TypeScript and Tailwind. Animations run on GSAP: draggable windows, dock minimizing, scroll reveals (ScrollTrigger).\n\nThe apps are real: Weather queries open-meteo with the visitor's location, the Calculator actually computes, Messages runs my home-made chatbot, Spotlight (⌘K) navigates everywhere, and the App Store GitHub stats are live.\n\nSystem sounds are synthesized with Web Audio (zero audio files), icons are hand-drawn SVG or Framework7 Icons (MIT), and the boot screen is server-rendered to avoid any flash.\n\nThree languages, clean SEO, verified build. The code says the rest."
       },
       "digitaleo": {
-        "title": "What I'm learning at Digitaleo",
+        "title": "What I learned at Digitaleo",
         "body": "Two and a half years of apprenticeship on a real SaaS product used daily — that shapes you.\n\nThe most formative part: the email editor. Making an email look right in Outlook means diving into VML and conditional HTML — a world without modern standards. I shipped dynamic blocks, the preheader, an emoji picker, mobile column reordering.\n\nAnother lesson: living with legacy. Reusing Vue.js Design System components inside AngularJS screens instead of rewriting everything teaches you to create value without breaking what exists.\n\nAround the code: GitLab CI/CD, feature flipping, demanding code reviews, daily collaboration with Product Owners and designers in Figma."
       },
       "stack": {
