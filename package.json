@@ -22,8 +22,7 @@
   "dependencies": {
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@nuxt/icon": "^1.11.0",
-    "@nuxt/image": "^1.10.0",
-    "@nuxtjs/i18n": "^10.2.1",
+    "@nuxtjs/i18n": "^10.6.0",
     "@nuxtjs/robots": "^5.5.0",
     "@nuxtjs/sitemap": "^7.4.3",
     "@vercel/analytics": "^1.5.0",
@@ -32,7 +31,7 @@
     "framework7-icons": "^5.0.5",
     "gsap": "^3.15.0",
     "leaflet": "^1.9.4",
-    "nodemailer": "^6.10.0",
+    "nodemailer": "^9.0.5",
     "nuxt": "^3.16.1",
     "posthog-js": "^1.418.6",
     "vue": "^3.5.13",

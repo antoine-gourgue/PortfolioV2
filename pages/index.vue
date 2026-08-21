@@ -887,6 +887,7 @@
               <a
                 :href="qlProject.url"
                 target="_blank"
+                rel="noopener noreferrer"
                 class="text-[13px] font-medium text-ablue hover:underline"
                 >{{ $t('macos.openInSafari') }} ↗</a
               >
@@ -1398,7 +1399,8 @@ const downloadCv = () => {
   a.download = ''
   a.click()
 }
-const openUrl = (url: string) => window.open(url, '_blank')
+const openUrl = (url: string) =>
+  window.open(url, '_blank', 'noopener,noreferrer')
 
 const deskIcons = [
   // Colonne gauche : apps vitrines

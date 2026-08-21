@@ -7,6 +7,7 @@
       <NuxtLink
         :to="localePath('/')"
         class="menu-btn flex items-center px-2 py-0.5"
+        aria-label="Antoine Gourgue — accueil"
       >
         <AgLogo class="h-[18px] w-[22px] text-white" />
       </NuxtLink>
@@ -514,7 +515,7 @@ interface MenuItem {
 type Entry = MenuItem | 'sep'
 
 const go = (path: string) => router.push(localePath(path))
-const open = (url: string) => window.open(url, '_blank')
+const open = (url: string) => window.open(url, '_blank', 'noopener,noreferrer')
 // Mise en veille : déclenche l'écran de verrouillage
 const sleep = () => {
   setTimeout(() => (desktop.state.value.locked = true), 250)

@@ -128,7 +128,7 @@ const go = (path: string) => {
   close()
 }
 const open = (url: string) => {
-  window.open(url, '_blank')
+  window.open(url, '_blank', 'noopener,noreferrer')
   close()
 }
 

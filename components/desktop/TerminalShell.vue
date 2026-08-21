@@ -324,7 +324,7 @@ const execute = (raw: string) => {
       )
       if (project) {
         printOut(`→ ${esc(project.domain)}`)
-        window.open(project.url, '_blank')
+        window.open(project.url, '_blank', 'noopener,noreferrer')
         return
       }
       return printOut(

@@ -155,9 +155,9 @@
                 {{ current.initials }}
               </span>
               <div class="min-w-0 text-center lg:text-left">
-                <h1 class="text-[22px] font-bold tracking-tight lg:text-2xl">
+                <h2 class="text-[22px] font-bold tracking-tight lg:text-2xl">
                   {{ current.name }}
-                </h1>
+                </h2>
                 <p class="text-[14px] text-agray">{{ $t(current.roleKey) }}</p>
               </div>
             </div>

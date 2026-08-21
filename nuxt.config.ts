@@ -40,13 +40,7 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: [
-    '@nuxt/image',
-    '@nuxt/icon',
-    '@nuxtjs/sitemap',
-    '@nuxtjs/robots',
-    '@nuxtjs/i18n',
-  ],
+  modules: ['@nuxt/icon', '@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxtjs/i18n'],
   i18n: {
     baseUrl: 'https://antoinegourgue.dev',
     locales: [

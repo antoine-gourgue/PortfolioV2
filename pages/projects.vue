@@ -116,6 +116,7 @@
                 <a
                   :href="project.url"
                   target="_blank"
+                  rel="noopener noreferrer"
                   class="shrink-0 rounded-full bg-black/5 px-4 py-1 text-[13px] font-bold text-ablue"
                   @click.stop
                   >{{ $t('macos.get') }}</a
@@ -153,14 +154,15 @@
                 />
               </span>
               <div class="min-w-0 flex-1 pt-1">
-                <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">
+                <h2 class="text-2xl font-bold tracking-tight sm:text-3xl">
                   {{ current.name }}
-                </h1>
+                </h2>
                 <p class="mt-0.5 text-[15px] text-agray">Antoine Gourgue</p>
                 <div class="mt-4 flex items-center gap-4">
                   <a
                     :href="current.url"
                     target="_blank"
+                    rel="noopener noreferrer"
                     class="rounded-full bg-ablue px-6 py-1.5 text-[14px] font-bold text-white transition-colors hover:bg-[#0077ed]"
                   >
                     {{ $t('macos.get') }}
@@ -169,6 +171,7 @@
                     v-if="!current.pro"
                     href="https://github.com/antoine-gourgue"
                     target="_blank"
+                    rel="noopener noreferrer"
                     class="text-[13px] font-medium text-ablue hover:underline"
                   >
                     {{ $t('macos.sourceCode') }} ↗
@@ -209,7 +212,12 @@
 
             <!-- Aperçu -->
             <h2 class="mt-8 text-lg font-bold">{{ $t('macos.preview') }}</h2>
-            <a :href="current.url" target="_blank" class="mt-3 block">
+            <a
+              :href="current.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-3 block"
+            >
               <img
                 :src="current.image"
                 :alt="current.name"
@@ -250,6 +258,7 @@
                   <a
                     :href="current.url"
                     target="_blank"
+                    rel="noopener noreferrer"
                     class="text-ablue hover:underline"
                     >{{ current.domain }}</a
                   >

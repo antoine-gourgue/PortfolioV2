@@ -1,5 +1,6 @@
 <template>
   <main ref="container" class="mx-auto w-full max-w-3xl px-4 pt-16 lg:px-8">
+    <h1 class="sr-only">{{ $t('contact.title') }} — Antoine Gourgue</h1>
     <div ref="winEl" class="win">
       <UiMacWindow
         :title="$t('macos.mailTitle')"

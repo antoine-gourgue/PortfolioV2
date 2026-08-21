@@ -13,7 +13,7 @@ interface FormattedResult {
 }
 
 interface GoogleSearchResponse {
-  items: SearchResult[]
+  items?: SearchResult[]
 }
 
 let cachedResults: { results: FormattedResult[] } | null = null
@@ -29,21 +29,30 @@ export default defineEventHandler(async () => {
 
   const apiKey = process.env.GOOGLE_API_KEY
   const cx = process.env.GOOGLE_CX_ID
+  // Sans clé configurée, on renvoie une liste vide plutôt que de planter
+  if (!apiKey || !cx) return { results: [] }
+
   const query = encodeURIComponent('"Antoine Gourgue"')
 
-  const res = await $fetch<GoogleSearchResponse>(
-    `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${query}`
-  )
+  try {
+    const res = await $fetch<GoogleSearchResponse>(
+      `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${query}`,
+      { timeout: 10_000 }
+    )
 
-  const results: FormattedResult[] = res.items.map((item) => ({
-    title: item.title,
-    link: item.link,
-    snippet: item.snippet,
-    domain: item.displayLink,
-  }))
+    // `items` est absent quand la recherche ne remonte rien
+    const results: FormattedResult[] = (res?.items ?? []).map((item) => ({
+      title: item.title,
+      link: item.link,
+      snippet: item.snippet,
+      domain: item.displayLink,
+    }))
 
-  cachedResults = { results }
-  lastFetchTime = now
-
-  return cachedResults
+    cachedResults = { results }
+    lastFetchTime = now
+    return cachedResults
+  } catch {
+    // Quota atteint ou Google indisponible : on ressert le cache, sinon vide
+    return cachedResults ?? { results: [] }
+  }
 })

@@ -105,36 +105,6 @@
     },
     "success": "¡Mensaje enviado con éxito!"
   },
-  "services": {
-    "title": "Servicios.",
-    "description": "Actualmente enfocado en mis estudios y mi rol en Digitaleo. No estoy disponible para proyectos freelance en este momento, pero no dude en contactarme para futuras oportunidades.",
-    "fullstack": {
-      "title": "Desarrollo Fullstack",
-      "description": "Vue.js, AngularJS, TypeScript, PHP, REST APIs"
-    },
-    "devops": {
-      "title": "DevOps & CI/CD",
-      "description": "Docker, GitLab CI, Vercel, GitHub Actions"
-    },
-    "email": {
-      "title": "Integración de Correo",
-      "description": "VML, integración específica de Outlook, correos responsive"
-    },
-    "ai": {
-      "title": "Proyectos IA y Datos",
-      "description": "Machine Learning, modelos CNN, exploración de datos"
-    },
-    "design": {
-      "title": "Integración de Design System",
-      "description": "Componentes personalizados, temas, sistemas de diseño internos"
-    },
-    "collaboration": {
-      "title": "Colaboración y Herramientas",
-      "description": "Git, Jira, métodos Agile, prácticas eficientes de trabajo en equipo"
-    },
-    "interested": "¿Interesado en trabajar juntos en el futuro? No dude en",
-    "reachOut": "contactarme"
-  },
   "projects": {
     "title": "Mis Proyectos.",
     "description": "Una colección curada de proyectos personales y académicos que muestran mi trayectoria como Desarrollador Fullstack. Desde aplicaciones web hasta experimentos técnicos, cada proyecto refleja mi pasión y progresión.",
