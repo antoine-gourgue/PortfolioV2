@@ -145,84 +145,103 @@ const validatePayload = (body: Partial<ContactPayload>): ContactPayload => {
   }
 }
 
+const C = {
+  bg: '#0d1117',
+  card: '#161b22',
+  bar: '#21262d',
+  border: '#30363d',
+  text: '#c9d1d9',
+  bright: '#e6edf3',
+  dim: '#8b949e',
+  blue: '#58a6ff',
+  green: '#3fb950',
+  purple: '#d2a8ff',
+  amber: '#d29922',
+}
+
 const generateEmailTemplate = (
   name: string,
   email: string,
   message: string,
-  messageHtml?: string
+  messageHtml: string | undefined,
+  attachment?: ContactAttachment
 ) => {
   const safeName = escapeHtml(name)
   const safeEmail = escapeHtml(email)
+  // Le HTML de l'éditeur est déjà nettoyé en amont (balises de mise en forme
+  // uniquement) ; sinon on convertit le texte brut
   const safeMessage =
     messageHtml || escapeHtml(message).replace(/\r?\n/g, '<br />')
+  const received = new Intl.DateTimeFormat('fr-FR', {
+    dateStyle: 'long',
+    timeStyle: 'short',
+    timeZone: 'Europe/Paris',
+  }).format(new Date())
 
-  return `
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>New Message</title>
-    <style>
-      body {
-        background-color: #f8f8f8;
-        font-family: Arial, sans-serif;
-        padding: 20px;
-        margin: 0;
-      }
-      .container {
-        max-width: 600px;
-        margin: auto;
-        background: #fff;
-        border-radius: 10px;
-        padding: 30px;
-        box-shadow: 0 0 15px rgba(0,0,0,0.05);
-      }
-      .logo {
-        text-align: center;
-        margin-bottom: 30px;
-      }
-      .logo img {
-        max-width: 120px;
-      }
-      h2 {
-        text-align: center;
-        color: #333;
-        margin-bottom: 20px;
-      }
-      .content p {
-        color: #555;
-        line-height: 1.6;
-        margin: 10px 0;
-      }
-      .footer {
-        margin-top: 30px;
-        text-align: center;
-        font-size: 12px;
-        color: #aaa;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="logo">
-        <img src="https://antoinegourgue.dev/assets/antoinegourgue-logo.svg" alt="Logo" />
-      </div>
-      <h2>New Message Received</h2>
-      <div class="content">
-        <p><strong>Name:</strong> ${safeName}</p>
-        <p><strong>Email:</strong> ${safeEmail}</p>
-        <p><strong>Message:</strong></p>
-        <p>${safeMessage}</p>
-      </div>
-      <div class="footer">
-        This message was sent from your portfolio contact form.
-      </div>
-    </div>
-  </body>
-  </html>
-`
+  const row = (label: string, value: string) =>
+    `<span style="color:${C.blue}">${label.padEnd(6, ' ').replace(/ /g, '&nbsp;')}</span>${value}`
+
+  const attachmentBlock = attachment
+    ? `<tr><td style="padding:4px 24px 0;font:400 13px/1.9 Menlo,Consolas,monospace">
+         ${row('FILE', `<span style="color:${C.amber}">${escapeHtml(attachment.name)}</span>`)}
+       </td></tr>`
+    : ''
+
+  return `<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Message depuis antoinegourgue.dev</title></head>
+<body style="margin:0;padding:28px 16px;background:${C.bg};font-family:Menlo,Consolas,monospace">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center">
+<table role="presentation" width="580" cellpadding="0" cellspacing="0" border="0" style="width:580px;max-width:100%;background:${C.card};border:1px solid ${C.border};border-radius:10px;overflow:hidden">
+
+  <tr><td style="background:${C.bar};padding:10px 14px;border-bottom:1px solid ${C.border};font:600 12px/1.4 Menlo,Consolas,monospace;color:${C.dim}">
+    antoine@portfolio — nouveau message
+  </td></tr>
+
+  <tr><td style="padding:22px 24px 6px;font:400 13px/1.9 Menlo,Consolas,monospace;color:${C.text}">
+    <span style="color:${C.green}">$</span> cat contact/message.txt<br /><br />
+    ${row('FROM', `<span style="color:${C.bright}">${safeName}</span>`)}<br />
+    ${row('EMAIL', `<a href="mailto:${safeEmail}" style="color:${C.purple};text-decoration:none">${safeEmail}</a>`)}<br />
+    ${row('DATE', `<span style="color:${C.dim}">${received}</span>`)}
+  </td></tr>
+  ${attachmentBlock}
+
+  <tr><td style="padding:14px 24px 0"><div style="height:1px;background:${C.border};font-size:0;line-height:0">&nbsp;</div></td></tr>
+
+  <tr><td style="padding:18px 24px 6px;font:400 14px/1.75 -apple-system,'Helvetica Neue',Arial,sans-serif;color:${C.text}">
+    ${safeMessage}
+  </td></tr>
+
+  <tr><td style="padding:20px 24px 26px;font:400 13px/1.9 Menlo,Consolas,monospace">
+    <span style="color:${C.green}">$</span>
+    <a href="mailto:${safeEmail}?subject=Re%3A%20votre%20message%20sur%20antoinegourgue.dev" style="color:${C.blue};text-decoration:none">reply --to ${safeEmail}</a>
+    <span style="color:${C.text}">&#9613;</span>
+  </td></tr>
+
+</table></td></tr></table></body></html>`
 }
+
+// Version texte : améliore la délivrabilité et sert de repli
+const generatePlainText = (
+  name: string,
+  email: string,
+  message: string,
+  attachment?: ContactAttachment
+) =>
+  [
+    '$ cat contact/message.txt',
+    '',
+    `FROM   ${name}`,
+    `EMAIL  ${email}`,
+    attachment ? `FILE   ${attachment.name}` : '',
+    '',
+    message,
+    '',
+    `$ reply --to ${email}`,
+  ]
+    .filter((l) => l !== '')
+    .join('\n')
 
 export default defineEventHandler(async (event) => {
   // Rate limiting très simple en mémoire
@@ -279,13 +298,21 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  const htmlContent = generateEmailTemplate(name, email, message, messageHtml)
+  const htmlContent = generateEmailTemplate(
+    name,
+    email,
+    message,
+    messageHtml,
+    attachment
+  )
+  const textContent = generatePlainText(name, email, message, attachment)
 
   await transporter.sendMail({
     from: `"Portfolio Contact" <${process.env.MAIL_USER}>`,
     to: process.env.MAIL_TO,
     replyTo: `${name} <${email}>`,
-    subject: `New message from ${name}`,
+    subject: `Portfolio — message de ${name}`,
+    text: textContent,
     html: htmlContent,
     attachments: attachment
       ? [
