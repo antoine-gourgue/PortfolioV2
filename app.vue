@@ -49,8 +49,14 @@ useHead({
               addressCountry: 'FR',
             },
             alumniOf: { '@type': 'CollegeOrUniversity', name: 'Epitech' },
-            worksFor: { '@type': 'Organization', name: 'Digitaleo' },
-            knowsAbout: ['Vue.js', 'Nuxt', 'TypeScript', 'Node.js', 'Docker'],
+            knowsAbout: [
+              'Vue.js',
+              'Nuxt',
+              'TypeScript',
+              'Node.js',
+              'Docker',
+              'Artificial Intelligence',
+            ],
             sameAs: [
               'https://github.com/antoine-gourgue',
               'https://linkedin.com/in/antoine-gourgue',

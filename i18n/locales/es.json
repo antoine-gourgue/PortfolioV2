@@ -15,13 +15,13 @@
     "contactMe": "Contáctame",
     "downloadCV": "Descargar CV",
     "aboutMe": "Sobre mí",
-    "aboutDescription": "Soy un desarrollador Fullstack apasionado, actualmente cursando un Máster en Epitech Rennes, mientras adquiero experiencia profesional a través de mi aprendizaje en Digitaleo. Disfruto construyendo aplicaciones web modernas y escalables usando Vue, Nuxt y TypeScript.",
+    "aboutDescription": "Soy un desarrollador Fullstack apasionado. Tras dos años y medio de alternancia en Digitaleo, estoy terminando mi Master of Science en Inteligencia Artificial en Epitech Rennes (septiembre de 2026). Me encanta crear aplicaciones web modernas y escalables con Vue, Nuxt y TypeScript.",
     "quote": "Creando experiencias web limpias y escalables, una línea de código a la vez.",
     "technologies": "Tecnologías con las que trabajo",
     "journey": "Mi trayectoria",
     "journey2024": {
       "title": "Desarrollador Full Stack — Digitaleo",
-      "period": "ene. 2024 — 2026",
+      "period": "ene. 2024 — jul. 2026",
       "description": "Editor de email de la plataforma (bloques dinámicos, compatibilidad Outlook/VML), Design System, archivado de campañas, estadísticas de Marketing Directo."
     },
     "journey2023": {
@@ -37,7 +37,7 @@
       "line3": "Progresión."
     },
     "subtitle": "Desarrollador Fullstack especializado en soluciones web escalables.",
-    "description": "Enfocado en IA y Datos en Epitech Rennes, adquiriendo experiencia práctica en Digitaleo.",
+    "description": "Master of Science en Inteligencia Artificial en Epitech Rennes, forjado por dos años y medio de alternancia en Digitaleo.",
     "journey": "Mi trayectoria.",
     "digitaleo": {
       "title": "Digitaleo",
@@ -219,7 +219,7 @@
     "projectsTitle": "Mis proyectos",
     "projectsSub": "Cada ventana es un sitio web real, en línea.",
     "visit": "Visitar",
-    "terminalStatus": "disponible — oportunidades 2026",
+    "terminalStatus": "disponible — indefinido desde octubre de 2026",
     "mailTitle": "Nuevo mensaje",
     "mailTo": "Para: usted{'@'}empresa.com",
     "mailSubject": "Asunto: Trabajemos juntos",
@@ -252,8 +252,8 @@
     "specTools": "Herramientas",
     "specTraining": "Formación",
     "specStatus": "Estado",
-    "specTrainingVal": "Máster en IA & Data — Epitech Rennes",
-    "specStatusVal": "Disponible — oportunidades 2026",
+    "specTrainingVal": "MSc Inteligencia Artificial — Epitech Rennes",
+    "specStatusVal": "Disponible — indefinido desde octubre de 2026",
     "get": "OBTENER",
     "sourceCode": "Código fuente",
     "preview": "Vista previa",
@@ -337,14 +337,14 @@
     "airdropDoneHint": "El CV está en tus descargas. ¡Buena lectura!",
     "notifGithubLoading": "Cargando contribuciones…",
     "notifGithubHint": "Actividad real de GitHub — últimas 16 semanas",
-    "notifAvailabilityHint": "Alternancia hasta finales de 2026, luego indefinido. ¡Hablemos!",
+    "notifAvailabilityHint": "Titulado en septiembre, disponible desde octubre de 2026 — ¡hablemos!",
     "mapsMyPlaces": "Mis lugares",
     "mapsTitle": "Mapas",
     "mapsHome": "Mi casa",
-    "mapsDigitaleo": "Digitaleo — alternancia",
+    "mapsDigitaleo": "Digitaleo — alternancia (2024-2026)",
     "mapsEpitech": "Epitech",
     "mapsMobility": "Movilidad por toda Francia",
-    "mapsMobilityHint": "Con base en Anglet y alternancia en Rennes — el teletrabajo y los desplazamientos no son problema.",
+    "mapsMobilityHint": "Con base en Anglet — abierto al País Vasco, Burdeos y París.",
     "mailInbox": "Bandeja de entrada",
     "mailCompose": "Nuevo mensaje",
     "mailAttach": "Adjuntar un archivo",
@@ -368,7 +368,7 @@
     "mailReply": "Responder",
     "mailWelcomeSubject": "Bienvenido a mi buzón 👋",
     "mailWelcomePreview": "¡Gracias por la visita! Así puedes contactarme…",
-    "mailWelcomeBody": "Hola:\n\n¡Gracias por explorar mi portfolio hasta aquí! Este buzón es real: el formulario « Nuevo mensaje » me envía tu mensaje directamente, y respondo rápido.\n\nEstoy en alternancia en Digitaleo hasta finales de 2026, y luego disponible para contrato indefinido. Si mi perfil te interesa — o solo quieres hablar de Vue, Nuxt o este sitio — escríbeme.\n\nHasta pronto,\nAntoine",
+    "mailWelcomeBody": "Hola:\n\n¡Gracias por explorar mi portafolio hasta aquí! Este buzón es real: el formulario «Nuevo mensaje» me envía tu mensaje directamente, y respondo rápido.\n\nTerminé mi alternancia en Digitaleo en julio de 2026 y me titulo de mi Master of Science en IA en septiembre. Estoy disponible para un puesto indefinido desde octubre de 2026 — en el País Vasco, Burdeos o París. Si mi perfil te interesa — o si solo quieres hablar de Vue, de Nuxt o de este sitio — escríbeme.\n\nHasta pronto,\nAntoine",
     "mailCvSubject": "Mi CV adjunto 📎",
     "mailCvPreview": "Versión PDF actualizada de mi trayectoria…",
     "mailCvBody": "Hola:\n\nAdjunto la versión PDF de mi CV — más fácil de compartir o imprimir que el portfolio.\n\n¡Buena lectura!\nAntoine",
@@ -499,7 +499,7 @@
       },
       "stack": {
         "title": "Mi stack en 2026",
-        "body": "Front: Vue y Nuxt primero — ahí soy más productivo. TypeScript en todas partes, Tailwind para ir rápido y mantener coherencia, GSAP cuando algo debe moverse bien.\n\nBack: Node.js, PHP en Digitaleo, MongoDB y PostgreSQL según el proyecto. Prisma y Auth.js en mis proyectos Next.js recientes (Mosaic, TailTCG).\n\nHerramientas: Docker, GitLab CI/CD y Claude Code, que cambió mi forma de trabajar — este portfolio es la prueba.\n\nAhora mismo: el Máster en IA & Data de Epitech me empuja hacia el machine learning. El siguiente paso lógico."
+        "body": "Front: Vue y Nuxt primero — ahí soy más productivo. TypeScript en todas partes, Tailwind para ir rápido y mantener coherencia, GSAP cuando algo debe moverse bien.\n\nBack: Node.js, PHP en Digitaleo, MongoDB y PostgreSQL según el proyecto. Prisma y Auth.js en mis proyectos Next.js recientes (Mosaic, TailTCG).\n\nHerramientas: Docker, GitLab CI/CD y Claude Code, que cambió mi forma de trabajar — este portfolio es la prueba.\n\nY el Master of Science en IA de Epitech me empujó hacia el machine learning. El siguiente paso lógico."
       }
     }
   }

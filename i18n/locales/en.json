@@ -15,13 +15,13 @@
     "contactMe": "Contact Me",
     "downloadCV": "Download CV",
     "aboutMe": "About Me",
-    "aboutDescription": "I'm a passionate Fullstack Developer currently pursuing a Master's Degree at Epitech Rennes, while gaining real-world experience through my apprenticeship at Digitaleo. I enjoy building modern, scalable web applications using Vue, Nuxt, and TypeScript.",
+    "aboutDescription": "I'm a passionate Fullstack Developer. After two and a half years as an apprentice at Digitaleo, I'm completing my Master of Science in Artificial Intelligence at Epitech Rennes (September 2026). I love building modern, scalable web applications with Vue, Nuxt and TypeScript.",
     "quote": "Crafting clean & scalable web experiences, one line of code at a time.",
     "technologies": "Technologies I Work With",
     "journey": "My Journey",
     "journey2024": {
       "title": "Full Stack Developer — Digitaleo",
-      "period": "Jan 2024 — 2026",
+      "period": "Jan 2024 — Jul 2026",
       "description": "Platform email editor (dynamic blocks, Outlook/VML compatibility), Design System, campaign archiving, Direct Marketing statistics."
     },
     "journey2023": {
@@ -37,7 +37,7 @@
       "line3": "Progression."
     },
     "subtitle": "Fullstack Developer specializing in scalable web solutions.",
-    "description": "Focused on AI & Data at Epitech Rennes, gaining hands-on experience at Digitaleo.",
+    "description": "Master of Science in Artificial Intelligence at Epitech Rennes, shaped by two and a half years at Digitaleo.",
     "journey": "My Journey.",
     "digitaleo": {
       "title": "Digitaleo",
@@ -46,8 +46,8 @@
     },
     "epitech": {
       "title": "Epitech Rennes",
-      "role": "Master's Degree - AI & Data",
-      "description": "Specializing in AI & Data, focusing on Machine Learning, Data Science, and innovative solutions."
+      "role": "Master of Science — Artificial Intelligence",
+      "description": "Specializing in Artificial Intelligence: machine learning, data science and innovative solutions."
     },
     "education": {
       "title": "Lycée Saint Joseph — Hasparren",
@@ -219,7 +219,7 @@
     "projectsTitle": "My projects",
     "projectsSub": "Every window is a real, live website.",
     "visit": "Visit",
-    "terminalStatus": "available — 2026 opportunities",
+    "terminalStatus": "available — open to full-time from October 2026",
     "mailTitle": "New message",
     "mailTo": "To: you{'@'}company.com",
     "mailSubject": "Subject: Let’s work together",
@@ -252,8 +252,8 @@
     "specTools": "Tools",
     "specTraining": "Education",
     "specStatus": "Status",
-    "specTrainingVal": "Master's in AI & Data — Epitech Rennes",
-    "specStatusVal": "Available — 2026 opportunities",
+    "specTrainingVal": "MSc Artificial Intelligence — Epitech Rennes",
+    "specStatusVal": "Available — full-time from October 2026",
     "get": "GET",
     "sourceCode": "Source code",
     "preview": "Preview",
@@ -337,14 +337,14 @@
     "airdropDoneHint": "The resume is in your downloads. Happy reading!",
     "notifGithubLoading": "Loading contributions…",
     "notifGithubHint": "Real GitHub activity — last 16 weeks",
-    "notifAvailabilityHint": "Apprenticeship until late 2026, then full-time. Let's talk!",
+    "notifAvailabilityHint": "Graduating in September, available full-time from October 2026 — let's talk!",
     "mapsMyPlaces": "My places",
     "mapsTitle": "Maps",
     "mapsHome": "Home",
-    "mapsDigitaleo": "Digitaleo — apprenticeship",
+    "mapsDigitaleo": "Digitaleo — apprenticeship (2024-2026)",
     "mapsEpitech": "Epitech",
     "mapsMobility": "Mobile anywhere in France",
-    "mapsMobilityHint": "Based in Anglet, apprenticing in Rennes — remote work and travel are no problem.",
+    "mapsMobilityHint": "Based in Anglet — open to the Basque Country, Bordeaux and Paris.",
     "mailInbox": "Inbox",
     "mailCompose": "New message",
     "mailAttach": "Attach a file",
@@ -368,7 +368,7 @@
     "mailReply": "Reply",
     "mailWelcomeSubject": "Welcome to my mailbox 👋",
     "mailWelcomePreview": "Thanks for visiting! Here's how to reach me…",
-    "mailWelcomeBody": "Hi,\n\nThanks for exploring my portfolio this far! This mailbox is real: the “New message” form sends your message straight to me, and I reply quickly.\n\nI'm apprenticing at Digitaleo until late 2026, then available full-time. If my profile interests you — or you just want to chat about Vue, Nuxt or this site — drop me a line.\n\nSee you soon,\nAntoine",
+    "mailWelcomeBody": "Hello,\n\nThanks for exploring my portfolio this far! This mailbox is real: the “New message” form sends your message straight to me, and I reply quickly.\n\nI finished my apprenticeship at Digitaleo in July 2026 and I graduate from my Master of Science in AI in September. I'm available for a full-time role from October 2026 — in the Basque Country, Bordeaux or Paris. If my profile interests you — or if you just want to talk Vue, Nuxt or this site — write to me.\n\nSee you soon,\nAntoine",
     "mailCvSubject": "My resume attached 📎",
     "mailCvPreview": "Up-to-date PDF version of my background…",
     "mailCvBody": "Hi,\n\nAttached is the PDF version of my resume — easier to share or print than the portfolio.\n\nHappy reading!\nAntoine",
@@ -499,7 +499,7 @@
       },
       "stack": {
         "title": "My 2026 stack",
-        "body": "Front: Vue and Nuxt first — that's where I'm most productive. TypeScript everywhere, Tailwind for speed and consistency, GSAP when things need to move well.\n\nBack: Node.js, PHP at Digitaleo, MongoDB and PostgreSQL depending on the project. Prisma and Auth.js on my recent Next.js projects (Mosaic, TailTCG).\n\nTools: Docker, GitLab CI/CD, and Claude Code, which changed how I work — this portfolio is the proof.\n\nRight now: the AI & Data Master's at Epitech is pushing me toward machine learning. The logical next step."
+        "body": "Front: Vue and Nuxt first — that's where I'm most productive. TypeScript everywhere, Tailwind for speed and consistency, GSAP when things need to move well.\n\nBack: Node.js, PHP at Digitaleo, MongoDB and PostgreSQL depending on the project. Prisma and Auth.js on my recent Next.js projects (Mosaic, TailTCG).\n\nTools: Docker, GitLab CI/CD, and Claude Code, which changed how I work — this portfolio is the proof.\n\nAnd the Master of Science in AI at Epitech pushed me toward machine learning. The logical next step."
       }
     }
   }

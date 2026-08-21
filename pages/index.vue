@@ -162,13 +162,11 @@
               <span class="text-right font-semibold">{{
                 $t('macos.specBackend')
               }}</span>
-              <span class="text-agray">Node.js · PHP · MongoDB</span>
+              <span class="text-agray">Node.js · Prisma · PostgreSQL</span>
               <span class="text-right font-semibold">{{
                 $t('macos.specTools')
               }}</span>
-              <span class="text-agray"
-                >Docker · GitLab CI/CD · Claude Code</span
-              >
+              <span class="text-agray">Docker · CI/CD · Claude Code · LLM</span>
               <span class="text-right font-semibold">{{
                 $t('macos.specTraining')
               }}</span>

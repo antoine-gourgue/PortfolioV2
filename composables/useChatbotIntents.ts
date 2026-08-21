@@ -75,9 +75,9 @@ export const useChatbotIntents = (): Intent[] => [
       ],
     },
     response: {
-      fr: `🟢 Oui ! Mon alternance chez Digitaleo se termine à l'été 2026, en même temps que mon Master — je suis ouvert aux opportunités pour la suite (basé à Anglet, télétravail bienvenu). Parlons-en via ${link('/contact', 'Contact')} !`,
-      es: `🟢 ¡Sí! Mi alternancia en Digitaleo termina en verano de 2026, junto con mi Máster — estoy abierto a oportunidades (desde Anglet, teletrabajo bienvenido). ¡Hablemos vía ${link('/contact', 'Contacto')}!`,
-      en: `🟢 Yes! My apprenticeship at Digitaleo ends in summer 2026, along with my Master's — I'm open to opportunities for what's next (based in Anglet, remote-friendly). Let's talk via ${link('/contact', 'Contact')}!`,
+      fr: `🟢 Oui ! Alternance chez Digitaleo terminée en juillet 2026, diplôme du Master of Science en IA en septembre — je suis disponible en CDI dès octobre 2026, au Pays basque, à Bordeaux ou à Paris. Parlons-en via ${link('/contact', 'Contact')} !`,
+      es: `🟢 ¡Sí! Alternancia en Digitaleo terminada en julio de 2026, título del Master of Science en IA en septiembre — disponible para un indefinido desde octubre de 2026, en el País Vasco, Burdeos o París. ¡Hablemos vía ${link('/contact', 'Contacto')}!`,
+      en: `🟢 Yes! I finished my apprenticeship at Digitaleo in July 2026 and graduate from my Master of Science in AI in September — available full-time from October 2026, in the Basque Country, Bordeaux or Paris. Let's talk via ${link('/contact', 'Contact')}!`,
     },
   },
   {
@@ -98,9 +98,9 @@ export const useChatbotIntents = (): Intent[] => [
       en: ['where', 'live', 'located', 'location', 'city', 'anglet', 'rennes'],
     },
     response: {
-      fr: `🌊 Je vis à Anglet, au Pays Basque. Mon école (Epitech) et mon alternance (Digitaleo) sont à Rennes — je jongle entre les deux, et le télétravail ne me fait pas peur.`,
-      es: `🌊 Vivo en Anglet, en el País Vasco francés. Mi escuela (Epitech) y mi alternancia (Digitaleo) están en Rennes — el teletrabajo no me asusta.`,
-      en: `🌊 I live in Anglet, in the French Basque Country. My school (Epitech) and apprenticeship (Digitaleo) are in Rennes — remote work is second nature.`,
+      fr: `🌊 Je vis à Anglet, au Pays Basque. Après trois ans entre Rennes (Epitech, Digitaleo) et la côte, je cherche mon prochain poste au Pays basque, à Bordeaux ou à Paris.`,
+      es: `🌊 Vivo en Anglet, en el País Vasco francés. Tras tres años entre Rennes (Epitech, Digitaleo) y la costa, busco mi próximo puesto en el País Vasco, Burdeos o París.`,
+      en: `🌊 I live in Anglet, in the French Basque Country. After three years between Rennes (Epitech, Digitaleo) and the coast, I'm looking for my next role in the Basque Country, Bordeaux or Paris.`,
     },
   },
   {
@@ -266,15 +266,15 @@ export const useChatbotIntents = (): Intent[] => [
       en: ['education', 'studies', 'school', 'epitech', 'master', 'degree'],
     },
     response: {
-      fr: `🎓 Master IA & Data à Epitech Rennes (2023-2026), après un BTS SNIR au Lycée Saint Joseph d'Hasparren et des bacs S & STL au Lycée André Malraux de Biarritz. Tout le détail dans ${link('/about', 'Contacts')}.`,
-      es: `🎓 Máster en IA & Data en Epitech Rennes (2023-2026), tras un BTS SNIR en el Lycée Saint Joseph de Hasparren y bachilleratos S & STL en el Lycée André Malraux de Biarritz. Todo el detalle en ${link('/about', 'Contactos')}.`,
-      en: `🎓 Master's in AI & Data at Epitech Rennes (2023-2026), after a BTS SNIR (IT & networks) in Hasparren and science baccalaureates in Biarritz. Full details in ${link('/about', 'Contacts')}.`,
+      fr: `🎓 Master of Science en Intelligence Artificielle à Epitech Rennes (2023-2026, diplôme en septembre), après un BTS SNIR au Lycée Saint Joseph d'Hasparren et des bacs S & STL au Lycée André Malraux de Biarritz. Tout le détail dans ${link('/about', 'Contacts')}.`,
+      es: `🎓 Master of Science en Inteligencia Artificial en Epitech Rennes (2023-2026, título en septiembre), tras un BTS SNIR en el Lycée Saint Joseph de Hasparren y bachilleratos S & STL en el Lycée André Malraux de Biarritz. Todo el detalle en ${link('/about', 'Contactos')}.`,
+      en: `🎓 Master of Science in Artificial Intelligence at Epitech Rennes (2023-2026, graduating in September), after a BTS SNIR (IT & networks) in Hasparren and science baccalaureates in Biarritz. Full details in ${link('/about', 'Contacts')}.`,
     },
     followUp: {
       question: {
-        fr: `Tu veux savoir pourquoi j'ai choisi la spécialisation IA & Data ?`,
-        es: `¿Quieres saber por qué elegí la especialización en IA & Data?`,
-        en: `Want to know why I chose the AI & Data specialization?`,
+        fr: `Tu veux savoir pourquoi j'ai choisi la spécialisation Intelligence Artificielle ?`,
+        es: `¿Quieres saber por qué elegí la especialización en Inteligencia Artificial?`,
+        en: `Want to know why I chose the Artificial Intelligence specialization?`,
       },
       expectedIntent: 'choix_ia',
     },
@@ -323,9 +323,9 @@ export const useChatbotIntents = (): Intent[] => [
       ],
     },
     response: {
-      fr: `💼 Développeur Full Stack en alternance chez Digitaleo (Rennes) depuis janvier 2024, sur un SaaS de marketing local. Mon terrain : l'éditeur d'email — blocs dynamiques, compatibilité Outlook/VML, Design System — plus l'archivage des campagnes et les stats Marketing Direct. La fiche complète est dans l'${link('/projects', 'App Store')}.`,
-      es: `💼 Desarrollador Full Stack en alternancia en Digitaleo (Rennes) desde enero de 2024, en un SaaS de marketing local. Mi terreno: el editor de email — bloques dinámicos, compatibilidad Outlook/VML, Design System — más el archivado de campañas y las estadísticas de Marketing Directo. La ficha completa está en el ${link('/projects', 'App Store')}.`,
-      en: `💼 Full Stack Developer apprentice at Digitaleo (Rennes) since January 2024, on a local-marketing SaaS. My playground: the email editor — dynamic blocks, Outlook/VML compatibility, Design System — plus campaign archiving and Direct Marketing statistics. Full case study in the ${link('/projects', 'App Store')}.`,
+      fr: `💼 Deux ans et demi d'alternance Full Stack chez Digitaleo (Rennes, janvier 2024 → juillet 2026), sur un SaaS de marketing local. Mon terrain : l'éditeur d'email — blocs dynamiques, compatibilité Outlook/VML, intégration du Design System Vue.js dans le legacy — plus l'archivage des campagnes et les stats Marketing Direct. La fiche complète est dans l'${link('/projects', 'App Store')}.`,
+      es: `💼 Dos años y medio de alternancia Full Stack en Digitaleo (Rennes, enero de 2024 → julio de 2026), en un SaaS de marketing local. Mi terreno: el editor de email — bloques dinámicos, compatibilidad Outlook/VML, integración del Design System Vue.js en el legacy — más el archivado de campañas y las estadísticas de Marketing Directo. La ficha completa está en el ${link('/projects', 'App Store')}.`,
+      en: `💼 Two and a half years as a Full Stack apprentice at Digitaleo (Rennes, January 2024 → July 2026), on a local-marketing SaaS. My playground: the email editor — dynamic blocks, Outlook/VML compatibility, Vue.js Design System integration into legacy code — plus campaign archiving and Direct Marketing statistics. Full case study in the ${link('/projects', 'App Store')}.`,
     },
   },
   {
@@ -492,7 +492,7 @@ export const useChatbotIntents = (): Intent[] => [
           <img src="/assets/profile.png" alt="Antoine Gourgue" class="w-12 h-12 rounded-full border object-cover object-top" />
           <div>
             <p class="font-semibold">Antoine Gourgue</p>
-            <p class="text-[12px] text-black/50">Développeur Fullstack · Master IA & Data à Epitech</p>
+            <p class="text-[12px] text-black/50">Développeur Fullstack · MSc Intelligence Artificielle — Epitech</p>
           </div>
         </div>
         <p>👋 Salut ! Dev fullstack en alternance chez Digitaleo, basé à Anglet. Passionné de dev, d'IA, de montres et de foot ⚽️ — et c'est moi qui ai codé ce Mac.</p>
@@ -509,7 +509,7 @@ export const useChatbotIntents = (): Intent[] => [
           <img src="/assets/profile.png" alt="Antoine Gourgue" class="w-12 h-12 rounded-full border object-cover object-top" />
           <div>
             <p class="font-semibold">Antoine Gourgue</p>
-            <p class="text-[12px] text-black/50">Desarrollador Fullstack · Máster IA & Data en Epitech</p>
+            <p class="text-[12px] text-black/50">Desarrollador Fullstack · MSc Inteligencia Artificial — Epitech</p>
           </div>
         </div>
         <p>👋 ¡Hola! Dev fullstack en alternancia en Digitaleo, desde Anglet. Apasionado del desarrollo, la IA, los relojes y el fútbol ⚽️ — y fui yo quien programó este Mac.</p>
@@ -526,7 +526,7 @@ export const useChatbotIntents = (): Intent[] => [
           <img src="/assets/profile.png" alt="Antoine Gourgue" class="w-12 h-12 rounded-full border object-cover object-top" />
           <div>
             <p class="font-semibold">Antoine Gourgue</p>
-            <p class="text-[12px] text-black/50">Fullstack Developer · AI & Data Master's at Epitech</p>
+            <p class="text-[12px] text-black/50">Fullstack Developer · MSc Artificial Intelligence — Epitech</p>
           </div>
         </div>
         <p>👋 Hey! Fullstack dev apprentice at Digitaleo, based in Anglet. Passionate about dev, AI, watches and football ⚽️ — and yes, I coded this Mac.</p>
