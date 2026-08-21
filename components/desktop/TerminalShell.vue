@@ -1,7 +1,7 @@
 <template>
   <div
     ref="bodyEl"
-    class="h-[300px] cursor-text overflow-y-auto p-5 font-mono text-[12.5px] leading-relaxed text-white/90"
+    class="h-[336px] cursor-text overflow-y-auto p-4 font-mono text-[12.5px] leading-relaxed text-white/90"
     @click="focusInput"
   >
     <!-- Historique -->
@@ -109,12 +109,14 @@ const COMMANDS = [
 ]
 
 const NEOFETCH_ART = [
-  '   <span class="text-sky-300"> ▄▄▄▄▄▄▄ </span>',
-  '   <span class="text-sky-300">██▀▀▀▀▀██</span>',
-  '   <span class="text-sky-300">██  ▄▄▄▄█</span>',
-  '   <span class="text-sky-300">██  ▀▀▀██</span>',
-  '   <span class="text-sky-300">██▄▄▄▄▄██</span>',
-  '   <span class="text-sky-300"> ▀▀▀▀▀▀▀ </span>',
+  '<span class="text-sky-300">    ██████████▄▄  </span>',
+  '<span class="text-sky-300">       ▄▄▄▄▄ ▀▀██▄</span>',
+  '<span class="text-sky-300">    ▄█████████ ▀██</span>',
+  '<span class="text-sky-300">  ▄██▀ ▄▄▄▄▄▄▄▄▄██</span>',
+  '<span class="text-sky-300">  ██  ██▀▀▀▀▀▀▀▀██</span>',
+  '<span class="text-sky-300">  ██  ████████  ██</span>',
+  '<span class="text-sky-300">  ▀██▄▄ ▀▀▀▀▀▀  ██</span>',
+  '<span class="text-sky-300">    ▀█████████████</span>',
 ]
 
 const neofetch = () => {
@@ -125,14 +127,26 @@ const neofetch = () => {
   const info = [
     '<span class="text-emerald-400">antoine</span>@<span class="text-emerald-400">portfolio</span>',
     '<span class="text-white/40">─────────────────</span>',
-    `<span class="text-sky-300">OS</span>: AntoineOS 26 (façon macOS)`,
-    `<span class="text-sky-300">Shell</span>: zsh (100 % Vue, 0 % serveur)`,
+    `<span class="text-sky-300">OS</span>: ${t('macos.term.osLabel')}`,
+    `<span class="text-sky-300">Shell</span>: zsh (100 % Vue)`,
     `<span class="text-sky-300">Stack</span>: Nuxt 3 · GSAP · Tailwind`,
-    `<span class="text-sky-300">Localisation</span>: Anglet, France`,
-    `<span class="text-sky-300">Musique</span>: ${esc(playing)}`,
+    `<span class="text-sky-300">${t('macos.term.location')}</span>: Anglet, France`,
     `<span class="text-sky-300">Uptime</span>: ${uptime} min`,
   ]
-  NEOFETCH_ART.forEach((art, i) => print(`${art}  ${info[i] ?? ''}`))
+  // la ligne Musique n'apparaît que si un titre est en cours
+  if (music.state.value.playing) {
+    info.splice(
+      6,
+      0,
+      `<span class="text-sky-300">${t('macos.term.music')}</span>: ${esc(playing)}`
+    )
+  }
+  NEOFETCH_ART.forEach((art, i) =>
+    // leading serré : sans ça les blocs du logo ne se rejoignent pas
+    print(
+      `<span class="block leading-[1.08] ${i === 0 ? 'pt-2' : ''}">${art}  ${info[i] ?? ''}</span>`
+    )
+  )
   if (info.length > NEOFETCH_ART.length) {
     info
       .slice(NEOFETCH_ART.length)
@@ -144,17 +158,17 @@ const neofetch = () => {
 
 const help = () => {
   const rows: Array<[string, string]> = [
-    ['help', 'cette aide'],
-    ['ls projets', 'liste les projets'],
-    ['open &lt;projet|page&gt;', 'ouvre un projet ou une page'],
-    ['cat now.txt', 'ce que je fais en ce moment'],
-    ['whoami', 'qui suis-je'],
-    ['music play|pause|next', "contrôle l'app Musique"],
-    ['weather · calc', 'ouvre les apps'],
-    ['wallpaper', "change le fond d'écran"],
-    ['neofetch', 'fiche système'],
-    ['settings · lock', "réglages · verrouille l'écran"],
-    ['clear · exit', 'nettoie · réduit la fenêtre'],
+    ['help', t('macos.term.helpHelp')],
+    ['ls', t('macos.term.helpLs')],
+    [t('macos.term.helpOpenCmd'), t('macos.term.helpOpen')],
+    ['cat now.txt', t('macos.term.helpCat')],
+    ['whoami', t('macos.term.helpWhoami')],
+    ['music play|pause|next', t('macos.term.helpMusic')],
+    ['weather · calc', t('macos.term.helpApps')],
+    ['wallpaper', t('macos.term.helpWallpaper')],
+    ['neofetch', t('macos.term.helpNeofetch')],
+    ['settings · lock', t('macos.term.helpSettings')],
+    ['clear · exit', t('macos.term.helpClear')],
   ]
   rows.forEach(([cmd, desc]) =>
     print(
@@ -170,23 +184,68 @@ const execute = (raw: string) => {
 
   if (cmd) track('terminal_command', { command: cmd.toLowerCase() })
 
+  // Ces commandes ne prennent aucun argument : on refuse plutôt que d'ignorer
+  const NO_ARGS = new Set([
+    'help',
+    'whoami',
+    'date',
+    'clear',
+    'exit',
+    'contact',
+    'weather',
+    'calc',
+    'calculator',
+    'wallpaper',
+    'neofetch',
+    'news',
+    'siri',
+    'airdrop',
+    'lock',
+    'settings',
+    'reglages',
+  ])
+  if (args.length && NO_ARGS.has(cmd.toLowerCase())) {
+    return printOut(
+      `${esc(cmd.toLowerCase())}: too many arguments`,
+      'text-red-400'
+    )
+  }
+
   switch (cmd.toLowerCase()) {
     case '':
       return
     case 'help':
       return help()
-    case 'ls':
+    case 'ls': {
+      const LS_PATHS = [
+        '',
+        '.',
+        '~',
+        'projets',
+        'projects',
+        'proyectos',
+        './projets',
+        '~/projets',
+      ]
+      if (!LS_PATHS.includes(arg.replace(/\/$/, ''))) {
+        return printOut(
+          `ls: ${esc(arg)}: no such file or directory`,
+          'text-red-400'
+        )
+      }
       return print(`<span class="text-sky-300">${projectList()}</span>`)
+    }
     case 'cat':
-      if (arg.includes('now')) return printOut(esc(t('macos.terminalNow')))
+      if (!arg) return printOut('usage: cat &lt;file&gt;', 'text-red-400')
+      if (arg === 'now.txt' || arg === 'now') {
+        return printOut(esc(t('macos.terminalNow')))
+      }
       return printOut(
-        `cat: ${esc(arg || '?')}: fichier introuvable`,
+        `cat: ${esc(arg)}: no such file or directory`,
         'text-red-400'
       )
     case 'whoami':
-      return printOut(
-        'Antoine Gourgue — développeur fullstack (Vue/Nuxt · Node) · Anglet, France'
-      )
+      return printOut(esc(t('macos.term.whoami')))
     case 'date':
       return printOut(new Date().toLocaleString(locale.value))
     case 'echo':
@@ -195,42 +254,42 @@ const execute = (raw: string) => {
       history.value = []
       return
     case 'exit':
-      printOut('déconnexion…', 'text-white/50')
+      printOut(t('macos.term.loggingOut'), 'text-white/50')
       setTimeout(() => emit('exit'), 350)
       return
     case 'contact':
-      printOut('→ ouverture du Mail…')
+      printOut(t('macos.term.openMail'))
       router.push(localePath('/contact'))
       return
     case 'weather':
       desktop.state.value.apps.weather = true
-      return printOut('→ Météo ouverte')
+      return printOut(t('macos.term.openWeather'))
     case 'calc':
     case 'calculator':
       desktop.state.value.apps.calculator = true
-      return printOut('→ Calculatrice ouverte')
+      return printOut(t('macos.term.openCalc'))
     case 'wallpaper':
       desktop.cycleWallpaper()
-      return printOut("→ fond d'écran suivant 🎨")
+      return printOut(t('macos.term.wallpaperNext'))
     case 'neofetch':
       return neofetch()
     case 'news':
       desktop.state.value.apps.news = true
-      return printOut('→ News ouvert 📰')
+      return printOut(t('macos.term.openNews'))
     case 'siri':
       desktop.state.value.apps.siri = true
-      return printOut('→ Siri vous écoute 🎙️')
+      return printOut(t('macos.term.openSiri'))
     case 'airdrop':
       desktop.state.value.apps.airdrop = true
-      return printOut('→ AirDrop : réception en cours… 📡')
+      return printOut(t('macos.term.openAirdrop'))
     case 'lock':
-      printOut('🔒 verrouillage…', 'text-white/50')
+      printOut(t('macos.term.locking'), 'text-white/50')
       setTimeout(() => (desktop.state.value.locked = true), 400)
       return
     case 'settings':
     case 'reglages':
       desktop.state.value.apps.settings = true
-      return printOut('→ Réglages ouverts')
+      return printOut(t('macos.term.openSettings'))
     case 'music': {
       if (arg === 'play' || arg === '') {
         music.play()
@@ -240,7 +299,7 @@ const execute = (raw: string) => {
       }
       if (arg === 'pause') {
         music.pause()
-        return printOut('⏸ pause')
+        return printOut(`⏸ ${t('macos.term.paused')}`)
       }
       if (arg === 'next') {
         music.next()
@@ -250,10 +309,11 @@ const execute = (raw: string) => {
         music.prev()
         return printOut(`⏮ ${esc(music.track.value.title)}`)
       }
-      return printOut('usage : music play|pause|next|prev', 'text-red-400')
+      return printOut('usage: music play|pause|next|prev', 'text-red-400')
     }
     case 'open': {
-      if (!arg) return printOut('usage : open <projet|page>', 'text-red-400')
+      if (!arg)
+        return printOut('usage: open &lt;project|page&gt;', 'text-red-400')
       if (PAGES[arg]) {
         printOut(`→ antoinegourgue.dev${PAGES[arg]}`)
         router.push(localePath(PAGES[arg]))
@@ -268,27 +328,21 @@ const execute = (raw: string) => {
         return
       }
       return printOut(
-        `open: ${esc(arg)}: introuvable — essaie \`ls\``,
+        `open: ${esc(arg)}: not found — try \`ls\``,
         'text-red-400'
       )
     }
     case 'sudo':
-      return printOut(
-        'antoine n’est pas dans le fichier sudoers. Cet incident sera signalé. 😄',
-        'text-amber-300'
-      )
+      return printOut(esc(t('macos.term.sudo')), 'text-amber-300')
     case 'rm':
-      return printOut(
-        'Bien tenté. Le portfolio reste en ligne. 🛡️',
-        'text-amber-300'
-      )
+      return printOut(esc(t('macos.term.rm')), 'text-amber-300')
     case 'vim':
     case 'nano':
     case 'emacs':
-      return printOut(':q! pour sortir 😉', 'text-white/50')
+      return printOut(esc(t('macos.term.editor')), 'text-white/50')
     default:
       return printOut(
-        `zsh: command not found: ${esc(cmd)} — tape \`help\``,
+        `zsh: command not found: ${esc(cmd)} — try \`help\``,
         'text-red-400'
       )
   }
@@ -334,15 +388,17 @@ const complete = () => {
 }
 
 onMounted(() => {
-  // Historique initial : reprend le contenu statique d'origine
-  print(PROMPT + 'ls ~/projets')
-  print(`<span class="text-sky-300">${projectList()}</span>`)
+  // Historique initial : fiche système, statut du moment, puis l'aide
+  print(PROMPT + 'neofetch')
+  neofetch()
   print('&nbsp;')
   print(PROMPT + 'cat now.txt')
   printOut(esc(t('macos.terminalNow')))
   print('&nbsp;')
   printOut(
-    'Tape <span class="text-sky-300">help</span> pour la liste des commandes.',
+    t('macos.term.hint', {
+      cmd: '<span class="text-sky-300">help</span>',
+    }),
     'text-white/50'
   )
 })

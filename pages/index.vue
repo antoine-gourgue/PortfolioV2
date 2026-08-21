@@ -205,7 +205,7 @@
       <div
         v-show="!desktop.state.value.wins.terminal?.min"
         ref="termEl"
-        class="win absolute right-36 top-60 z-10 w-[440px] xl:right-[12%]"
+        class="win absolute right-56 top-60 z-10 w-[440px] xl:right-[16%]"
         :style="{ zIndex: desktop.state.value.wins.terminal?.z ?? 10 }"
         @pointerdown="desktop.focus('terminal')"
       >
@@ -221,11 +221,33 @@
         </UiMacWindow>
       </div>
 
-      <p
-        class="pointer-events-none absolute bottom-8 left-1/2 hidden -translate-x-1/2 text-[12px] font-medium tracking-wide text-white/50 lg:block"
+      <!-- Indice de bas de page : s'efface dès que le visiteur descend -->
+      <div
+        class="pointer-events-none absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 transition-opacity duration-500 lg:flex"
+        :class="scrolledDown ? 'opacity-0' : 'opacity-100'"
       >
-        {{ $t('macos.dragHint') }}
-      </p>
+        <p class="text-[12px] font-medium tracking-wide text-white/50">
+          {{ $t('macos.dragHint') }}
+        </p>
+        <button
+          class="scroll-cue pointer-events-auto rounded-full p-1 text-white/45 transition-colors hover:text-white/80"
+          :aria-label="$t('macos.scrollDown')"
+          @click="scrollToProjects"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            class="h-[18px] w-[18px]"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M6 9.5 12 15.5 18 9.5" />
+          </svg>
+        </button>
+      </div>
     </section>
 
     <!-- ═══ Projets : fenêtre Finder + Quick Look ═══ -->
@@ -1270,6 +1292,14 @@ const openFinderSection = (s: 'projects' | 'recents' | 'docs') => {
 
 const scrollToDesktop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
 
+// Indice de scroll du bureau : masqué dès les premiers pixels parcourus
+const scrolledDown = ref(false)
+const onScrollCue = () => {
+  scrolledDown.value = window.scrollY > 40
+}
+const scrollToProjects = () =>
+  finderEl.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+
 const toggleFinderTag = (key: string) => {
   finderTag.value = finderTag.value === key ? '' : key
   finderSection.value = 'projects'
@@ -1529,6 +1559,7 @@ onMounted(() => {
     evt.id = ''
   })
   document.addEventListener('keydown', onEsc)
+  window.addEventListener('scroll', onScrollCue, { passive: true })
 
   ctxGsap = gsap.context(() => {
     const mm = gsap.matchMedia()
@@ -1613,6 +1644,7 @@ onUnmounted(() => {
   ctxGsap?.revert()
   document.removeEventListener('click', closeContext)
   document.removeEventListener('keydown', onEsc)
+  window.removeEventListener('scroll', onScrollCue)
 })
 </script>
 
@@ -1623,6 +1655,27 @@ onUnmounted(() => {
 @keyframes blink {
   50% {
     opacity: 0;
+  }
+}
+/* Chevron d'invitation au scroll : flottement lent, désactivé si le
+   visiteur a demandé moins d'animations */
+.scroll-cue {
+  animation: cue-float 2.6s ease-in-out infinite;
+}
+@keyframes cue-float {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateY(5px);
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue {
+    animation: none;
   }
 }
 .ctx-item {
