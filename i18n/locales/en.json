@@ -177,7 +177,7 @@
         "description": "Real-time messaging app with group channels, private messages and IRC-style chat commands. Vue 3, Socket.io, Express and MongoDB — including a built-in demo mode that mocks the API and socket so the app can be tried without a backend."
       },
       "emailEditor": {
-        "description": "Digitaleo's platform email editor, used daily by retail networks. My apprenticeship playground: dynamic blocks, preheader and emoji picker, Outlook compatibility through VML and conditional HTML, mobile column reordering, Vue.js Design System components integrated into the AngularJS legacy, campaign archiving and the Direct Marketing statistics revamp."
+        "description": "Digitaleo's platform email editor, used by more than 600 retail networks and 37,000 active users. My apprenticeship playground: dynamic blocks, preheader and emoji picker, Outlook compatibility through VML and conditional HTML, mobile column reordering, Vue.js Design System components integrated into the AngularJS legacy, campaign archiving and the Direct Marketing statistics revamp."
       }
     },
     "all": "All",

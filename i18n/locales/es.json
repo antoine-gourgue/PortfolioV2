@@ -177,7 +177,7 @@
         "description": "Mensajería en tiempo real con salas de grupo, mensajes privados y comandos de chat estilo IRC. Vue 3, Socket.io, Express y MongoDB — con un modo demo integrado que simula la API y el socket para probar la app sin backend."
       },
       "emailEditor": {
-        "description": "El editor de email de la plataforma Digitaleo, usado a diario por redes de puntos de venta. Mi terreno de juego en alternancia: bloques dinámicos, preheader y selector de emojis, compatibilidad con Outlook mediante VML y HTML condicional, inversión de columnas en móvil, integración del Design System Vue.js en el legacy AngularJS, archivado de campañas y rediseño de las estadísticas de Marketing Directo."
+        "description": "El editor de email de la plataforma Digitaleo, usado por más de 600 redes de puntos de venta y 37 000 usuarios activos. Mi terreno de juego en alternancia: bloques dinámicos, preheader y selector de emojis, compatibilidad con Outlook mediante VML y HTML condicional, inversión de columnas en móvil, integración del Design System Vue.js en el legacy AngularJS, archivado de campañas y rediseño de las estadísticas de Marketing Directo."
       }
     },
     "all": "Todos",
