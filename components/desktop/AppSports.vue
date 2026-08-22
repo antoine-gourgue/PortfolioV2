@@ -3,543 +3,144 @@
     <div
       v-if="desktop.state.value.apps.sports"
       ref="winEl"
-      class="fixed inset-0 z-40 overflow-hidden lg:inset-auto lg:left-[22%] lg:top-24 lg:w-[700px] lg:rounded-xl lg:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.45)] lg:ring-1 lg:ring-black/10"
+      class="fixed inset-0 z-40 flex flex-col overflow-hidden bg-black lg:inset-auto lg:left-[18%] lg:top-20 lg:h-[560px] lg:w-[880px] lg:flex-row lg:rounded-[14px] lg:shadow-[0_40px_90px_-20px_rgba(0,0,0,0.75)] lg:ring-1 lg:ring-white/10"
       :style="{ zIndex: z }"
       @pointerdown="bringToFront"
     >
-      <div class="flex h-full flex-col bg-[#f2f2f7] lg:h-[480px]">
-        <!-- ── Desktop : barre de titre ── -->
+      <!-- Voile du tiroir mobile -->
+      <Transition name="sp-fade">
         <div
-          class="sports-drag hidden h-[44px] shrink-0 items-center gap-2 border-b border-black/10 bg-white/70 px-4 backdrop-blur lg:flex"
-        >
-          <button
-            class="group flex h-3 w-3 items-center justify-center rounded-full border border-[#E0443E] bg-[#FF5F57]"
-            aria-label="close"
-            @click.stop="closeSports"
-            @pointerdown.stop
-          >
-            <svg
-              viewBox="0 0 12 12"
-              class="h-full w-full p-[1px] opacity-0 group-hover:opacity-100"
-            >
-              <path
-                d="M3.6 3.6 L8.4 8.4 M8.4 3.6 L3.6 8.4"
-                stroke="#820005"
-                stroke-width="1.2"
-                stroke-linecap="round"
-              />
-            </svg>
-          </button>
-          <button
-            class="group flex h-3 w-3 items-center justify-center rounded-full border border-[#D89E24] bg-[#FEBC2E]"
-            aria-label="minimize"
-            @click.stop="(sfx.minimize(), desktop.minimizeApp('sports'))"
-            @pointerdown.stop
-          >
-            <svg
-              viewBox="0 0 12 12"
-              class="h-full w-full p-[1px] opacity-0 group-hover:opacity-100"
-            >
-              <path
-                d="M2.6 6 L9.4 6"
-                stroke="#985712"
-                stroke-width="1.4"
-                stroke-linecap="round"
-              />
-            </svg>
-          </button>
-          <span
-            class="h-3 w-3 rounded-full border border-black/10 bg-[#DDDDDF]"
-          ></span>
-          <span class="ml-2 text-[14px] font-bold text-aink">{{
-            $t('macos.sportsTitle')
-          }}</span>
-          <!-- Segmented control Matchs / Classement -->
-          <div
-            class="ml-auto flex rounded-[8px] bg-black/[0.06] p-[2px]"
-            @pointerdown.stop
-          >
+          v-if="drawer"
+          class="absolute inset-0 z-20 bg-black/55 lg:hidden"
+          @click="drawer = false"
+        ></div>
+      </Transition>
+
+      <!-- ══ Colonne des ligues : fixe sur desktop, tiroir sur mobile ══ -->
+      <DesktopSportsSidebar
+        v-model:drawer="drawer"
+        v-model:query="query"
+        :league="league"
+        :view="view"
+        :searching="searching"
+        :results="results"
+        :has-results="hasResults"
+        @close="closeSports"
+        @minimize="(sfx.minimize(), desktop.minimizeApp('sports'))"
+        @select-league="setLeague"
+        @select-view="setView"
+        @open-hit="openHit"
+      />
+
+      <!-- ══ Colonne principale ══ -->
+      <div class="flex min-h-0 min-w-0 flex-1 flex-col">
+        <!-- En-tête mobile -->
+        <div class="shrink-0 lg:hidden">
+          <div class="flex items-center justify-between px-4 pb-1 pt-12">
             <button
-              v-for="v in ['matches', 'standings'] as const"
-              :key="v"
-              class="rounded-[6px] px-3 py-[3px] text-[12px] font-medium transition"
-              :class="
-                view === v
-                  ? 'bg-white text-aink shadow-sm'
-                  : 'text-black/50 hover:text-aink'
-              "
-              @click="setView(v)"
+              class="-ml-2 flex h-9 w-9 items-center justify-center rounded-full text-white transition active:bg-white/10"
+              :aria-label="$t('macos.sportsLeagues')"
+              @click="openDrawer"
             >
-              {{
-                v === 'matches'
-                  ? $t('macos.sportsMatches')
-                  : $t('macos.sportsStandings')
-              }}
+              <svg viewBox="0 0 20 20" class="h-[19px] w-[19px]">
+                <path
+                  d="M2.5 5h15M2.5 10h15M2.5 15h15"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+            <button
+              class="flex items-center gap-0.5 text-[15px] font-medium text-[#0A84FF]"
+              @click="closeSports"
+            >
+              <span class="text-[19px] leading-none">‹</span>
+              {{ $t('macos.close') }}
             </button>
           </div>
+          <h1 class="px-4 text-[32px] font-bold tracking-[-0.6px] text-white">
+            {{ $t('macos.sportsTitle') }}
+          </h1>
+          <p class="px-4 pb-3 pt-0.5 text-[13px] font-medium text-[#8E8E93]">
+            {{ leagueName }} ·
+            {{ viewLabel(view) }}
+          </p>
         </div>
 
-        <!-- ── Mobile : barre de titre iOS ── -->
-        <div class="relative flex items-center px-4 pb-2 pt-12 lg:hidden">
-          <button
-            class="flex items-center gap-0.5 text-[15px] font-medium text-[#0A84FF]"
-            @click="desktop.closeApp('sports')"
-          >
-            <span class="text-xl leading-none">‹</span>
-            {{ $t('macos.close') }}
-          </button>
-          <span
-            class="absolute left-1/2 -translate-x-1/2 text-[16px] font-semibold text-aink"
-            >{{ $t('macos.sportsTitle') }}</span
-          >
-        </div>
-
-        <!-- ── Ligues ── -->
+        <!-- En-tête desktop : navigation par jour -->
         <div
-          class="no-scrollbar flex shrink-0 gap-1.5 overflow-x-auto px-4 py-2.5 lg:px-5"
+          class="sports-drag hidden h-[52px] shrink-0 items-center justify-center gap-3 border-b border-white/[0.08] px-5 lg:flex"
         >
-          <button
-            v-for="lg in LEAGUES"
-            :key="lg.code"
-            class="shrink-0 rounded-full px-3 py-1 text-[12px] font-semibold transition"
-            :class="
-              league === lg.code
-                ? 'bg-aink text-white'
-                : 'bg-black/[0.06] text-aink/70 hover:bg-black/10'
-            "
-            @click="setLeague(lg.code)"
-          >
-            {{ lg.name }}
-          </button>
-        </div>
-
-        <!-- Mobile : bascule Matchs / Classement -->
-        <div class="flex gap-1.5 px-4 pb-2 lg:hidden">
-          <button
-            v-for="v in ['matches', 'standings'] as const"
-            :key="v"
-            class="rounded-full px-3 py-1 text-[12px] font-semibold"
-            :class="
-              view === v ? 'bg-aink text-white' : 'bg-black/[0.06] text-aink/70'
-            "
-            @click="setView(v)"
-          >
-            {{
-              v === 'matches'
-                ? $t('macos.sportsMatches')
-                : $t('macos.sportsStandings')
-            }}
-          </button>
-        </div>
-
-        <div class="flex-1 overflow-y-auto px-4 pb-8 lg:px-5 lg:pb-5">
-          <!-- ══ Détail d'un match ══ -->
-          <template v-if="pane === 'match' && selMatch">
+          <template v-if="pane === 'main' && view === 'matches'">
             <button
-              class="mb-2 flex items-center gap-0.5 text-[13px] font-medium text-[#0A84FF]"
-              @click="backFromPane"
+              class="flex h-7 w-7 items-center justify-center rounded-full text-[#8E8E93] transition hover:bg-white/[0.04] hover:text-white"
+              aria-label="previous day"
+              @pointerdown.stop
+              @click="shiftDay(-1)"
             >
-              <span class="text-lg leading-none">‹</span>
-              {{ $t('macos.sportsBack') }}
+              <i aria-hidden="true" class="f7-icons" style="font-size: 13px"
+                >chevron_left</i
+              >
             </button>
-
-            <!-- En-tête du match -->
-            <div class="rounded-xl bg-white p-4 shadow-sm ring-1 ring-black/5">
-              <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
-                <button
-                  class="flex flex-col items-center gap-1.5 rounded-lg p-1.5 transition hover:bg-black/[0.04]"
-                  @click="openTeam(selMatch.home, 'match')"
-                >
-                  <img
-                    v-if="selMatch.home.logo"
-                    :src="selMatch.home.logo"
-                    :alt="selMatch.home.name"
-                    class="h-11 w-11 object-contain"
-                  />
-                  <span class="text-[12.5px] font-semibold text-aink">{{
-                    selMatch.home.name
-                  }}</span>
-                </button>
-                <div class="text-center">
-                  <p
-                    v-if="selMatch.state !== 'pre'"
-                    class="text-[28px] font-bold tabular-nums text-aink"
-                  >
-                    {{ selMatch.home.score }}
-                    <span class="text-black/30">–</span>
-                    {{ selMatch.away.score }}
-                  </p>
-                  <p v-else class="text-[22px] font-bold text-aink">
-                    {{ kickoff(selMatch.date) }}
-                  </p>
-                  <p
-                    v-if="selMatch.state === 'in'"
-                    class="mt-0.5 flex items-center justify-center gap-1.5 text-[11px] font-bold text-[#FA233B]"
-                  >
-                    <span
-                      class="live-dot h-1.5 w-1.5 rounded-full bg-[#FA233B]"
-                    ></span>
-                    {{ selMatch.detail }}
-                  </p>
-                  <p v-else class="mt-0.5 text-[11px] text-black/40">
-                    {{
-                      selMatch.state === 'pre'
-                        ? matchDay(selMatch.date)
-                        : selMatch.detail
-                    }}
-                  </p>
-                </div>
-                <button
-                  class="flex flex-col items-center gap-1.5 rounded-lg p-1.5 transition hover:bg-black/[0.04]"
-                  @click="openTeam(selMatch.away, 'match')"
-                >
-                  <img
-                    v-if="selMatch.away.logo"
-                    :src="selMatch.away.logo"
-                    :alt="selMatch.away.name"
-                    class="h-11 w-11 object-contain"
-                  />
-                  <span class="text-[12.5px] font-semibold text-aink">{{
-                    selMatch.away.name
-                  }}</span>
-                </button>
-              </div>
-              <p
-                v-if="matchDetail?.venue"
-                class="mt-2 text-center text-[11px] text-black/35"
-              >
-                {{ matchDetail.venue }}
-              </p>
-            </div>
-
-            <!-- Skeleton du détail -->
-            <div
-              v-if="detailLoading"
-              class="mt-3 rounded-xl bg-white p-4 shadow-sm ring-1 ring-black/5"
+            <button
+              class="min-w-[150px] rounded-full px-3 py-1 text-center text-[14px] font-semibold text-white transition hover:bg-white/[0.04]"
+              @pointerdown.stop
+              @click="dayOffset = 0"
             >
-              <div
-                v-for="i in 5"
-                :key="`skd-${i}`"
-                class="flex items-center gap-3 py-1.5"
+              {{ dayLabel }}
+            </button>
+            <button
+              class="flex h-7 w-7 items-center justify-center rounded-full text-[#8E8E93] transition hover:bg-white/[0.04] hover:text-white"
+              aria-label="next day"
+              @pointerdown.stop
+              @click="shiftDay(1)"
+            >
+              <i aria-hidden="true" class="f7-icons" style="font-size: 13px"
+                >chevron_right</i
               >
-                <span class="skel h-3 w-8"></span>
-                <span class="skel h-3 w-40"></span>
-                <span class="skel ml-auto h-3 w-8"></span>
-              </div>
-            </div>
-
-            <template v-else-if="matchDetail">
-              <!-- Buts et cartons -->
-              <div
-                v-if="matchDetail.events.length"
-                class="mt-3 rounded-xl bg-white px-4 py-2 shadow-sm ring-1 ring-black/5"
-              >
-                <div
-                  v-for="(ev, i) in matchDetail.events"
-                  :key="i"
-                  class="flex items-center gap-2 py-[5px] text-[12.5px] text-aink"
-                  :class="ev.side === 'away' ? 'flex-row-reverse' : ''"
-                >
-                  <span
-                    class="w-10 shrink-0 text-[11px] font-semibold tabular-nums text-black/40"
-                    :class="ev.side === 'away' ? 'text-left' : 'text-right'"
-                    >{{ ev.minute }}</span
-                  >
-                  <svg
-                    v-if="ev.kind === 'goal'"
-                    viewBox="0 0 12 12"
-                    class="h-[11px] w-[11px] shrink-0"
-                  >
-                    <circle
-                      cx="6"
-                      cy="6"
-                      r="5.4"
-                      fill="#fff"
-                      stroke="#26262B"
-                      stroke-width="1.1"
-                    />
-                    <polygon
-                      points="6,3.6 8.2,5.2 7.4,7.8 4.6,7.8 3.8,5.2"
-                      fill="#26262B"
-                    />
-                  </svg>
-                  <span
-                    v-else
-                    class="h-[11px] w-[8px] shrink-0 rounded-[1.5px]"
-                    :class="
-                      ev.kind === 'yellow' ? 'bg-[#FFCC00]' : 'bg-[#FF3B30]'
-                    "
-                  ></span>
-                  <span
-                    class="min-w-0 truncate"
-                    :class="ev.side === 'away' ? 'text-right' : ''"
-                    >{{ ev.player }}</span
-                  >
-                </div>
-              </div>
-
-              <!-- Statistiques -->
-              <div
-                v-if="matchDetail.stats.length"
-                class="mt-3 rounded-xl bg-white px-4 py-2.5 shadow-sm ring-1 ring-black/5"
-              >
-                <div
-                  v-for="s in matchDetail.stats"
-                  :key="s.key"
-                  class="grid grid-cols-[44px_1fr_44px] items-center gap-2 py-[5px]"
-                >
-                  <span
-                    class="text-[13px] tabular-nums text-aink"
-                    :class="
-                      statLead(s) === 'home' ? 'font-bold' : 'font-medium'
-                    "
-                    >{{ s.home }}</span
-                  >
-                  <span class="text-center text-[11.5px] text-black/45">{{
-                    $t(`macos.sportsStat_${s.key}`)
-                  }}</span>
-                  <span
-                    class="text-right text-[13px] tabular-nums text-aink"
-                    :class="
-                      statLead(s) === 'away' ? 'font-bold' : 'font-medium'
-                    "
-                    >{{ s.away }}</span
-                  >
-                </div>
-              </div>
-
-              <p
-                v-if="!matchDetail.events.length && !matchDetail.stats.length"
-                class="py-10 text-center text-[13px] text-black/40"
-              >
-                {{ $t('macos.sportsNoDetails') }}
-              </p>
-            </template>
+            </button>
           </template>
+          <span v-else class="text-[14px] font-semibold text-white">{{
+            pane === 'main' ? viewLabel(view) : $t('macos.sportsTitle')
+          }}</span>
+        </div>
+
+        <!-- Corps commun -->
+        <div
+          class="sp-scroll min-h-0 flex-1 overflow-y-auto px-4 pb-8 lg:px-5 lg:py-4"
+        >
+          <!-- ══ Détail d'un match ══ -->
+          <DesktopSportsMatchPane
+            v-if="pane === 'match' && selMatch"
+            v-model:tab="matchTab"
+            :match="selMatch"
+            :detail="matchDetail"
+            :loading="detailLoading"
+          />
+
+          <!-- ══ Fiche joueur ══ -->
+          <DesktopSportsAthletePane
+            v-else-if="pane === 'athlete'"
+            :detail="athleteDetail"
+            :name="athleteName"
+            :loading="detailLoading"
+          />
 
           <!-- ══ Fiche équipe ══ -->
-          <template v-else-if="pane === 'team'">
-            <button
-              class="mb-2 flex items-center gap-0.5 text-[13px] font-medium text-[#0A84FF]"
-              @click="backFromPane"
-            >
-              <span class="text-lg leading-none">‹</span>
-              {{ $t('macos.sportsBack') }}
-            </button>
-
-            <div
-              v-if="detailLoading"
-              class="rounded-xl bg-white p-4 shadow-sm ring-1 ring-black/5"
-            >
-              <div class="flex items-center gap-3">
-                <span class="skel h-12 w-12 !rounded-full"></span>
-                <span>
-                  <span class="skel block h-4 w-36"></span>
-                  <span class="skel mt-2 block h-3 w-24"></span>
-                </span>
-              </div>
-              <div
-                v-for="i in 6"
-                :key="`skt-${i}`"
-                class="mt-3 flex items-center gap-3"
-              >
-                <span class="skel h-3 w-12"></span>
-                <span class="skel h-3 w-44"></span>
-              </div>
-            </div>
-
-            <template v-else-if="teamDetail">
-              <div
-                class="rounded-xl bg-white p-4 shadow-sm ring-1 ring-black/5"
-              >
-                <div class="flex items-center gap-3">
-                  <img
-                    v-if="teamDetail.logo"
-                    :src="teamDetail.logo"
-                    :alt="teamDetail.name"
-                    class="h-12 w-12 object-contain"
-                  />
-                  <div class="min-w-0">
-                    <p class="truncate text-[16px] font-bold text-aink">
-                      {{ teamDetail.name }}
-                    </p>
-                    <p
-                      v-if="teamDetail.standing"
-                      class="text-[12px] text-black/45"
-                    >
-                      {{ teamDetail.standing }}
-                    </p>
-                  </div>
-                  <!-- Forme sur les 5 derniers matchs -->
-                  <div
-                    v-if="teamForm.length"
-                    class="ml-auto flex shrink-0 gap-1"
-                  >
-                    <span
-                      v-for="(r, i) in teamForm"
-                      :key="i"
-                      class="flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold"
-                      :class="FORM_STYLE[r]"
-                      >{{ formLetter(r) }}</span
-                    >
-                  </div>
-                </div>
-                <!-- Saison en cours -->
-                <div
-                  v-if="teamDetail.season"
-                  class="mt-3.5 grid grid-cols-4 divide-x divide-black/[0.06] border-t border-black/[0.06] pt-3 text-center"
-                >
-                  <div>
-                    <p class="text-[16px] font-bold tabular-nums text-aink">
-                      {{ teamDetail.season.rank || '–' }}
-                    </p>
-                    <p class="text-[10.5px] text-black/40">
-                      {{ $t('macos.sportsPosLabel') }}
-                    </p>
-                  </div>
-                  <div>
-                    <p class="text-[16px] font-bold tabular-nums text-aink">
-                      {{ teamDetail.season.points || '0' }}
-                    </p>
-                    <p class="text-[10.5px] text-black/40">Pts</p>
-                  </div>
-                  <div>
-                    <p class="text-[16px] font-bold tabular-nums text-aink">
-                      {{ teamDetail.season.wins }}-{{
-                        teamDetail.season.draws
-                      }}-{{ teamDetail.season.losses }}
-                    </p>
-                    <p class="text-[10.5px] text-black/40">
-                      {{ $t('macos.sportsRecordLabel') }}
-                    </p>
-                  </div>
-                  <div>
-                    <p class="text-[16px] font-bold tabular-nums text-aink">
-                      {{ teamDetail.season.goalsFor || '0' }}:{{
-                        teamDetail.season.goalsAgainst || '0'
-                      }}
-                    </p>
-                    <p class="text-[10.5px] text-black/40">
-                      {{ $t('macos.sportsGoalsLabel') }}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <template v-for="group in teamGroups" :key="group.titleKey">
-                <p
-                  v-if="group.items.length"
-                  class="px-1 pb-1 pt-3.5 text-[11px] font-semibold text-black/40"
-                >
-                  {{ $t(group.titleKey) }}
-                </p>
-                <div
-                  v-if="group.items.length"
-                  class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-black/5"
-                >
-                  <div
-                    v-for="f in group.items"
-                    :key="f.id"
-                    class="relative flex items-center gap-2.5 px-4 py-2 text-[12.5px] text-aink"
-                  >
-                    <span
-                      class="absolute left-4 right-0 top-0 border-t border-black/[0.06]"
-                    ></span>
-                    <span class="w-14 shrink-0 text-[11px] text-black/40">{{
-                      fixtureDay(f.date)
-                    }}</span>
-                    <span class="flex min-w-0 flex-1 items-center gap-1.5">
-                      <img
-                        v-if="f.home.logo"
-                        :src="f.home.logo"
-                        alt=""
-                        class="h-4 w-4 shrink-0 object-contain"
-                      />
-                      <span
-                        class="truncate"
-                        :class="isSelTeam(f.home.name) ? 'font-semibold' : ''"
-                        >{{ f.home.name }}</span
-                      >
-                    </span>
-                    <span
-                      class="shrink-0 text-[12.5px] font-semibold tabular-nums"
-                    >
-                      {{
-                        f.state === 'pre'
-                          ? kickoff(f.date)
-                          : `${f.home.score} – ${f.away.score}`
-                      }}
-                    </span>
-                    <span
-                      class="flex min-w-0 flex-1 items-center justify-end gap-1.5"
-                    >
-                      <span
-                        class="truncate text-right"
-                        :class="isSelTeam(f.away.name) ? 'font-semibold' : ''"
-                        >{{ f.away.name }}</span
-                      >
-                      <img
-                        v-if="f.away.logo"
-                        :src="f.away.logo"
-                        alt=""
-                        class="h-4 w-4 shrink-0 object-contain"
-                      />
-                    </span>
-                  </div>
-                </div>
-              </template>
-
-              <!-- Effectif -->
-              <template v-for="group in rosterGroups" :key="group.titleKey">
-                <p
-                  class="px-1 pb-1 pt-3.5 text-[11px] font-semibold text-black/40"
-                >
-                  {{ $t(group.titleKey) }}
-                </p>
-                <div
-                  class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-black/5"
-                >
-                  <div
-                    v-for="p in group.players"
-                    :key="p.name"
-                    class="relative flex items-center gap-2.5 px-4 py-[7px] text-[12.5px] text-aink"
-                  >
-                    <span
-                      class="absolute left-4 right-0 top-0 border-t border-black/[0.06]"
-                    ></span>
-                    <span
-                      class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-black/[0.06] text-[10.5px] font-bold tabular-nums text-aink/60"
-                      >{{ p.jersey || '–' }}</span
-                    >
-                    <span class="min-w-0 flex-1 truncate">{{ p.name }}</span>
-                    <img
-                      v-if="p.flag"
-                      :src="p.flag"
-                      :alt="p.flagAlt"
-                      :title="p.flagAlt"
-                      class="h-[12px] w-[17px] shrink-0 rounded-[2px] object-cover ring-1 ring-black/10"
-                      loading="lazy"
-                    />
-                    <span
-                      v-if="p.age"
-                      class="w-12 shrink-0 text-right text-[11.5px] tabular-nums text-black/40"
-                      >{{ p.age }} {{ $t('macos.sportsYears') }}</span
-                    >
-                  </div>
-                </div>
-              </template>
-            </template>
-            <p v-else class="py-14 text-center text-[13px] text-black/40">
-              {{ $t('macos.sportsError') }}
-            </p>
-          </template>
+          <DesktopSportsTeamPane
+            v-else-if="pane === 'team'"
+            :detail="teamDetail"
+            :loading="detailLoading"
+            :sel-name="selTeamName"
+          />
 
           <!-- ══ Matchs ══ -->
           <template v-else-if="view === 'matches'">
-            <!-- Navigation par jour -->
-            <div class="mb-2.5 flex items-center justify-center gap-2">
+            <!-- Navigation par jour (mobile) -->
+            <div class="mb-3 flex items-center justify-center gap-2 lg:hidden">
               <button
-                class="flex h-6 w-6 items-center justify-center rounded-md text-aink/60 transition hover:bg-black/5"
+                class="flex h-7 w-7 items-center justify-center rounded-full text-[#8E8E93]"
                 aria-label="previous day"
                 @click="shiftDay(-1)"
               >
@@ -548,13 +149,13 @@
                 >
               </button>
               <button
-                class="min-w-[130px] rounded-md px-2 py-0.5 text-center text-[13px] font-semibold text-aink transition hover:bg-black/5"
+                class="min-w-[150px] text-center text-[14px] font-semibold text-white"
                 @click="dayOffset = 0"
               >
                 {{ dayLabel }}
               </button>
               <button
-                class="flex h-6 w-6 items-center justify-center rounded-md text-aink/60 transition hover:bg-black/5"
+                class="flex h-7 w-7 items-center justify-center rounded-full text-[#8E8E93]"
                 aria-label="next day"
                 @click="shiftDay(1)"
               >
@@ -564,185 +165,65 @@
               </button>
             </div>
 
-            <!-- Skeleton -->
-            <div v-if="loading" class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div
-                v-for="i in 4"
-                :key="`skm-${i}`"
-                class="rounded-xl bg-white p-3.5 shadow-sm ring-1 ring-black/5"
-              >
-                <span class="skel block h-2.5 w-16"></span>
-                <div class="mt-3 space-y-2.5">
-                  <div class="flex items-center gap-2.5">
-                    <span class="skel h-6 w-6 !rounded-full"></span>
-                    <span class="skel h-3 w-28"></span>
-                    <span class="skel ml-auto h-3 w-4"></span>
-                  </div>
-                  <div class="flex items-center gap-2.5">
-                    <span class="skel h-6 w-6 !rounded-full"></span>
-                    <span class="skel h-3 w-24"></span>
-                    <span class="skel ml-auto h-3 w-4"></span>
-                  </div>
+            <div v-if="loading">
+              <div class="sp-skel mb-4 h-[188px] !rounded-[20px] lg:h-[216px]">
+                &nbsp;
+              </div>
+              <div class="sp-card grid lg:grid-cols-2">
+                <div
+                  v-for="i in 4"
+                  :key="`skm-${i}`"
+                  class="flex items-center gap-3 px-4 py-3"
+                >
+                  <span class="sp-skel h-3 w-9"></span>
+                  <span class="min-w-0 flex-1">
+                    <span class="sp-skel block h-3.5 w-28"></span>
+                    <span class="sp-skel mt-2 block h-3.5 w-24"></span>
+                  </span>
                 </div>
               </div>
             </div>
 
             <p
               v-else-if="error"
-              class="py-14 text-center text-[13px] text-black/40"
+              class="py-16 text-center text-[14px] text-[#636366]"
             >
               {{ $t('macos.sportsError') }}
             </p>
             <p
               v-else-if="!matches.length"
-              class="py-14 text-center text-[13px] text-black/40"
+              class="py-16 text-center text-[14px] text-[#636366]"
             >
               {{ $t('macos.sportsNoMatches') }}
             </p>
 
-            <div v-else class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div
-                v-for="m in matches"
-                :key="m.id"
-                class="cursor-pointer rounded-xl bg-white p-3.5 shadow-sm ring-1 ring-black/5 transition hover:ring-black/15"
-                role="button"
-                tabindex="0"
-                @click="openMatch(m)"
-                @keydown.enter="openMatch(m)"
-              >
-                <div class="flex items-center justify-between">
-                  <span
-                    v-if="m.state === 'in'"
-                    class="flex items-center gap-1.5 text-[11px] font-bold text-[#FA233B]"
-                  >
-                    <span
-                      class="live-dot h-1.5 w-1.5 rounded-full bg-[#FA233B]"
-                    ></span>
-                    {{ m.detail }}
-                  </span>
-                  <span v-else class="text-[11px] font-medium text-black/40">
-                    {{ m.state === 'pre' ? kickoff(m.date) : m.detail }}
-                  </span>
-                </div>
-                <div class="mt-2.5 space-y-2">
-                  <div
-                    v-for="side in ['home', 'away'] as const"
-                    :key="side"
-                    class="-mx-1.5 flex items-center gap-2.5 rounded-md px-1.5 py-0.5 transition hover:bg-black/[0.04]"
-                    @click.stop="openTeam(m[side], 'main')"
-                  >
-                    <img
-                      v-if="m[side].logo"
-                      :src="m[side].logo"
-                      :alt="m[side].name"
-                      class="h-6 w-6 object-contain"
-                      loading="lazy"
-                    />
-                    <span
-                      v-else
-                      class="h-6 w-6 rounded-full bg-black/[0.06]"
-                    ></span>
-                    <span
-                      class="min-w-0 flex-1 truncate text-[13.5px] text-aink"
-                      :class="winner(m, side) ? 'font-semibold' : ''"
-                      >{{ m[side].name }}</span
-                    >
-                    <span
-                      v-if="m.state !== 'pre'"
-                      class="text-[15px] tabular-nums text-aink"
-                      :class="winner(m, side) ? 'font-bold' : 'font-medium'"
-                      >{{ m[side].score }}</span
-                    >
-                  </div>
-                </div>
-              </div>
-            </div>
+            <template v-else>
+              <!-- ── Match à la une ── -->
+              <DesktopSportsHero v-if="featured" :match="featured" />
+
+              <!-- ── Les autres matchs du jour ── -->
+              <DesktopSportsMatchList
+                v-if="restMatches.length"
+                :matches="restMatches"
+              />
+            </template>
           </template>
 
+          <!-- ══ Actualités ══ -->
+          <DesktopSportsNewsList
+            v-else-if="view === 'news'"
+            :articles="articles"
+            :loading="loading"
+            :error="error"
+          />
+
           <!-- ══ Classement ══ -->
-          <template v-else>
-            <div
-              v-if="loading"
-              class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-black/5"
-            >
-              <div
-                v-for="i in 10"
-                :key="`sks-${i}`"
-                class="flex items-center gap-3 px-4 py-2"
-              >
-                <span class="skel h-3 w-4"></span>
-                <span class="skel h-5 w-5 !rounded-full"></span>
-                <span class="skel h-3 w-32"></span>
-                <span class="skel ml-auto h-3 w-6"></span>
-              </div>
-            </div>
-            <p
-              v-else-if="error || !standings.length"
-              class="py-14 text-center text-[13px] text-black/40"
-            >
-              {{ $t('macos.sportsError') }}
-            </p>
-            <div
-              v-else
-              class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-black/5"
-            >
-              <div
-                class="grid grid-cols-[26px_1fr_repeat(5,30px)_36px] items-center gap-1 px-4 py-1.5 text-[10.5px] font-semibold text-black/35"
-              >
-                <span>#</span>
-                <span></span>
-                <span class="text-center">{{ $t('macos.sportsPlayed') }}</span>
-                <span class="text-center">{{ $t('macos.sportsWins') }}</span>
-                <span class="text-center">{{ $t('macos.sportsDraws') }}</span>
-                <span class="text-center">{{ $t('macos.sportsLosses') }}</span>
-                <span class="text-center">+/-</span>
-                <span class="text-center">Pts</span>
-              </div>
-              <button
-                v-for="row in standings"
-                :key="row.rank + row.name"
-                class="relative grid w-full grid-cols-[26px_1fr_repeat(5,30px)_36px] items-center gap-1 px-4 py-[7px] text-left text-[12.5px] text-aink transition hover:bg-black/[0.03]"
-                @click="openTeam(row, 'main')"
-              >
-                <span
-                  class="absolute left-4 right-0 top-0 border-t border-black/[0.06]"
-                ></span>
-                <span
-                  class="text-[11.5px] font-semibold tabular-nums"
-                  :class="row.rank <= 3 ? 'text-[#0A84FF]' : 'text-black/45'"
-                  >{{ row.rank }}</span
-                >
-                <span class="flex min-w-0 items-center gap-2">
-                  <img
-                    v-if="row.logo"
-                    :src="row.logo"
-                    :alt="row.name"
-                    class="h-5 w-5 shrink-0 object-contain"
-                    loading="lazy"
-                  />
-                  <span class="truncate">{{ row.name }}</span>
-                </span>
-                <span class="text-center tabular-nums text-black/55">{{
-                  row.played
-                }}</span>
-                <span class="text-center tabular-nums text-black/55">{{
-                  row.wins
-                }}</span>
-                <span class="text-center tabular-nums text-black/55">{{
-                  row.draws
-                }}</span>
-                <span class="text-center tabular-nums text-black/55">{{
-                  row.losses
-                }}</span>
-                <span class="text-center tabular-nums text-black/55">{{
-                  row.diff
-                }}</span>
-                <span class="text-center font-bold tabular-nums">{{
-                  row.points
-                }}</span>
-              </button>
-            </div>
-          </template>
+          <DesktopSportsStandings
+            v-else
+            :rows="standings"
+            :loading="loading"
+            :error="error"
+          />
         </div>
       </div>
     </div>
@@ -750,11 +231,26 @@
 </template>
 
 <script setup lang="ts">
+import { LEAGUES, SPORTS_KEY, useSportsFormat } from '~/composables/useSports'
+import type {
+  AthleteDetail,
+  MatchDetail,
+  MatchTab,
+  NewsArticle,
+  SearchHit,
+  SportsMatch,
+  SportsPane,
+  SportsView,
+  StandingRow,
+  TeamDetail,
+} from '~/types/sports'
+
 const desktop = useDesktop()
 const sfx = useSfx()
 const track = useTrack()
 const { gsap, Draggable } = useGsap()
 const { locale, t } = useI18n()
+const format = useSportsFormat()
 
 const winEl = ref<HTMLElement | null>(null)
 const z = ref(40)
@@ -762,104 +258,33 @@ const bringToFront = () => {
   z.value = ++desktop.state.value.topZ + 40
 }
 
-const LEAGUES = [
-  { code: 'fra.1', name: 'Ligue 1' },
-  { code: 'uefa.champions', name: 'Champions League' },
-  { code: 'eng.1', name: 'Premier League' },
-  { code: 'esp.1', name: 'LaLiga' },
-  { code: 'ita.1', name: 'Serie A' },
-  { code: 'ger.1', name: 'Bundesliga' },
-]
-
-interface SportsTeam {
-  id: string
-  name: string
-  full: string
-  logo: string
-  score: string
-}
-interface SportsMatch {
-  id: string
-  date: string
-  state: 'pre' | 'in' | 'post'
-  detail: string
-  home: SportsTeam
-  away: SportsTeam
-}
-interface StandingRow {
-  rank: number
-  id: string
-  name: string
-  logo: string
-  played: string
-  wins: string
-  draws: string
-  losses: string
-  diff: string
-  points: string
-}
-
-interface MatchEvent {
-  minute: string
-  kind: 'goal' | 'yellow' | 'red'
-  player: string
-  side: 'home' | 'away' | ''
-}
-interface MatchDetail {
-  venue: string
-  events: MatchEvent[]
-  stats: Array<{ key: string; home: string; away: string }>
-}
-interface TeamFixture {
-  id: string
-  date: string
-  state: 'pre' | 'in' | 'post'
-  res: 'W' | 'D' | 'L' | ''
-  home: { name: string; logo: string; score: string }
-  away: { name: string; logo: string; score: string }
-}
-interface TeamSeason {
-  rank: number
-  played: string
-  wins: string
-  draws: string
-  losses: string
-  goalsFor: string
-  goalsAgainst: string
-  points: string
-}
-interface TeamPlayer {
-  jersey: string
-  name: string
-  pos: string
-  age: number | null
-  flag: string
-  flagAlt: string
-}
-interface TeamDetail {
-  name: string
-  logo: string
-  record: string
-  standing: string
-  season: TeamSeason | null
-  fixtures: TeamFixture[]
-  roster: TeamPlayer[]
-}
-
+// ── État de la fenêtre ──
 const league = ref('fra.1')
-const view = ref<'matches' | 'standings'>('matches')
+const view = ref<SportsView>('matches')
 const dayOffset = ref(0)
 const matches = ref<SportsMatch[]>([])
 const standings = ref<StandingRow[]>([])
+const articles = ref<NewsArticle[]>([])
 const loading = ref(false)
 const error = ref(false)
 
+const leagueName = computed(
+  () => LEAGUES.find((l) => l.code === league.value)?.name ?? ''
+)
+
+const VIEW_LABELS = {
+  matches: 'macos.sportsMatches',
+  standings: 'macos.sportsStandings',
+  news: 'macos.sportsNews',
+} as const
+const viewLabel = (v: SportsView) => t(VIEW_LABELS[v])
+
+// ── Navigation par jour ──
 const dayDate = computed(() => {
   const d = new Date()
   d.setDate(d.getDate() + dayOffset.value)
   return d
 })
-
 const dayLabel = computed(() => {
   if (dayOffset.value === 0) return t('macos.sportsToday')
   return new Intl.DateTimeFormat(locale.value, {
@@ -868,25 +293,18 @@ const dayLabel = computed(() => {
     month: 'short',
   }).format(dayDate.value)
 })
-
 const dateParam = computed(() => {
   const d = dayDate.value
   const p = (n: number) => String(n).padStart(2, '0')
   return `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}`
 })
-
-const kickoff = (iso: string) =>
-  new Intl.DateTimeFormat(locale.value, {
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(new Date(iso))
-
-const winner = (m: SportsMatch, side: 'home' | 'away') => {
-  if (m.state !== 'post') return false
-  const other = side === 'home' ? 'away' : 'home'
-  return Number(m[side].score) > Number(m[other].score)
+const shiftDay = (delta: number) => {
+  sfx.click()
+  dayOffset.value += delta
 }
+watch(dayOffset, () => load())
 
+// ── Chargement de la vue courante ──
 const load = async (quiet = false) => {
   if (!quiet) {
     loading.value = true
@@ -898,6 +316,11 @@ const load = async (quiet = false) => {
         query: { league: league.value, date: dateParam.value },
       })
       matches.value = data.matches
+    } else if (view.value === 'news') {
+      const data = await $fetch<{ articles: NewsArticle[] }>('/api/sports', {
+        query: { league: league.value, type: 'news' },
+      })
+      articles.value = data.articles
     } else {
       const data = await $fetch<{ rows: StandingRow[] }>('/api/sports', {
         query: { league: league.value, type: 'standings' },
@@ -911,15 +334,39 @@ const load = async (quiet = false) => {
   }
 }
 
+// Le match mis en avant : le direct s'il y en a un, sinon le dernier terminé,
+// sinon le prochain coup d'envoi.
+const featured = computed<SportsMatch | null>(() => {
+  const list = matches.value
+  if (!list.length) return null
+  const live = list.find((m) => m.state === 'in')
+  if (live) return live
+  const done = list.filter((m) => m.state === 'post')
+  if (done.length) return done[done.length - 1]
+  return list.find((m) => m.state === 'pre') ?? list[0]
+})
+const restMatches = computed(() =>
+  matches.value.filter((m) => m.id !== featured.value?.id)
+)
+
+// ── Tiroir des ligues : permanent sur desktop, coulissant sous 1024 px ──
+const drawer = ref(false)
+const openDrawer = () => {
+  sfx.click()
+  drawer.value = true
+}
+
 const closeSports = () => {
   sfx.minimize()
   pane.value = 'main'
   view.value = 'matches'
   dayOffset.value = 0
+  drawer.value = false
   desktop.closeApp('sports')
 }
 
 const setLeague = (code: string) => {
+  drawer.value = false
   if (code === league.value) return
   sfx.click()
   track('sports_league_selected', { league: code })
@@ -927,7 +374,8 @@ const setLeague = (code: string) => {
   pane.value = 'main'
   load()
 }
-const setView = (v: 'matches' | 'standings') => {
+const setView = (v: SportsView) => {
+  drawer.value = false
   if (v === view.value) return
   sfx.click()
   view.value = v
@@ -935,14 +383,87 @@ const setView = (v: 'matches' | 'standings') => {
   load()
 }
 
-// ── Panes de détail : match et équipe ──
-const pane = ref<'main' | 'match' | 'team'>('main')
+// ── Recherche d'un club ou d'un joueur ──
+const query = ref('')
+const searching = ref(false)
+const results = ref<{ teams: SearchHit[]; players: SearchHit[] }>({
+  teams: [],
+  players: [],
+})
+const hasResults = computed(
+  () => results.value.teams.length + results.value.players.length > 0
+)
+
+let searchTimer: ReturnType<typeof setTimeout> | undefined
+watch(query, (q) => {
+  clearTimeout(searchTimer)
+  const term = q.trim()
+  if (term.length < 2) {
+    results.value = { teams: [], players: [] }
+    searching.value = false
+    return
+  }
+  searching.value = true
+  // On laisse la frappe se poser avant d'interroger ESPN
+  searchTimer = setTimeout(async () => {
+    try {
+      results.value = await $fetch<{
+        teams: SearchHit[]
+        players: SearchHit[]
+      }>('/api/sports', {
+        query: { league: league.value, type: 'search', q: term },
+      })
+      track('sports_search', { term })
+    } catch {
+      results.value = { teams: [], players: [] }
+    } finally {
+      searching.value = false
+    }
+  }, 350)
+})
+
+const openHit = (hit: SearchHit, kind: 'teams' | 'players') => {
+  // Chaque fiche est interrogée dans sa propre compétition : on bascule aussi
+  // la liste de matchs, sinon le retour arrière afficherait une autre ligue.
+  if (hit.league && hit.league !== league.value) {
+    league.value = hit.league
+    load()
+  }
+  query.value = ''
+  drawer.value = false
+  if (kind === 'teams') openTeam({ id: hit.id, name: hit.name }, 'main')
+  else openAthlete(hit.id, hit.name, 'main')
+}
+
+// ── Panneaux de détail : match, équipe et joueur ──
+const pane = ref<SportsPane>('main')
 const cameFrom = ref<'main' | 'match'>('main')
+// D'où l'on vient quand on ouvre un joueur : effectif d'une équipe ou compo
+const athleteFrom = ref<'team' | 'match' | 'main'>('team')
+const matchTab = ref<MatchTab>('summary')
 const selMatch = ref<SportsMatch | null>(null)
 const matchDetail = ref<MatchDetail | null>(null)
 const teamDetail = ref<TeamDetail | null>(null)
+const athleteDetail = ref<AthleteDetail | null>(null)
+const athleteName = ref('')
 const selTeamName = ref('')
 const detailLoading = ref(false)
+
+// Le fil de match est traduit côté serveur : la langue fait partie de la requête
+const fetchMatchDetail = (id: string) =>
+  $fetch<MatchDetail>('/api/sports', {
+    query: { league: league.value, type: 'match', id, lang: locale.value },
+  })
+
+// Changer la langue du site change celle du fil, sans recharger la page
+watch(locale, async () => {
+  if (pane.value !== 'match' || !selMatch.value) return
+  try {
+    matchDetail.value = await fetchMatchDetail(selMatch.value.id)
+  } catch {
+    /* on garde le détail affiché */
+  }
+})
 
 const openMatch = async (m: SportsMatch) => {
   sfx.click()
@@ -952,14 +473,19 @@ const openMatch = async (m: SportsMatch) => {
   })
   selMatch.value = m
   matchDetail.value = null
+  matchTab.value = 'summary'
   pane.value = 'match'
   detailLoading.value = true
   try {
-    matchDetail.value = await $fetch<MatchDetail>('/api/sports', {
-      query: { league: league.value, type: 'match', id: m.id },
-    })
+    matchDetail.value = await fetchMatchDetail(m.id)
   } catch {
-    matchDetail.value = { venue: '', events: [], stats: [] }
+    matchDetail.value = {
+      venue: '',
+      events: [],
+      stats: [],
+      lineups: { home: null, away: null },
+      commentary: [],
+    }
   } finally {
     detailLoading.value = false
   }
@@ -988,96 +514,55 @@ const openTeam = async (
   }
 }
 
+const openAthlete = async (
+  id: string,
+  name: string,
+  from: 'team' | 'match' | 'main' = 'team'
+) => {
+  if (!id) return
+  sfx.click()
+  track('sports_player_opened', { player: name })
+  athleteFrom.value = from
+  athleteName.value = name
+  athleteDetail.value = null
+  pane.value = 'athlete'
+  detailLoading.value = true
+  try {
+    athleteDetail.value = await $fetch<AthleteDetail>('/api/sports', {
+      query: { league: league.value, type: 'athlete', id },
+    })
+  } catch {
+    athleteDetail.value = null
+  } finally {
+    detailLoading.value = false
+  }
+}
+
 const backFromPane = () => {
   sfx.click()
+  if (pane.value === 'athlete') {
+    pane.value = athleteFrom.value === 'main' ? 'main' : athleteFrom.value
+    return
+  }
   pane.value =
     pane.value === 'team' && cameFrom.value === 'match' ? 'match' : 'main'
 }
 
-const isSelTeam = (name: string) =>
-  !!selTeamName.value && name === selTeamName.value
-
-// Le plus fort des deux en gras (possession comprise)
-const statLead = (s: { home: string; away: string }) => {
-  const h = parseFloat(s.home)
-  const a = parseFloat(s.away)
-  if (Number.isNaN(h) || Number.isNaN(a) || h === a) return ''
-  return h > a ? 'home' : 'away'
-}
-
-const matchDay = (iso: string) =>
-  new Intl.DateTimeFormat(locale.value, {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-  }).format(new Date(iso))
-
-const fixtureDay = (iso: string) =>
-  new Intl.DateTimeFormat(locale.value, {
-    day: 'numeric',
-    month: 'short',
-  }).format(new Date(iso))
-
-// Derniers résultats (les 5 plus récents) et 5 prochains matchs
-const teamGroups = computed(() => {
-  const fixtures = teamDetail.value?.fixtures ?? []
-  return [
-    {
-      titleKey: 'macos.sportsForm',
-      items: fixtures
-        .filter((f) => f.state === 'post')
-        .slice(-5)
-        .reverse(),
-    },
-    {
-      titleKey: 'macos.sportsUpcoming',
-      items: fixtures.filter((f) => f.state !== 'post').slice(0, 5),
-    },
-  ]
+// Actions et formats mis à disposition des panneaux enfants
+provide(SPORTS_KEY, {
+  openMatch,
+  openTeam,
+  openAthlete,
+  backFromPane,
+  ...format,
 })
 
-// Forme V/N/D sur les 5 derniers matchs (du plus ancien au plus récent)
-const teamForm = computed(() =>
-  (teamDetail.value?.fixtures ?? [])
-    .filter((f) => f.state === 'post' && f.res)
-    .slice(-5)
-    .map((f) => f.res)
-)
-
-const FORM_STYLE: Record<string, string> = {
-  W: 'bg-[#34C759] text-white',
-  D: 'bg-black/15 text-aink/70',
-  L: 'bg-[#FF3B30] text-white',
-}
-const formLetter = (r: string) =>
-  r === 'W'
-    ? t('macos.sportsW')
-    : r === 'L'
-      ? t('macos.sportsL')
-      : t('macos.sportsD')
-
-// Effectif groupé par poste, dans l'ordre gardiens → attaquants
-const ROSTER_GROUPS = [
-  { pos: ['G'], titleKey: 'macos.sportsGoalkeepers' },
-  { pos: ['D'], titleKey: 'macos.sportsDefenders' },
-  { pos: ['M'], titleKey: 'macos.sportsMidfielders' },
-  { pos: ['F', 'A'], titleKey: 'macos.sportsForwards' },
-]
-const rosterGroups = computed(() => {
-  const roster = teamDetail.value?.roster ?? []
-  return ROSTER_GROUPS.map((g) => ({
-    titleKey: g.titleKey,
-    players: roster.filter((p) => g.pos.includes(p.pos)),
-  })).filter((g) => g.players.length)
-})
-const shiftDay = (delta: number) => {
-  sfx.click()
-  dayOffset.value += delta
-}
-watch(dayOffset, () => load())
-
-// Rafraîchissement discret pendant les matchs du jour
+// ── Rafraîchissement discret pendant les matchs du jour ──
 let timer: ReturnType<typeof setInterval> | undefined
+const stopPolling = () => {
+  if (timer) clearInterval(timer)
+  timer = undefined
+}
 const startPolling = () => {
   stopPolling()
   timer = setInterval(async () => {
@@ -1093,22 +578,12 @@ const startPolling = () => {
     }
     if (pane.value === 'match' && selMatch.value?.state === 'in') {
       try {
-        matchDetail.value = await $fetch<MatchDetail>('/api/sports', {
-          query: {
-            league: league.value,
-            type: 'match',
-            id: selMatch.value.id,
-          },
-        })
+        matchDetail.value = await fetchMatchDetail(selMatch.value.id)
       } catch {
         /* on garde le détail affiché */
       }
     }
   }, 60_000)
-}
-const stopPolling = () => {
-  if (timer) clearInterval(timer)
-  timer = undefined
 }
 onUnmounted(stopPolling)
 
@@ -1148,26 +623,154 @@ watch(
 )
 </script>
 
-<style scoped>
-.skel {
-  @apply animate-pulse rounded bg-black/[0.08];
+<style>
+/* Styles volontairement globaux : les panneaux enfants (terrain, listes,
+   cartes) utilisent les mêmes classes. Toutes sont préfixées `sp-`/`sports-`,
+   il n'y a donc pas de risque de collision ailleurs dans le site. */
+/* Cartes façon Apple Sports : gris élevé sur fond noir, sans ombre */
+.sp-card {
+  background: #1c1c1e;
+  border-radius: 18px;
 }
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+/* Terrain : pelouse sombre, bandes de tonte et ligne médiane */
+.sp-pitch {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.05) 0 10%,
+      transparent 10% 20%,
+      rgba(255, 255, 255, 0.05) 20% 30%,
+      transparent 30% 40%,
+      rgba(255, 255, 255, 0.05) 40% 50%,
+      transparent 50% 60%,
+      rgba(255, 255, 255, 0.05) 60% 70%,
+      transparent 70% 80%,
+      rgba(255, 255, 255, 0.05) 80% 90%,
+      transparent 90%
+    ),
+    linear-gradient(160deg, #14512f, #0d3a22);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
 }
-.no-scrollbar {
-  scrollbar-width: none;
+/* Survol des lignes qui ouvrent une fiche : aucun fond, un chevron qui
+   apparaît à droite comme dans Réglages ou Contacts. Il reste dans le flux,
+   toujours présent mais transparent, pour que rien ne se décale au survol. */
+.sp-chev {
+  flex: none;
+  width: 8px;
+  margin-left: 4px;
+  font-size: 16px;
+  line-height: 1;
+  color: #636366;
+  text-align: right;
+  opacity: 0;
+  transform: translateX(-3px);
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
 }
-.live-dot {
-  animation: sports-live 1.4s ease-in-out infinite;
+.sp-av {
+  transition: background-color 0.18s ease;
 }
-@keyframes sports-live {
+/* Noms de clubs et de joueurs cités dans une phrase : un simple soulignement
+   qui n'apparaît qu'au survol, sans changer la couleur ni la graisse. */
+.sp-link {
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color 0.18s ease;
+}
+@media (hover: hover) and (min-width: 1024px) {
+  .sp-link:hover {
+    text-decoration-color: currentColor;
+  }
+}
+/* Flèche des articles : même logique, dans le fil du titre */
+.sp-chev-inline {
+  display: inline;
+  width: auto;
+  margin-left: 2px;
+  font-size: 12px;
+}
+@media (hover: hover) and (min-width: 1024px) {
+  .sp-hit:hover .sp-chev {
+    opacity: 1;
+    transform: none;
+  }
+  .sp-hit:hover .sp-av {
+    background-color: #3a3a3c;
+  }
+  .sp-news:hover .sp-chev-inline {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sp-chev {
+    transform: none;
+    transition: opacity 0.18s ease;
+  }
+}
+/* Séparateurs internes en retrait, comme les listes iOS */
+.sp-row + .sp-row {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.sp-skel {
+  display: block;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.09);
+  animation: sp-pulse 1.6s ease-in-out infinite;
+}
+@keyframes sp-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+/* Pastille du direct */
+.sp-dot {
+  animation: sp-live 1.4s ease-in-out infinite;
+}
+/* Halo de la pastille sur la une, où le fond est coloré */
+.sp-glow {
+  box-shadow: 0 0 8px #ff453a;
+}
+/* Voile du tiroir mobile */
+.sp-fade-enter-active,
+.sp-fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+.sp-fade-enter-from,
+.sp-fade-leave-to {
+  opacity: 0;
+}
+@keyframes sp-live {
   0%,
   100% {
     opacity: 1;
   }
   50% {
     opacity: 0.25;
+  }
+}
+.sp-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+.sp-scroll {
+  scrollbar-width: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sp-dot,
+  .sp-skel {
+    animation: none;
+  }
+  .sp-fade-enter-active,
+  .sp-fade-leave-active {
+    transition: none;
   }
 }
 </style>
