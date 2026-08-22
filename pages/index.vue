@@ -102,7 +102,7 @@
     <section ref="heroEl" class="relative hidden min-h-[92vh] w-full lg:block">
       <!-- Icônes du bureau -->
       <div
-        class="absolute right-6 top-14 z-[5] hidden grid-flow-col grid-rows-5 gap-x-2 gap-y-5 lg:grid"
+        class="absolute right-2 top-14 z-[5] hidden grid-flow-col grid-rows-5 gap-x-2 gap-y-5 xl:grid"
       >
         <button
           v-for="icon in deskIcons"
@@ -132,7 +132,7 @@
       <div
         v-show="!desktop.state.value.wins.about?.min"
         ref="aboutEl"
-        class="win absolute left-12 top-28 z-10 w-[500px] xl:left-[7%]"
+        class="win absolute left-10 top-60 z-10 w-[500px] min-[1360px]:left-[calc(7%+84px)]"
         :style="{ zIndex: desktop.state.value.wins.about?.z ?? 10 }"
         @pointerdown="desktop.focus('about')"
       >
@@ -205,7 +205,7 @@
       <div
         v-show="!desktop.state.value.wins.terminal?.min"
         ref="termEl"
-        class="win absolute right-56 top-60 z-10 w-[440px] xl:right-[16%]"
+        class="win absolute right-6 top-60 z-10 w-[440px] xl:right-[17%]"
         :style="{ zIndex: desktop.state.value.wins.terminal?.z ?? 10 }"
         @pointerdown="desktop.focus('terminal')"
       >
@@ -220,6 +220,12 @@
           <DesktopTerminalShell @exit="animateMinimize('terminal')" />
         </UiMacWindow>
       </div>
+
+      <!-- Widgets de bureau. Rendus côté client seulement : l'horloge serait
+           figée à l'heure du serveur et provoquerait un écart d'hydratation. -->
+      <ClientOnly>
+        <DesktopWidgets />
+      </ClientOnly>
 
       <!-- Indice de bas de page : s'efface dès que le visiteur descend -->
       <div
