@@ -243,6 +243,7 @@ import type {
   SportsView,
   StandingRow,
   TeamDetail,
+  TeamFixture,
 } from '~/types/sports'
 
 const desktop = useDesktop()
@@ -465,8 +466,39 @@ watch(locale, async () => {
   }
 })
 
-const openMatch = async (m: SportsMatch) => {
+// D'où l'on vient quand on ouvre un match : liste du jour ou fiche équipe
+const matchFrom = ref<'main' | 'team'>('main')
+
+// Une ligne de calendrier n'a pas toutes les données d'un match du jour :
+// on complète, le serveur se charge du reste. Les rencontres passées gardent
+// leurs compositions, leur commentaire et leurs statistiques.
+const openFixture = (f: TeamFixture) => {
+  const side = (t: TeamFixture['home']) => ({
+    id: t.id,
+    name: t.name,
+    full: t.name,
+    logo: t.logo,
+    score: t.score,
+    color: '',
+  })
+  openMatch(
+    {
+      id: f.id,
+      date: f.date,
+      state: f.state,
+      detail: '',
+      venue: '',
+      goals: [],
+      home: side(f.home),
+      away: side(f.away),
+    },
+    'team'
+  )
+}
+
+const openMatch = async (m: SportsMatch, from: 'main' | 'team' = 'main') => {
   sfx.click()
+  matchFrom.value = from
   track('sports_match_opened', {
     match: `${m.home.name} – ${m.away.name}`,
     state: m.state,
@@ -544,13 +576,17 @@ const backFromPane = () => {
     pane.value = athleteFrom.value === 'main' ? 'main' : athleteFrom.value
     return
   }
-  pane.value =
-    pane.value === 'team' && cameFrom.value === 'match' ? 'match' : 'main'
+  if (pane.value === 'match') {
+    pane.value = matchFrom.value
+    return
+  }
+  pane.value = cameFrom.value === 'match' ? 'match' : 'main'
 }
 
 // Actions et formats mis à disposition des panneaux enfants
 provide(SPORTS_KEY, {
   openMatch,
+  openFixture,
   openTeam,
   openAthlete,
   backFromPane,

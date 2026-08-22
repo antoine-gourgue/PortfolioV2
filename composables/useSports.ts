@@ -1,5 +1,5 @@
 import type { InjectionKey } from 'vue'
-import type { SportsMatch } from '~/types/sports'
+import type { SportsMatch, TeamFixture } from '~/types/sports'
 
 // Compétitions proposées, groupées comme dans la barre latérale d'Apple Sports.
 // Chaque code est vérifié comme répondant côté ESPN et présent dans la liste
@@ -51,6 +51,8 @@ export const LEAGUES = LEAGUE_GROUPS.flatMap((g) => g.leagues)
  */
 export interface SportsCtx {
   openMatch: (m: SportsMatch) => void
+  /** Ouvre la fiche d'un match depuis le calendrier d'une équipe */
+  openFixture: (f: TeamFixture) => void
   openTeam: (team: { id: string; name: string }, from: 'main' | 'match') => void
   openAthlete: (
     id: string,

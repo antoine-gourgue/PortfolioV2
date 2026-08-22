@@ -19,7 +19,11 @@
       v-else
       class="mb-4 text-center text-[12px] font-semibold uppercase tracking-wide text-[#8E8E93]"
     >
-      {{ match.state === 'pre' ? matchDay(match.date) : match.detail }}
+      {{
+        match.state === 'pre' || !match.detail
+          ? matchDay(match.date)
+          : match.detail
+      }}
     </p>
 
     <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-4">

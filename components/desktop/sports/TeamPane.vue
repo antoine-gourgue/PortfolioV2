@@ -122,13 +122,18 @@
               >{{ f.home.name }}</component
             >
           </span>
-          <span class="shrink-0 text-[13.5px] font-semibold tabular-nums">
+          <!-- Le score ouvre la fiche du match : résumé, compositions et fil -->
+          <button
+            class="sp-link shrink-0 px-1 text-[13.5px] font-semibold tabular-nums"
+            :aria-label="$t('macos.sportsMatchDetails')"
+            @click="openFixture(f)"
+          >
             {{
               f.state === 'pre'
                 ? kickoff(f.date)
                 : `${f.home.score} – ${f.away.score}`
             }}
-          </span>
+          </button>
           <span class="flex min-w-0 flex-1 items-center justify-end gap-2">
             <component
               :is="f.away.id ? 'button' : 'span'"
@@ -215,7 +220,7 @@ const props = defineProps<{
 
 const { t } = useI18n()
 const { kickoff, fixtureDay, dropPhoto } = useSportsFormat()
-const { backFromPane, openTeam, openAthlete } = useSportsCtx()
+const { backFromPane, openTeam, openAthlete, openFixture } = useSportsCtx()
 
 const isSelTeam = (name: string) => !!props.selName && name === props.selName
 
