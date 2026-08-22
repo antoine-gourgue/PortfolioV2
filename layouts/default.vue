@@ -24,6 +24,7 @@
     </main>
 
     <MacDock />
+    <DesktopLaunchpad />
     <DesktopSpotlight />
     <DesktopBootScreen />
     <DesktopAppWeather />

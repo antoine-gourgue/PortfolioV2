@@ -61,6 +61,11 @@ export function useDesktop() {
     state.value.apps[id] = !state.value.apps[id]
     state.value.minimizedApps[id] = false
   }
+  // Ouvre sans basculer : le Launchpad ne doit jamais refermer une app déjà là
+  const openApp = (id: string) => {
+    state.value.apps[id] = true
+    state.value.minimizedApps[id] = false
+  }
   const closeApp = (id: string) => {
     state.value.apps[id] = false
     state.value.minimizedApps[id] = false
@@ -134,6 +139,7 @@ export function useDesktop() {
     cycleWallpaper,
     minimized,
     toggleApp,
+    openApp,
     closeApp,
     minimizeApp,
   }

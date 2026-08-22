@@ -742,6 +742,45 @@
     />
   </svg>
 
+  <!-- Launchpad : grille 3 × 3 de pastilles colorées sur fond blanc -->
+  <svg
+    v-else-if="name === 'launchpad'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
+    <defs>
+      <linearGradient :id="`lpbg-${uid}`" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#FFFFFF" />
+        <stop offset="1" stop-color="#EFF0F2" />
+      </linearGradient>
+      <!-- Reflet unique, réappliqué sur chaque pastille -->
+      <linearGradient :id="`lpgl-${uid}`" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fff" stop-opacity="0.3" />
+        <stop offset="0.55" stop-color="#fff" stop-opacity="0.04" />
+        <stop offset="1" stop-color="#000" stop-opacity="0.05" />
+      </linearGradient>
+    </defs>
+    <rect width="100" height="100" rx="23" :fill="`url(#lpbg-${uid})`" />
+    <template v-for="(tile, i) in LAUNCHPAD_TILES" :key="i">
+      <rect
+        :x="13.5 + (i % 3) * 26.5"
+        :y="13.5 + Math.floor(i / 3) * 26.5"
+        width="20"
+        height="20"
+        rx="5.6"
+        :fill="tile"
+      />
+      <rect
+        :x="13.5 + (i % 3) * 26.5"
+        :y="13.5 + Math.floor(i / 3) * 26.5"
+        width="20"
+        height="20"
+        rx="5.6"
+        :fill="`url(#lpgl-${uid})`"
+      />
+    </template>
+  </svg>
+
   <!-- Fichier PDF -->
   <svg
     v-else-if="name === 'pdf'"
@@ -783,4 +822,17 @@ withDefaults(
 
 // Identifiant unique pour les défs SVG (évite les collisions d'id entre instances)
 const uid = useId().replace(/[^a-zA-Z0-9]/g, '')
+
+// Pastilles du Launchpad, dans l'ordre de lecture
+const LAUNCHPAD_TILES = [
+  '#43CB58',
+  '#FFC42E',
+  '#FF9A22',
+  '#EE3B37',
+  '#C6CAD1',
+  '#FF4B67',
+  '#AE55EE',
+  '#2C95FF',
+  '#2FD1A5',
+]
 </script>

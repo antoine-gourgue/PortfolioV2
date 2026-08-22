@@ -30,6 +30,17 @@
       ></span>
     </component>
 
+    <!-- Launchpad -->
+    <button
+      :ref="setItemRef"
+      class="dock-icon group"
+      :aria-label="$t('macos.launchpad')"
+      @click="(launchpad.toggle(), bounce($event))"
+    >
+      <DesktopMacAppIcon name="launchpad" />
+      <span class="dock-tip">{{ $t('macos.launchpad') }}</span>
+    </button>
+
     <!-- Apps utilitaires (Météo, Calculatrice) -->
     <button
       v-for="app in utilApps"
@@ -90,6 +101,7 @@ const localePath = useLocalePath()
 const route = useRoute()
 const { gsap } = useGsap()
 const { minimized, restore, toggleApp, state } = useDesktop()
+const launchpad = useLaunchpad()
 
 const musicPlaying = computed(() => useMusic().state.value.playing)
 
