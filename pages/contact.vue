@@ -1,28 +1,19 @@
 <template>
-  <main ref="container" class="mx-auto w-full max-w-3xl px-4 pt-16 lg:px-8">
+  <main
+    ref="container"
+    class="mx-auto w-full pt-8 lg:max-w-3xl lg:px-8 lg:pt-16"
+  >
     <h1 class="sr-only">{{ $t('contact.title') }} — Antoine Gourgue</h1>
-    <div ref="winEl" class="win">
+    <div ref="winEl" class="win" data-window="page">
       <UiMacWindow
         :title="$t('macos.mailTitle')"
         @close="closeToDesktop"
         @minimize="closeToDesktop"
         @zoom="toggleZoom"
       >
-        <!-- Envoi dans la barre de navigation iOS (mobile) -->
-        <template #ios-action>
-          <button
-            class="flex h-7 w-7 items-center justify-center rounded-full bg-ablue text-[14px] text-white disabled:opacity-40"
-            :disabled="loading"
-            :aria-label="$t('contact.send')"
-            @click="submitForm"
-          >
-            ↑
-          </button>
-        </template>
-
         <!-- Bascule Boîte de réception / Nouveau message -->
         <div
-          class="flex items-center gap-1.5 border-b border-black/5 bg-white/60 px-5 py-2"
+          class="hidden items-center gap-1.5 border-b border-black/5 bg-white/60 px-5 py-2 lg:flex"
         >
           <button
             class="rounded-full px-3 py-1 text-[12.5px] font-semibold transition"
@@ -60,41 +51,62 @@
         </div>
 
         <!-- ── Boîte de réception ── -->
-        <div v-if="mailView === 'inbox'" class="min-h-[380px]">
+        <div v-if="mailView === 'inbox'" class="flex-1 min-h-[380px]">
+          <!-- Mobile : en-tête de Mail -->
+          <div v-if="!openedMail" class="px-5 pb-2 pt-3 lg:hidden">
+            <h2
+              class="text-[34px] font-bold leading-tight tracking-[-0.9px] text-aink"
+            >
+              {{ $t('macos.mailInbox') }}
+            </h2>
+            <p class="mt-0.5 text-[13px] text-black/40">
+              {{ $t('macos.mailUnread', { n: unreadCount }) }}
+            </p>
+          </div>
+
           <!-- Liste -->
-          <div v-if="!openedMail" class="divide-y divide-black/5">
+          <div v-if="!openedMail" class="lg:divide-y lg:divide-black/5">
             <button
-              v-for="mail in inboxMails"
+              v-for="(mail, i) in inboxMails"
               :key="mail.id"
-              class="flex w-full items-start gap-3 px-5 py-3.5 text-left transition hover:bg-black/[0.03]"
+              class="relative flex w-full items-start gap-3 px-5 py-3 text-left transition hover:bg-black/[0.03] lg:py-3.5"
               @click="openedMail = mail.id"
             >
               <span
-                class="mt-0.5 h-2 w-2 shrink-0 rounded-full"
+                v-if="i > 0"
+                class="absolute left-[84px] right-0 top-0 h-px bg-black/[0.09] lg:hidden"
+              ></span>
+              <span
+                class="mt-2 h-[9px] w-[9px] shrink-0 rounded-full lg:mt-0.5 lg:h-2 lg:w-2"
                 :class="
                   readMails.includes(mail.id) ? 'bg-transparent' : 'bg-ablue'
                 "
               ></span>
               <span
-                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-[#3b4048] to-[#17181b]"
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-[#3b4048] to-[#17181b] lg:h-9 lg:w-9"
               >
                 <AgLogo class="h-4 w-5 text-white" />
               </span>
               <span class="min-w-0 flex-1">
                 <span class="flex items-baseline justify-between gap-2">
-                  <span class="truncate text-[13.5px] font-semibold text-aink">
+                  <span
+                    class="truncate text-[16px] font-semibold text-aink lg:text-[13.5px]"
+                  >
                     Antoine Gourgue
                   </span>
-                  <span class="shrink-0 text-[11px] text-black/35">{{
-                    mail.date
-                  }}</span>
+                  <span
+                    class="shrink-0 text-[14px] text-black/35 lg:text-[11px]"
+                    >{{ mail.date }}</span
+                  >
                 </span>
                 <span
-                  class="block truncate text-[13px] font-medium text-aink/90"
+                  class="block truncate text-[15px] font-normal text-aink/90 lg:text-[13px] lg:font-medium"
                 >
                   {{ $t(mail.subjectKey) }}
                 </span>
-                <span class="block truncate text-[12px] text-black/45">
+                <span
+                  class="block truncate text-[15px] text-black/45 lg:text-[12px]"
+                >
                   {{ $t(mail.previewKey) }}
                 </span>
               </span>
@@ -170,6 +182,38 @@
 
         <!-- ── Nouveau message ── (ph-no-capture : exclu du session replay) -->
         <form v-else class="ph-no-capture" @submit.prevent="submitForm">
+          <!-- Mobile : barre de rédaction de Mail -->
+          <div
+            class="relative flex items-center justify-between border-b border-black/5 px-4 py-2.5 lg:hidden"
+          >
+            <button
+              type="button"
+              class="text-[17px] text-ablue"
+              @click="mailView = 'inbox'"
+            >
+              {{ $t('contact.cancel') }}
+            </button>
+            <span
+              class="pointer-events-none absolute left-1/2 -translate-x-1/2 text-[17px] font-semibold text-aink"
+            >
+              {{ $t('macos.mailCompose') }}
+            </span>
+            <button
+              type="submit"
+              :disabled="loading"
+              class="flex h-8 w-8 items-center justify-center rounded-full bg-ablue text-[15px] text-white disabled:opacity-40"
+              :aria-label="$t('contact.send')"
+            >
+              <i
+                aria-hidden="true"
+                class="f7-icons"
+                :class="loading ? 'animate-spin' : ''"
+                style="font-size: 15px"
+                >{{ loading ? 'arrow_2_circlepath' : 'arrow_up' }}</i
+              >
+            </button>
+          </div>
+
           <!-- Barre d'outils de composition (desktop) -->
           <div
             class="hidden items-center gap-1 border-b border-black/5 bg-white/60 px-5 py-2.5 lg:flex"
@@ -409,7 +453,7 @@
               {{ errorMessage }}
             </p>
 
-            <div class="mt-4 flex items-center justify-end gap-4">
+            <div class="mt-4 hidden items-center justify-end gap-4 lg:flex">
               <button
                 type="submit"
                 :disabled="loading"
@@ -420,7 +464,34 @@
             </div>
           </div>
         </form>
+        <!--
+          Mobile : barre d'outils de Mail. Pas de bouton flottant rond — iOS
+          pose une icône bleue sans fond, avec l'état de mise à jour au centre.
+        -->
+        <div
+          v-if="mailView === 'inbox' && !openedMail"
+          class="fixed inset-x-0 bottom-0 z-40 border-t border-black/[0.07] bg-white/85 pb-[calc(24px+env(safe-area-inset-bottom,0px))] pt-2.5 backdrop-blur-xl lg:hidden"
+        >
+          <div class="relative flex items-center px-5">
+            <span
+              class="pointer-events-none absolute left-1/2 -translate-x-1/2 text-[13px] text-black/45"
+            >
+              {{ $t('macos.mailUpdated') }}
+            </span>
+            <button
+              class="ml-auto flex h-8 w-8 items-center justify-center text-ablue"
+              :aria-label="$t('macos.mailCompose')"
+              @click="mailView = 'compose'"
+            >
+              <i aria-hidden="true" class="f7-icons" style="font-size: 23px"
+                >square_pencil</i
+              >
+            </button>
+          </div>
+        </div>
       </UiMacWindow>
+      <!-- Balayer vers le haut pour revenir au bureau -->
+      <DesktopIosHomeBar app="page" @close="goHome" />
     </div>
   </main>
 </template>
@@ -633,6 +704,9 @@ const inboxMails: InboxMail[] = [
 ]
 
 const mailView = ref<'inbox' | 'compose'>('inbox')
+const unreadCount = computed(
+  () => inboxMails.filter((m) => !readMails.value.includes(m.id)).length
+)
 const openedMail = ref('')
 const readMails = ref<string[]>([])
 const currentMail = computed(() =>
@@ -731,7 +805,7 @@ const submitForm = async () => {
 
 const container = ref<HTMLElement | null>(null)
 const winEl = ref<HTMLElement | null>(null)
-const { closeToDesktop, toggleZoom } = usePageWindow(winEl)
+const { closeToDesktop, goHome, toggleZoom } = usePageWindow(winEl)
 let ctx: gsap.Context | undefined
 
 onMounted(() => {
