@@ -3,6 +3,7 @@
     <div
       v-if="desktop.state.value.apps.news"
       ref="winEl"
+      data-window="news"
       class="fixed inset-0 z-40 overflow-hidden lg:inset-auto lg:left-[24%] lg:top-28 lg:w-[560px] lg:rounded-xl lg:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.45)] lg:ring-1 lg:ring-black/10"
       :style="{ zIndex: z }"
       @pointerdown="bringToFront"
@@ -51,13 +52,6 @@
           <span
             class="hidden h-3 w-3 rounded-full border border-black/10 bg-[#DDDDDF] lg:block"
           ></span>
-          <button
-            class="flex items-center gap-0.5 text-[15px] font-medium text-[#FA2D48] lg:hidden"
-            @click="desktop.closeApp('news')"
-          >
-            <span class="text-xl leading-none">‹</span>
-            {{ $t('macos.close') }}
-          </button>
           <span
             class="absolute left-1/2 -translate-x-1/2 text-[13px] font-semibold text-aink"
           >
@@ -225,6 +219,8 @@
           </template>
         </div>
       </div>
+      <!-- Balayer vers le haut pour revenir à l'écran d'accueil -->
+      <DesktopIosHomeBar app="news" @close="desktop.closeApp('news')" />
     </div>
   </Teleport>
 </template>
@@ -248,7 +244,7 @@ const { locale, t } = useI18n()
 const winEl = ref<HTMLElement | null>(null)
 const z = ref(40)
 const bringToFront = () => {
-  z.value = ++desktop.state.value.topZ + 40
+  z.value = desktop.focusApp('news')
 }
 
 const tab = ref<'headlines' | 'tech'>('headlines')

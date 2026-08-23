@@ -3,6 +3,7 @@
     <div
       v-if="desktop.state.value.apps.sports"
       ref="winEl"
+      data-window="sports"
       class="fixed inset-0 z-40 flex flex-col overflow-hidden bg-black lg:inset-auto lg:left-[18%] lg:top-20 lg:h-[560px] lg:w-[880px] lg:flex-row lg:rounded-[14px] lg:shadow-[0_40px_90px_-20px_rgba(0,0,0,0.75)] lg:ring-1 lg:ring-white/10"
       :style="{ zIndex: z }"
       @pointerdown="bringToFront"
@@ -50,13 +51,6 @@
                   stroke-linecap="round"
                 />
               </svg>
-            </button>
-            <button
-              class="flex items-center gap-0.5 text-[15px] font-medium text-[#0A84FF]"
-              @click="closeSports"
-            >
-              <span class="text-[19px] leading-none">‹</span>
-              {{ $t('macos.close') }}
             </button>
           </div>
           <h1 class="px-4 text-[32px] font-bold tracking-[-0.6px] text-white">
@@ -226,6 +220,8 @@
           />
         </div>
       </div>
+      <!-- Balayer vers le haut pour revenir à l'écran d'accueil -->
+      <DesktopIosHomeBar app="sports" dark @close="closeSports" />
     </div>
   </Teleport>
 </template>
@@ -256,7 +252,7 @@ const format = useSportsFormat()
 const winEl = ref<HTMLElement | null>(null)
 const z = ref(40)
 const bringToFront = () => {
-  z.value = ++desktop.state.value.topZ + 40
+  z.value = desktop.focusApp('sports')
 }
 
 // ── État de la fenêtre ──

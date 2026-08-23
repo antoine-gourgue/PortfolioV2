@@ -3,6 +3,7 @@
     <div
       v-if="desktop.state.value.apps.calculator"
       ref="winEl"
+      data-window="calculator"
       class="app-cal fixed inset-0 z-40 overflow-hidden lg:inset-auto lg:right-[16%] lg:top-32 lg:w-[232px] lg:rounded-xl lg:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.55)] lg:ring-1 lg:ring-white/10"
       :style="{ zIndex: z }"
       @pointerdown="bringToFront"
@@ -51,13 +52,6 @@
           <span
             class="hidden h-3 w-3 rounded-full border border-black/20 bg-[#4a4a4c] lg:block"
           ></span>
-          <button
-            class="flex items-center gap-0.5 text-[15px] font-medium text-[#FF9F0A] lg:hidden"
-            @click.stop="(sfx.minimize(), desktop.closeApp('calculator'))"
-          >
-            <span class="text-[19px] leading-none">‹</span>
-            {{ $t('macos.close') }}
-          </button>
         </div>
 
         <!-- Affichage -->
@@ -112,6 +106,12 @@
           <button class="key key-op" @click="equals">=</button>
         </div>
       </div>
+      <!-- Balayer vers le haut pour revenir à l'écran d'accueil -->
+      <DesktopIosHomeBar
+        app="calculator"
+        dark
+        @close="desktop.closeApp('calculator')"
+      />
     </div>
   </Teleport>
 </template>
@@ -124,7 +124,7 @@ const sfx = useSfx()
 const winEl = ref<HTMLElement | null>(null)
 const z = ref(40)
 const bringToFront = () => {
-  z.value = ++desktop.state.value.topZ + 40
+  z.value = desktop.focusApp('calculator')
 }
 
 // ── Logique ──

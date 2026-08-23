@@ -3,6 +3,7 @@
     <div
       v-if="desktop.state.value.apps.weather"
       ref="winEl"
+      data-window="weather"
       class="fixed inset-0 z-40 overflow-y-auto lg:inset-auto lg:left-[12%] lg:top-28 lg:w-[350px] lg:overflow-hidden lg:rounded-2xl lg:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.55)] lg:ring-1 lg:ring-white/20"
       :style="{ zIndex: z }"
       @pointerdown="bringToFront"
@@ -51,13 +52,6 @@
           <span
             class="hidden h-3 w-3 rounded-full border border-white/20 bg-white/25 lg:block"
           ></span>
-          <button
-            class="flex items-center gap-0.5 text-[15px] font-medium text-white/90 lg:hidden"
-            @click.stop="(sfx.minimize(), desktop.closeApp('weather'))"
-          >
-            <span class="text-[19px] leading-none">‹</span>
-            {{ $t('macos.close') }}
-          </button>
         </div>
 
         <!-- En-tête : ville, température géante, condition, H/L -->
@@ -181,6 +175,12 @@
           </button>
         </div>
       </div>
+      <!-- Balayer vers le haut pour revenir à l'écran d'accueil -->
+      <DesktopIosHomeBar
+        app="weather"
+        dark
+        @close="desktop.closeApp('weather')"
+      />
     </div>
   </Teleport>
 </template>
@@ -194,7 +194,7 @@ const sfx = useSfx()
 const winEl = ref<HTMLElement | null>(null)
 const z = ref(40)
 const bringToFront = () => {
-  z.value = ++desktop.state.value.topZ + 40
+  z.value = desktop.focusApp('weather')
 }
 
 // ── Météo à la position du visiteur (géoloc IP, sans permission) ──
