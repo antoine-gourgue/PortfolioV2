@@ -103,7 +103,8 @@
       "tooShort": "Your message is a bit too short.",
       "failed": "Failed to send message. Please try again later."
     },
-    "success": "Message sent successfully!"
+    "success": "Message sent successfully!",
+    "cancel": "Cancel"
   },
   "projects": {
     "title": "My Projects.",
@@ -175,6 +176,9 @@
   "macos": {
     "projectsTitle": "My projects",
     "projectsSub": "Every window is a real, live website.",
+    "projectsPerso": "Personal",
+    "projectsFeatured": "Featured",
+    "seeAll": "See All",
     "visit": "Visit",
     "terminalStatus": "available — open to full-time from October 2026",
     "mailTitle": "New message",
@@ -187,6 +191,14 @@
     "menuFile": "File",
     "menuGo": "Go",
     "menuHelp": "Help",
+    "menuHideApp": "Hide {app}",
+    "menuQuitApp": "Quit {app}",
+    "menuControls": "Controls",
+    "menuPlayPause": "Play / Pause",
+    "menuPrevTrack": "Previous track",
+    "menuNextTrack": "Next track",
+    "menuView": "View",
+    "menuNextWallpaper": "Next wallpaper",
     "menuNewProject": "New project…",
     "menuDownloadCv": "Download resume",
     "menuAboutSite": "About this portfolio",
@@ -227,6 +239,9 @@
     "ghStars": "GITHUB STARS",
     "age": "STACK",
     "search": "Search",
+    "contactsMyCard": "My Card",
+    "contactsOthers": "Background",
+    "searchNoResult": "No results",
     "finderFavorites": "Favorites",
     "finderProjects": "Projects",
     "finderApps": "Applications",
@@ -306,6 +321,8 @@
     "mapsMobility": "Mobile anywhere in France",
     "mapsMobilityHint": "Based in Anglet — open to the Basque Country, Bordeaux and Paris.",
     "mailInbox": "Inbox",
+    "mailUnread": "{n} unread",
+    "mailUpdated": "Updated Just Now",
     "mailCompose": "New message",
     "mailAttach": "Attach a file",
     "batteryTitle": "Battery",
@@ -408,6 +425,11 @@
     "settingsMusicVolume": "Music volume",
     "settingsLanguage": "Language",
     "settingsGeneral": "General",
+    "settingsGroupLook": "Appearance",
+    "settingsGroupSystem": "System",
+    "settingsGroupLinks": "Links",
+    "settingsIdentity": "Fullstack developer — Anglet, France",
+    "settingsFooter": "Antoine Gourgue's portfolio · Nuxt 3",
     "settingsReset": "Reset desktop",
     "settingsVersion": "Version",
     "settingsTagline": "macOS-style interactive portfolio",
@@ -436,6 +458,7 @@
     "musicLive": "LIVE",
     "musicLibrary": "Library",
     "calcTitle": "Calculator",
+    "clockTitle": "Clock",
     "wxLoading": "Loading…",
     "wxError": "Weather unavailable",
     "wxClear": "Sunny",
@@ -517,6 +540,7 @@
         "title": "My 2026 stack",
         "body": "Front: Vue and Nuxt first — that's where I'm most productive. TypeScript everywhere, Tailwind for speed and consistency, GSAP when things need to move well.\n\nBack: Node.js, PHP at Digitaleo, MongoDB and PostgreSQL depending on the project. Prisma and Auth.js on my recent Next.js projects (Mosaic, TailTCG).\n\nTools: Docker, GitLab CI/CD, and Claude Code, which changed how I work — this portfolio is the proof.\n\nAnd the Master of Science in AI at Epitech pushed me toward machine learning. The logical next step."
       }
-    }
+    },
+    "noteCount": "{n} notes"
   }
 }
