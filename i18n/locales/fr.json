@@ -172,19 +172,6 @@
   "footer": {
     "copyright": "© 2025 Antoine Gourgue"
   },
-  "chatbot": {
-    "title": "Assistant",
-    "placeholder": "Pose-moi une question…",
-    "send": "Envoyer",
-    "close": "Fermer le chat",
-    "welcome": "👋 Bonjour ! Je suis là pour répondre à tes questions sur mon portfolio.",
-    "switchToFr": "Passer en français",
-    "switchToEn": "Switch to English",
-    "switchToEs": "Cambiar a español",
-    "detectedFr": "🇫🇷 On dirait que tu parles français.",
-    "detectedEn": "🇬🇧 It looks like you're speaking English.",
-    "detectedEs": "🇪🇸 Parece que estás hablando español."
-  },
   "macos": {
     "projectsTitle": "Mes projets",
     "projectsSub": "Chaque fenêtre est un vrai site en ligne.",
@@ -348,8 +335,8 @@
     "siriListening": "Je vous écoute…",
     "siriThinking": "Je réfléchis…",
     "siriHint": "Posez-moi une question sur Antoine — à la voix ou au clavier.",
+    "siriTitle": "Siri",
     "siriPlaceholder": "Ou écrivez votre question…",
-    "siriError": "Je n'arrive pas à joindre mes serveurs. Réessayez dans une minute, ou passez par l'app Messages 💬",
     "siriPowered": "Propulsé par GPT-OSS via Groq — réponses générées par IA",
     "newsTitle": "News",
     "sportsTitle": "Sports",
@@ -471,7 +458,6 @@
     "catJobs": "Emploi",
     "catNlp": "IA & Voyage",
     "catShop": "E-commerce",
-    "messagesTitle": "Messages",
     "errTitle": "Fichier introuvable",
     "errDesc": "L'élément demandé n'existe pas sur ce Mac.",
     "errBack": "Retour au bureau",

@@ -29,7 +29,6 @@
     <DesktopBootScreen />
     <DesktopAppWeather />
     <DesktopAppCalculator />
-    <DesktopAppMessages />
     <DesktopAppMusic />
     <DesktopAppSettings />
     <DesktopAppTrash />
@@ -52,7 +51,6 @@ import DesktopSpotlight from '~/components/desktop/Spotlight.vue'
 import DesktopBootScreen from '~/components/desktop/BootScreen.vue'
 import DesktopAppWeather from '~/components/desktop/AppWeather.vue'
 import DesktopAppCalculator from '~/components/desktop/AppCalculator.vue'
-import DesktopAppMessages from '~/components/desktop/AppMessages.vue'
 import DesktopAppMusic from '~/components/desktop/AppMusic.vue'
 import DesktopAppSettings from '~/components/desktop/AppSettings.vue'
 import DesktopAppTrash from '~/components/desktop/AppTrash.vue'

@@ -1,5 +1,4 @@
 export type Lang = 'fr' | 'es' | 'en'
-export type TranslationKey = 'title' | 'placeholder' | 'send'
 
 export interface Intent {
   intent: string

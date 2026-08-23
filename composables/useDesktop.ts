@@ -40,7 +40,6 @@ export function useDesktop() {
     apps: {
       weather: false,
       calculator: false,
-      messages: false,
       music: false,
       settings: false,
       trash: false,

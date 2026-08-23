@@ -172,19 +172,6 @@
   "footer": {
     "copyright": "© 2025 Antoine Gourgue"
   },
-  "chatbot": {
-    "title": "Assistant",
-    "placeholder": "Ask me something…",
-    "send": "Send",
-    "close": "Close chat",
-    "welcome": "👋 Hello! I'm here to answer your questions about my portfolio.",
-    "switchToFr": "Switch to French",
-    "switchToEn": "Switch to English",
-    "switchToEs": "Switch to Spanish",
-    "detectedFr": "🇫🇷 It looks like you're speaking French.",
-    "detectedEn": "🇬🇧 It looks like you're speaking English.",
-    "detectedEs": "🇪🇸 It looks like you're speaking Spanish."
-  },
   "macos": {
     "projectsTitle": "My projects",
     "projectsSub": "Every window is a real, live website.",
@@ -348,8 +335,8 @@
     "siriListening": "Listening…",
     "siriThinking": "Thinking…",
     "siriHint": "Ask me anything about Antoine — by voice or keyboard.",
+    "siriTitle": "Siri",
     "siriPlaceholder": "Or type your question…",
-    "siriError": "I can't reach my servers. Try again in a minute, or use the Messages app 💬",
     "siriPowered": "Powered by GPT-OSS via Groq — AI-generated answers",
     "newsTitle": "News",
     "sportsTitle": "Sports",
@@ -471,7 +458,6 @@
     "catJobs": "Jobs",
     "catNlp": "AI & Travel",
     "catShop": "E-commerce",
-    "messagesTitle": "Messages",
     "errTitle": "File not found",
     "errDesc": "The requested item doesn't exist on this Mac.",
     "errBack": "Back to desktop",

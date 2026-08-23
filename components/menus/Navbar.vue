@@ -20,12 +20,12 @@
 
     <button
       class="relative block h-11 w-11"
-      :aria-label="$t('macos.messagesTitle')"
-      @click="desktop.toggleApp('messages')"
+      :aria-label="$t('macos.siriTitle')"
+      @click="desktop.toggleApp('siri')"
     >
-      <DesktopMacAppIcon name="messages" />
+      <DesktopMacAppIcon name="siri" />
       <span
-        v-if="desktop.state.value.apps.messages"
+        v-if="desktop.state.value.apps.siri"
         class="absolute -bottom-[7px] left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-white/80"
       ></span>
     </button>

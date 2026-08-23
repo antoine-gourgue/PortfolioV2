@@ -174,17 +174,6 @@ const items = computed<Item[]>(() => [
     action: () => go('/contact'),
   },
   {
-    id: 'messages',
-    label: t('macos.messagesTitle'),
-    icon: { name: 'messages' },
-    kind: 'App',
-    group: 'apps',
-    action: () => {
-      desktop.state.value.apps.messages = true
-      close()
-    },
-  },
-  {
     id: 'weather',
     label: t('macos.weatherTitle'),
     icon: { name: 'weather' },

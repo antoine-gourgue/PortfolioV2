@@ -106,7 +106,7 @@ const launchpad = useLaunchpad()
 const musicPlaying = computed(() => useMusic().state.value.playing)
 
 const utilApps = [
-  { id: 'messages', label: 'macos.messagesTitle', icon: 'messages' },
+  { id: 'siri', label: 'macos.siriTitle', icon: 'siri' },
   { id: 'weather', label: 'macos.weatherTitle', icon: 'weather' },
   { id: 'calculator', label: 'macos.calcTitle', icon: 'calculator' },
   { id: 'music', label: 'macos.musicTitle', icon: 'music' },
