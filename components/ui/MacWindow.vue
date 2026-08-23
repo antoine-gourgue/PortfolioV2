@@ -1,44 +1,20 @@
 <template>
   <div
-    class="overflow-hidden rounded-2xl border backdrop-blur-2xl transition-shadow duration-300"
+    class="flex min-h-[calc(100svh-2rem)] flex-col pb-[calc(28px+env(safe-area-inset-bottom,0px))] transition-shadow duration-300 lg:block lg:min-h-0 lg:overflow-hidden lg:rounded-2xl lg:border lg:pb-0 lg:backdrop-blur-2xl"
+    :style="!dark && mobileBg ? { '--mw-bg': mobileBg } : undefined"
     :class="[
+      !dark ? (mobileBg ? 'bg-[var(--mw-bg)]' : 'bg-white') : '',
       dark
-        ? 'border-white/10 bg-[#1e1e20] ring-1 ring-white/10'
-        : 'border-black/10 bg-white/80 ring-1 ring-white/40',
+        ? 'bg-[#1e1e20] lg:border-white/10 lg:ring-1 lg:ring-white/10'
+        : 'lg:border-black/10 lg:bg-white/80 lg:ring-1 lg:ring-white/40',
       active
-        ? 'shadow-[0_30px_70px_-15px_rgba(0,0,0,0.5)]'
-        : 'shadow-[0_15px_40px_-15px_rgba(0,0,0,0.3)]',
+        ? 'lg:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.5)]'
+        : 'lg:shadow-[0_15px_40px_-15px_rgba(0,0,0,0.3)]',
     ]"
   >
-    <!-- Barre de navigation iOS (mobile uniquement) -->
-    <div
-      class="relative flex items-center justify-between px-3 py-2.5 md:hidden"
-      :class="
-        dark
-          ? 'border-b border-white/10 bg-[#2c2c2e]'
-          : 'border-b border-black/5 bg-white/70'
-      "
-    >
-      <NuxtLink
-        :to="localePath('/')"
-        class="flex items-center gap-0.5 text-[15px] font-medium text-ablue"
-      >
-        <span class="text-[19px] leading-none">‹</span> {{ $t('nav.home') }}
-      </NuxtLink>
-      <span
-        v-if="title"
-        class="pointer-events-none absolute left-1/2 -translate-x-1/2 text-[15px] font-semibold"
-        :class="dark ? 'text-white/80' : 'text-aink'"
-        >{{ title }}</span
-      >
-      <span class="flex w-16 justify-end">
-        <slot name="ios-action" />
-      </span>
-    </div>
-
     <!-- Barre de titre (desktop et tablette) -->
     <div
-      class="drag-handle relative hidden items-center px-4 py-2.5 select-none md:flex"
+      class="drag-handle relative hidden items-center px-4 py-2.5 select-none lg:flex"
       :class="
         dark
           ? 'border-b border-white/10 bg-[#2c2c2e]'
@@ -125,7 +101,9 @@
       </div>
     </div>
 
-    <slot />
+    <div class="flex flex-1 flex-col lg:block">
+      <slot />
+    </div>
   </div>
 </template>
 
@@ -136,8 +114,10 @@ withDefaults(
     url?: string
     dark?: boolean
     active?: boolean
+    /** Fond de la coquille mobile, quand la page n'est pas blanche */
+    mobileBg?: string
   }>(),
-  { title: '', url: '', dark: false, active: true }
+  { title: '', url: '', dark: false, active: true, mobileBg: '' }
 )
 
 defineEmits<{
@@ -148,7 +128,6 @@ defineEmits<{
 
 const lightOff = 'border-black/10 bg-[#DBDBDB] dark:bg-[#4a4a4c]'
 const sfx = useSfx()
-const localePath = useLocalePath()
 </script>
 
 <style scoped>

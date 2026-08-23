@@ -19,7 +19,7 @@
     <MacMenuBar />
     <Navbar />
 
-    <main class="flex-1 pb-24 lg:pb-28">
+    <main class="flex-1 lg:pb-28" :class="dockVisible ? 'pb-24' : ''">
       <slot />
     </main>
 
@@ -65,6 +65,28 @@ import DesktopNotificationBanner from '~/components/desktop/NotificationBanner.v
 import AgLogo from '~/components/ui/AGLogo.vue'
 
 const wallpaper = useWallpaper()
+const desktop = useDesktop()
+const route = useRoute()
+
+// Le dock mobile ne s'affiche que sur l'accueil : ailleurs, réserver sa hauteur
+// laissait apparaître le fond d'écran sous la page (voir Navbar.vue)
+const dockVisible = computed(
+  () => route.path.replace(/^\/[a-z]{2}(\/|$)/, '/') === '/'
+)
+
+// Comme sur macOS, cliquer sur le bureau désactive l'app au premier plan :
+// la barre de menu reprend l'identité du site. Les fenêtres (`[data-window]`
+// et `.win`), la barre de menu (`header`) et les docks (`nav`) gardent la main.
+const onDesktopPointerDown = (e) => {
+  const target = e.target
+  if (!(target instanceof Element)) return
+  if (target.closest('[data-window], .win, header, nav')) return
+  desktop.blurAll()
+}
+onMounted(() => window.addEventListener('pointerdown', onDesktopPointerDown))
+onUnmounted(() =>
+  window.removeEventListener('pointerdown', onDesktopPointerDown)
+)
 
 let wallpaperTimer = null
 onMounted(() => {
