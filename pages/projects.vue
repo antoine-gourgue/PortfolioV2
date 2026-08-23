@@ -1,13 +1,16 @@
 <template>
-  <main ref="container" class="mx-auto w-full max-w-6xl px-4 pt-16 lg:px-8">
-    <div ref="winEl" class="win">
+  <main
+    ref="container"
+    class="mx-auto w-full pt-8 lg:max-w-6xl lg:px-8 lg:pt-16"
+  >
+    <div ref="winEl" class="win" data-window="page">
       <UiMacWindow
         title="App Store"
         @close="closeToDesktop"
         @minimize="closeToDesktop"
         @zoom="toggleZoom"
       >
-        <div class="flex min-h-[70vh]">
+        <div class="flex flex-1 min-h-[70vh]">
           <!-- Sidebar -->
           <aside
             class="hidden w-56 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:block"
@@ -82,18 +85,113 @@
             v-if="!mobileOpen"
             class="min-w-0 flex-1 px-4 pb-6 pt-4 lg:hidden"
           >
-            <h1 class="px-1 text-[28px] font-bold tracking-tight">App Store</h1>
-            <p class="mt-0.5 px-1 text-[13px] text-black/40">
-              {{ $t('macos.projectsSub') }}
-            </p>
-            <div class="mt-4">
+            <!-- En-tête : grand titre + avatar, comme l'onglet Apps -->
+            <div class="flex items-start justify-between gap-3 px-1">
+              <div class="min-w-0">
+                <h1
+                  class="text-[34px] font-bold leading-tight tracking-[-0.9px]"
+                >
+                  App Store
+                </h1>
+                <p class="mt-0.5 text-[15px] text-[#8A8A8E]">
+                  {{ $t('macos.projectsSub') }}
+                </p>
+              </div>
+              <NuxtLink
+                :to="localePath('/about')"
+                class="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-[#3b4048] to-[#17181b]"
+                :aria-label="$t('nav.about')"
+              >
+                <AgLogo class="h-4 w-5 text-white" />
+              </NuxtLink>
+            </div>
+
+            <!--
+              Carte éditoriale : la signature de l'App Store, une rubrique
+              en vedette avec visuel puis la ligne d'app en pied de carte.
+            -->
+            <button
+              v-if="featured"
+              class="mt-5 block w-full overflow-hidden rounded-[18px] bg-white text-left shadow-[0_2px_14px_-4px_rgba(0,0,0,0.18)] ring-1 ring-black/[0.06]"
+              @click="openMobile(featured.key)"
+            >
+              <div class="px-4 pb-3 pt-3.5">
+                <p
+                  class="text-[13px] font-bold uppercase tracking-[0.6px] text-ablue"
+                >
+                  {{ $t('macos.projectsFeatured') }}
+                </p>
+                <p class="mt-1 text-[22px] font-bold leading-tight text-aink">
+                  {{ featured.name }}
+                </p>
+                <p class="mt-1 line-clamp-2 text-[15px] text-[#8A8A8E]">
+                  {{ featured.stack }}
+                </p>
+              </div>
+              <!-- Capture entière : un recadrage coupe l'interface montrée -->
+              <img
+                :src="featured.image"
+                :alt="featured.name"
+                class="w-full bg-[#F2F2F7]"
+                loading="lazy"
+              />
+              <div class="flex items-center gap-3 px-4 py-3">
+                <span class="block h-12 w-12 shrink-0">
+                  <DesktopProjectIcon
+                    :icon="featured.icon"
+                    :name="featured.name"
+                    :bg="featured.iconBg"
+                    :pad="featured.iconPad"
+                    :letter="featured.letter"
+                    :color-top="featured.colorTop"
+                    :color-bottom="featured.colorBottom"
+                  />
+                </span>
+                <span class="min-w-0 flex-1">
+                  <span class="block truncate text-[15px] text-aink">{{
+                    featured.name
+                  }}</span>
+                  <span class="block truncate text-[13px] text-[#8A8A8E]">{{
+                    $t(featured.categoryKey)
+                  }}</span>
+                </span>
+                <a
+                  :href="featured.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="min-w-[74px] shrink-0 rounded-full bg-[#E9E9EB] py-[6px] text-center text-[13px] font-bold uppercase tracking-[0.3px] text-ablue"
+                  @click.stop
+                  >{{ $t('macos.get') }}</a
+                >
+              </div>
+            </button>
+
+            <!-- En-tête de rubrique avec « Tout afficher », comme l'App Store -->
+            <div
+              class="flex items-baseline justify-between gap-3 px-1 pb-1 pt-7"
+            >
+              <h2 class="text-[22px] font-bold tracking-[-0.4px]">
+                {{ $t('macos.projectsPerso') }}
+              </h2>
               <button
-                v-for="(project, i) in projects"
+                v-if="!showAllProjects && restProjects.length > 3"
+                class="shrink-0 text-[17px] text-ablue"
+                @click="showAllProjects = true"
+              >
+                {{ $t('macos.seeAll') }}
+              </button>
+            </div>
+            <div>
+              <button
+                v-for="(project, i) in visibleProjects"
                 :key="project.key"
-                class="flex w-full items-center gap-3.5 py-2.5 text-left"
-                :class="i > 0 ? 'border-t border-black/5' : ''"
+                class="relative flex w-full items-center gap-3 py-3 text-left"
                 @click="openMobile(project.key)"
               >
+                <span
+                  v-if="i > 0"
+                  class="absolute left-[76px] right-0 top-0 h-px bg-black/[0.11]"
+                ></span>
                 <span class="block h-16 w-16 shrink-0">
                   <DesktopProjectIcon
                     :icon="project.icon"
@@ -106,18 +204,20 @@
                   />
                 </span>
                 <span class="min-w-0 flex-1">
-                  <span class="block truncate text-[15px] font-semibold">{{
-                    project.name
-                  }}</span>
-                  <span class="block truncate text-[12px] text-black/40">{{
-                    $t(project.categoryKey)
-                  }}</span>
+                  <span
+                    class="block truncate text-[17px] font-normal leading-tight text-aink"
+                    >{{ project.name }}</span
+                  >
+                  <span
+                    class="mt-1 block truncate text-[15px] text-[#8A8A8E]"
+                    >{{ $t(project.categoryKey) }}</span
+                  >
                 </span>
                 <a
                   :href="project.url"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="shrink-0 rounded-full bg-black/5 px-4 py-1 text-[13px] font-bold text-ablue"
+                  class="min-w-[74px] shrink-0 rounded-full bg-[#E9E9EB] py-[6px] text-center text-[13px] font-bold uppercase tracking-[0.3px] text-ablue"
                   @click.stop
                   >{{ $t('macos.get') }}</a
                 >
@@ -268,16 +368,33 @@
           </div>
         </div>
       </UiMacWindow>
+      <!-- Balayer vers le haut pour revenir au bureau -->
+      <DesktopIosHomeBar app="page" @close="goHome" />
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
+import AgLogo from '~/components/ui/AGLogo.vue'
+
 const { gsap } = useGsap()
+const localePath = useLocalePath()
 
 const projects = useProjects()
 const proProjects = projects.filter((p) => p.pro)
 const persoProjects = projects.filter((p) => !p.pro)
+/** L'App Store met une app en vedette dans une carte éditoriale */
+const featured = computed(() => proProjects[0] ?? persoProjects[0])
+
+/** La rubrique n'affiche que trois entrées avant « Tout afficher » */
+const restProjects = computed(() =>
+  projects.filter((p) => p.key !== featured.value?.key)
+)
+const showAllProjects = ref(false)
+const visibleProjects = computed(() =>
+  showAllProjects.value ? restProjects.value : restProjects.value.slice(0, 3)
+)
+
 const selected = ref(projects[0].key)
 const current = computed(() => projects.find((p) => p.key === selected.value))
 
@@ -306,7 +423,7 @@ const starsFor = (p: { repoHint: string }) => {
 
 const container = ref<HTMLElement | null>(null)
 const winEl = ref<HTMLElement | null>(null)
-const { closeToDesktop, toggleZoom } = usePageWindow(winEl)
+const { closeToDesktop, goHome, toggleZoom } = usePageWindow(winEl)
 let ctx: gsap.Context | undefined
 
 onMounted(() => {
