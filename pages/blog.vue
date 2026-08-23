@@ -1,13 +1,17 @@
 <template>
-  <main ref="container" class="mx-auto w-full max-w-6xl px-4 pt-16 lg:px-8">
-    <div ref="winEl" class="win">
+  <main
+    ref="container"
+    class="mx-auto w-full pt-8 lg:max-w-6xl lg:px-8 lg:pt-16"
+  >
+    <div ref="winEl" class="win" data-window="page">
       <UiMacWindow
         title="Notes"
+        mobile-bg="#FBF9F2"
         @close="closeToDesktop"
         @minimize="closeToDesktop"
         @zoom="toggleZoom"
       >
-        <div class="flex min-h-[64vh]">
+        <div class="flex flex-1 min-h-[64vh]">
           <!-- Colonne 1 : dossiers (desktop) -->
           <aside
             class="hidden w-44 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:block"
@@ -39,6 +43,13 @@
             class="w-full shrink-0 border-r border-black/5 bg-[#FBF9F2]/80 px-3 py-4 lg:w-72"
             :class="selectedId ? 'hidden lg:block' : ''"
           >
+            <!-- Mobile : en-tête de Notes -->
+            <h1
+              class="px-1 pb-2 text-[34px] font-bold leading-tight tracking-[-0.9px] lg:hidden"
+            >
+              {{ $t(activeFolder.labelKey) }}
+            </h1>
+
             <!-- Sélecteur de dossier (mobile) -->
             <div class="mb-3 flex gap-2 lg:hidden">
               <button
@@ -58,7 +69,7 @@
 
             <!-- Recherche fonctionnelle -->
             <div
-              class="mb-3 flex items-center gap-2 rounded-[10px] bg-black/5 px-3 py-1.5"
+              class="mb-3 flex items-center gap-2 rounded-[10px] bg-black/[0.06] px-3 py-2 lg:bg-black/5 lg:py-1.5"
             >
               <span class="text-[12px] text-black/35"
                 ><DesktopSfIcon name="search"
@@ -67,29 +78,34 @@
                 v-model="query"
                 type="text"
                 :placeholder="$t('notesApp.searchNotes')"
-                class="w-full bg-transparent text-[13px] text-aink outline-none placeholder:text-black/35"
+                class="w-full bg-transparent text-[17px] text-aink outline-none placeholder:text-black/35 lg:text-[13px]"
               />
             </div>
 
             <p
               v-if="pinnedList.length"
-              class="px-2 pb-1 text-[11px] font-semibold text-black/35"
+              class="px-1 pb-1 text-[13px] font-semibold text-black/45 lg:px-2 lg:text-[11px] lg:text-black/35"
             >
-              📌 {{ $t('notesApp.pinned') }}
+              {{ $t('notesApp.pinned') }}
             </p>
             <button
-              v-for="note in pinnedList"
+              v-for="(note, i) in pinnedList"
               :key="note.id"
               class="note-cell"
-              :class="
-                selectedId === note.id ? 'bg-[#FBD75B]/60' : 'hover:bg-black/5'
-              "
+              :class="[
+                selectedId === note.id ? 'bg-[#FBD75B]/60' : 'hover:bg-black/5',
+                i > 0 ? 'border-t border-black/[0.07] lg:border-0' : '',
+              ]"
               @click="openNote(note.id)"
             >
-              <p class="truncate text-[13.5px] font-semibold text-aink">
+              <p
+                class="truncate text-[17px] font-semibold text-aink lg:text-[13.5px]"
+              >
                 {{ note.title }}
               </p>
-              <p class="mt-0.5 line-clamp-2 text-[12px] text-black/45">
+              <p
+                class="mt-0.5 line-clamp-2 text-[15px] text-black/45 lg:text-[12px]"
+              >
                 <span class="mr-1.5 text-black/60">{{ note.dateLabel }}</span
                 >{{ note.preview }}
               </p>
@@ -97,7 +113,7 @@
 
             <p
               v-if="pinnedList.length && normalList.length"
-              class="px-2 pb-1 pt-3 text-[11px] font-semibold text-black/35"
+              class="px-1 pb-1 pt-5 text-[13px] font-semibold text-black/45 lg:px-2 lg:pt-3 lg:text-[11px] lg:text-black/35"
             >
               {{ $t(activeFolder.labelKey) }}
             </p>
@@ -114,18 +130,23 @@
               {{ $t('blog.error') }}
             </div>
             <button
-              v-for="note in normalList"
+              v-for="(note, i) in normalList"
               :key="note.id"
               class="note-cell"
-              :class="
-                selectedId === note.id ? 'bg-[#FBD75B]/60' : 'hover:bg-black/5'
-              "
+              :class="[
+                selectedId === note.id ? 'bg-[#FBD75B]/60' : 'hover:bg-black/5',
+                i > 0 ? 'border-t border-black/[0.07] lg:border-0' : '',
+              ]"
               @click="openNote(note.id)"
             >
-              <p class="truncate text-[13.5px] font-semibold text-aink">
+              <p
+                class="truncate text-[17px] font-semibold text-aink lg:text-[13.5px]"
+              >
                 {{ note.title }}
               </p>
-              <p class="mt-0.5 line-clamp-2 text-[12px] text-black/45">
+              <p
+                class="mt-0.5 line-clamp-2 text-[15px] text-black/45 lg:text-[12px]"
+              >
                 <span v-if="note.dateLabel" class="mr-1.5 text-black/60">{{
                   note.dateLabel
                 }}</span
@@ -138,6 +159,17 @@
             >
               {{ $t('macos.spotlightEmpty') }}
             </p>
+
+            <!-- Mobile : barre d'outils de Notes, décompte centré -->
+            <div
+              class="fixed inset-x-0 bottom-0 z-30 border-t border-black/[0.07] bg-[#FBF9F2]/85 pb-[calc(24px+env(safe-area-inset-bottom,0px))] pt-2.5 text-center text-[13px] text-black/45 backdrop-blur-xl lg:hidden"
+            >
+              {{
+                $t('notesApp.noteCount', {
+                  n: pinnedList.length + normalList.length,
+                })
+              }}
+            </div>
           </aside>
 
           <!-- Colonne 3 : contenu de la note -->
@@ -190,6 +222,8 @@
           </div>
         </div>
       </UiMacWindow>
+      <!-- Balayer vers le haut pour revenir au bureau -->
+      <DesktopIosHomeBar app="page" @close="goHome" />
     </div>
   </main>
 </template>
@@ -329,7 +363,7 @@ onMounted(() => {
 // ── Fenêtre ──
 const container = ref<HTMLElement | null>(null)
 const winEl = ref<HTMLElement | null>(null)
-const { closeToDesktop, toggleZoom } = usePageWindow(winEl)
+const { closeToDesktop, goHome, toggleZoom } = usePageWindow(winEl)
 let ctx: gsap.Context | undefined
 
 onMounted(() => {
@@ -353,6 +387,6 @@ onUnmounted(() => ctx?.revert())
 
 <style scoped>
 .note-cell {
-  @apply block w-full rounded-lg px-3 py-2.5 text-left transition-colors;
+  @apply relative block w-full rounded-lg px-1 py-2.5 text-left transition-colors lg:px-3;
 }
 </style>
