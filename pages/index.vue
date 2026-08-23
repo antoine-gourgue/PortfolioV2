@@ -2,60 +2,94 @@
   <main
     ref="container"
     class="relative font-sans text-aink"
-    @contextmenu.prevent="openContext"
+    @contextmenu="openContext"
   >
     <!-- ═══ Écran d'accueil iOS (mobile) ═══ -->
     <section
-      class="flex min-h-[calc(100svh-90px)] flex-col px-7 pb-6 pt-16 lg:hidden"
+      class="flex min-h-[calc(100svh-90px)] flex-col px-7 pb-6 pt-16 sm:px-14 lg:hidden"
     >
       <ClientOnly>
-        <div class="mx-auto grid w-full max-w-sm grid-cols-2 gap-4">
-          <!-- Widget Calendrier -->
+        <div
+          class="mx-auto grid w-full max-w-sm grid-cols-2 gap-4 sm:max-w-none sm:grid-cols-6 sm:gap-6 [&>*]:sm:col-span-3"
+        >
+          <!-- Widget Horloge : même cadran que le widget macOS -->
           <button
-            class="flex aspect-square flex-col rounded-[22px] bg-white/90 p-4 text-left shadow-lg backdrop-blur-2xl"
-            @click="go('/about')"
+            class="wg-glass flex aspect-square items-center justify-center gap-5 rounded-[22px] p-4 sm:aspect-[2/1]"
+            :aria-label="$t('macos.clockTitle')"
+            @click="desktop.state.value.apps.settings = true"
           >
-            <p
-              class="text-[12px] font-semibold uppercase tracking-wide text-[#FF453A]"
+            <div
+              class="relative aspect-square w-[115px] shrink-0 rounded-full bg-white"
             >
-              {{ sbWeekday }}
-            </p>
-            <p class="text-[42px] font-semibold leading-none text-aink">
-              {{ sbDay }}
-            </p>
-            <div class="mt-auto space-y-1">
-              <div
-                class="rounded-md border-l-[3px] border-[#1273DE] bg-[#1273DE]/15 px-1.5 py-0.5"
+              <!-- Graduations : un bras du centre au bord, la marque au bout -->
+              <span
+                v-for="h in 12"
+                :key="h"
+                class="absolute left-1/2 top-1/2 h-[52px] w-[2px] origin-top"
+                :style="{ transform: `translateX(-50%) rotate(${h * 30}deg)` }"
               >
-                <p class="truncate text-[10px] font-semibold text-[#0B4FA0]">
-                  Digitaleo · 2024—26
-                </p>
-              </div>
-              <div
-                class="rounded-md border-l-[3px] border-[#0E9F6E] bg-[#0E9F6E]/15 px-1.5 py-0.5"
+                <span
+                  class="absolute bottom-[4px] left-0 w-full rounded-full"
+                  :class="
+                    h % 3 === 0 ? 'h-[8px] bg-black/75' : 'h-[4px] bg-black/35'
+                  "
+                ></span>
+              </span>
+              <!-- Aiguilles : heure courte et épaisse, minute longue, seconde fine -->
+              <span
+                class="absolute bottom-1/2 left-1/2 h-[27px] w-[3.5px] origin-bottom rounded-full bg-[#1d1d1f]"
+                :style="{
+                  transform: `translateX(-50%) rotate(${clock.hour}deg)`,
+                }"
+              ></span>
+              <span
+                class="absolute bottom-1/2 left-1/2 h-[39px] w-[2.5px] origin-bottom rounded-full bg-[#1d1d1f]"
+                :style="{
+                  transform: `translateX(-50%) rotate(${clock.minute}deg)`,
+                }"
+              ></span>
+              <span
+                class="absolute bottom-1/2 left-1/2 h-[44px] w-[1.5px] origin-bottom rounded-full bg-[#FF453A]"
+                :style="{
+                  transform: `translateX(-50%) rotate(${clock.second}deg)`,
+                }"
+              ></span>
+              <span
+                class="absolute left-1/2 top-1/2 h-[7px] w-[7px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[1.5px] border-[#FF453A] bg-white"
+              ></span>
+            </div>
+            <div class="hidden min-w-0 text-left sm:block">
+              <p
+                class="truncate text-[15px] font-semibold capitalize text-[#FF6961]"
               >
-                <p class="truncate text-[10px] font-semibold text-[#086A49]">
-                  Epitech · 2023—26
-                </p>
-              </div>
+                {{ clockWeekday }}
+              </p>
+              <p class="text-[34px] font-light leading-tight text-white">
+                {{ clockLabel }}
+              </p>
             </div>
           </button>
 
           <!-- Widget Météo (live) -->
           <button
-            class="flex aspect-square flex-col rounded-[22px] bg-gradient-to-b from-[#2E67BE] to-[#4A86D8] p-4 text-left text-white shadow-lg"
+            class="flex aspect-square flex-col rounded-[22px] bg-gradient-to-b from-[#2E67BE] to-[#4A86D8] p-4 text-left text-white shadow-lg sm:aspect-[2/1] sm:flex-row sm:items-center sm:justify-between sm:gap-4"
             @click="desktop.state.value.apps.weather = true"
           >
-            <p class="truncate text-[14px] font-semibold">
-              {{ wxWidget.city }}
-            </p>
-            <p class="text-[40px] font-thin leading-tight">
-              {{
-                wxWidget.temp !== null ? Math.round(wxWidget.temp) + '°' : '—'
-              }}
-            </p>
-            <div class="mt-auto">
-              <p v-if="wxWidget.code !== null" class="text-[24px] leading-none">
+            <div class="min-w-0 sm:flex-1">
+              <p class="truncate text-[14px] font-semibold sm:text-[16px]">
+                {{ wxWidget.city }}
+              </p>
+              <p class="text-[40px] font-thin leading-tight sm:text-[52px]">
+                {{
+                  wxWidget.temp !== null ? Math.round(wxWidget.temp) + '°' : '—'
+                }}
+              </p>
+            </div>
+            <div class="mt-auto sm:mt-0 sm:shrink-0 sm:text-right">
+              <p
+                v-if="wxWidget.code !== null"
+                class="text-[24px] leading-none sm:text-[44px]"
+              >
                 <DesktopWxIcon :code="wxWidget.code" />
               </p>
               <p class="mt-1 text-[11px] font-medium text-white/85">
@@ -71,7 +105,7 @@
       </ClientOnly>
 
       <div
-        class="mx-auto mt-9 grid w-full max-w-sm grid-cols-4 gap-x-4 gap-y-6"
+        class="mx-auto mt-9 grid w-full max-w-sm grid-cols-4 gap-x-4 gap-y-6 sm:mt-12 sm:max-w-none sm:grid-cols-6 sm:gap-x-6 sm:gap-y-10"
       >
         <component
           :is="app.to ? NuxtLinkComponent : app.href ? 'a' : 'button'"
@@ -87,11 +121,11 @@
           class="flex flex-col items-center gap-1.5"
           @click="app.action && app.action()"
         >
-          <span class="block h-14 w-14">
+          <span class="block h-14 w-14 sm:h-[76px] sm:w-[76px]">
             <DesktopMacAppIcon :name="app.icon" />
           </span>
           <span
-            class="max-w-full truncate text-[11px] font-medium text-white drop-shadow"
+            class="max-w-full truncate text-[11px] font-medium text-white drop-shadow sm:text-[13px]"
             >{{ app.raw ?? $t(app.label!) }}</span
           >
         </component>
@@ -132,6 +166,7 @@
       <div
         v-show="!desktop.state.value.wins.about?.min"
         ref="aboutEl"
+        data-window="about"
         class="win absolute left-10 top-60 z-10 w-[500px] min-[1360px]:left-[calc(7%+84px)]"
         :style="{ zIndex: desktop.state.value.wins.about?.z ?? 10 }"
         @pointerdown="desktop.focus('about')"
@@ -205,6 +240,7 @@
       <div
         v-show="!desktop.state.value.wins.terminal?.min"
         ref="termEl"
+        data-window="terminal"
         class="win absolute right-6 top-60 z-10 w-[440px] xl:right-[17%]"
         :style="{ zIndex: desktop.state.value.wins.terminal?.z ?? 10 }"
         @pointerdown="desktop.focus('terminal')"
@@ -261,7 +297,12 @@
       v-show="!desktop.state.value.wins.finder?.min"
       class="mx-auto hidden w-full max-w-5xl px-5 pt-20 lg:block lg:px-8"
     >
-      <div ref="finderEl" data-reveal>
+      <div
+        ref="finderEl"
+        data-reveal
+        data-window="finder"
+        @pointerdown="desktop.focus('finder')"
+      >
         <UiMacWindow
           @close="animateMinimize('finder')"
           @minimize="animateMinimize('finder')"
@@ -665,7 +706,12 @@
       v-show="!desktop.state.value.wins.notes?.min"
       class="mx-auto hidden w-full max-w-4xl px-5 pt-20 lg:block lg:px-8"
     >
-      <div ref="notesEl" data-reveal>
+      <div
+        ref="notesEl"
+        data-reveal
+        data-window="notes"
+        @pointerdown="desktop.focus('notes')"
+      >
         <UiMacWindow
           @close="animateMinimize('notes')"
           @minimize="animateMinimize('notes')"
@@ -771,7 +817,12 @@
       v-show="!desktop.state.value.wins.mail?.min"
       class="mx-auto hidden w-full max-w-2xl px-5 pb-36 pt-20 lg:block lg:px-8"
     >
-      <div ref="mailEl" data-reveal>
+      <div
+        ref="mailEl"
+        data-reveal
+        data-window="mail"
+        @pointerdown="desktop.focus('mail')"
+      >
         <UiMacWindow
           :title="$t('macos.mailTitle')"
           @close="animateMinimize('mail')"
@@ -1098,11 +1149,30 @@ const NuxtLinkComponent = resolveComponent('NuxtLink')
 
 // Écran d'accueil iOS (mobile)
 const { locale } = useI18n()
-const now = new Date()
-const sbWeekday = new Intl.DateTimeFormat(locale.value, {
-  weekday: 'long',
-}).format(now)
-const sbDay = now.getDate()
+// Widget Horloge : angles des aiguilles en degrés, comme le widget macOS
+const clock = reactive({ hour: 0, minute: 0, second: 0 })
+const tickClock = () => {
+  const d = new Date()
+  const s = d.getSeconds()
+  const m = d.getMinutes() + s / 60
+  clock.hour = (((d.getHours() % 12) + m / 60) * 360) / 12
+  clock.minute = (m * 360) / 60
+  clock.second = (s * 360) / 60
+  clockLabel.value = new Intl.DateTimeFormat(locale.value, {
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(d)
+  clockWeekday.value = new Intl.DateTimeFormat(locale.value, {
+    weekday: 'long',
+    day: 'numeric',
+  }).format(d)
+}
+const clockLabel = ref('')
+const clockWeekday = ref('')
+tickClock()
+let clockTimer: ReturnType<typeof setInterval> | null = null
+onMounted(() => (clockTimer = setInterval(tickClock, 1000)))
+onUnmounted(() => clockTimer && clearInterval(clockTimer))
 
 // Widget météo de l'écran d'accueil : position IP uniquement (aucune permission)
 const wxWidget = reactive<{
@@ -1209,12 +1279,6 @@ const springboard: SpringboardApp[] = [
   { id: 'about', icon: 'contacts', label: 'nav.about', to: '/about' },
   { id: 'blog', icon: 'notes', label: 'nav.blog', to: '/blog' },
   { id: 'contact', icon: 'mail', label: 'nav.contact', to: '/contact' },
-  {
-    id: 'messages',
-    icon: 'messages',
-    label: 'macos.messagesTitle',
-    action: () => (desktop.state.value.apps.messages = true),
-  },
   {
     id: 'weather',
     icon: 'weather',
@@ -1478,6 +1542,10 @@ const onEsc = (e: KeyboardEvent) => {
 
 const ctx = reactive({ show: false, x: 0, y: 0 })
 const openContext = (e: MouseEvent) => {
+  // Le menu du bureau (fond d'écran, etc.) n'existe que sur macOS : sur mobile
+  // et tablette, un appui long déclenche contextmenu et l'ouvrait par erreur
+  if (!window.matchMedia('(min-width: 1024px)').matches) return
+  e.preventDefault()
   ctx.show = true
   ctx.x = Math.min(e.clientX, window.innerWidth - 240)
   ctx.y = Math.min(e.clientY, window.innerHeight - 160)
@@ -1485,25 +1553,10 @@ const openContext = (e: MouseEvent) => {
 const closeContext = () => (ctx.show = false)
 
 // ── Fenêtres : réduction / restauration / zoom animés ──
-const animateMinimize = (id: string) => {
-  const el = winEls[id]?.value
-  if (!el) return desktop.minimize(id)
-  const r = el.getBoundingClientRect()
-  gsap.to(el, {
-    x: window.innerWidth / 2 - (r.left + r.width / 2),
-    y: window.innerHeight - r.top,
-    scale: 0.15,
-    autoAlpha: 0,
-    duration: 0.45,
-    ease: 'power2.in',
-    transformOrigin: 'center bottom',
-    onComplete: () => {
-      desktop.minimize(id)
-      gsap.set(el, { clearProps: 'x,y,scale,opacity,visibility' })
-      useGsap().ScrollTrigger.refresh()
-    },
-  })
-}
+// L'aspiration vers le Dock vit dans useDesktop : elle est partagée avec les
+// apps flottantes et la barre de menu. ScrollTrigger est rafraîchi par le
+// watcher ci-dessous, une fois la section réellement repliée.
+const animateMinimize = (id: string) => desktop.minimize(id)
 
 const animateZoom = (id: string) => {
   desktop.toggleZoom(id)
@@ -1527,6 +1580,11 @@ watch(
     const oldMin = new Set(old.split(',').filter((s) => s.endsWith('true')))
     val.split(',').forEach((s) => {
       const [id, min] = s.split(':')
+      // Repli terminé : les déclencheurs gardaient l'ancienne hauteur de page
+      if (min === 'true' && !oldMin.has(`${id}:true`)) {
+        nextTick(() => useGsap().ScrollTrigger.refresh())
+        return
+      }
       if (min === 'false' && oldMin.has(`${id}:true`)) {
         nextTick(() => {
           const el = winEls[id]?.value
@@ -1657,6 +1715,15 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* Carte des widgets macOS : verre sombre translucide (voir Widgets.vue) */
+.wg-glass {
+  background: rgba(28, 30, 38, 0.34);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+    0 18px 40px -12px rgba(0, 0, 0, 0.55);
+}
 .caret {
   animation: blink 1s steps(1) infinite;
 }

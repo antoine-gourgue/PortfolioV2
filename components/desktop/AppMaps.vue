@@ -3,6 +3,7 @@
     <div
       v-if="desktop.state.value.apps.maps"
       ref="winEl"
+      data-window="maps"
       class="fixed inset-0 z-40 overflow-hidden lg:inset-auto lg:left-[22%] lg:top-32 lg:w-[620px] lg:rounded-xl lg:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.45)] lg:ring-1 lg:ring-black/10"
       :style="{ zIndex: z }"
       @pointerdown="bringToFront"
@@ -10,7 +11,7 @@
       <div class="flex h-full flex-col bg-[#f5f5f7] lg:h-[420px]">
         <!-- Barre de titre -->
         <div
-          class="maps-drag relative flex items-center gap-2 border-b border-black/10 bg-[#F5F5F7]/90 px-4 pb-2 pt-12 backdrop-blur lg:px-3 lg:py-2.5"
+          class="maps-drag relative hidden items-center gap-2 border-b border-black/10 bg-[#F5F5F7]/90 backdrop-blur lg:flex lg:px-3 lg:py-2.5"
         >
           <button
             class="group hidden h-3 w-3 items-center justify-center rounded-full border border-[#E0443E] bg-[#FF5F57] lg:flex"
@@ -51,16 +52,7 @@
           <span
             class="hidden h-3 w-3 rounded-full border border-black/10 bg-[#DDDDDF] lg:block"
           ></span>
-          <button
-            class="flex items-center gap-0.5 text-[15px] font-medium text-[#0A84FF] lg:hidden"
-            @click="desktop.closeApp('maps')"
-          >
-            <span class="text-xl leading-none">‹</span>
-            {{ $t('macos.close') }}
-          </button>
-          <span
-            class="absolute left-1/2 -translate-x-1/2 text-[13px] font-semibold text-aink"
-          >
+          <span class="text-[13px] font-semibold text-aink">
             {{ $t('macos.mapsTitle') }}
           </span>
         </div>
@@ -71,18 +63,24 @@
 
           <!-- Panneau flottant façon Apple Maps -->
           <aside
-            class="absolute left-3 top-3 z-[500] w-[calc(100%-24px)] rounded-xl bg-white/85 p-2 shadow-[0_10px_30px_-8px_rgba(0,0,0,0.35)] ring-1 ring-black/10 backdrop-blur-xl sm:w-[230px]"
+            class="absolute inset-x-0 bottom-0 z-[500] rounded-t-2xl bg-white/85 px-3 pb-[calc(26px+env(safe-area-inset-bottom,0px))] pt-2 shadow-[0_-10px_30px_-8px_rgba(0,0,0,0.35)] ring-1 ring-black/10 backdrop-blur-xl lg:inset-x-auto lg:bottom-auto lg:left-3 lg:top-3 lg:w-[230px] lg:rounded-xl lg:p-2 lg:shadow-[0_10px_30px_-8px_rgba(0,0,0,0.35)]"
           >
+            <!-- Poignée de la feuille, comme sur une sheet iOS -->
+            <span
+              class="mx-auto mb-2 block h-[5px] w-9 rounded-full bg-black/20 lg:hidden"
+            ></span>
             <p
               class="px-2 pb-1.5 pt-1 text-[11px] font-semibold uppercase tracking-wider text-black/40"
             >
               {{ $t('macos.mapsMyPlaces') }}
             </p>
-            <div class="flex gap-1.5 overflow-x-auto sm:flex-col sm:gap-0.5">
+            <div
+              class="flex max-h-[34vh] flex-col gap-0.5 overflow-y-auto lg:max-h-none lg:overflow-visible"
+            >
               <button
                 v-for="place in places"
                 :key="place.id"
-                class="flex min-w-[150px] items-center gap-2.5 rounded-lg px-2 py-1.5 text-left transition sm:min-w-0"
+                class="flex items-center gap-2.5 rounded-lg px-2 py-2 text-left transition lg:py-1.5"
                 :class="
                   selected === place.id
                     ? 'bg-[#0A84FF] text-white'
@@ -120,7 +118,7 @@
               </button>
             </div>
             <div
-              class="mt-1.5 hidden items-center gap-1.5 rounded-lg bg-emerald-500/10 px-2.5 py-1.5 sm:flex"
+              class="mt-1.5 hidden items-center gap-1.5 rounded-lg bg-emerald-500/10 px-2.5 py-1.5 lg:flex"
             >
               <i
                 aria-hidden="true"
@@ -137,6 +135,8 @@
           </aside>
         </div>
       </div>
+      <!-- Balayer vers le haut pour revenir à l'écran d'accueil -->
+      <DesktopIosHomeBar app="maps" @close="desktop.closeApp('maps')" />
     </div>
   </Teleport>
 </template>
@@ -152,7 +152,7 @@ const winEl = ref<HTMLElement | null>(null)
 const mapEl = ref<HTMLElement | null>(null)
 const z = ref(40)
 const bringToFront = () => {
-  z.value = ++desktop.state.value.topZ + 40
+  z.value = desktop.focusApp('maps')
 }
 
 interface Place {
@@ -213,7 +213,9 @@ const initMap = async () => {
 
   map = L.map(mapEl.value, { zoomControl: false, attributionControl: true })
   map!.attributionControl.setPrefix(false)
-  L.control.zoom({ position: 'bottomright' }).addTo(map)
+  // En haut à droite comme dans Plans : en bas, les contrôles passaient
+  // derrière la feuille des lieux sur mobile
+  L.control.zoom({ position: 'topright' }).addTo(map)
   L.tileLayer(
     'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
     {
@@ -288,6 +290,16 @@ onUnmounted(() => {
 </script>
 
 <style>
+/* Mobile : les contrôles passent sous la barre d'état, qui recouvre la carte */
+.leaflet-top {
+  top: 2rem !important;
+}
+@media (min-width: 1024px) {
+  .leaflet-top {
+    top: 0 !important;
+  }
+}
+
 /* Attribution licence OSM/CARTO : obligatoire mais discrète */
 .leaflet-control-attribution {
   font-size: 8.5px !important;

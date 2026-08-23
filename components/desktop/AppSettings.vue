@@ -3,6 +3,7 @@
     <div
       v-if="desktop.state.value.apps.settings"
       ref="winEl"
+      data-window="settings"
       class="fixed inset-0 z-40 overflow-hidden lg:inset-auto lg:left-[28%] lg:top-28 lg:w-[640px] lg:rounded-xl lg:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.45)] lg:ring-1 lg:ring-black/10"
       :style="{ zIndex: z }"
       @pointerdown="bringToFront"
@@ -124,26 +125,49 @@
           </nav>
         </aside>
 
-        <!-- ── Mobile : barre de titre iOS ── -->
-        <div class="relative flex items-center px-4 pb-2 pt-12 lg:hidden">
-          <button
-            class="flex items-center gap-0.5 text-[15px] font-medium text-[#0A84FF]"
-            @click="
-              mobileDetail
-                ? (mobileDetail = false)
-                : desktop.closeApp('settings')
-            "
+        <!--
+          Mobile : navigation iOS. À la racine, grand titre aligné à gauche
+          comme dans Réglages ; en détail, barre compacte avec titre centré et
+          retour. On ne quitte pas l'app d'ici : on balaie vers le haut.
+        -->
+        <div class="bg-[#f2f2f7] pt-12 lg:hidden">
+          <div
+            v-if="mobileDetail"
+            class="relative flex min-h-[22px] items-center px-4 pb-2"
           >
-            <span class="text-xl leading-none">‹</span>
-            {{ mobileDetail ? $t('macos.settingsTitle') : $t('macos.close') }}
-          </button>
-          <span
-            class="absolute left-1/2 -translate-x-1/2 text-[16px] font-semibold text-aink"
+            <button
+              class="-ml-1 flex items-center gap-0.5 text-[17px] text-[#0A84FF]"
+              @click="mobileDetail = false"
+            >
+              <svg
+                viewBox="0 0 12 20"
+                class="h-[19px] w-[11px]"
+                aria-hidden="true"
+              >
+                <path
+                  d="M10 1 L2 10 L10 19"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              {{ $t('macos.settingsTitle') }}
+            </button>
+            <span
+              class="pointer-events-none absolute left-1/2 max-w-[55%] -translate-x-1/2 truncate text-[17px] font-semibold text-aink"
+            >
+              {{ $t(activeSection.label) }}
+            </span>
+          </div>
+
+          <h2
+            v-else
+            class="px-4 pb-1 text-[34px] font-bold leading-tight tracking-[-0.9px] text-aink"
           >
-            {{
-              mobileDetail ? $t(activeSection.label) : $t('macos.settingsTitle')
-            }}
-          </span>
+            {{ $t('macos.settingsTitle') }}
+          </h2>
         </div>
 
         <!-- ── Contenu ── -->
@@ -191,33 +215,107 @@
             class="flex-1 overflow-y-auto px-4 pb-8 pt-1 lg:px-6 lg:pb-6 lg:pt-4"
           >
             <!-- Mobile : liste iOS des sections -->
-            <div v-if="!mobileDetail" class="mt-2 lg:hidden">
+            <div v-if="!mobileDetail" class="mt-1 space-y-6 lg:hidden">
+              <!-- Fiche d'identité, à la place de la carte Apple ID -->
               <div class="settings-card">
-                <button
-                  v-for="item in sections"
-                  :key="item.id"
-                  class="flex w-full items-center gap-3 px-4 py-2.5 text-left"
-                  @click="((section = item.id), (mobileDetail = true))"
+                <NuxtLink
+                  :to="localePath('/about')"
+                  class="flex items-center gap-3.5 px-4 py-3.5"
+                  @click="desktop.closeApp('settings')"
                 >
                   <span
-                    class="flex h-[28px] w-[28px] items-center justify-center rounded-[7px] text-white"
-                    :style="{
-                      background: `linear-gradient(180deg, ${item.tintLight}, ${item.tint})`,
-                    }"
+                    class="flex h-[58px] w-[58px] shrink-0 items-center justify-center rounded-full bg-aink"
                   >
-                    <i
-                      aria-hidden="true"
-                      class="f7-icons"
-                      style="font-size: 15px"
-                      >{{ item.icon }}</i
-                    >
+                    <AgLogo class="h-7 w-8 text-white" />
                   </span>
-                  <span class="settings-label flex-1">{{
-                    $t(item.label)
-                  }}</span>
-                  <span class="text-[15px] text-black/25">›</span>
-                </button>
+                  <span class="min-w-0 flex-1">
+                    <span class="block text-[19px] font-medium text-aink"
+                      >Antoine Gourgue</span
+                    >
+                    <span class="block truncate text-[13px] text-black/45">{{
+                      $t('macos.settingsIdentity')
+                    }}</span>
+                  </span>
+                  <span class="text-[17px] text-black/25">›</span>
+                </NuxtLink>
               </div>
+
+              <div v-for="group in mobileGroups" :key="group.label">
+                <p
+                  class="px-4 pb-1.5 text-[13px] uppercase tracking-[0.03em] text-black/45"
+                >
+                  {{ $t(group.label) }}
+                </p>
+                <div class="settings-card">
+                  <button
+                    v-for="item in group.items"
+                    :key="item.id"
+                    class="flex w-full items-center gap-3 px-4 py-3 text-left"
+                    @click="((section = item.id), (mobileDetail = true))"
+                  >
+                    <span
+                      class="flex h-[29px] w-[29px] items-center justify-center rounded-[7px] text-white"
+                      :style="{
+                        background: `linear-gradient(180deg, ${item.tintLight}, ${item.tint})`,
+                      }"
+                    >
+                      <i
+                        aria-hidden="true"
+                        class="f7-icons"
+                        style="font-size: 16px"
+                        >{{ item.icon }}</i
+                      >
+                    </span>
+                    <span class="flex-1 text-[17px] text-aink">{{
+                      $t(item.label)
+                    }}</span>
+                    <span class="text-[17px] text-black/25">›</span>
+                  </button>
+                </div>
+              </div>
+              <div>
+                <p
+                  class="px-4 pb-1.5 text-[13px] uppercase tracking-[0.03em] text-black/45"
+                >
+                  {{ $t('macos.settingsGroupLinks') }}
+                </p>
+                <div class="settings-card">
+                  <a
+                    v-for="link in mobileLinks"
+                    :key="link.label"
+                    :href="link.href"
+                    :download="link.download ? '' : undefined"
+                    :target="link.download ? undefined : '_blank'"
+                    rel="noopener noreferrer"
+                    class="flex w-full items-center gap-3 px-4 py-3 text-left"
+                    @click="
+                      link.track && track(link.track, { from: 'settings' })
+                    "
+                  >
+                    <span
+                      class="flex h-[29px] w-[29px] items-center justify-center rounded-[7px] text-white"
+                      :style="{
+                        background: `linear-gradient(180deg, ${link.tintLight}, ${link.tint})`,
+                      }"
+                    >
+                      <i
+                        aria-hidden="true"
+                        class="f7-icons"
+                        style="font-size: 16px"
+                        >{{ link.icon }}</i
+                      >
+                    </span>
+                    <span class="flex-1 text-[17px] text-aink">{{
+                      link.raw ?? $t(link.label)
+                    }}</span>
+                    <span class="text-[15px] text-black/25">↗</span>
+                  </a>
+                </div>
+              </div>
+
+              <p class="px-4 pt-1 text-center text-[12px] text-black/35">
+                {{ $t('macos.settingsFooter') }}
+              </p>
             </div>
 
             <div :class="mobileDetail ? '' : 'hidden lg:block'">
@@ -410,6 +508,8 @@
           </div>
         </div>
       </div>
+      <!-- Balayer vers le haut pour revenir à l'écran d'accueil -->
+      <DesktopIosHomeBar app="settings" @close="desktop.closeApp('settings')" />
     </div>
   </Teleport>
 </template>
@@ -426,6 +526,8 @@ const { gsap, Draggable } = useGsap()
 const { locale, locales } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
 const router = useRouter()
+const localePath = useLocalePath()
+const track = useTrack()
 const { t } = useI18n()
 const buildSha = (
   useRuntimeConfig().public.gitSha as string | undefined
@@ -434,11 +536,52 @@ const buildSha = (
 const winEl = ref<HTMLElement | null>(null)
 const z = ref(40)
 const bringToFront = () => {
-  z.value = ++desktop.state.value.topZ + 40
+  z.value = desktop.focusApp('settings')
 }
 
 type SectionId = 'wallpaper' | 'sound' | 'language' | 'general'
 const section = ref<SectionId>('wallpaper')
+// Réglages iOS groupe ses entrées par thème plutôt qu'en une liste unique
+const mobileGroups = computed(() => [
+  {
+    label: 'macos.settingsGroupLook',
+    items: sections.filter((s) => s.id === 'wallpaper' || s.id === 'sound'),
+  },
+  {
+    label: 'macos.settingsGroupSystem',
+    items: sections.filter((s) => s.id === 'language' || s.id === 'general'),
+  },
+])
+
+/** Sorties réelles du portfolio, pour que la racine ne soit pas qu'une liste vide */
+const mobileLinks = [
+  {
+    raw: 'GitHub',
+    label: 'GitHub',
+    icon: 'chevron_left_slash_chevron_right',
+    href: 'https://github.com/antoine-gourgue',
+    tint: '#1B1B1F',
+    tintLight: '#4A4A52',
+  },
+  {
+    raw: 'LinkedIn',
+    label: 'LinkedIn',
+    icon: 'person_crop_square_fill',
+    href: 'https://linkedin.com/in/antoine-gourgue',
+    tint: '#0A66C2',
+    tintLight: '#3E92E0',
+  },
+  {
+    label: 'macos.menuDownloadCv',
+    icon: 'doc_text_fill',
+    href: '/assets/antoinegourgue-cv.pdf',
+    download: true,
+    track: 'cv_downloaded',
+    tint: '#FF375F',
+    tintLight: '#FF6B8A',
+  },
+]
+
 const mobileDetail = ref(false)
 
 const sections: Array<{

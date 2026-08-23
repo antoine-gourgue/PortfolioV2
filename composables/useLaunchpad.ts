@@ -22,12 +22,6 @@ export const LAUNCHPAD_APPS: LaunchpadApp[] = [
   { id: 'blog', icon: 'notes', label: 'nav.blog', to: '/blog' },
   { id: 'contact', icon: 'mail', label: 'nav.contact', to: '/contact' },
   {
-    id: 'messages',
-    icon: 'messages',
-    label: 'macos.messagesTitle',
-    app: 'messages',
-  },
-  {
     id: 'weather',
     icon: 'weather',
     label: 'macos.weatherTitle',

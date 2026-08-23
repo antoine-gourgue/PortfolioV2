@@ -3,6 +3,7 @@
     <div
       v-if="desktop.state.value.apps.trash"
       ref="winEl"
+      data-window="trash"
       class="fixed inset-0 z-40 overflow-hidden lg:inset-auto lg:left-[26%] lg:top-40 lg:w-[520px] lg:rounded-xl lg:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.45)] lg:ring-1 lg:ring-black/10"
       :style="{ zIndex: z }"
       @pointerdown="bringToFront"
@@ -51,13 +52,6 @@
           <span
             class="hidden h-3 w-3 rounded-full border border-black/10 bg-[#DDDDDF] lg:block"
           ></span>
-          <button
-            class="flex items-center gap-0.5 text-[15px] font-medium text-[#0A84FF] lg:hidden"
-            @click="desktop.closeApp('trash')"
-          >
-            <span class="text-xl leading-none">‹</span>
-            {{ $t('macos.close') }}
-          </button>
           <span
             class="absolute left-1/2 -translate-x-1/2 text-[13px] font-semibold text-aink"
           >
@@ -139,6 +133,8 @@
           </template>
         </div>
       </div>
+      <!-- Balayer vers le haut pour revenir à l'écran d'accueil -->
+      <DesktopIosHomeBar app="trash" @close="desktop.closeApp('trash')" />
     </div>
   </Teleport>
 </template>
@@ -151,7 +147,7 @@ const { gsap, Draggable } = useGsap()
 const winEl = ref<HTMLElement | null>(null)
 const z = ref(40)
 const bringToFront = () => {
-  z.value = ++desktop.state.value.topZ + 40
+  z.value = desktop.focusApp('trash')
 }
 
 // Les vrais rejets de la conception de ce portfolio 🪦

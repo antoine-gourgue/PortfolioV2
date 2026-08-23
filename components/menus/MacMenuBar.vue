@@ -1,6 +1,15 @@
 <template>
   <header
-    class="fixed inset-x-0 top-0 z-[300] flex h-8 items-center justify-between border-b border-white/10 bg-black/20 px-3 text-[13px] font-medium text-white backdrop-blur-2xl lg:px-4"
+    class="pointer-events-none fixed inset-x-0 top-0 z-[315] flex h-8 items-center justify-between border-b px-3 text-[13px] font-medium backdrop-blur-2xl lg:pointer-events-auto lg:border-white/10 lg:bg-black/20 lg:px-4 lg:text-white"
+    :class="
+      statusTint
+        ? [
+            'border-transparent bg-[var(--status-bg)]',
+            statusTint.light ? 'text-white' : 'text-aink',
+          ]
+        : 'border-white/10 bg-black/20 text-white'
+    "
+    :style="statusTint ? { '--status-bg': statusTint.bg } : undefined"
     @click.stop
   >
     <div class="flex items-center">
@@ -9,7 +18,7 @@
         class="menu-btn flex items-center px-2 py-0.5"
         aria-label="Antoine Gourgue — accueil"
       >
-        <AgLogo class="h-[18px] w-[22px] text-white" />
+        <AgLogo class="h-[18px] w-[22px] text-current" />
       </NuxtLink>
 
       <div
@@ -28,7 +37,7 @@
           "
           @mouseenter="openMenu && (openMenu = menu.id)"
         >
-          {{ menu.bold ? menu.label : $t(menu.label) }}
+          {{ menu.raw ? menu.label : $t(menu.label) }}
         </button>
 
         <transition name="menu-pop">
@@ -93,7 +102,7 @@
           @click="(sfx.click(), (openMenu = openMenu === 'lang' ? '' : 'lang'))"
         >
           <span
-            class="rounded-[4px] border-[1.3px] border-white/80 px-[3.5px] pb-px text-[9.5px] font-bold uppercase leading-[13px] tracking-[0.05em] text-white/90"
+            class="rounded-[4px] border-[1.3px] border-current px-[3.5px] pb-px text-[9.5px] font-bold uppercase leading-[13px] tracking-[0.05em] opacity-90"
             >{{ currentLocale }}</span
           >
         </button>
@@ -127,7 +136,7 @@
       <!-- Musique : contrôles de lecture dans la barre de menu -->
       <div class="relative hidden h-full sm:block">
         <button
-          class="menu-btn flex h-full items-center rounded px-2 text-white/85"
+          class="menu-btn flex h-full items-center rounded px-2 text-current opacity-90"
           :class="openMenu === 'music' ? 'bg-white/20' : ''"
           aria-label="music controls"
           @click.stop="
@@ -251,7 +260,7 @@
         </transition>
       </div>
       <button
-        class="menu-btn hidden h-full items-center px-2 text-[15px] text-white/85 sm:flex"
+        class="menu-btn hidden h-full items-center px-2 text-[15px] text-current opacity-90 sm:flex"
         :aria-label="desktop.state.value.sfxMuted ? 'unmute' : 'mute'"
         @click="toggleSfx"
       >
@@ -269,7 +278,7 @@
       <!-- Batterie : niveau réel du visiteur (Battery API), icône pleine sinon -->
       <div class="relative h-full">
         <button
-          class="menu-btn flex h-full items-center gap-1.5 rounded px-2 text-white/85"
+          class="menu-btn flex h-full items-center gap-1.5 rounded px-2 text-current opacity-90"
           :class="openMenu === 'battery' ? 'bg-white/20' : ''"
           aria-label="battery"
           @click.stop="
@@ -278,7 +287,7 @@
         >
           <span
             v-if="battery.level !== null"
-            class="text-[11px] font-medium tabular-nums text-white/70"
+            class="text-[11px] font-medium tabular-nums opacity-70"
             >{{ battery.level }} %</span
           >
           <span
@@ -380,7 +389,7 @@
       <!-- Wi-Fi : menu façon macOS -->
       <div class="relative h-full">
         <button
-          class="menu-btn flex h-full items-center rounded px-2 text-[15px] text-white/85"
+          class="menu-btn flex h-full items-center rounded px-2 text-[15px] text-current opacity-90"
           :class="openMenu === 'wifi' ? 'bg-white/20' : ''"
           aria-label="wifi"
           @click.stop="
@@ -461,7 +470,7 @@
         </transition>
       </div>
       <button
-        class="menu-btn hidden h-full items-center px-2 text-[14px] text-white/85 lg:flex"
+        class="menu-btn hidden h-full items-center px-2 text-[14px] text-current opacity-90 lg:flex"
         aria-label="Spotlight"
         @click="desktop.state.value.spotlightOpen = true"
       >
@@ -480,7 +489,7 @@
         </span>
       </button>
       <button
-        class="menu-btn hidden h-full items-center rounded px-2 tabular-nums text-white/90 lg:flex"
+        class="menu-btn hidden h-full items-center rounded px-2 tabular-nums opacity-90 lg:flex"
         :class="desktop.state.value.notifOpen ? 'bg-white/20' : ''"
         aria-label="notification center"
         @click.stop="
@@ -497,9 +506,10 @@
 import AgLogo from '~/components/ui/AGLogo.vue'
 
 const localePath = useLocalePath()
-const { locale, locales } = useI18n()
+const { t, locale, locales } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
 const router = useRouter()
+const route = useRoute()
 const desktop = useDesktop()
 const track = useTrack()
 const music = useMusic()
@@ -529,16 +539,48 @@ const downloadCv = () => {
   a.click()
 }
 
-const menus: Array<{
+interface Menu {
   id: string
   label: string
+  /** Nom d'app : affiché en gras, comme sur macOS */
   bold?: boolean
+  /** Libellé déjà littéral (nom propre ou chaîne déjà traduite) */
+  raw?: boolean
   items: Entry[]
-}> = [
+}
+
+// ── Menus communs, présents quelle que soit l'app au premier plan ──
+const goMenu: Menu = {
+  id: 'go',
+  label: 'macos.menuGo',
+  items: [
+    { label: 'nav.home', hint: '⌘1', action: () => go('/') },
+    { label: 'nav.projects', hint: '⌘2', action: () => go('/projects') },
+    { label: 'nav.about', hint: '⌘3', action: () => go('/about') },
+    { label: 'nav.blog', hint: '⌘4', action: () => go('/blog') },
+    { label: 'nav.contact', hint: '⌘5', action: () => go('/contact') },
+  ],
+}
+
+const helpMenu: Menu = {
+  id: 'help',
+  label: 'macos.menuHelp',
+  items: [
+    {
+      label: 'macos.spotlightPlaceholder',
+      hint: '⌘K',
+      action: () => (desktop.state.value.spotlightOpen = true),
+    },
+  ],
+}
+
+// ── Barre du bureau : l'identité du site, quand aucune app n'est au premier plan ──
+const siteMenus: Menu[] = [
   {
     id: 'app',
     label: 'Antoine Gourgue',
     bold: true,
+    raw: true,
     items: [
       { label: 'macos.menuAboutSite', action: () => go('/about') },
       'sep',
@@ -573,31 +615,149 @@ const menus: Array<{
       { label: 'macos.menuDownloadCv', hint: '⌘S', action: downloadCv },
     ],
   },
-  {
-    id: 'go',
-    label: 'macos.menuGo',
-    items: [
-      { label: 'nav.home', hint: '⌘1', action: () => go('/') },
-      { label: 'nav.projects', hint: '⌘2', action: () => go('/projects') },
-      { label: 'nav.about', hint: '⌘3', action: () => go('/about') },
-      { label: 'nav.blog', hint: '⌘4', action: () => go('/blog') },
-      { label: 'nav.contact', hint: '⌘5', action: () => go('/contact') },
-    ],
-  },
-  {
-    id: 'help',
-    label: 'macos.menuHelp',
-    items: [
-      {
-        label: 'macos.spotlightPlaceholder',
-        hint: '⌘K',
-        action: () => (desktop.state.value.spotlightOpen = true),
-      },
-    ],
-  },
+  goMenu,
+  helpMenu,
 ]
 
+// ── Barre contextuelle ──
+// Sur macOS, la barre de menu appartient à l'app au premier plan : son nom
+// passe en gras à gauche et ses menus remplacent ceux de l'app précédente.
+// `desktop.state.activeApp` est alimenté par focusApp() (apps flottantes)
+// et par focus() (fenêtres du bureau).
+
+/** Apps en fenêtre flottante : masquables ET quittables */
+const FLOATING_APPS = new Set([
+  'calculator',
+  'weather',
+  'music',
+  'maps',
+  'news',
+  'sports',
+  'settings',
+  'trash',
+])
+
+/** Nom porté par chaque app dans la barre de menu */
+const APP_NAMES: Record<string, { label?: string; raw?: string }> = {
+  calculator: { label: 'macos.calcTitle' },
+  weather: { label: 'macos.weatherTitle' },
+  music: { label: 'macos.musicTitle' },
+  maps: { label: 'macos.mapsTitle' },
+  news: { raw: 'News' },
+  sports: { label: 'macos.sportsTitle' },
+  settings: { label: 'macos.settingsTitle' },
+  trash: { label: 'macos.trash' },
+  about: { raw: 'Contacts' },
+  terminal: { raw: 'Terminal' },
+  finder: { raw: 'Finder' },
+  notes: { label: 'macos.calTitle' },
+  mail: { raw: 'Mail' },
+}
+
+// Les fenêtres du bureau n'ont pas de fermeture propre (leur pastille rouge
+// réduit, comme le jaune) : on ne leur propose donc que « Masquer ».
+const hideApp = (id: string) =>
+  FLOATING_APPS.has(id) ? desktop.minimizeApp(id) : desktop.minimize(id)
+
+/** Menus propres à une app, insérés entre son nom et « Aller » */
+const appExtras = (id: string): Menu[] => {
+  if (id === 'music')
+    return [
+      {
+        id: 'controls',
+        label: 'macos.menuControls',
+        items: [
+          { label: 'macos.menuPlayPause', action: () => music.toggle() },
+          { label: 'macos.menuPrevTrack', action: () => music.prev() },
+          { label: 'macos.menuNextTrack', action: () => music.next() },
+        ],
+      },
+    ]
+  if (id === 'settings')
+    return [
+      {
+        id: 'view',
+        label: 'macos.menuView',
+        items: [
+          {
+            label: 'macos.menuNextWallpaper',
+            action: () => desktop.cycleWallpaper(),
+          },
+          { label: 'macos.settingsSfx', action: toggleSfx },
+        ],
+      },
+    ]
+  return []
+}
+
+const menus = computed<Menu[]>(() => {
+  const id = desktop.state.value.activeApp
+  const meta = APP_NAMES[id]
+  if (!meta) return siteMenus
+
+  const name = meta.raw ?? t(meta.label as string)
+  const items: Entry[] = [
+    {
+      label: t('macos.menuHideApp', { app: name }),
+      raw: true,
+      action: () => hideApp(id),
+    },
+  ]
+  if (FLOATING_APPS.has(id))
+    items.push('sep', {
+      label: t('macos.menuQuitApp', { app: name }),
+      raw: true,
+      action: () => desktop.closeApp(id),
+    })
+
+  return [
+    { id: 'app', label: name, bold: true, raw: true, items },
+    ...appExtras(id),
+    goMenu,
+    helpMenu,
+  ]
+})
+
+/**
+ * Mobile : la barre d'état prend la couleur de l'app ou de la page au premier
+ * plan, pour se lire comme son prolongement plutôt que comme un bandeau
+ * translucide posé dessus. Sur le bureau elle reste translucide.
+ */
+const STATUS_TINTS: Record<string, { bg: string; light: boolean }> = {
+  calculator: { bg: '#000000', light: true },
+  weather: { bg: '#22509E', light: true },
+  music: { bg: '#161618', light: true },
+  maps: { bg: '#F5F5F7', light: false },
+  sports: { bg: '#000000', light: true },
+  news: { bg: '#FFFFFF', light: false },
+  settings: { bg: '#F2F2F7', light: false },
+  trash: { bg: '#FFFFFF', light: false },
+}
+
+const isHome = computed(
+  () => route.path.replace(/^\/[a-z]{2}(\/|$)/, '/') === '/'
+)
+
+/** Fond propre à certaines pages, pour que la barre s'y fonde aussi */
+const PAGE_TINTS: Record<string, string> = {
+  '/blog': '#FBF9F2',
+  '/about': '#F2F2F7',
+}
+
+const statusTint = computed(() => {
+  const app = STATUS_TINTS[desktop.state.value.activeApp]
+  if (app) return app
+  if (isHome.value) return null
+  const path = route.path.replace(/^\/[a-z]{2}(\/|$)/, '/')
+  return { bg: PAGE_TINTS[path] ?? '#FFFFFF', light: false }
+})
+
 const openMenu = ref('')
+// Changer d'app referme le menu déroulant : son id n'existe peut-être plus
+watch(
+  () => desktop.state.value.activeApp,
+  () => (openMenu.value = '')
+)
 const sfx = useSfx()
 
 const toggleSfx = () => {

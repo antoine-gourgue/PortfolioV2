@@ -3,6 +3,7 @@
     <div
       v-if="desktop.state.value.apps.music"
       ref="winEl"
+      data-window="music"
       class="fixed inset-0 z-40 overflow-hidden lg:inset-auto lg:left-[16%] lg:top-24 lg:w-[780px] lg:rounded-xl lg:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.45)] lg:ring-1 lg:ring-black/10"
       :style="{ zIndex: z }"
       @pointerdown="bringToFront"
@@ -17,14 +18,7 @@
         ></div>
         <div class="pointer-events-none absolute inset-0 bg-black/45"></div>
 
-        <div class="relative flex items-center px-4 pb-1 pt-12">
-          <button
-            class="flex items-center gap-0.5 text-[15px] font-medium text-[#FA586A]"
-            @click="desktop.closeApp('music')"
-          >
-            <span class="text-xl leading-none">‹</span>
-            {{ $t('macos.close') }}
-          </button>
+        <div class="relative flex min-h-[20px] items-center px-4 pb-1 pt-12">
           <span
             class="absolute left-1/2 -translate-x-1/2 text-[13px] font-semibold text-white/60"
           >
@@ -1003,6 +997,8 @@
           </main>
         </div>
       </div>
+      <!-- Balayer vers le haut pour revenir à l'écran d'accueil -->
+      <DesktopIosHomeBar app="music" dark @close="desktop.closeApp('music')" />
     </div>
   </Teleport>
 </template>
@@ -1028,7 +1024,7 @@ const { gsap, Draggable } = useGsap()
 const winEl = ref<HTMLElement | null>(null)
 const z = ref(40)
 const bringToFront = () => {
-  z.value = ++desktop.state.value.topZ + 40
+  z.value = desktop.focusApp('music')
 }
 
 const track = music.track

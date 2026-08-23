@@ -4,7 +4,7 @@
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 400.000000 300.000000"
       preserveAspectRatio="xMidYMid meet"
-      class="transition-transform duration-300"
+      class="h-full w-full transition-transform duration-300"
     >
       <g
         transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)"

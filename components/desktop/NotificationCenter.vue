@@ -1,16 +1,45 @@
 <template>
   <Teleport to="body">
+    <!-- Mobile : voile façon centre de contrôle, l'écran d'accueil ne doit
+         pas transparaître entre les cartes -->
     <Transition
       enter-active-class="transition duration-300 ease-out"
-      enter-from-class="translate-x-full opacity-0"
+      enter-from-class="opacity-0"
       leave-active-class="transition duration-200 ease-in"
-      leave-to-class="translate-x-full opacity-0"
+      leave-to-class="opacity-0"
+    >
+      <div
+        v-if="desktop.state.value.notifOpen"
+        class="fixed inset-0 z-[309] bg-black/40 backdrop-blur-2xl lg:hidden"
+        @click="desktop.state.value.notifOpen = false"
+      ></div>
+    </Transition>
+
+    <Transition
+      enter-active-class="transition duration-300 ease-out"
+      enter-from-class="-translate-y-6 opacity-0 lg:translate-y-0 lg:translate-x-full"
+      leave-active-class="transition duration-200 ease-in"
+      leave-to-class="-translate-y-6 opacity-0 lg:translate-y-0 lg:translate-x-full"
     >
       <aside
         v-if="desktop.state.value.notifOpen"
-        class="fixed bottom-4 right-2 top-10 z-[310] w-[330px] overflow-y-auto rounded-2xl p-3"
+        class="fixed inset-x-2 top-10 z-[310] max-h-[82svh] overflow-y-auto rounded-2xl p-3 lg:inset-x-auto lg:bottom-4 lg:right-2 lg:max-h-none lg:w-[330px]"
         @click.stop
       >
+        <!--
+          Poignée : on referme en la tirant vers le haut. Le geste ne peut pas
+          vivre sur le panneau lui-même, qui défile — le navigateur y annule
+          les événements pointeur dès qu'il prend la main sur le scroll.
+        -->
+        <div
+          class="-mt-1 mb-1 flex touch-none justify-center py-2 lg:hidden"
+          @pointerdown="onPanelDown"
+          @pointermove="onPanelMove"
+          @pointerup="onPanelUp"
+          @pointercancel="onPanelUp"
+        >
+          <span class="block h-[5px] w-9 rounded-full bg-white/60"></span>
+        </div>
         <!-- Date -->
         <p
           class="px-1 pb-2 text-[13px] font-semibold text-white/80 drop-shadow"
@@ -135,11 +164,25 @@
         </div>
       </aside>
     </Transition>
+
+    <!--
+      Mobile : la barre d'état n'est pas cliquable (comme sur iOS), on ouvre
+      le centre de contrôle en tirant vers le bas depuis le haut de l'écran.
+    -->
+    <div
+      v-if="!desktop.state.value.notifOpen"
+      class="fixed inset-x-0 top-0 z-[305] h-8 touch-none lg:hidden"
+      @pointerdown="onEdgeDown"
+      @pointermove="onEdgeMove"
+      @pointerup="onEdgeUp"
+      @pointercancel="onEdgeUp"
+    ></div>
   </Teleport>
 </template>
 
 <script setup lang="ts">
 const desktop = useDesktop()
+const sfx = useSfx()
 const music = useMusic()
 const localePath = useLocalePath()
 const { locale } = useI18n()
@@ -190,6 +233,46 @@ watch(
     if (open) loadContributions()
   }
 )
+
+// ── Gestes mobiles ──
+// Tirer vers le bas depuis le bord haut ouvre ; balayer vers le haut referme.
+const PULL = 45
+
+let edgeY = 0
+let edgeDragging = false
+
+const onEdgeDown = (e: PointerEvent) => {
+  edgeY = e.clientY
+  edgeDragging = true
+  ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+}
+const onEdgeMove = (e: PointerEvent) => {
+  if (!edgeDragging) return
+  if (e.clientY - edgeY > PULL) {
+    edgeDragging = false
+    sfx.pop()
+    desktop.state.value.notifOpen = true
+  }
+}
+const onEdgeUp = () => (edgeDragging = false)
+
+let panelY = 0
+let panelDragging = false
+
+const onPanelDown = (e: PointerEvent) => {
+  panelY = e.clientY
+  panelDragging = true
+  ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+}
+const onPanelMove = (e: PointerEvent) => {
+  if (!panelDragging) return
+  if (panelY - e.clientY > PULL) {
+    panelDragging = false
+    sfx.minimize()
+    desktop.state.value.notifOpen = false
+  }
+}
+const onPanelUp = () => (panelDragging = false)
 
 // Fermeture au clic en dehors
 const onOutside = () => {

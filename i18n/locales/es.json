@@ -103,7 +103,8 @@
       "tooShort": "Tu mensaje es un poco demasiado corto.",
       "failed": "Error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde."
     },
-    "success": "¡Mensaje enviado con éxito!"
+    "success": "¡Mensaje enviado con éxito!",
+    "cancel": "Cancelar"
   },
   "projects": {
     "title": "Mis Proyectos.",
@@ -172,22 +173,12 @@
   "footer": {
     "copyright": "© 2025 Antoine Gourgue"
   },
-  "chatbot": {
-    "title": "Asistente",
-    "placeholder": "Hazme una pregunta…",
-    "send": "Enviar",
-    "close": "Cerrar el chat",
-    "welcome": "👋 ¡Hola! Estoy aquí para responder tus preguntas sobre mi portafolio.",
-    "switchToFr": "Cambiar a francés",
-    "switchToEn": "Cambiar a inglés",
-    "switchToEs": "Cambiar a español",
-    "detectedFr": "🇫🇷 Parece que estás hablando francés.",
-    "detectedEn": "🇬🇧 Parece que estás hablando inglés.",
-    "detectedEs": "🇪🇸 Parece que estás hablando español."
-  },
   "macos": {
     "projectsTitle": "Mis proyectos",
     "projectsSub": "Cada ventana es un sitio web real, en línea.",
+    "projectsPerso": "Personal",
+    "projectsFeatured": "Destacado",
+    "seeAll": "Ver todo",
     "visit": "Visitar",
     "terminalStatus": "disponible — indefinido desde octubre de 2026",
     "mailTitle": "Nuevo mensaje",
@@ -200,6 +191,14 @@
     "menuFile": "Archivo",
     "menuGo": "Ir",
     "menuHelp": "Ayuda",
+    "menuHideApp": "Ocultar {app}",
+    "menuQuitApp": "Salir de {app}",
+    "menuControls": "Controles",
+    "menuPlayPause": "Reproducir / Pausa",
+    "menuPrevTrack": "Pista anterior",
+    "menuNextTrack": "Pista siguiente",
+    "menuView": "Visualización",
+    "menuNextWallpaper": "Siguiente fondo de pantalla",
     "menuNewProject": "Nuevo proyecto…",
     "menuDownloadCv": "Descargar CV",
     "menuAboutSite": "Acerca de este portfolio",
@@ -240,6 +239,9 @@
     "ghStars": "ESTRELLAS GITHUB",
     "age": "STACK",
     "search": "Buscar",
+    "contactsMyCard": "Mi ficha",
+    "contactsOthers": "Trayectoria",
+    "searchNoResult": "Sin resultados",
     "finderFavorites": "Favoritos",
     "finderProjects": "Proyectos",
     "finderApps": "Aplicaciones",
@@ -319,6 +321,8 @@
     "mapsMobility": "Movilidad por toda Francia",
     "mapsMobilityHint": "Con base en Anglet — abierto al País Vasco, Burdeos y París.",
     "mailInbox": "Bandeja de entrada",
+    "mailUnread": "{n} sin leer",
+    "mailUpdated": "Actualizado ahora",
     "mailCompose": "Nuevo mensaje",
     "mailAttach": "Adjuntar un archivo",
     "batteryTitle": "Batería",
@@ -348,8 +352,8 @@
     "siriListening": "Te escucho…",
     "siriThinking": "Pensando…",
     "siriHint": "Pregúntame lo que quieras sobre Antoine — por voz o teclado.",
+    "siriTitle": "Siri",
     "siriPlaceholder": "O escribe tu pregunta…",
-    "siriError": "No puedo conectar con mis servidores. Inténtalo en un minuto, o usa la app Mensajes 💬",
     "siriPowered": "Impulsado por GPT-OSS vía Groq — respuestas generadas por IA",
     "newsTitle": "News",
     "sportsTitle": "Deportes",
@@ -421,6 +425,11 @@
     "settingsMusicVolume": "Volumen de música",
     "settingsLanguage": "Idioma",
     "settingsGeneral": "General",
+    "settingsGroupLook": "Apariencia",
+    "settingsGroupSystem": "Sistema",
+    "settingsGroupLinks": "Enlaces",
+    "settingsIdentity": "Desarrollador fullstack — Anglet",
+    "settingsFooter": "Portafolio de Antoine Gourgue · Nuxt 3",
     "settingsReset": "Restablecer el escritorio",
     "settingsVersion": "Versión",
     "settingsTagline": "Portafolio interactivo estilo macOS",
@@ -449,6 +458,7 @@
     "musicLive": "EN DIRECTO",
     "musicLibrary": "Biblioteca",
     "calcTitle": "Calculadora",
+    "clockTitle": "Reloj",
     "wxLoading": "Cargando…",
     "wxError": "Tiempo no disponible",
     "wxClear": "Soleado",
@@ -471,7 +481,6 @@
     "catJobs": "Empleo",
     "catNlp": "IA y viajes",
     "catShop": "E-commerce",
-    "messagesTitle": "Messages",
     "errTitle": "Archivo no encontrado",
     "errDesc": "El elemento solicitado no existe en este Mac.",
     "errBack": "Volver al escritorio",
@@ -531,6 +540,7 @@
         "title": "Mi stack en 2026",
         "body": "Front: Vue y Nuxt primero — ahí soy más productivo. TypeScript en todas partes, Tailwind para ir rápido y mantener coherencia, GSAP cuando algo debe moverse bien.\n\nBack: Node.js, PHP en Digitaleo, MongoDB y PostgreSQL según el proyecto. Prisma y Auth.js en mis proyectos Next.js recientes (Mosaic, TailTCG).\n\nHerramientas: Docker, GitLab CI/CD y Claude Code, que cambió mi forma de trabajar — este portfolio es la prueba.\n\nY el Master of Science en IA de Epitech me empujó hacia el machine learning. El siguiente paso lógico."
       }
-    }
+    },
+    "noteCount": "{n} notas"
   }
 }

@@ -93,6 +93,8 @@
 </template>
 
 <script setup lang="ts">
+import { type Lang, useChatbotIntents } from '@/composables/useChatbotIntents'
+
 const desktop = useDesktop()
 const sfx = useSfx()
 const track = useTrack()
@@ -234,6 +236,44 @@ const stripMarkdown = (text: string) =>
     .trim()
 
 // ── Appel du LLM ──
+// ── Repli hors-ligne ──
+// Groq tourne sur un quota gratuit (8 requêtes/IP/min, 24 au global) et peut
+// être injoignable. Plutôt qu'une erreur, on répond avec le moteur d'intents
+// local : dégradé mais toujours utile, et hors de portée de toute panne réseau.
+const intents = useChatbotIntents()
+
+// Les intents contiennent des liens HTML ; Siri affiche du texte brut et le lit
+// à voix haute, on ne garde donc que le libellé.
+const stripHtml = (html: string) =>
+  html
+    .replace(/<[^>]+>/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+
+const similarity = (input: string, keyword: string): number => {
+  const words = input.toLowerCase().split(/\s+/)
+  const kwWords = keyword.toLowerCase().split(/\s+/)
+  const common = words.filter((w) => kwWords.includes(w))
+  return common.length / Math.max(words.length, kwWords.length)
+}
+
+const offlineAnswer = (question: string): string => {
+  const lang = (locale.value as Lang) ?? 'fr'
+  const input = question.toLowerCase()
+  let best = { intent: 'default', score: 0 }
+  for (const intent of intents) {
+    for (const keyword of intent.keywords[lang] ?? []) {
+      const score = similarity(input, keyword)
+      if (score > best.score) best = { intent: intent.intent, score }
+    }
+  }
+  const match = intents.find((i) => i.intent === best.intent)
+  const fallback = intents.find((i) => i.intent === 'default')!
+  return stripHtml(
+    match?.response[lang] ?? fallback.response[lang] ?? fallback.response.fr
+  )
+}
+
 const ask = async (question: string) => {
   track('siri_question', { question })
   thinking.value = true
@@ -249,7 +289,9 @@ const ask = async (question: string) => {
     speak(reply)
   } catch {
     history.pop()
-    exchanges.value.push({ question, answer: t('macos.siriError') })
+    const answer = offlineAnswer(question)
+    exchanges.value.push({ question, answer })
+    speak(answer)
   } finally {
     thinking.value = false
     nextTick(() => {

@@ -8,6 +8,8 @@ interface DesktopState {
   wins: Record<string, WinState>
   topZ: number
   activeWin: string
+  /** App au premier plan : pilote le nom et les menus de la barre de menu */
+  activeApp: string
   wallpaper: number
   spotlightOpen: boolean
   apps: Record<string, boolean>
@@ -35,12 +37,12 @@ export function useDesktop() {
     wins: {},
     topZ: 10,
     activeWin: '',
+    activeApp: '',
     wallpaper: 0,
     spotlightOpen: false,
     apps: {
       weather: false,
       calculator: false,
-      messages: false,
       music: false,
       settings: false,
       trash: false,
@@ -57,9 +59,25 @@ export function useDesktop() {
     sfxMuted: false,
   }))
 
+  /**
+   * Passe une app flottante au premier plan et renvoie son nouveau z-index.
+   * Toutes les apps y passent, à l'ouverture comme au clic : c'est ce qui
+   * permet à la barre de menu de savoir quelle app est active.
+   */
+  const focusApp = (id: string) => {
+    state.value.activeApp = id
+    return 40 + ++state.value.topZ
+  }
+
+  // Une app qui disparaît rend la main au bureau
+  const blurApp = (id: string) => {
+    if (state.value.activeApp === id) state.value.activeApp = ''
+  }
+
   const toggleApp = (id: string) => {
     state.value.apps[id] = !state.value.apps[id]
     state.value.minimizedApps[id] = false
+    if (!state.value.apps[id]) blurApp(id)
   }
   // Ouvre sans basculer : le Launchpad ne doit jamais refermer une app déjà là
   const openApp = (id: string) => {
@@ -69,11 +87,51 @@ export function useDesktop() {
   const closeApp = (id: string) => {
     state.value.apps[id] = false
     state.value.minimizedApps[id] = false
+    blurApp(id)
   }
+  /**
+   * Aspiration vers le Dock, comme le « genie » de macOS. La bascule d'état
+   * n'a lieu qu'à la fin : sinon la fenêtre disparaîtrait avant de bouger.
+   * Les positions sont remises à zéro après coup, car les fenêtres du bureau
+   * survivent en v-show et resteraient invisibles et décalées à la réouverture.
+   */
+  const genie = (id: string, done: () => void) => {
+    if (!import.meta.client) return done()
+
+    const el = document.querySelector<HTMLElement>(`[data-window="${id}"]`)
+    // Sur mobile les apps sont en plein écran et il n'y a pas de Dock à viser
+    if (!el || !window.matchMedia('(min-width: 1024px)').matches) return done()
+
+    const { gsap } = useGsap()
+    const rect = el.getBoundingClientRect()
+    gsap.to(el, {
+      // décalages relatifs : la fenêtre a pu être déplacée à la souris
+      x: `+=${Math.round(window.innerWidth / 2 - (rect.left + rect.width / 2))}`,
+      y: `+=${Math.round(window.innerHeight - rect.top)}`,
+      scale: 0.15,
+      autoAlpha: 0,
+      duration: 0.45,
+      ease: 'power2.in',
+      transformOrigin: 'center bottom',
+      onComplete: () => {
+        done()
+        gsap.set(el, { clearProps: 'x,y,scale,opacity,visibility' })
+      },
+    })
+  }
+
   // Réduite : fenêtre masquée mais app « en cours » (point dans le Dock)
-  const minimizeApp = (id: string) => {
-    state.value.apps[id] = false
-    state.value.minimizedApps[id] = true
+  const minimizeApp = (id: string) =>
+    genie(id, () => {
+      state.value.apps[id] = false
+      state.value.minimizedApps[id] = true
+      blurApp(id)
+    })
+
+  // Clic sur le bureau : plus aucune app au premier plan
+  const blurAll = () => {
+    state.value.activeApp = ''
+    state.value.activeWin = ''
   }
 
   // Même échelle de z que les fenêtres d'app (bringToFront : 40 + topZ),
@@ -94,13 +152,17 @@ export function useDesktop() {
     if (!win) return
     win.z = 40 + ++state.value.topZ
     state.value.activeWin = id
+    state.value.activeApp = id
   }
 
   const minimize = (id: string) => {
     const win = state.value.wins[id]
     if (!win) return
-    win.min = true
-    if (state.value.activeWin === id) state.value.activeWin = ''
+    genie(id, () => {
+      win.min = true
+      if (state.value.activeWin === id) state.value.activeWin = ''
+      blurApp(id)
+    })
   }
 
   const restore = (id: string) => {
@@ -138,6 +200,8 @@ export function useDesktop() {
     toggleZoom,
     cycleWallpaper,
     minimized,
+    focusApp,
+    blurAll,
     toggleApp,
     openApp,
     closeApp,

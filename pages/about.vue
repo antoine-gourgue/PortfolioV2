@@ -1,13 +1,17 @@
 <template>
-  <main ref="container" class="mx-auto w-full max-w-5xl px-4 pt-16 lg:px-8">
-    <div ref="winEl" class="win">
+  <main
+    ref="container"
+    class="mx-auto w-full pt-8 lg:max-w-5xl lg:px-8 lg:pt-16"
+  >
+    <div ref="winEl" class="win" data-window="page">
       <UiMacWindow
         :title="$t('nav.about')"
+        mobile-bg="#F2F2F7"
         @close="closeToDesktop"
         @minimize="closeToDesktop"
         @zoom="toggleZoom"
       >
-        <div class="flex min-h-[62vh]">
+        <div class="flex flex-1 min-h-[62vh]">
           <!-- Liste des contacts (desktop) -->
           <aside
             class="hidden w-60 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:block"
@@ -67,54 +71,83 @@
             v-if="!mobileOpen"
             class="min-w-0 flex-1 px-4 pb-6 pt-4 lg:hidden"
           >
-            <h1 class="px-1 text-[28px] font-bold tracking-tight">
+            <h1
+              class="px-1 text-[34px] font-bold leading-tight tracking-[-0.9px]"
+            >
               {{ $t('nav.about') }}
             </h1>
-            <div
-              class="mt-3 flex items-center gap-2 rounded-[10px] bg-black/5 px-3 py-2 text-[15px] text-black/40"
+
+            <!-- Recherche réelle : filtre la liste, pas un champ décoratif -->
+            <label
+              class="mt-3 flex items-center gap-2 rounded-[10px] bg-black/[0.07] px-3 py-2"
             >
-              <span class="text-[14px]"><DesktopSfIcon name="search" /></span>
-              {{ $t('macos.search') }}
-            </div>
-            <div class="mt-3">
-              <button
-                v-for="(entry, i) in entries"
-                :key="entry.id"
-                class="flex w-full items-center gap-3 py-2.5 text-left"
-                :class="i > 0 ? 'border-t border-black/5' : ''"
-                @click="openMobile(entry.id)"
+              <span class="text-[15px] text-black/35"
+                ><DesktopSfIcon name="search"
+              /></span>
+              <input
+                v-model="query"
+                type="search"
+                :placeholder="$t('macos.search')"
+                class="w-full bg-transparent text-[17px] text-aink outline-none placeholder:text-black/35"
+              />
+            </label>
+
+            <template v-for="group in mobileGroups" :key="group.label">
+              <p
+                class="px-1 pb-1 pt-5 text-[13px] uppercase tracking-[0.03em] text-black/45"
               >
-                <span
-                  class="flex h-10 w-10 shrink-0 items-center justify-center"
+                {{ $t(group.label) }}
+              </p>
+              <div class="overflow-hidden rounded-[10px] bg-white px-4">
+                <button
+                  v-for="(entry, i) in group.items"
+                  :key="entry.id"
+                  class="relative flex w-full items-center gap-3 py-2.5 text-left"
+                  @click="openMobile(entry.id)"
                 >
-                  <AgLogo
-                    v-if="entry.id === 'antoine'"
-                    class="h-6 w-8 text-aink"
-                  />
-                  <img
-                    v-else-if="entry.logo"
-                    :src="entry.logo"
-                    :alt="entry.name"
-                    class="h-10 w-10 rounded-full bg-white object-contain p-1 ring-1 ring-black/10"
-                  />
                   <span
-                    v-else
-                    class="flex h-10 w-10 items-center justify-center rounded-full text-[14px] font-bold text-white"
-                    :style="{ background: entry.avatarBg }"
-                    >{{ entry.initials }}</span
-                  >
-                </span>
-                <span class="min-w-0 flex-1">
-                  <span class="block truncate text-[16px] font-semibold">{{
-                    entry.name
-                  }}</span>
-                  <span class="block truncate text-[12px] text-black/40">{{
-                    $t(entry.roleKey)
-                  }}</span>
-                </span>
-                <span class="text-[16px] text-black/25">›</span>
-              </button>
-            </div>
+                    v-if="i > 0"
+                    class="absolute left-[64px] right-[-16px] top-0 h-px bg-black/[0.09]"
+                  ></span>
+                  <span class="shrink-0">
+                    <span
+                      v-if="entry.id === 'antoine'"
+                      class="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-gradient-to-b from-[#3b4048] to-[#17181b]"
+                    >
+                      <AgLogo class="h-5 w-6 text-white" />
+                    </span>
+                    <img
+                      v-else-if="entry.logo"
+                      :src="entry.logo"
+                      :alt="entry.name"
+                      class="h-[52px] w-[52px] rounded-full bg-white object-contain p-1.5 ring-1 ring-black/10"
+                    />
+                    <span
+                      v-else
+                      class="flex h-[52px] w-[52px] items-center justify-center rounded-full text-[17px] font-semibold text-white"
+                      :style="{ background: entry.avatarBg }"
+                      >{{ entry.initials }}</span
+                    >
+                  </span>
+                  <span class="min-w-0 flex-1">
+                    <span class="block truncate text-[17px] text-aink">{{
+                      entry.name
+                    }}</span>
+                    <span class="block truncate text-[15px] text-black/45">{{
+                      $t(entry.roleKey)
+                    }}</span>
+                  </span>
+                  <span class="text-[17px] text-black/25">›</span>
+                </button>
+              </div>
+            </template>
+
+            <p
+              v-if="!mobileGroups.length"
+              class="px-1 pt-8 text-center text-[15px] text-black/35"
+            >
+              {{ $t('macos.searchNoResult') }}
+            </p>
           </div>
 
           <!-- Fiche -->
@@ -137,28 +170,36 @@
             <div
               class="flex flex-col items-center gap-3 lg:flex-row lg:items-center lg:gap-5"
             >
-              <AgLogo
+              <span
                 v-if="current.id === 'antoine'"
-                class="h-14 w-[70px] shrink-0 text-aink lg:h-16 lg:w-20"
-              />
+                class="flex h-[104px] w-[104px] shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-[#3b4048] to-[#17181b] lg:h-20 lg:w-20 lg:rounded-none lg:bg-none"
+              >
+                <AgLogo
+                  class="h-10 w-12 text-white lg:h-16 lg:w-20 lg:text-aink"
+                />
+              </span>
               <img
                 v-else-if="current.logo"
                 :src="current.logo"
                 :alt="current.name"
-                class="h-[72px] w-[72px] shrink-0 rounded-full bg-white object-contain p-2 shadow-md ring-1 ring-black/10 lg:h-20 lg:w-20"
+                class="h-[104px] w-[104px] shrink-0 rounded-full bg-white object-contain p-3 shadow-md ring-1 ring-black/10 lg:h-20 lg:w-20 lg:p-2"
               />
               <span
                 v-else
-                class="flex h-[72px] w-[72px] shrink-0 items-center justify-center rounded-full text-2xl font-bold text-white shadow-md lg:h-20 lg:w-20"
+                class="flex h-[104px] w-[104px] shrink-0 items-center justify-center rounded-full text-[38px] font-semibold text-white shadow-md lg:h-20 lg:w-20 lg:text-2xl"
                 :style="{ background: current.avatarBg }"
               >
                 {{ current.initials }}
               </span>
               <div class="min-w-0 text-center lg:text-left">
-                <h2 class="text-[22px] font-bold tracking-tight lg:text-2xl">
+                <h2
+                  class="text-[26px] font-semibold tracking-[-0.4px] lg:text-2xl lg:font-bold lg:tracking-tight"
+                >
                   {{ current.name }}
                 </h2>
-                <p class="text-[14px] text-agray">{{ $t(current.roleKey) }}</p>
+                <p class="mt-0.5 text-[15px] text-agray lg:text-[14px]">
+                  {{ $t(current.roleKey) }}
+                </p>
               </div>
             </div>
 
@@ -274,10 +315,6 @@
             <!-- Champs — mobile : cartes groupées iOS -->
             <div class="mt-5 space-y-3 lg:hidden">
               <div class="ios-card">
-                <div class="ios-field">
-                  <span>{{ $t('macos.position') }}</span>
-                  <p>{{ $t(current.roleKey) }}</p>
-                </div>
                 <div v-if="current.periodKey" class="ios-field">
                   <span>{{ $t('macos.year') }}</span>
                   <p>{{ $t(current.periodKey) }}</p>
@@ -347,6 +384,8 @@
           </div>
         </div>
       </UiMacWindow>
+      <!-- Balayer vers le haut pour revenir au bureau -->
+      <DesktopIosHomeBar app="page" @close="goHome" />
     </div>
   </main>
 </template>
@@ -355,6 +394,7 @@
 import AgLogo from '~/components/ui/AGLogo.vue'
 
 const localePath = useLocalePath()
+const { t } = useI18n()
 const { gsap } = useGsap()
 const sfx = useSfx()
 
@@ -438,6 +478,28 @@ const selected = ref('antoine')
 const current = computed(() => entries.find((e) => e.id === selected.value))
 
 // Mobile : liste iOS d'abord, fiche au tap
+// Recherche : filtre nom et rôle, sur la fiche comme sur les organisations
+const query = ref('')
+
+const filtered = computed(() => {
+  const q = query.value.trim().toLowerCase()
+  if (!q) return entries
+  return entries.filter(
+    (e) =>
+      e.name.toLowerCase().includes(q) || t(e.roleKey).toLowerCase().includes(q)
+  )
+})
+
+// Contacts isole la fiche du propriétaire sous « Ma fiche »
+const mobileGroups = computed(() => {
+  const me = filtered.value.filter((e) => e.id === 'antoine')
+  const others = filtered.value.filter((e) => e.id !== 'antoine')
+  return [
+    { label: 'macos.contactsMyCard', items: me },
+    { label: 'macos.contactsOthers', items: others },
+  ].filter((g) => g.items.length)
+})
+
 const mobileOpen = ref(false)
 const openMobile = (id: string) => {
   selected.value = id
@@ -455,7 +517,7 @@ if (typeof preselect === 'string' && entries.some((e) => e.id === preselect)) {
 
 const container = ref<HTMLElement | null>(null)
 const winEl = ref<HTMLElement | null>(null)
-const { closeToDesktop, toggleZoom } = usePageWindow(winEl)
+const { closeToDesktop, goHome, toggleZoom } = usePageWindow(winEl)
 let ctx: gsap.Context | undefined
 
 onMounted(() => {
@@ -492,14 +554,18 @@ onUnmounted(() => ctx?.revert())
 }
 
 /* iOS : tuiles d'action et cartes groupées */
+/* Actions de fiche : rond bleu clair + libellé dessous, comme Contacts */
 .ios-tile {
-  @apply flex flex-col items-center gap-1 rounded-xl bg-black/[0.05] py-2.5 text-[16px] text-ablue transition-colors active:bg-black/10;
+  @apply flex flex-col items-center gap-1.5 text-[19px] text-ablue transition-opacity active:opacity-60;
+}
+.ios-tile > i {
+  @apply flex h-[52px] w-[52px] items-center justify-center rounded-full bg-ablue/10;
 }
 .ios-tile span {
-  @apply text-[10px] font-medium text-aink/70;
+  @apply text-[11px] font-medium text-ablue;
 }
 .ios-card {
-  @apply divide-y divide-black/5 rounded-xl bg-black/[0.04] px-4;
+  @apply divide-y divide-black/[0.07] rounded-[10px] bg-white px-4;
 }
 .ios-field {
   @apply py-2.5;
@@ -508,6 +574,6 @@ onUnmounted(() => ctx?.revert())
   @apply block text-[12px] text-black/45;
 }
 .ios-field p {
-  @apply mt-0.5 text-[15px] text-aink;
+  @apply mt-px text-[17px] text-aink;
 }
 </style>

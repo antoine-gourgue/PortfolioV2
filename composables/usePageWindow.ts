@@ -12,9 +12,10 @@ export function usePageWindow(winRef: Ref<HTMLElement | null>) {
 
   const zoomed = ref(false)
 
+  const goHome = () => router.push(localePath('/'))
+
   const closeToDesktop = () => {
     const el = winRef.value
-    const goHome = () => router.push(localePath('/'))
     if (!el) return goHome()
     gsap.to(el, {
       scale: 0.92,
@@ -37,5 +38,5 @@ export function usePageWindow(winRef: Ref<HTMLElement | null>) {
     })
   }
 
-  return { closeToDesktop, toggleZoom }
+  return { closeToDesktop, goHome, toggleZoom }
 }
