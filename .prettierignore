@@ -1,1 +1,5 @@
 public/assets/Trinity_fichiers
+
+# Gabarit A4 du CV : HTML volontairement dense, aux dimensions exactes du PDF.
+# Le reformater déplace les espaces entre balises inline, ce qui change le rendu.
+.cv-source
