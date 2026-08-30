@@ -6,7 +6,7 @@
   >
     <!-- ═══ Écran d'accueil iOS (mobile) ═══ -->
     <section
-      class="flex min-h-[calc(100svh-90px)] flex-col px-7 pb-6 pt-16 sm:px-14 lg:hidden"
+      class="flex h-[100svh] flex-col overflow-y-auto px-7 pb-28 pt-16 sm:px-14 lg:hidden"
     >
       <ClientOnly>
         <div
