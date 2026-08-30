@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col font-sans text-aink">
+  <div class="min-h-[100svh] flex flex-col font-sans text-aink">
     <!-- Fond d'écran macOS partagé par toutes les pages -->
     <div
       class="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
@@ -19,7 +19,7 @@
     <MacMenuBar />
     <Navbar />
 
-    <main class="flex-1 lg:pb-28" :class="dockVisible ? 'pb-24' : ''">
+    <main class="flex-1 lg:pb-28">
       <slot />
     </main>
 
@@ -59,13 +59,6 @@ import AgLogo from '~/components/ui/AGLogo.vue'
 
 const wallpaper = useWallpaper()
 const desktop = useDesktop()
-const route = useRoute()
-
-// Le dock mobile ne s'affiche que sur l'accueil : ailleurs, réserver sa hauteur
-// laissait apparaître le fond d'écran sous la page (voir Navbar.vue)
-const dockVisible = computed(
-  () => route.path.replace(/^\/[a-z]{2}(\/|$)/, '/') === '/'
-)
 
 // Comme sur macOS, cliquer sur le bureau désactive l'app au premier plan :
 // la barre de menu reprend l'identité du site. Les fenêtres (`[data-window]`
