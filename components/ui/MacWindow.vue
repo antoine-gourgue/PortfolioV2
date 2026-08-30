@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex min-h-[calc(100svh-2rem)] flex-col pb-[calc(28px+env(safe-area-inset-bottom,0px))] transition-shadow duration-300 lg:block lg:min-h-0 lg:overflow-hidden lg:rounded-2xl lg:border lg:pb-0 lg:backdrop-blur-2xl"
+    class="flex min-h-[calc(100svh-2rem)] flex-col pb-[calc(48px+env(safe-area-inset-bottom,0px))] transition-shadow duration-300 lg:block lg:min-h-0 lg:overflow-hidden lg:rounded-2xl lg:border lg:pb-0 lg:backdrop-blur-2xl"
     :style="!dark && mobileBg ? { '--mw-bg': mobileBg } : undefined"
     :class="[
       !dark ? (mobileBg ? 'bg-[var(--mw-bg)]' : 'bg-white') : '',
