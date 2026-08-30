@@ -14,7 +14,7 @@
         >
           <!-- Widget Horloge : même cadran que le widget macOS -->
           <button
-            class="wg-glass flex aspect-square items-center justify-center gap-5 rounded-[22px] p-4 sm:aspect-[2/1]"
+            class="wg-glass flex aspect-square items-center justify-center gap-5 rounded-[22px] p-4 sm:aspect-[2/1] sm:min-h-[147px]"
             :aria-label="$t('macos.clockTitle')"
             @click="desktop.state.value.apps.settings = true"
           >
@@ -72,7 +72,7 @@
 
           <!-- Widget Météo (live) -->
           <button
-            class="flex aspect-square flex-col rounded-[22px] bg-gradient-to-b from-[#2E67BE] to-[#4A86D8] p-4 text-left text-white shadow-lg sm:aspect-[2/1] sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+            class="flex aspect-square flex-col rounded-[22px] bg-gradient-to-b from-[#2E67BE] to-[#4A86D8] p-4 text-left text-white shadow-lg sm:aspect-[2/1] sm:min-h-[147px] sm:flex-row sm:items-center sm:justify-between sm:gap-4"
             @click="desktop.state.value.apps.weather = true"
           >
             <div class="min-w-0 sm:flex-1">
