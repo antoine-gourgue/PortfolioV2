@@ -6,10 +6,10 @@
       :style="{ backgroundImage: wallpaper.style.value }"
     >
       <div
-        class="absolute -left-[10%] top-[-15%] h-[36rem] w-[36rem] rounded-full bg-white/10 blur-[130px]"
+        class="absolute -left-[10%] top-[-15%] hidden h-[36rem] w-[36rem] rounded-full bg-white/10 blur-[130px] lg:block"
       ></div>
       <div
-        class="absolute right-[-8%] top-[25%] h-[32rem] w-[32rem] rounded-full bg-white/10 blur-[130px]"
+        class="absolute right-[-8%] top-[25%] hidden h-[32rem] w-[32rem] rounded-full bg-white/10 blur-[130px] lg:block"
       ></div>
       <AgLogo
         class="absolute left-1/2 top-1/2 h-72 w-80 -translate-x-1/2 -translate-y-1/2 text-white opacity-[0.07]"
@@ -24,22 +24,29 @@
     </main>
 
     <MacDock />
-    <DesktopLaunchpad />
-    <DesktopSpotlight />
     <DesktopBootScreen />
-    <DesktopAppWeather />
-    <DesktopAppCalculator />
-    <DesktopAppMusic />
-    <DesktopAppSettings />
-    <DesktopAppTrash />
-    <DesktopAirDropModal />
-    <DesktopNotificationCenter />
-    <DesktopAppMaps />
-    <DesktopAppSiri />
-    <DesktopAppNews />
-    <DesktopAppSports />
-    <DesktopLockScreen />
-    <DesktopNotificationBanner />
+
+    <!--
+      Fenêtres d'apps : montées fermées, elles n'ont pas besoin de participer
+      à l'hydratation initiale. Sur iPhone, hydrater ces quinze composants
+      bloquait le fil principal plusieurs secondes — aucun tap ne répondait.
+      `hydrate-on-idle` les rend interactives dès la première accalmie.
+    -->
+    <LazyDesktopLaunchpad hydrate-on-idle />
+    <LazyDesktopSpotlight hydrate-on-idle />
+    <LazyDesktopAppWeather hydrate-on-idle />
+    <LazyDesktopAppCalculator hydrate-on-idle />
+    <LazyDesktopAppMusic hydrate-on-idle />
+    <LazyDesktopAppSettings hydrate-on-idle />
+    <LazyDesktopAppTrash hydrate-on-idle />
+    <LazyDesktopAirDropModal hydrate-on-idle />
+    <LazyDesktopNotificationCenter hydrate-on-idle />
+    <LazyDesktopAppMaps hydrate-on-idle />
+    <LazyDesktopAppSiri hydrate-on-idle />
+    <LazyDesktopAppNews hydrate-on-idle />
+    <LazyDesktopAppSports hydrate-on-idle />
+    <LazyDesktopLockScreen hydrate-on-idle />
+    <LazyDesktopNotificationBanner hydrate-on-idle />
   </div>
 </template>
 
@@ -47,21 +54,7 @@
 import Navbar from '@/components/menus/Navbar.vue'
 import MacMenuBar from '~/components/menus/MacMenuBar.vue'
 import MacDock from '~/components/menus/MacDock.vue'
-import DesktopSpotlight from '~/components/desktop/Spotlight.vue'
 import DesktopBootScreen from '~/components/desktop/BootScreen.vue'
-import DesktopAppWeather from '~/components/desktop/AppWeather.vue'
-import DesktopAppCalculator from '~/components/desktop/AppCalculator.vue'
-import DesktopAppMusic from '~/components/desktop/AppMusic.vue'
-import DesktopAppSettings from '~/components/desktop/AppSettings.vue'
-import DesktopAppTrash from '~/components/desktop/AppTrash.vue'
-import DesktopAirDropModal from '~/components/desktop/AirDropModal.vue'
-import DesktopNotificationCenter from '~/components/desktop/NotificationCenter.vue'
-import DesktopAppMaps from '~/components/desktop/AppMaps.vue'
-import DesktopAppSiri from '~/components/desktop/AppSiri.vue'
-import DesktopAppNews from '~/components/desktop/AppNews.vue'
-import DesktopAppSports from '~/components/desktop/AppSports.vue'
-import DesktopLockScreen from '~/components/desktop/LockScreen.vue'
-import DesktopNotificationBanner from '~/components/desktop/NotificationBanner.vue'
 import AgLogo from '~/components/ui/AGLogo.vue'
 
 const wallpaper = useWallpaper()
