@@ -10,6 +10,19 @@
     overscroll-behavior: none;
   }
 
+  /* Safari iOS ignore overscroll-behavior sur le scroller racine (bug WebKit) :
+     même une page qui ne déborde pas peut être tirée et rebondir. Le seul
+     remède fiable est de figer le body — le défilement vit alors dans le
+     conteneur de l'app, comme dans une vraie app iOS. Desktop inchangé. */
+  @media (max-width: 1023px) {
+    html,
+    body {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+    }
+  }
+
   /* iOS retarde le clic pour laisser sa chance au double-tap de zoom :
      aucun élément interactif du site n'en a besoin */
   a,

@@ -1,5 +1,7 @@
 <template>
-  <div class="min-h-[100svh] flex flex-col font-sans text-aink">
+  <div
+    class="min-h-[100svh] flex flex-col font-sans text-aink max-lg:h-[100svh] max-lg:overflow-y-auto"
+  >
     <!-- Fond d'écran macOS partagé par toutes les pages -->
     <div
       class="pointer-events-none fixed inset-0 -z-10 overflow-hidden"

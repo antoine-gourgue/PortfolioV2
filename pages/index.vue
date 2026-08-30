@@ -6,7 +6,7 @@
   >
     <!-- ═══ Écran d'accueil iOS (mobile) ═══ -->
     <section
-      class="flex h-[100svh] flex-col overflow-y-auto px-7 pb-28 pt-16 sm:px-14 lg:hidden"
+      class="flex h-[100svh] flex-col overflow-y-auto px-7 pb-[92px] pt-12 sm:px-14 sm:pb-28 sm:pt-16 lg:hidden"
     >
       <ClientOnly>
         <div
@@ -14,12 +14,12 @@
         >
           <!-- Widget Horloge : même cadran que le widget macOS -->
           <button
-            class="wg-glass flex aspect-square items-center justify-center gap-5 rounded-[22px] p-4 sm:aspect-[2/1]"
+            class="wg-glass flex h-[144px] items-center justify-center gap-5 rounded-[22px] p-4 sm:aspect-[2/1] sm:h-auto"
             :aria-label="$t('macos.clockTitle')"
             @click="desktop.state.value.apps.settings = true"
           >
             <div
-              class="relative aspect-square w-[115px] shrink-0 rounded-full bg-white"
+              class="relative aspect-square w-[104px] shrink-0 rounded-full bg-white sm:w-[115px]"
             >
               <!-- Graduations : un bras du centre au bord, la marque au bout -->
               <span
@@ -72,7 +72,7 @@
 
           <!-- Widget Météo (live) -->
           <button
-            class="flex aspect-square flex-col rounded-[22px] bg-gradient-to-b from-[#2E67BE] to-[#4A86D8] p-4 text-left text-white shadow-lg sm:aspect-[2/1] sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+            class="flex h-[144px] flex-col rounded-[22px] bg-gradient-to-b from-[#2E67BE] to-[#4A86D8] p-4 text-left text-white shadow-lg sm:aspect-[2/1] sm:h-auto sm:flex-row sm:items-center sm:justify-between sm:gap-4"
             @click="desktop.state.value.apps.weather = true"
           >
             <div class="min-w-0 sm:flex-1">
@@ -105,7 +105,7 @@
       </ClientOnly>
 
       <div
-        class="mx-auto mt-9 grid w-full max-w-sm grid-cols-4 gap-x-4 gap-y-6 sm:mt-12 sm:max-w-none sm:grid-cols-6 sm:gap-x-6 sm:gap-y-10"
+        class="mx-auto mt-6 grid w-full max-w-sm grid-cols-4 gap-x-4 gap-y-3 sm:mt-12 sm:max-w-none sm:grid-cols-6 sm:gap-x-6 sm:gap-y-10"
       >
         <component
           :is="app.to ? NuxtLinkComponent : app.href ? 'a' : 'button'"
