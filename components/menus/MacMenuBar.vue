@@ -1,6 +1,6 @@
 <template>
   <header
-    class="pointer-events-none fixed inset-x-0 top-0 z-[315] flex h-8 items-center justify-between border-b px-3 text-[13px] font-medium backdrop-blur-2xl lg:pointer-events-auto lg:border-white/10 lg:bg-black/20 lg:px-4 lg:text-white"
+    class="pointer-events-none fixed inset-x-0 top-0 z-[315] flex h-8 items-center justify-between border-b px-3 text-[13px] font-medium lg:pointer-events-auto lg:backdrop-blur-2xl lg:border-white/10 lg:bg-black/20 lg:px-4 lg:text-white"
     :class="
       statusTint
         ? [

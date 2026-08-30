@@ -10,6 +10,14 @@
     overscroll-behavior: none;
   }
 
+  /* iOS retarde le clic pour laisser sa chance au double-tap de zoom :
+     aucun élément interactif du site n'en a besoin */
+  a,
+  button,
+  [role='button'] {
+    touch-action: manipulation;
+  }
+
   /* Navigation clavier visible, style macOS */
   :focus-visible {
     outline: 2px solid #0071e3;
