@@ -12,7 +12,6 @@
         @zoom="toggleZoom"
       >
         <div class="flex flex-1 min-h-[64vh]">
-          <!-- Colonne 1 : dossiers (desktop) -->
           <aside
             class="hidden w-44 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:block"
           >
@@ -38,19 +37,16 @@
             </button>
           </aside>
 
-          <!-- Colonne 2 : liste des notes -->
           <aside
             class="w-full shrink-0 border-r border-black/5 bg-[#FBF9F2]/80 px-3 py-4 lg:w-72"
             :class="selectedId ? 'hidden lg:block' : ''"
           >
-            <!-- Mobile : en-tête de Notes -->
             <h1
               class="px-1 pb-2 text-[34px] font-bold leading-tight tracking-[-0.9px] lg:hidden"
             >
               {{ $t(activeFolder.labelKey) }}
             </h1>
 
-            <!-- Sélecteur de dossier (mobile) -->
             <div class="mb-3 flex gap-2 lg:hidden">
               <button
                 v-for="f in folders"
@@ -67,7 +63,6 @@
               </button>
             </div>
 
-            <!-- Recherche fonctionnelle -->
             <div
               class="mb-3 flex items-center gap-2 rounded-[10px] bg-black/[0.06] px-3 py-2 lg:bg-black/5 lg:py-1.5"
             >
@@ -160,7 +155,7 @@
               {{ $t('macos.spotlightEmpty') }}
             </p>
 
-            <!-- Mobile : barre d'outils de Notes, décompte centré -->
+            <!-- Mobile: Notes toolbar, centered note count -->
             <div
               class="fixed inset-x-0 bottom-0 z-30 border-t border-black/[0.07] bg-[#FBF9F2]/85 pb-[calc(24px+env(safe-area-inset-bottom,0px))] pt-2.5 text-center text-[13px] text-black/45 backdrop-blur-xl lg:hidden"
             >
@@ -172,7 +167,6 @@
             </div>
           </aside>
 
-          <!-- Colonne 3 : contenu de la note -->
           <div
             class="min-w-0 flex-1 bg-white/60"
             :class="selectedId ? '' : 'hidden lg:block'"
@@ -222,7 +216,7 @@
           </div>
         </div>
       </UiMacWindow>
-      <!-- Balayer vers le haut pour revenir au bureau -->
+      <!-- Swipe up to return to the desktop -->
       <DesktopIosHomeBar app="page" @close="goHome" />
     </div>
   </main>
@@ -233,7 +227,7 @@ const { gsap } = useGsap()
 const { t, locale } = useI18n()
 const sfx = useSfx()
 
-// ── Notes personnelles (contenu i18n) ──
+// Personal notes (i18n content)
 const PERSONAL = [
   { id: 'colophon', pinned: true, date: '2026-08-18' },
   { id: 'digitaleo', pinned: false, date: '2026-06-12' },
@@ -273,7 +267,7 @@ const personalNotes = computed<NoteItem[]>(() =>
   })
 )
 
-// ── Mentions (API existante) ──
+// Mentions (existing API)
 interface Article {
   title: string
   snippet: string
@@ -297,7 +291,6 @@ const mentionNotes = computed<NoteItem[]>(() =>
   }))
 )
 
-// ── Dossiers, recherche, sélection ──
 const folder = ref<'notes' | 'mentions'>('notes')
 const query = ref('')
 const selectedId = ref('')
@@ -343,7 +336,7 @@ const openNote = (id: string) => {
   sfx.click()
 }
 
-// Desktop : présélectionne le colophon ; changement de dossier remet la sélection
+// Desktop: preselect the colophon; folder changes reset the selection
 watch(
   folder,
   () => {
@@ -360,7 +353,6 @@ onMounted(() => {
   if (window.innerWidth >= 1024) selectedId.value = 'colophon'
 })
 
-// ── Fenêtre ──
 const container = ref<HTMLElement | null>(null)
 const winEl = ref<HTMLElement | null>(null)
 const { closeToDesktop, goHome, toggleZoom } = usePageWindow(winEl)

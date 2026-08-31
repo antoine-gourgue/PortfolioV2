@@ -11,7 +11,6 @@
       <div
         class="min-h-full bg-gradient-to-b from-[#22509E] via-[#2E67BE] to-[#4A86D8] pb-6 text-white lg:min-h-0 lg:pb-3"
       >
-        <!-- Barre de titre (desktop : pastilles / mobile : chevron iOS) -->
         <div class="wx-drag flex items-center gap-2 px-3 pb-0 pt-10 lg:pt-2.5">
           <button
             class="group hidden h-3 w-3 items-center justify-center rounded-full border border-[#E0443E] bg-[#FF5F57] lg:flex"
@@ -54,7 +53,6 @@
           ></span>
         </div>
 
-        <!-- En-tête : ville, température géante, condition, H/L -->
         <div
           class="wx-drag mx-auto w-full max-w-md select-none px-6 pb-5 pt-3 text-center lg:max-w-none lg:pb-4 lg:pt-1"
         >
@@ -97,7 +95,7 @@
           </p>
         </div>
 
-        <!-- Prévisions horaires (du jour sélectionné) -->
+        <!-- Hourly forecast (for the selected day) -->
         <div
           v-if="shownHours.length"
           class="wx-card mx-auto w-[calc(100%-2rem)] max-w-md lg:mx-3 lg:w-auto lg:max-w-none"
@@ -128,7 +126,6 @@
           </div>
         </div>
 
-        <!-- Prévisions sur 6 jours -->
         <div
           v-if="days.length"
           class="wx-card mx-auto w-[calc(100%-2rem)] max-w-md lg:mx-3 lg:w-auto lg:max-w-none"
@@ -160,7 +157,7 @@
             <span class="w-9 text-right font-medium text-white/60 lg:w-7"
               >{{ Math.round(d.min) }}°</span
             >
-            <!-- Barre de plage de température (signature macOS) -->
+            <!-- Temperature range bar (the macOS signature) -->
             <span
               class="relative h-[4px] flex-1 overflow-hidden rounded-full bg-black/25"
             >
@@ -175,7 +172,7 @@
           </button>
         </div>
       </div>
-      <!-- Balayer vers le haut pour revenir à l'écran d'accueil -->
+      <!-- Swipe up to return to the home screen -->
       <DesktopIosHomeBar
         app="weather"
         dark
@@ -197,7 +194,7 @@ const bringToFront = () => {
   z.value = desktop.focusApp('weather')
 }
 
-// ── Météo à la position du visiteur (géoloc IP, sans permission) ──
+// Weather at the visitor's location (IP geolocation, no permission prompt)
 interface Current {
   temp: number
   code: number
@@ -223,7 +220,7 @@ const selectedDay = ref(0)
 const error = ref(false)
 let loaded = false
 
-// Données horaires brutes (6 jours) pour le détail par jour
+// Raw hourly data (6 days) for the per-day detail
 const rawHourly = ref<{ time: string[]; temp: number[]; code: number[] }>({
   time: [],
   temp: [],
@@ -235,7 +232,7 @@ const shownHours = computed<Hour[]>(() => {
   const day = days.value[selectedDay.value]
   if (!day || !rawHourly.value.time.length) return []
   if (selectedDay.value === 0) {
-    // Aujourd'hui : à partir de l'heure courante
+    // Today: from the current hour
     let start = rawHourly.value.time.findIndex((h) => h >= nowTime)
     if (start === -1) start = 0
     return rawHourly.value.time.slice(start, start + 9).map((time, i) => ({
@@ -245,7 +242,7 @@ const shownHours = computed<Hour[]>(() => {
       code: rawHourly.value.code[start + i],
     }))
   }
-  // Autre jour : de 8 h à 22 h, toutes les 2 h
+  // Any other day: 8am to 10pm, every 2h
   return rawHourly.value.time
     .map((time, i) => ({ time, i }))
     .filter(({ time }) => {
@@ -261,7 +258,7 @@ const shownHours = computed<Hour[]>(() => {
     }))
 })
 
-// En-tête : aujourd'hui = conditions actuelles, autre jour = son détail
+// Header: today shows current conditions, another day its own detail
 const header = computed(() => {
   const day = days.value[selectedDay.value]
   if (!day) return null
@@ -291,7 +288,7 @@ const load = async () => {
   if (loaded) return
   loaded = true
 
-  // 1. Estimation immédiate par IP (repli : Anglet), le temps que le GPS réponde
+  // 1. Instant IP estimate (fallback: Anglet) while the GPS answers
   let lat = 43.4832
   let lon = -1.514
   city.value = 'Anglet'
@@ -307,11 +304,11 @@ const load = async () => {
       if (geo.city) city.value = geo.city
     }
   } catch {
-    /* repli silencieux sur Rennes */
+    /* silent fallback to Rennes */
   }
   await fetchForecast(lat, lon)
 
-  // 2. Position précise du navigateur (permission demandée à l'ouverture de l'app)
+  // 2. Precise browser position (permission asked when the app opens)
   if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
@@ -327,9 +324,9 @@ const load = async () => {
           city.value =
             rev.locality || rev.city || rev.principalSubdivision || city.value
         } catch {
-          /* on garde le nom estimé par IP */
+          /* keep the IP-estimated name */
         }
-        // Position précise mémorisée pour le widget de l'écran d'accueil
+        // Precise position remembered for the home-screen widget
         try {
           localStorage.setItem(
             'ag-geo',
@@ -341,19 +338,19 @@ const load = async () => {
             })
           )
         } catch {
-          /* stockage indisponible */
+          /* storage unavailable */
         }
         await fetchForecast(latitude, longitude)
       },
       () => {
-        /* refusé : on reste sur l'estimation IP */
+        /* denied: stick with the IP estimate */
       },
       { timeout: 8000, maximumAge: 600000 }
     )
   }
 }
 
-// Prévisions open-meteo pour une position donnée
+// open-meteo forecast for a given position
 const fetchForecast = async (lat: number, lon: number) => {
   try {
     const res = await $fetch<{
@@ -402,7 +399,7 @@ const fetchForecast = async (lat: number, lon: number) => {
 const { t } = useI18n()
 const todayLabel = computed(() => t('macos.wxToday'))
 
-// Barre min→max positionnée dans la plage de la semaine
+// min→max bar positioned within the week's range
 const rangeBar = (d: Day) => {
   const weekMin = Math.min(...days.value.map((x) => x.min))
   const weekMax = Math.max(...days.value.map((x) => x.max))
@@ -416,7 +413,7 @@ const rangeBar = (d: Day) => {
   }
 }
 
-// Codes météo WMO → libellé
+// WMO weather codes → label
 const wxLabel = (code: number) => {
   if (code === 0) return 'macos.wxClear'
   if (code <= 2) return 'macos.wxPartly'
@@ -469,7 +466,7 @@ watch(
   @apply mb-1 flex items-center gap-1.5 border-b border-white/15 px-2 pb-1.5 text-[10px] font-semibold tracking-[0.08em] text-white/60;
 }
 
-/* Bandeau horaire : défilement sans barre visible */
+/* Hourly strip: scroll without a visible bar */
 .no-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;

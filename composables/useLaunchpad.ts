@@ -1,10 +1,10 @@
 export interface LaunchpadApp {
   id: string
   icon: string
-  /** Clé i18n du libellé, ou `raw` pour un nom propre non traduisible */
+  /** i18n key for the label, or `raw` for an untranslatable proper name */
   label?: string
   raw?: string
-  /** Route interne, lien externe, ou app du bureau à ouvrir */
+  /** Internal route, external link, or desktop app to open */
   to?: string
   href?: string
   app?: string
@@ -12,9 +12,9 @@ export interface LaunchpadApp {
 }
 
 /**
- * Catalogue des applications, partagé par le Launchpad et l'écran d'accueil
- * mobile. Volontairement sans fonctions : chaque entrée décrit ce qu'elle est,
- * c'est l'appelant qui décide comment l'ouvrir.
+ * App catalog shared by the Launchpad and the mobile home screen.
+ * Deliberately data-only: each entry describes what it is, the caller
+ * decides how to open it.
  */
 export const LAUNCHPAD_APPS: LaunchpadApp[] = [
   { id: 'projects', icon: 'appstore', label: 'nav.projects', to: '/projects' },
@@ -60,7 +60,7 @@ export const LAUNCHPAD_APPS: LaunchpadApp[] = [
 ]
 
 export function useLaunchpad() {
-  // Partagé : le Dock l'ouvre, la couche l'affiche, Échap la referme
+  // Shared state: the Dock opens it, the overlay renders it, Escape closes it
   const open = useState('launchpad', () => false)
   const toggle = () => {
     open.value = !open.value

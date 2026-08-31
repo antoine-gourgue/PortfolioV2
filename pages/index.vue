@@ -4,7 +4,6 @@
     class="relative font-sans text-aink"
     @contextmenu="openContext"
   >
-    <!-- ═══ Écran d'accueil iOS (mobile) ═══ -->
     <section
       class="flex h-[100svh] flex-col overflow-y-auto px-7 pb-[88px] pt-10 sm:px-14 sm:pb-28 sm:pt-16 lg:hidden"
     >
@@ -12,7 +11,7 @@
         <div
           class="mx-auto grid w-full max-w-sm grid-cols-2 gap-4 sm:max-w-2xl sm:grid-cols-6 sm:gap-6 [&>*]:sm:col-span-3"
         >
-          <!-- Widget Horloge : même cadran que le widget macOS -->
+          <!-- Clock widget: same dial as the macOS widget -->
           <button
             class="wg-glass flex aspect-square min-w-0 items-center justify-center gap-5 rounded-[22px] p-4 sm:aspect-[2/1]"
             :aria-label="$t('macos.clockTitle')"
@@ -24,7 +23,7 @@
               <div
                 class="relative aspect-square w-[115px] shrink-0 rounded-full bg-white sm:max-[729px]:scale-[0.8]"
               >
-                <!-- Graduations : un bras du centre au bord, la marque au bout -->
+                <!-- Tick marks: an arm from center to rim, the mark at its tip -->
                 <span
                   v-for="h in 12"
                   :key="h"
@@ -42,7 +41,7 @@
                     "
                   ></span>
                 </span>
-                <!-- Aiguilles : heure courte et épaisse, minute longue, seconde fine -->
+                <!-- Hands: hour short and thick, minute long, second thin -->
                 <span
                   class="absolute bottom-1/2 left-1/2 h-[27px] w-[3.5px] origin-bottom rounded-full bg-[#1d1d1f]"
                   :style="{
@@ -78,7 +77,6 @@
             </div>
           </button>
 
-          <!-- Widget Météo (live) -->
           <button
             class="flex aspect-square min-w-0 flex-col rounded-[22px] bg-gradient-to-b from-[#2E67BE] to-[#4A86D8] p-4 text-left text-white shadow-lg sm:aspect-[2/1] sm:flex-row sm:items-center sm:justify-between sm:gap-4"
             @click="desktop.state.value.apps.weather = true"
@@ -140,9 +138,7 @@
       </div>
     </section>
 
-    <!-- ═══ Bureau (desktop) ═══ -->
     <section ref="heroEl" class="relative hidden min-h-[92vh] w-full lg:block">
-      <!-- Icônes du bureau -->
       <div
         class="absolute right-2 top-14 z-[5] hidden grid-flow-col grid-rows-5 gap-x-2 gap-y-5 xl:grid"
       >
@@ -170,7 +166,6 @@
         </button>
       </div>
 
-      <!-- Fenêtre "À propos" -->
       <div
         v-show="!desktop.state.value.wins.about?.min"
         ref="aboutEl"
@@ -244,7 +239,6 @@
         </UiMacWindow>
       </div>
 
-      <!-- Fenêtre Terminal -->
       <div
         v-show="!desktop.state.value.wins.terminal?.min"
         ref="termEl"
@@ -265,13 +259,13 @@
         </UiMacWindow>
       </div>
 
-      <!-- Widgets de bureau. Rendus côté client seulement : l'horloge serait
-           figée à l'heure du serveur et provoquerait un écart d'hydratation. -->
+      <!-- Desktop widgets. Client-only: the clock would freeze at server
+           time and cause a hydration mismatch. -->
       <ClientOnly>
         <DesktopWidgets />
       </ClientOnly>
 
-      <!-- Indice de bas de page : s'efface dès que le visiteur descend -->
+      <!-- Scroll cue: fades as soon as the visitor moves down -->
       <div
         class="pointer-events-none absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 transition-opacity duration-500 lg:flex"
         :class="scrolledDown ? 'opacity-0' : 'opacity-100'"
@@ -300,7 +294,6 @@
       </div>
     </section>
 
-    <!-- ═══ Projets : fenêtre Finder + Quick Look ═══ -->
     <section
       v-show="!desktop.state.value.wins.finder?.min"
       class="mx-auto hidden w-full max-w-5xl px-5 pt-20 lg:block lg:px-8"
@@ -316,7 +309,7 @@
           @minimize="animateMinimize('finder')"
           @zoom="go('/projects')"
         >
-          <!-- Barre d'outils Finder, intégrée à la barre de titre -->
+          <!-- Finder toolbar, embedded in the title bar -->
           <template #toolbar>
             <div class="flex items-center gap-3">
               <div class="flex items-center gap-1 text-black/45">
@@ -331,7 +324,6 @@
                 $t('macos.finderProjects')
               }}</span>
               <div class="ml-auto flex items-center gap-2 text-black/45">
-                <!-- Vue grille / liste -->
                 <div
                   class="hidden overflow-hidden rounded-md border border-black/10 sm:flex"
                 >
@@ -355,7 +347,6 @@
                   </button>
                 </div>
 
-                <!-- Tri -->
                 <div class="relative hidden sm:block">
                   <button
                     class="tb-btn text-[14px]"
@@ -408,7 +399,6 @@
                   ><DesktopSfIcon name="share"
                 /></span>
 
-                <!-- Recherche réelle -->
                 <div
                   class="hidden items-center gap-1.5 rounded-md bg-black/5 px-2.5 py-1 md:flex"
                 >
@@ -427,7 +417,6 @@
           </template>
 
           <div class="flex min-h-[380px]">
-            <!-- Sidebar Finder -->
             <aside
               class="hidden w-48 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 sm:block"
             >
@@ -536,9 +525,8 @@
               </button>
             </aside>
 
-            <!-- Contenu (grille ou liste) + barre de statut -->
             <div class="flex min-w-0 flex-1 flex-col">
-              <!-- Vue Documents : le CV en fichier -->
+              <!-- Documents view: the CV as a file -->
               <div v-if="finderSection === 'docs'" class="flex-1 p-6">
                 <div
                   class="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 lg:grid-cols-4"
@@ -570,7 +558,6 @@
                 </p>
               </div>
 
-              <!-- Vue grille -->
               <div v-else-if="finderView === 'grid'" class="flex-1 p-6">
                 <div
                   v-if="finderProjects.length"
@@ -621,7 +608,7 @@
                 </p>
               </div>
 
-              <!-- Vue liste (colonnes triables) -->
+              <!-- List view (sortable columns) -->
               <div v-else class="flex-1 py-2">
                 <div class="finder-cols text-[11px] font-medium text-black/45">
                   <button class="text-left" @click="setSort('name')">
@@ -709,7 +696,6 @@
       </div>
     </section>
 
-    <!-- ═══ Parcours (Calendrier) ═══ -->
     <section
       v-show="!desktop.state.value.wins.notes?.min"
       class="mx-auto hidden w-full max-w-4xl px-5 pt-20 lg:block lg:px-8"
@@ -751,7 +737,7 @@
           </template>
 
           <div class="flex min-h-[300px]">
-            <!-- Sidebar des calendriers (checkboxes fonctionnelles) -->
+            <!-- Calendars sidebar (functional checkboxes) -->
             <aside
               class="hidden w-44 shrink-0 border-r border-black/5 bg-white/40 px-4 py-4 sm:block"
             >
@@ -776,7 +762,7 @@
               </button>
             </aside>
 
-            <!-- Événements (cliquables : popover de détail) -->
+            <!-- Events (clickable: detail popover) -->
             <div class="min-w-0 flex-1 space-y-3 p-5 sm:p-6">
               <button
                 v-for="step in visibleSteps"
@@ -820,7 +806,6 @@
       </div>
     </section>
 
-    <!-- ═══ Contact (Mail) ═══ -->
     <section
       v-show="!desktop.state.value.wins.mail?.min"
       class="mx-auto hidden w-full max-w-2xl px-5 pb-36 pt-20 lg:block lg:px-8"
@@ -883,7 +868,6 @@
       </div>
     </section>
 
-    <!-- ═══ Popover d'événement (Calendrier) ═══ -->
     <Teleport to="body">
       <Transition name="ql">
         <div
@@ -926,7 +910,6 @@
       </Transition>
     </Teleport>
 
-    <!-- ═══ Quick Look ═══ -->
     <Teleport to="body">
       <Transition name="ql">
         <div
@@ -985,7 +968,6 @@
       </Transition>
     </Teleport>
 
-    <!-- ═══ Menu contextuel du bureau ═══ -->
     <Teleport to="body">
       <div
         v-if="ctx.show"
@@ -1055,7 +1037,7 @@ const winEls: Record<string, Ref<HTMLElement | null>> = {
 const router = useRouter()
 const go = (path: string) => router.push(localePath(path))
 
-// Parcours façon Calendrier : catégories cochables et événements cliquables
+// Calendar-style timeline: checkable categories, clickable events
 const calCategories = [
   { id: 'work', labelKey: 'macos.calWork', color: '#1273DE' },
   { id: 'studies', labelKey: 'macos.calStudies', color: '#0E9F6E' },
@@ -1071,7 +1053,7 @@ const toggleCat = (id: string) => {
   activeCats[id] = !activeCats[id]
 }
 
-// Popover de détail d'un événement
+// Event detail popover
 const evt = reactive({ id: '', x: 0, y: 0 })
 const openEvent = (e: MouseEvent, id: string) => {
   sfx.click()
@@ -1155,9 +1137,8 @@ const visibleSteps = computed(() =>
 
 const NuxtLinkComponent = resolveComponent('NuxtLink')
 
-// Écran d'accueil iOS (mobile)
 const { locale } = useI18n()
-// Widget Horloge : angles des aiguilles en degrés, comme le widget macOS
+// Clock widget: hand angles in degrees, like the macOS widget
 const clock = reactive({ hour: 0, minute: 0, second: 0 })
 const tickClock = () => {
   const d = new Date()
@@ -1182,7 +1163,7 @@ let clockTimer: ReturnType<typeof setInterval> | null = null
 onMounted(() => (clockTimer = setInterval(tickClock, 1000)))
 onUnmounted(() => clockTimer && clearInterval(clockTimer))
 
-// Widget météo de l'écran d'accueil : position IP uniquement (aucune permission)
+// Home-screen weather widget: IP position only (no permission prompt)
 const wxWidget = reactive<{
   city: string
   temp: number | null
@@ -1197,7 +1178,7 @@ onMounted(async () => {
   let lon = -1.514
   wxWidget.city = 'Anglet'
 
-  // 1. Position précise mémorisée par l'app Météo (24 h)
+  // 1. Precise position remembered by the Weather app (24h)
   let located = false
   try {
     const cached = JSON.parse(localStorage.getItem('ag-geo') || 'null')
@@ -1208,10 +1189,10 @@ onMounted(async () => {
       located = true
     }
   } catch {
-    /* cache illisible */
+    /* unreadable cache */
   }
 
-  // 2. Permission déjà accordée ? Position GPS silencieuse (aucun popup)
+  // 2. Permission already granted? Silent GPS position (no popup)
   if (!located && 'permissions' in navigator) {
     try {
       const perm = await navigator.permissions.query({ name: 'geolocation' })
@@ -1231,15 +1212,15 @@ onMounted(async () => {
           )
           wxWidget.city = rev.locality || rev.city || wxWidget.city
         } catch {
-          /* nom de ville indisponible */
+          /* city name unavailable */
         }
       }
     } catch {
-      /* API Permissions indisponible */
+      /* Permissions API unavailable */
     }
   }
 
-  // 3. Repli : estimation par IP
+  // 3. Fallback: IP estimate
   if (!located) {
     try {
       const geo = await $fetch<{
@@ -1253,7 +1234,7 @@ onMounted(async () => {
         if (geo.city) wxWidget.city = geo.city
       }
     } catch {
-      /* repli Anglet */
+      /* Anglet fallback */
     }
   }
   try {
@@ -1268,7 +1249,7 @@ onMounted(async () => {
     wxWidget.max = res.daily.temperature_2m_max[0]
     wxWidget.min = res.daily.temperature_2m_min[0]
   } catch {
-    /* le widget reste sobre en cas d'échec */
+    /* the widget stays plain on failure */
   }
 })
 
@@ -1350,16 +1331,16 @@ const springboard: SpringboardApp[] = [
   { id: 'cv', icon: 'pdf', label: 'macos.deskCv', action: () => downloadCv() },
 ]
 
-// L'accueil (Finder) ne montre que les projets perso ; l'App Store montre tout
+// Home (Finder) only shows personal projects; the App Store shows all
 const projects = useProjects().filter((p) => !p.pro)
 const { t } = useI18n()
 
-// ── Finder fonctionnel : recherche, tri, vue, sélection ──
+// Functional Finder: search, sort, view, selection
 const finderView = ref<'grid' | 'list'>('grid')
 const finderQuery = ref('')
 const finderSelected = ref('')
 
-// ── Sidebar Finder cliquable : sections + tags ──
+// Clickable Finder sidebar: sections + tags
 const finderSection = ref<'projects' | 'recents' | 'docs'>('projects')
 const finderTag = ref('')
 
@@ -1371,7 +1352,7 @@ const openFinderSection = (s: 'projects' | 'recents' | 'docs') => {
 
 const scrollToDesktop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
 
-// Indice de scroll du bureau : masqué dès les premiers pixels parcourus
+// Desktop scroll cue: hidden after the first few pixels
 const scrolledDown = ref(false)
 const onScrollCue = () => {
   scrolledDown.value = window.scrollY > 40
@@ -1385,13 +1366,13 @@ const toggleFinderTag = (key: string) => {
   finderSelected.value = ''
 }
 
-// Dernière année mentionnée ("2024 — 2026" → 2026)
+// Last mentioned year ("2024 — 2026" → 2026)
 const yearOf = (p: (typeof projects)[number]) => {
   const years = p.year.match(/\d{4}/g)
   return years ? Number(years[years.length - 1]) : 0
 }
 
-// Couleurs de tags macOS, une par catégorie présente
+// macOS tag colors, one per present category
 const TAG_COLORS = [
   '#007AFF',
   '#AF52DE',
@@ -1454,7 +1435,6 @@ const finderProjects = computed(() => {
   )
 })
 
-// Quick Look
 const quicklook = ref('')
 const qlProject = computed(() =>
   projects.find((p) => p.key === quicklook.value)
@@ -1468,7 +1448,6 @@ watch(quicklook, (v) => {
   }
 })
 
-// ── Icônes du bureau ──
 const selectedIcon = ref('')
 const downloadCv = () => {
   track('cv_downloaded', { from: 'desktop' })
@@ -1481,7 +1460,7 @@ const openUrl = (url: string) =>
   window.open(url, '_blank', 'noopener,noreferrer')
 
 const deskIcons = [
-  // Colonne gauche : apps vitrines
+  // Left column: showcase apps
   {
     id: 'news',
     label: 'macos.newsTitle',
@@ -1512,7 +1491,7 @@ const deskIcons = [
     icon: 'sports',
     action: () => (desktop.state.value.apps.sports = true),
   },
-  // Colonne droite : fichiers et liens, comme sur un vrai bureau
+  // Right column: files and links, like a real desktop
   { id: 'cv', label: 'macos.deskCv', icon: 'pdf', action: downloadCv },
   {
     id: 'projects',
@@ -1534,13 +1513,12 @@ const deskIcons = [
   },
 ]
 
-// Remet les icônes du bureau à leur place d'origine
+// Snap desktop icons back to their original spots
 const arrangeIcons = () => {
   localStorage.removeItem('ag-icon-pos-v2')
   gsap.to('.desk-icon', { x: 0, y: 0, duration: 0.35, ease: 'power2.out' })
 }
 
-// ── Menu contextuel ──
 const onEsc = (e: KeyboardEvent) => {
   if (e.key === 'Escape') {
     quicklook.value = ''
@@ -1550,8 +1528,8 @@ const onEsc = (e: KeyboardEvent) => {
 
 const ctx = reactive({ show: false, x: 0, y: 0 })
 const openContext = (e: MouseEvent) => {
-  // Le menu du bureau (fond d'écran, etc.) n'existe que sur macOS : sur mobile
-  // et tablette, un appui long déclenche contextmenu et l'ouvrait par erreur
+  // The desktop menu (wallpaper, etc.) only exists on macOS: on mobile
+  // and tablet a long press fires contextmenu and opened it by mistake
   if (!window.matchMedia('(min-width: 1024px)').matches) return
   e.preventDefault()
   ctx.show = true
@@ -1560,10 +1538,9 @@ const openContext = (e: MouseEvent) => {
 }
 const closeContext = () => (ctx.show = false)
 
-// ── Fenêtres : réduction / restauration / zoom animés ──
-// L'aspiration vers le Dock vit dans useDesktop : elle est partagée avec les
-// apps flottantes et la barre de menu. ScrollTrigger est rafraîchi par le
-// watcher ci-dessous, une fois la section réellement repliée.
+// The Dock genie lives in useDesktop, shared with the floating apps and
+// the menu bar. ScrollTrigger is refreshed by the watcher below, once
+// the section has actually folded.
 const animateMinimize = (id: string) => desktop.minimize(id)
 
 const animateZoom = (id: string) => {
@@ -1577,7 +1554,7 @@ const animateZoom = (id: string) => {
   })
 }
 
-// Le dock appelle desktop.restore() : on intercepte pour animer
+// The dock calls desktop.restore(): intercept to animate
 watch(
   () =>
     Object.entries(desktop.state.value.wins)
@@ -1588,7 +1565,7 @@ watch(
     const oldMin = new Set(old.split(',').filter((s) => s.endsWith('true')))
     val.split(',').forEach((s) => {
       const [id, min] = s.split(':')
-      // Repli terminé : les déclencheurs gardaient l'ancienne hauteur de page
+      // Fold done: triggers kept the old page height
       if (min === 'true' && !oldMin.has(`${id}:true`)) {
         nextTick(() => useGsap().ScrollTrigger.refresh())
         return
@@ -1618,7 +1595,7 @@ watch(
 onMounted(() => {
   if (!container.value) return
 
-  // Deep-link : /?app=sports (ou music, news…) ouvre l'app directement
+  // Deep link: /?app=sports (or music, news…) opens the app directly
   const appParam = useRoute().query.app
   if (typeof appParam === 'string' && appParam in desktop.state.value.apps) {
     desktop.state.value.apps[appParam] = true
@@ -1679,7 +1656,7 @@ onMounted(() => {
         )
         .flat()
 
-      // ── Icônes du bureau déplaçables, position mémorisée ──
+      // Draggable desktop icons, position remembered
       let iconPos: Record<string, { x: number; y: number }> = {}
       try {
         iconPos = JSON.parse(localStorage.getItem('ag-icon-pos-v2') || '{}')
@@ -1723,7 +1700,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* Carte des widgets macOS : verre sombre translucide (voir Widgets.vue) */
+/* macOS widget card: translucent dark glass (see Widgets.vue) */
 .wg-glass {
   background: rgba(28, 30, 38, 0.34);
   backdrop-filter: blur(24px) saturate(1.4);
@@ -1740,8 +1717,8 @@ onUnmounted(() => {
     opacity: 0;
   }
 }
-/* Chevron d'invitation au scroll : flottement lent, désactivé si le
-   visiteur a demandé moins d'animations */
+/* Scroll-cue chevron: slow float, disabled when the visitor asked for
+   reduced motion */
 .scroll-cue {
   animation: cue-float 2.6s ease-in-out infinite;
 }
@@ -1768,7 +1745,7 @@ onUnmounted(() => {
   @apply mt-0.5 flex items-center gap-2 rounded-md px-2 py-1 text-[13px] text-aink/70;
 }
 
-/* Barre d'outils Finder */
+/* Finder toolbar */
 .tb-btn {
   @apply rounded px-1.5 py-0.5 transition-colors hover:bg-black/5;
 }

@@ -1,5 +1,5 @@
 <template>
-  <!-- Vraies icônes météo : Meteocons (Bas Milius, MIT) — animées, style Apple Weather -->
+  <!-- Real weather icons: Meteocons (Bas Milius, MIT) — animated, Apple Weather style -->
   <img
     :src="`/assets/weather/${file}.svg`"
     :alt="kind"
@@ -9,6 +9,7 @@
 </template>
 
 <script setup lang="ts">
+/** Animated weather icon for a WMO weather code */
 const props = defineProps<{ code: number }>()
 
 const kind = computed(() => {

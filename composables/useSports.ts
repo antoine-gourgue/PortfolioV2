@@ -1,9 +1,11 @@
 import type { InjectionKey } from 'vue'
 import type { SportsMatch, TeamFixture } from '~/types/sports'
 
-// Compétitions proposées, groupées comme dans la barre latérale d'Apple Sports.
-// Chaque code est vérifié comme répondant côté ESPN et présent dans la liste
-// blanche du serveur.
+/**
+ * Available competitions, grouped like the Apple Sports sidebar.
+ * Every code is verified to respond on ESPN's side and is present in the
+ * server allowlist.
+ */
 export const LEAGUE_GROUPS = [
   {
     titleKey: 'macos.sportsGroupLeagues',
@@ -45,13 +47,13 @@ export const LEAGUE_GROUPS = [
 export const LEAGUES = LEAGUE_GROUPS.flatMap((g) => g.leagues)
 
 /**
- * Actions et formats partagés par les panneaux de l'app Sports. Fournis par
- * AppSports plutôt que passés en propriétés : chaque panneau en utilise trois
- * ou quatre, et ils sont stables pour toute la durée de vie de la fenêtre.
+ * Actions and formatters shared by the Sports app panes. Provided by
+ * AppSports rather than passed as props: each pane uses three or four of
+ * them and they are stable for the window's whole lifetime.
  */
 export interface SportsCtx {
   openMatch: (m: SportsMatch) => void
-  /** Ouvre la fiche d'un match depuis le calendrier d'une équipe */
+  /** Open a match sheet from a team's fixture list */
   openFixture: (f: TeamFixture) => void
   openTeam: (team: { id: string; name: string }, from: 'main' | 'match') => void
   openAthlete: (
@@ -60,12 +62,10 @@ export interface SportsCtx {
     from?: 'team' | 'match' | 'main'
   ) => void
   backFromPane: () => void
-  // formats
   kickoff: (iso: string) => string
   matchDay: (iso: string) => string
   fixtureDay: (iso: string) => string
   articleDay: (iso: string) => string
-  // aides d'affichage
   winner: (m: SportsMatch, side: 'home' | 'away') => boolean
   initials: (full: string) => string
   lastName: (full: string) => string
@@ -77,13 +77,13 @@ export const SPORTS_KEY: InjectionKey<SportsCtx> = Symbol('sports')
 
 export const useSportsCtx = () => {
   const ctx = inject(SPORTS_KEY)
-  if (!ctx) throw new Error('useSportsCtx() hors de AppSports')
+  if (!ctx) throw new Error('useSportsCtx() used outside AppSports')
   return ctx
 }
 
 /**
- * Formats de dates et petites aides d'affichage. Séparé du composant pour que
- * les panneaux n'aient pas à réimporter useI18n.
+ * Date formatters and small display helpers, kept out of the component so
+ * panes do not have to re-wire useI18n themselves.
  */
 export const useSportsFormat = () => {
   const { locale, t } = useI18n()
@@ -121,8 +121,8 @@ export const useSportsFormat = () => {
     return Number(m[side].score) > Number(m[other].score)
   }
 
-  // Repli quand ESPN n'a pas de portrait : les initiales, pas le numéro, qui
-  // est déjà affiché à côté.
+  // Fallback when ESPN has no portrait: initials, not the jersey number,
+  // which is already shown next to it.
   const initials = (full: string) => {
     const parts = full.trim().split(/\s+/).filter(Boolean)
     if (!parts.length) return '–'
@@ -131,13 +131,13 @@ export const useSportsFormat = () => {
     return (first + last).toUpperCase()
   }
 
-  // Sur le terrain, la place manque : on n'affiche que le nom de famille
+  // Pitch labels are cramped: last name only
   const lastName = (full: string) => {
     const parts = full.trim().split(' ')
     return parts.length > 1 ? parts[parts.length - 1] : full
   }
 
-  // ESPN ne renvoie les postes qu'en anglais
+  // ESPN only returns positions in English
   const POSITIONS: Record<string, string> = {
     goalkeeper: 'macos.sportsGoalkeepers',
     defender: 'macos.sportsDefenders',
@@ -147,11 +147,11 @@ export const useSportsFormat = () => {
   }
   const posLabel = (pos: string) => {
     const key = POSITIONS[pos.trim().toLowerCase()]
-    // Les libellés existants sont au pluriel : « Gardiens » → « Gardien »
+    // Existing labels are plural: "Gardiens" → "Gardien"
     return key ? t(key).replace(/s$/, '') : pos
   }
 
-  // ESPN annonce parfois une photo qui n'existe plus : on retombe sur le numéro
+  // ESPN sometimes advertises a photo that no longer exists: fall back to the number
   const dropPhoto = (p: { photo: string }) => {
     p.photo = ''
   }

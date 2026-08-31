@@ -65,8 +65,8 @@
         </transition>
       </div>
 
-      <!-- Mobile : heure iOS à gauche — un tap ouvre le centre de notifications,
-           le geste depuis le bord haut appartenant au système sur iPhone -->
+      <!-- Mobile: iOS time on the left — a tap opens the notification
+           center, since the top-edge gesture belongs to the system on iPhone -->
       <button
         class="pointer-events-auto ml-2 rounded px-1 text-[15px] font-semibold tabular-nums lg:hidden"
         aria-label="notification center"
@@ -79,7 +79,7 @@
     </div>
 
     <div class="flex h-full items-stretch gap-0.5">
-      <!-- Mobile : indicateur lecture en cours, comme le ♪ de la barre iOS -->
+      <!-- Mobile: now-playing indicator, like the ♪ in the iOS bar -->
       <button
         v-if="musicPlaying"
         class="menu-btn flex h-full items-center px-2 sm:hidden"
@@ -91,7 +91,7 @@
         </span>
       </button>
 
-      <!-- Mobile : bascule de langue en cycle -->
+      <!-- Mobile: language cycler -->
       <button
         class="menu-btn flex h-full items-center rounded px-2 uppercase lg:hidden"
         aria-label="language"
@@ -100,7 +100,7 @@
         {{ currentLocale }}
       </button>
 
-      <!-- Menu de saisie macOS : badge de langue + liste cochée -->
+      <!-- macOS input menu: language badge + checked list -->
       <div class="relative hidden h-full lg:block">
         <button
           class="menu-btn flex h-full items-center rounded px-2"
@@ -140,7 +140,7 @@
         </transition>
       </div>
 
-      <!-- Musique : contrôles de lecture dans la barre de menu -->
+      <!-- Music: playback controls in the menu bar -->
       <div class="relative hidden h-full sm:block">
         <button
           class="menu-btn flex h-full items-center rounded px-2 text-current opacity-90"
@@ -282,7 +282,7 @@
           }}</i
         >
       </button>
-      <!-- Batterie : niveau réel du visiteur (Battery API), icône pleine sinon -->
+      <!-- Battery: the visitor's real level (Battery API), full icon otherwise -->
       <div class="relative h-full">
         <button
           class="menu-btn flex h-full items-center gap-1.5 rounded px-2 text-current opacity-90"
@@ -393,7 +393,7 @@
         </transition>
       </div>
 
-      <!-- Wi-Fi : menu façon macOS -->
+      <!-- Wi-Fi: macOS-style menu -->
       <div class="relative h-full">
         <button
           class="menu-btn flex h-full items-center rounded px-2 text-[15px] text-current opacity-90"
@@ -413,7 +413,7 @@
           >
             <div class="flex items-center justify-between px-2.5 py-1">
               <p class="text-[13px] font-bold text-aink">Wi‑Fi</p>
-              <!-- Interrupteur macOS : 26 × 15, bleu système -->
+              <!-- macOS switch: 26x15, system blue -->
               <button
                 class="relative h-[15px] w-[26px] rounded-full transition-colors duration-200"
                 :class="wifiOn ? 'bg-ablue' : 'bg-black/25'"
@@ -483,7 +483,6 @@
       >
         <DesktopSfIcon name="search" />
       </button>
-      <!-- Siri -->
       <button
         class="menu-btn hidden h-full items-center px-2 lg:flex"
         aria-label="Siri"
@@ -533,7 +532,7 @@ type Entry = MenuItem | 'sep'
 
 const go = (path: string) => router.push(localePath(path))
 const open = (url: string) => window.open(url, '_blank', 'noopener,noreferrer')
-// Mise en veille : déclenche l'écran de verrouillage
+// Sleep: triggers the lock screen
 const sleep = () => {
   setTimeout(() => (desktop.state.value.locked = true), 250)
 }
@@ -549,14 +548,14 @@ const downloadCv = () => {
 interface Menu {
   id: string
   label: string
-  /** Nom d'app : affiché en gras, comme sur macOS */
+  /** App name: rendered bold, like macOS */
   bold?: boolean
-  /** Libellé déjà littéral (nom propre ou chaîne déjà traduite) */
+  /** Label already literal (proper name or pre-translated string) */
   raw?: boolean
   items: Entry[]
 }
 
-// ── Menus communs, présents quelle que soit l'app au premier plan ──
+// Menus shared by every frontmost app
 const goMenu: Menu = {
   id: 'go',
   label: 'macos.menuGo',
@@ -581,7 +580,7 @@ const helpMenu: Menu = {
   ],
 }
 
-// ── Barre du bureau : l'identité du site, quand aucune app n'est au premier plan ──
+// Desktop bar: the site identity when no app is frontmost
 const siteMenus: Menu[] = [
   {
     id: 'app',
@@ -626,13 +625,12 @@ const siteMenus: Menu[] = [
   helpMenu,
 ]
 
-// ── Barre contextuelle ──
-// Sur macOS, la barre de menu appartient à l'app au premier plan : son nom
-// passe en gras à gauche et ses menus remplacent ceux de l'app précédente.
-// `desktop.state.activeApp` est alimenté par focusApp() (apps flottantes)
-// et par focus() (fenêtres du bureau).
+// Contextual bar. On macOS the menu bar belongs to the frontmost app:
+// its name goes bold on the left and its menus replace the previous
+// app's. `desktop.state.activeApp` is fed by focusApp() (floating apps)
+// and focus() (desktop windows).
 
-/** Apps en fenêtre flottante : masquables ET quittables */
+/** Floating-window apps: hideable AND quittable */
 const FLOATING_APPS = new Set([
   'calculator',
   'weather',
@@ -644,7 +642,7 @@ const FLOATING_APPS = new Set([
   'trash',
 ])
 
-/** Nom porté par chaque app dans la barre de menu */
+/** The name each app carries in the menu bar */
 const APP_NAMES: Record<string, { label?: string; raw?: string }> = {
   calculator: { label: 'macos.calcTitle' },
   weather: { label: 'macos.weatherTitle' },
@@ -661,12 +659,12 @@ const APP_NAMES: Record<string, { label?: string; raw?: string }> = {
   mail: { raw: 'Mail' },
 }
 
-// Les fenêtres du bureau n'ont pas de fermeture propre (leur pastille rouge
-// réduit, comme le jaune) : on ne leur propose donc que « Masquer ».
+// Desktop windows have no real close (their red light minimizes, like
+// the yellow one), so they only get "Hide".
 const hideApp = (id: string) =>
   FLOATING_APPS.has(id) ? desktop.minimizeApp(id) : desktop.minimize(id)
 
-/** Menus propres à une app, insérés entre son nom et « Aller » */
+/** App-specific menus, inserted between its name and "Go" */
 const appExtras = (id: string): Menu[] => {
   if (id === 'music')
     return [
@@ -726,9 +724,9 @@ const menus = computed<Menu[]>(() => {
 })
 
 /**
- * Mobile : la barre d'état prend la couleur de l'app ou de la page au premier
- * plan, pour se lire comme son prolongement plutôt que comme un bandeau
- * translucide posé dessus. Sur le bureau elle reste translucide.
+ * Mobile: the status bar takes the color of the frontmost app or page, so
+ * it reads as its continuation rather than a translucent strip laid on
+ * top. On the desktop it stays translucent.
  */
 const STATUS_TINTS: Record<string, { bg: string; light: boolean }> = {
   calculator: { bg: '#000000', light: true },
@@ -745,7 +743,7 @@ const isHome = computed(
   () => route.path.replace(/^\/[a-z]{2}(\/|$)/, '/') === '/'
 )
 
-/** Fond propre à certaines pages, pour que la barre s'y fonde aussi */
+/** Page-specific background, so the bar blends into those too */
 const PAGE_TINTS: Record<string, string> = {
   '/blog': '#FBF9F2',
   '/about': '#F2F2F7',
@@ -760,7 +758,7 @@ const statusTint = computed(() => {
 })
 
 const openMenu = ref('')
-// Changer d'app referme le menu déroulant : son id n'existe peut-être plus
+// Switching apps closes the open dropdown: its id may no longer exist
 watch(
   () => desktop.state.value.activeApp,
   () => (openMenu.value = '')
@@ -797,7 +795,7 @@ const cycleLocale = () => {
   router.push(switchLocalePath(next))
 }
 
-// Horloge macOS en direct (+ format court iOS pour mobile)
+// Live macOS clock (+ short iOS format for mobile)
 const clock = ref('')
 const clockShort = ref('')
 let timer: ReturnType<typeof setInterval> | undefined
@@ -816,7 +814,7 @@ const tick = () => {
   }).format(now)
 }
 
-// Raccourcis clavier globaux
+// Global keyboard shortcuts
 const shortcuts: Record<string, () => void> = {
   '1': () => go('/'),
   '2': () => go('/projects'),
@@ -842,7 +840,7 @@ const onKeydown = (e: KeyboardEvent) => {
   }
 }
 
-// ── Wi-Fi décoratif façon macOS ──
+// Decorative macOS-style Wi-Fi
 const wifiOn = ref(true)
 const wifiNetwork = ref("Livebox d'Antoine")
 const WIFI_NETWORKS = [
@@ -859,7 +857,7 @@ const openSettingsFromMenu = () => {
   openMenu.value = ''
 }
 
-// Clin d'œil macOS : le navigateur du visiteur « consomme beaucoup d'énergie »
+// macOS wink: the visitor's browser is "using significant energy"
 const energyApp = ref('Navigateur')
 const detectBrowser = () => {
   const ua = navigator.userAgent
@@ -876,7 +874,7 @@ const detectBrowser = () => {
             : 'Navigateur'
 }
 
-// ── Batterie réelle du visiteur (API non supportée par Safari/Firefox) ──
+// The visitor's real battery (API unsupported on Safari/Firefox)
 const battery = reactive<{ level: number | null; charging: boolean }>({
   level: null,
   charging: false,

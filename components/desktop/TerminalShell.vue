@@ -4,8 +4,7 @@
     class="h-[336px] cursor-text overflow-y-auto p-4 font-mono text-[12.5px] leading-relaxed text-white/90"
     @click="focusInput"
   >
-    <!-- Historique -->
-    <!-- eslint-disable-next-line vue/no-v-html : lignes générées localement, entrée utilisateur échappée -->
+    <!-- eslint-disable-next-line vue/no-v-html : lines are generated locally, user input is escaped -->
     <p
       v-for="(line, i) in history"
       :key="i"
@@ -13,7 +12,6 @@
       v-html="line"
     ></p>
 
-    <!-- Ligne de saisie -->
     <p class="term-line flex items-center gap-1.5">
       <span class="shrink-0 text-emerald-400">antoine@macbook</span>
       <span class="shrink-0 text-white/40">~ %</span>
@@ -133,7 +131,7 @@ const neofetch = () => {
     `<span class="text-sky-300">${t('macos.term.location')}</span>: Anglet, France`,
     `<span class="text-sky-300">Uptime</span>: ${uptime} min`,
   ]
-  // la ligne Musique n'apparaît que si un titre est en cours
+  // the Music line only shows while a track is playing
   if (music.state.value.playing) {
     info.splice(
       6,
@@ -142,7 +140,7 @@ const neofetch = () => {
     )
   }
   NEOFETCH_ART.forEach((art, i) =>
-    // leading serré : sans ça les blocs du logo ne se rejoignent pas
+    // tight leading: without it the logo blocks do not join up
     print(
       `<span class="block leading-[1.08] ${i === 0 ? 'pt-2' : ''}">${art}  ${info[i] ?? ''}</span>`
     )
@@ -184,7 +182,7 @@ const execute = (raw: string) => {
 
   if (cmd) track('terminal_command', { command: cmd.toLowerCase() })
 
-  // Ces commandes ne prennent aucun argument : on refuse plutôt que d'ignorer
+  // These commands take no arguments: refuse rather than silently ignore
   const NO_ARGS = new Set([
     'help',
     'whoami',
@@ -388,7 +386,7 @@ const complete = () => {
 }
 
 onMounted(() => {
-  // Historique initial : fiche système, statut du moment, puis l'aide
+  // Initial history: system card, current status, then the help
   print(PROMPT + 'neofetch')
   neofetch()
   print('&nbsp;')

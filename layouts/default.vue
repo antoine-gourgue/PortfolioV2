@@ -2,7 +2,7 @@
   <div
     class="min-h-[100svh] flex flex-col font-sans text-aink max-lg:h-[100svh] max-lg:overflow-y-auto"
   >
-    <!-- Fond d'écran macOS partagé par toutes les pages -->
+    <!-- macOS wallpaper shared by every page -->
     <div
       class="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
       :style="{ backgroundImage: wallpaper.style.value }"
@@ -29,10 +29,10 @@
     <DesktopBootScreen />
 
     <!--
-      Fenêtres d'apps : montées fermées, elles n'ont pas besoin de participer
-      à l'hydratation initiale. Sur iPhone, hydrater ces quinze composants
-      bloquait le fil principal plusieurs secondes — aucun tap ne répondait.
-      `hydrate-on-idle` les rend interactives dès la première accalmie.
+      App windows all mount closed, so they have no business joining the
+      initial hydration. On iPhone, hydrating these fifteen components
+      blocked the main thread for seconds — no tap responded.
+      `hydrate-on-idle` makes them interactive at the first lull.
     -->
     <LazyDesktopLaunchpad hydrate-on-idle />
     <LazyDesktopSpotlight hydrate-on-idle />
@@ -62,9 +62,9 @@ import AgLogo from '~/components/ui/AGLogo.vue'
 const wallpaper = useWallpaper()
 const desktop = useDesktop()
 
-// Comme sur macOS, cliquer sur le bureau désactive l'app au premier plan :
-// la barre de menu reprend l'identité du site. Les fenêtres (`[data-window]`
-// et `.win`), la barre de menu (`header`) et les docks (`nav`) gardent la main.
+// Like macOS, clicking the desktop blurs the frontmost app and the menu
+// bar falls back to the site identity. Windows (`[data-window]`, `.win`),
+// the menu bar (`header`) and the docks (`nav`) keep the pointer.
 const onDesktopPointerDown = (e) => {
   const target = e.target
   if (!(target instanceof Element)) return

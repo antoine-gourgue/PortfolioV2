@@ -8,7 +8,6 @@
       :style="{ zIndex: z }"
       @pointerdown="bringToFront"
     >
-      <!-- Voile du tiroir mobile -->
       <Transition name="sp-fade">
         <div
           v-if="drawer"
@@ -17,7 +16,7 @@
         ></div>
       </Transition>
 
-      <!-- ══ Colonne des ligues : fixe sur desktop, tiroir sur mobile ══ -->
+      <!-- Leagues column: fixed on desktop, drawer on mobile -->
       <DesktopSportsSidebar
         v-model:drawer="drawer"
         v-model:query="query"
@@ -33,9 +32,7 @@
         @open-hit="openHit"
       />
 
-      <!-- ══ Colonne principale ══ -->
       <div class="flex min-h-0 min-w-0 flex-1 flex-col">
-        <!-- En-tête mobile -->
         <div class="shrink-0 lg:hidden">
           <div class="flex items-center justify-between px-4 pb-1 pt-12">
             <button
@@ -62,7 +59,7 @@
           </p>
         </div>
 
-        <!-- En-tête desktop : navigation par jour -->
+        <!-- Desktop header: day-by-day navigation -->
         <div
           class="sports-drag hidden h-[52px] shrink-0 items-center justify-center gap-3 border-b border-white/[0.08] px-5 lg:flex"
         >
@@ -100,11 +97,9 @@
           }}</span>
         </div>
 
-        <!-- Corps commun -->
         <div
           class="sp-scroll min-h-0 flex-1 overflow-y-auto px-4 pb-8 lg:px-5 lg:py-4"
         >
-          <!-- ══ Détail d'un match ══ -->
           <DesktopSportsMatchPane
             v-if="pane === 'match' && selMatch"
             v-model:tab="matchTab"
@@ -113,7 +108,6 @@
             :loading="detailLoading"
           />
 
-          <!-- ══ Fiche joueur ══ -->
           <DesktopSportsAthletePane
             v-else-if="pane === 'athlete'"
             :detail="athleteDetail"
@@ -121,7 +115,6 @@
             :loading="detailLoading"
           />
 
-          <!-- ══ Fiche équipe ══ -->
           <DesktopSportsTeamPane
             v-else-if="pane === 'team'"
             :detail="teamDetail"
@@ -129,9 +122,7 @@
             :sel-name="selTeamName"
           />
 
-          <!-- ══ Matchs ══ -->
           <template v-else-if="view === 'matches'">
-            <!-- Navigation par jour (mobile) -->
             <div class="mb-3 flex items-center justify-center gap-2 lg:hidden">
               <button
                 class="flex h-7 w-7 items-center justify-center rounded-full text-[#8E8E93]"
@@ -192,10 +183,8 @@
             </p>
 
             <template v-else>
-              <!-- ── Match à la une ── -->
               <DesktopSportsHero v-if="featured" :match="featured" />
 
-              <!-- ── Les autres matchs du jour ── -->
               <DesktopSportsMatchList
                 v-if="restMatches.length"
                 :matches="restMatches"
@@ -203,7 +192,6 @@
             </template>
           </template>
 
-          <!-- ══ Actualités ══ -->
           <DesktopSportsNewsList
             v-else-if="view === 'news'"
             :articles="articles"
@@ -211,7 +199,6 @@
             :error="error"
           />
 
-          <!-- ══ Classement ══ -->
           <DesktopSportsStandings
             v-else
             :rows="standings"
@@ -220,7 +207,7 @@
           />
         </div>
       </div>
-      <!-- Balayer vers le haut pour revenir à l'écran d'accueil -->
+      <!-- Swipe up to return to the home screen -->
       <DesktopIosHomeBar app="sports" dark @close="closeSports" />
     </div>
   </Teleport>
@@ -255,7 +242,6 @@ const bringToFront = () => {
   z.value = desktop.focusApp('sports')
 }
 
-// ── État de la fenêtre ──
 const league = ref('fra.1')
 const view = ref<SportsView>('matches')
 const dayOffset = ref(0)
@@ -276,7 +262,6 @@ const VIEW_LABELS = {
 } as const
 const viewLabel = (v: SportsView) => t(VIEW_LABELS[v])
 
-// ── Navigation par jour ──
 const dayDate = computed(() => {
   const d = new Date()
   d.setDate(d.getDate() + dayOffset.value)
@@ -301,7 +286,6 @@ const shiftDay = (delta: number) => {
 }
 watch(dayOffset, () => load())
 
-// ── Chargement de la vue courante ──
 const load = async (quiet = false) => {
   if (!quiet) {
     loading.value = true
@@ -331,8 +315,8 @@ const load = async (quiet = false) => {
   }
 }
 
-// Le match mis en avant : le direct s'il y en a un, sinon le dernier terminé,
-// sinon le prochain coup d'envoi.
+// The featured match: a live one if any, else the latest finished one,
+// else the next kickoff.
 const featured = computed<SportsMatch | null>(() => {
   const list = matches.value
   if (!list.length) return null
@@ -346,7 +330,7 @@ const restMatches = computed(() =>
   matches.value.filter((m) => m.id !== featured.value?.id)
 )
 
-// ── Tiroir des ligues : permanent sur desktop, coulissant sous 1024 px ──
+// Leagues drawer: permanent on desktop, sliding below 1024px
 const drawer = ref(false)
 const openDrawer = () => {
   sfx.click()
@@ -380,7 +364,6 @@ const setView = (v: SportsView) => {
   load()
 }
 
-// ── Recherche d'un club ou d'un joueur ──
 const query = ref('')
 const searching = ref(false)
 const results = ref<{ teams: SearchHit[]; players: SearchHit[] }>({
@@ -401,7 +384,7 @@ watch(query, (q) => {
     return
   }
   searching.value = true
-  // On laisse la frappe se poser avant d'interroger ESPN
+  // Let the typing settle before querying ESPN
   searchTimer = setTimeout(async () => {
     try {
       results.value = await $fetch<{
@@ -420,8 +403,8 @@ watch(query, (q) => {
 })
 
 const openHit = (hit: SearchHit, kind: 'teams' | 'players') => {
-  // Chaque fiche est interrogée dans sa propre compétition : on bascule aussi
-  // la liste de matchs, sinon le retour arrière afficherait une autre ligue.
+  // Each sheet is queried in its own competition: switch the match list
+  // too, otherwise going back would show another league.
   if (hit.league && hit.league !== league.value) {
     league.value = hit.league
     load()
@@ -432,10 +415,9 @@ const openHit = (hit: SearchHit, kind: 'teams' | 'players') => {
   else openAthlete(hit.id, hit.name, 'main')
 }
 
-// ── Panneaux de détail : match, équipe et joueur ──
 const pane = ref<SportsPane>('main')
 const cameFrom = ref<'main' | 'match'>('main')
-// D'où l'on vient quand on ouvre un joueur : effectif d'une équipe ou compo
+// Where a player was opened from: a team's squad or a lineup
 const athleteFrom = ref<'team' | 'match' | 'main'>('team')
 const matchTab = ref<MatchTab>('summary')
 const selMatch = ref<SportsMatch | null>(null)
@@ -446,28 +428,28 @@ const athleteName = ref('')
 const selTeamName = ref('')
 const detailLoading = ref(false)
 
-// Le fil de match est traduit côté serveur : la langue fait partie de la requête
+// Match commentary is translated server-side: the language is part of the request
 const fetchMatchDetail = (id: string) =>
   $fetch<MatchDetail>('/api/sports', {
     query: { league: league.value, type: 'match', id, lang: locale.value },
   })
 
-// Changer la langue du site change celle du fil, sans recharger la page
+// Changing the site language switches the commentary without a reload
 watch(locale, async () => {
   if (pane.value !== 'match' || !selMatch.value) return
   try {
     matchDetail.value = await fetchMatchDetail(selMatch.value.id)
   } catch {
-    /* on garde le détail affiché */
+    /* keep the displayed detail */
   }
 })
 
-// D'où l'on vient quand on ouvre un match : liste du jour ou fiche équipe
+// Where a match was opened from: the day's list or a team sheet
 const matchFrom = ref<'main' | 'team'>('main')
 
-// Une ligne de calendrier n'a pas toutes les données d'un match du jour :
-// on complète, le serveur se charge du reste. Les rencontres passées gardent
-// leurs compositions, leur commentaire et leurs statistiques.
+// A fixture row lacks part of a day-match's data: fill in what we can,
+// the server does the rest. Past games keep their lineups, commentary
+// and stats.
 const openFixture = (f: TeamFixture) => {
   const side = (t: TeamFixture['home']) => ({
     id: t.id,
@@ -579,7 +561,7 @@ const backFromPane = () => {
   pane.value = cameFrom.value === 'match' ? 'match' : 'main'
 }
 
-// Actions et formats mis à disposition des panneaux enfants
+// Actions and formatters made available to child panes
 provide(SPORTS_KEY, {
   openMatch,
   openFixture,
@@ -589,7 +571,7 @@ provide(SPORTS_KEY, {
   ...format,
 })
 
-// ── Rafraîchissement discret pendant les matchs du jour ──
+// Quiet refresh while the day's matches are on
 let timer: ReturnType<typeof setInterval> | undefined
 const stopPolling = () => {
   if (timer) clearInterval(timer)
@@ -601,7 +583,7 @@ const startPolling = () => {
     const hasLive = matches.value.some((m) => m.state === 'in')
     if (view.value === 'matches' && dayOffset.value === 0 && hasLive) {
       await load(true)
-      // garde l'en-tête du match ouvert en phase avec le score en direct
+      // keep the open match header in step with the live score
       if (selMatch.value) {
         selMatch.value =
           matches.value.find((m) => m.id === selMatch.value!.id) ??
@@ -612,14 +594,13 @@ const startPolling = () => {
       try {
         matchDetail.value = await fetchMatchDetail(selMatch.value.id)
       } catch {
-        /* on garde le détail affiché */
+        /* keep the displayed detail */
       }
     }
   }, 60_000)
 }
 onUnmounted(stopPolling)
 
-// ── Ouverture : animation + déplacement ──
 let drags: ReturnType<typeof Draggable.create> = []
 watch(
   () => desktop.state.value.apps.sports,
@@ -656,15 +637,15 @@ watch(
 </script>
 
 <style>
-/* Styles volontairement globaux : les panneaux enfants (terrain, listes,
-   cartes) utilisent les mêmes classes. Toutes sont préfixées `sp-`/`sports-`,
-   il n'y a donc pas de risque de collision ailleurs dans le site. */
-/* Cartes façon Apple Sports : gris élevé sur fond noir, sans ombre */
+/* Deliberately global styles: the child panes (pitch, lists, cards) use
+   the same classes. All are prefixed `sp-`/`sports-`, so nothing collides
+   elsewhere on the site. */
+/* Apple Sports-style cards: elevated gray on black, no shadow */
 .sp-card {
   background: #1c1c1e;
   border-radius: 18px;
 }
-/* Terrain : pelouse sombre, bandes de tonte et ligne médiane */
+/* Pitch: dark turf, mowing stripes and halfway line */
 .sp-pitch {
   background:
     linear-gradient(
@@ -683,9 +664,9 @@ watch(
     linear-gradient(160deg, #14512f, #0d3a22);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
 }
-/* Survol des lignes qui ouvrent une fiche : aucun fond, un chevron qui
-   apparaît à droite comme dans Réglages ou Contacts. Il reste dans le flux,
-   toujours présent mais transparent, pour que rien ne se décale au survol. */
+/* Hover on rows that open a sheet: no background, a chevron fading in on
+   the right like Settings or Contacts. It stays in the flow, always
+   present but transparent, so nothing shifts on hover. */
 .sp-chev {
   flex: none;
   width: 8px;
@@ -703,8 +684,8 @@ watch(
 .sp-av {
   transition: background-color 0.18s ease;
 }
-/* Noms de clubs et de joueurs cités dans une phrase : un simple soulignement
-   qui n'apparaît qu'au survol, sans changer la couleur ni la graisse. */
+/* Club and player names inside a sentence: a plain underline shown on
+   hover only, no color or weight change. */
 .sp-link {
   text-decoration: underline;
   text-decoration-color: transparent;
@@ -717,7 +698,7 @@ watch(
     text-decoration-color: currentColor;
   }
 }
-/* Flèche des articles : même logique, dans le fil du titre */
+/* Article arrow: same logic, inline with the title */
 .sp-chev-inline {
   display: inline;
   width: auto;
@@ -743,7 +724,7 @@ watch(
     transition: opacity 0.18s ease;
   }
 }
-/* Séparateurs internes en retrait, comme les listes iOS */
+/* Inset internal separators, like iOS lists */
 .sp-row + .sp-row {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
@@ -762,15 +743,15 @@ watch(
     opacity: 0.45;
   }
 }
-/* Pastille du direct */
+/* Live dot */
 .sp-dot {
   animation: sp-live 1.4s ease-in-out infinite;
 }
-/* Halo de la pastille sur la une, où le fond est coloré */
+/* Dot halo on the featured card, where the background is colored */
 .sp-glow {
   box-shadow: 0 0 8px #ff453a;
 }
-/* Voile du tiroir mobile */
+/* Mobile drawer scrim */
 .sp-fade-enter-active,
 .sp-fade-leave-active {
   transition: opacity 0.25s ease;

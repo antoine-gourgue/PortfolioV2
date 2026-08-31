@@ -1,29 +1,31 @@
-// Traduction du fil de match d'ESPN, qui n'existe qu'en anglais : le paramètre
-// `lang` de leur API change le flux, pas la langue. Le commentaire est très
-// gabarité — sur un échantillon de cinq matchs, les tournures ci-dessous
-// couvrent 100 % des 583 lignes relevées — donc une traduction par motifs
-// suffit. Toute phrase qui ne correspond à rien est renvoyée telle quelle
-// plutôt que déformée.
+/**
+ * Translation of ESPN's match commentary, which only exists in English —
+ * their API's `lang` parameter changes the feed, not the language. The
+ * commentary is highly templated: on a five-match sample the patterns
+ * below covered 100% of the 583 lines observed, so pattern translation
+ * is enough. Any sentence that matches nothing is returned untouched
+ * rather than mangled.
+ */
 
 interface Rules {
-  // Fragments descriptifs, remplacés partout dans la phrase. L'ordre compte :
-  // les expressions longues d'abord, sinon un fragment court mangerait la fin
-  // d'un fragment long.
+  // Descriptive fragments, replaced anywhere in the sentence. Order
+  // matters: long expressions first, otherwise a short fragment would eat
+  // the tail of a longer one.
   fragments: Array<[RegExp, string]>
-  // Phrases entières. `$1`, `$2`… reprennent les noms et les chiffres.
+  // Full sentences. `$1`, `$2`… carry the names and numbers over.
   sentences: Array<[RegExp, string]>
-  // Tournures après lesquelles « de » s'élide devant une voyelle (français)
+  // Phrases after which French "de" elides before a vowel
   elide: string[]
 }
 
-// ══ Français ══
+// French
 const FR_FRAGMENTS: Rules['fragments'] = [
-  // pieds et parties du corps
+  // feet and body parts
   [/\bright footed shot\b/g, 'frappe du pied droit'],
   [/\bleft footed shot\b/g, 'frappe du pied gauche'],
   [/\bheader\b/g, 'tête'],
 
-  // zones de frappe
+  // shot zones
   [/\bfrom outside the box\b/g, 'de l’extérieur de la surface'],
   [/\bfrom the centre of the box\b/g, 'du centre de la surface'],
   [/\bfrom the right side of the box\b/g, 'du côté droit de la surface'],
@@ -35,7 +37,7 @@ const FR_FRAGMENTS: Rules['fragments'] = [
   [/\bfrom a difficult angle on the right\b/g, 'd’un angle fermé à droite'],
   [/\bfrom a difficult angle on the left\b/g, 'd’un angle fermé à gauche'],
 
-  // issues de la frappe
+  // shot outcomes
   [/\bis saved in the top right corner\b/g, ', repoussée en haut à droite'],
   [/\bis saved in the top left corner\b/g, ', repoussée en haut à gauche'],
   [/\bis saved in the bottom right corner\b/g, ', repoussée en bas à droite'],
@@ -60,7 +62,7 @@ const FR_FRAGMENTS: Rules['fragments'] = [
   [/\bto the top left corner\b/g, ', en haut à gauche'],
   [/\bto the centre of the goal\b/g, ', au centre du but'],
 
-  // passes décisives et phases
+  // assists and phases of play
   [/\bAssisted by\b/g, 'Sur une passe de'],
   [/\bwith a cross\b/g, 'sur un centre'],
   [/\bwith a through ball\b/g, 'sur une passe en profondeur'],
@@ -70,14 +72,14 @@ const FR_FRAGMENTS: Rules['fragments'] = [
   [/\bfollowing a set piece situation\b/g, 'sur coup de pied arrêté'],
   [/\bafter a corner\b/g, 'après un corner'],
 
-  // Doit rester en dernier : les tournures « Assisted by » et « Foul by »
-  // sont déjà consommées plus haut, ne reste que le « by » du gardien.
+  // Must stay last: "Assisted by" and "Foul by" are consumed above, only
+  // the goalkeeper's "by" remains.
   [/\bby\b/g, 'par'],
 ]
 
-// ══ Français ══
+// French
 const FR_SENTENCES: Rules['sentences'] = [
-  // décisions de l'arbitrage vidéo
+  // VAR decisions
   [
     /^VAR Decision: No Penalty (.+)\.?$/,
     'Décision VAR : pas de penalty pour $1.',
@@ -91,7 +93,7 @@ const FR_SENTENCES: Rules['sentences'] = [
   ],
   [/^VAR Decision: (.+)\.?$/, 'Décision VAR : $1.'],
 
-  // fautes et coups francs
+  // fouls and free kicks
   [/^Foul by (.+)\.$/, 'Faute de $1.'],
   [/^Hand ?ball by (.+)\.$/, 'Main de $1.'],
   [
@@ -111,7 +113,7 @@ const FR_SENTENCES: Rules['sentences'] = [
     '$1 obtient un coup franc sur l’aile droite.',
   ],
 
-  // cartons
+  // cards
   [
     /^(.+) is shown the yellow card for a bad foul\.$/,
     '$1 reçoit un carton jaune pour une faute.',
@@ -139,7 +141,7 @@ const FR_SENTENCES: Rules['sentences'] = [
   ],
   [/^(.+) is shown the red card\.$/, '$1 est expulsé.'],
 
-  // corners, hors-jeu, penaltys
+  // corners, offsides, penalties
   [/^Corner, (.+)\. Conceded by (.+)\.$/, 'Corner pour $1, concédé par $2.'],
   [/^Corner, (.+)\.$/, 'Corner pour $1.'],
   [
@@ -158,14 +160,14 @@ const FR_SENTENCES: Rules['sentences'] = [
   [/^Penalty saved!(.*)$/, 'Penalty arrêté !$1'],
   [/^Penalty missed!(.*)$/, 'Penalty manqué !$1'],
 
-  // frappes et buts : le début est fixe, la suite passe par les fragments
+  // shots and goals: the head is fixed, the tail goes through the fragments
   [/^Attempt missed\.(.*)$/, 'Frappe manquée.$1'],
   [/^Attempt saved\.(.*)$/, 'Frappe arrêtée.$1'],
   [/^Attempt blocked\.(.*)$/, 'Frappe contrée.$1'],
   [/^Goal!(.*)$/, 'But !$1'],
   [/^Own Goal by (.+)\.$/, 'But contre son camp de $1.'],
 
-  // changements et blessures
+  // substitutions and injuries
   [
     /^Substitution, (.+)\. (.+) replaces (.+) because of an injury\.$/,
     'Changement, $1 : $2 remplace $3, blessé.',
@@ -182,7 +184,7 @@ const FR_SENTENCES: Rules['sentences'] = [
   [/^Delay over\. They are ready to continue\.$/, 'Reprise du jeu.'],
   [/^Delay over\.(.*)$/, 'Reprise du jeu.$1'],
 
-  // jalons du match
+  // match milestones
   [
     /^Lineups are announced and players are warming up\.$/,
     'Les compositions sont annoncées, les joueurs s’échauffent.',
@@ -209,8 +211,8 @@ const FR_SENTENCES: Rules['sentences'] = [
   [/^Delay in match for a drinks break\.$/, 'Pause fraîcheur.'],
 ]
 
-// « Sur une passe de Angel » → « d'Angel ». On ne le fait qu'après des
-// tournures connues, pour ne pas écorcher un nom de club contenant « de ».
+// "Sur une passe de Angel" → "d'Angel". Applied only after known phrases
+// so a club name containing "de" never gets clipped.
 
 const FR_ELIDE = [
   'Sur une passe de',
@@ -219,7 +221,7 @@ const FR_ELIDE = [
   'But contre son camp de',
 ]
 
-// ══ Espagnol ══
+// Spanish
 const ES_FRAGMENTS: Rules['fragments'] = [
   [/\bright footed shot\b/g, 'disparo con la derecha'],
   [/\bleft footed shot\b/g, 'disparo con la izquierda'],
@@ -287,7 +289,7 @@ const ES_FRAGMENTS: Rules['fragments'] = [
   [/\bfollowing a set piece situation\b/g, 'a balón parado'],
   [/\bafter a corner\b/g, 'tras un córner'],
 
-  // Doit rester en dernier, comme en français
+  // Must stay last, same reason as in French
   [/\bby\b/g, 'por'],
 ]
 
@@ -425,8 +427,8 @@ const RULES: Record<string, Rules> = {
   es: { fragments: ES_FRAGMENTS, sentences: ES_SENTENCES, elide: [] },
 }
 
-// « Sur une passe de Angel » → « d'Angel ». On ne le fait qu'après des
-// tournures connues, pour ne pas écorcher un nom de club contenant « de ».
+// "Sur une passe de Angel" → "d'Angel". Applied only after known phrases
+// so a club name containing "de" never gets clipped.
 const elide = (text: string, prefixes: string[]) => {
   let out = text
   for (const prefix of prefixes) {
@@ -439,7 +441,7 @@ const elide = (text: string, prefixes: string[]) => {
 const applyFragments = (text: string, rules: Rules) => {
   let out = text
   for (const [re, fr] of rules.fragments) out = out.replace(re, fr)
-  // Les fragments d'issue commencent par une virgule : on recolle proprement
+  // Outcome fragments start with a comma: rejoin cleanly
   return elide(out, rules.elide)
     .replace(/\s+,/g, ',')
     .replace(/,\s*,/g, ',')
@@ -448,9 +450,9 @@ const applyFragments = (text: string, rules: Rules) => {
 }
 
 /**
- * Traduit une ligne de commentaire vers `lang`. Renvoie l'anglais d'origine
- * si la langue n'est pas gérée ou si aucune tournure ne correspond : mieux
- * vaut une phrase non traduite qu'une phrase fausse.
+ * Translate one commentary line into `lang`. Returns the original English
+ * when the language is unsupported or no pattern matches: an untranslated
+ * sentence beats a wrong one.
  */
 export const translateCommentary = (text: string, lang: string): string => {
   const rules = RULES[lang]
@@ -463,7 +465,7 @@ export const translateCommentary = (text: string, lang: string): string => {
   return src
 }
 
-/** Vrai si la ligne a été reconnue, pour mesurer la couverture. */
+/** True when the line was recognized, used to measure coverage. */
 export const isTranslated = (text: string, lang: string): boolean =>
   (RULES[lang]?.sentences ?? []).some(([re]) => re.test(text.trim()))
 

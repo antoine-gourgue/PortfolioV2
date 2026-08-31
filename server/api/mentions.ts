@@ -29,7 +29,7 @@ export default defineEventHandler(async () => {
 
   const apiKey = process.env.GOOGLE_API_KEY
   const cx = process.env.GOOGLE_CX_ID
-  // Sans clé configurée, on renvoie une liste vide plutôt que de planter
+  // No key configured: return an empty list rather than crash
   if (!apiKey || !cx) return { results: [] }
 
   const query = encodeURIComponent('"Antoine Gourgue"')
@@ -40,7 +40,7 @@ export default defineEventHandler(async () => {
       { timeout: 10_000 }
     )
 
-    // `items` est absent quand la recherche ne remonte rien
+    // `items` is absent when the search returns nothing
     const results: FormattedResult[] = (res?.items ?? []).map((item) => ({
       title: item.title,
       link: item.link,
@@ -52,7 +52,7 @@ export default defineEventHandler(async () => {
     lastFetchTime = now
     return cachedResults
   } catch {
-    // Quota atteint ou Google indisponible : on ressert le cache, sinon vide
+    // Quota hit or Google down: serve the stale cache, else empty
     return cachedResults ?? { results: [] }
   }
 })

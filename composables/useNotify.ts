@@ -9,8 +9,8 @@ let timer: ReturnType<typeof setTimeout> | undefined
 let counter = 0
 
 /**
- * Notifications système façon macOS / iOS (remplace les toasts génériques).
- * Une seule bannière à la fois, auto-disparition après 4,5 s.
+ * macOS/iOS-style system notifications (in place of generic toasts).
+ * One banner at a time, auto-dismissed after 4.5s.
  */
 export function useNotify() {
   const current = useState<Notice | null>('notification', () => null)

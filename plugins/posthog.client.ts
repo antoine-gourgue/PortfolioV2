@@ -1,11 +1,13 @@
 // eslint-disable-next-line import/no-named-as-default
 import posthog from 'posthog-js'
 
-// PostHog (cloud EU) : autocapture, pageviews SPA, session replay
-// et suivi des ouvertures d'apps du bureau.
-// - cookieless (persistence memory) : pas de bannière de consentement
-// - init différée après le boot pour ne pas peser sur le LCP
-// - `.ph-no-capture` sur un élément l'exclut entièrement du replay
+/**
+ * PostHog (EU cloud): autocapture, SPA pageviews, session replay and
+ * desktop-app open tracking.
+ * - cookieless (memory persistence): no consent banner needed
+ * - init deferred past boot so it never weighs on the LCP
+ * - `.ph-no-capture` on an element excludes it from replay entirely
+ */
 export default defineNuxtPlugin((nuxtApp) => {
   const { posthogKey, posthogHost } = useRuntimeConfig().public
 
@@ -22,13 +24,13 @@ export default defineNuxtPlugin((nuxtApp) => {
       },
     })
 
-    // Pageviews SPA : à l'init puis à chaque navigation
+    // SPA pageviews: on init, then on every navigation
     posthog.capture('$pageview')
     useRouter().afterEach((to) => {
       posthog.capture('$pageview', { path: to.fullPath })
     })
 
-    // Une app du bureau passe de fermée à ouverte → événement dédié
+    // A desktop app flipping closed → open gets its own event
     const desktop = useDesktop()
     for (const id of Object.keys(desktop.state.value.apps)) {
       watch(
@@ -41,7 +43,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   }
 
   nuxtApp.hook('app:mounted', () => {
-    // après l'écran de boot et le premier rendu
+    // past the boot screen and the first paint
     setTimeout(start, 2500)
   })
 

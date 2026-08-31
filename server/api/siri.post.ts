@@ -1,6 +1,6 @@
 /**
- * Siri — assistant vocal propulsé par Groq (GPT-OSS 120B).
- * Rate limiting par IP + plafond global pour rester sous le quota gratuit.
+ * Siri — voice assistant backed by Groq (GPT-OSS 120B).
+ * Per-IP rate limiting plus a global ceiling to stay under the free quota.
  */
 
 interface ChatMessage {
@@ -8,7 +8,7 @@ interface ChatMessage {
   content: string
 }
 
-// ── Rate limiting en mémoire (par instance serverless : suffisant ici) ──
+// In-memory rate limiting (per serverless instance — good enough here)
 const ipHits = new Map<string, number[]>()
 const globalHits: number[] = []
 const WINDOW_MS = 60_000

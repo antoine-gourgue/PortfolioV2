@@ -51,7 +51,6 @@
       {{ $t('macos.sportsTitle') }}
     </p>
 
-    <!-- Recherche d'un club ou d'un joueur -->
     <div class="relative mb-2 px-1">
       <svg
         viewBox="0 0 16 16"
@@ -82,7 +81,7 @@
     </div>
 
     <div class="sp-scroll -mx-1 min-h-0 flex-1 overflow-y-auto px-1">
-      <!-- Résultats de recherche, à la place des compétitions -->
+      <!-- Search results, in place of the competitions -->
       <template v-if="query.trim().length >= 2">
         <p v-if="searching" class="px-2 py-3 text-[12.5px] text-[#636366]">
           {{ $t('macos.sportsSearching') }}
@@ -137,7 +136,6 @@
         </p>
       </template>
 
-      <!-- Compétitions, groupées -->
       <template v-else>
         <template v-for="grp in LEAGUE_GROUPS" :key="grp.titleKey">
           <p
@@ -202,8 +200,8 @@ defineEmits<{
   openHit: [hit: SearchHit, kind: 'teams' | 'players']
 }>()
 
-// Tiroir et champ de recherche restent pilotés par la fenêtre parente, qui les
-// remet à zéro quand on change de panneau.
+// Drawer and search field stay driven by the parent window, which resets
+// them on pane changes.
 const drawer = defineModel<boolean>('drawer', { required: true })
 const query = defineModel<string>('query', { required: true })
 

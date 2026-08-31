@@ -128,9 +128,8 @@ const props = defineProps<{ match: SportsMatch }>()
 const { kickoff, matchDay } = useSportsFormat()
 const { openMatch, openTeam, openAthlete } = useSportsCtx()
 
-// Certains clubs ont une couleur officielle très claire (le blanc de l'OM,
-// par exemple) : on la ramène sous un seuil de luminance pour garder le texte
-// blanc lisible par-dessus.
+// Some clubs have a very light official color (OM's white, for one):
+// clamp it under a luminance ceiling so the white text stays readable.
 const darken = (hex: string, fallback: string) => {
   if (!/^#[0-9a-f]{6}$/i.test(hex)) return fallback
   const rgb = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16))
@@ -140,15 +139,15 @@ const darken = (hex: string, fallback: string) => {
   return `rgb(${r}, ${g}, ${b})`
 }
 
-// Dégradé aux couleurs des deux clubs, assombri vers le centre pour le texte
+// Gradient in both clubs' colors, darkened toward the center for the text
 const heroGradient = computed(() => {
   const home = darken(props.match.home.color, '#1F2937')
   const away = darken(props.match.away.color, '#374151')
   return `linear-gradient(100deg, ${home} -10%, #0B1220 45%, #0B1220 55%, ${away} 115%)`
 })
 
-// Buteurs répartis de chaque côté, pour qu'on voie qui a marqué pour qui.
-// Au-delà de quatre, on résume : la une ne doit pas s'étirer sans fin.
+// Scorers split per side, so you can see who scored for whom. Beyond
+// four we summarize: the featured card must not stretch forever.
 const MAX_HERO_GOALS = 4
 const splitGoals = (goals: MatchGoal[], side: 'home' | 'away') => {
   const mine = goals.filter((g) => g.side === side)

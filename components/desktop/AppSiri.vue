@@ -11,7 +11,6 @@
         class="fixed inset-x-3 bottom-24 z-[320] mx-auto w-auto max-w-[360px] rounded-3xl bg-[#1c1c1e]/90 p-5 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.6)] ring-1 ring-white/10 backdrop-blur-2xl lg:inset-x-auto lg:right-4 lg:top-10 lg:bottom-auto lg:w-[340px]"
         @click.stop
       >
-        <!-- Fermer -->
         <button
           class="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-[11px] text-white/60 transition hover:bg-white/20"
           aria-label="close"
@@ -20,7 +19,6 @@
           ✕
         </button>
 
-        <!-- Orbe Siri -->
         <button
           class="mx-auto block"
           :aria-label="listening ? 'stop' : 'listen'"
@@ -32,7 +30,6 @@
           ></span>
         </button>
 
-        <!-- État / transcription -->
         <p
           class="mt-3 min-h-[20px] text-center text-[13px] font-medium text-white/80"
         >
@@ -47,7 +44,6 @@
           }}</template>
         </p>
 
-        <!-- Conversation -->
         <div
           v-if="exchanges.length"
           ref="convEl"
@@ -65,7 +61,6 @@
           </div>
         </div>
 
-        <!-- Saisie clavier -->
         <form class="mt-4 flex items-center gap-2" @submit.prevent="submitText">
           <input
             v-model="textInput"
@@ -107,10 +102,9 @@ const textInput = ref('')
 const exchanges = ref<Array<{ question: string; answer: string }>>([])
 const convEl = ref<HTMLElement | null>(null)
 
-// Historique envoyé au LLM
+// History sent to the LLM
 const history: Array<{ role: 'user' | 'assistant'; content: string }> = []
 
-// ── Reconnaissance vocale ──
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let recognition: any = null
 
@@ -169,7 +163,7 @@ const toggleListening = () => {
   }
 }
 
-// ── Synthèse vocale : voix Google de la langue en priorité ──
+// Speech synthesis: prefer the Google voice for the language
 const pickVoice = (): SpeechSynthesisVoice | undefined => {
   const lang = (LANGS[locale.value] ?? 'fr-FR').slice(0, 2)
   const candidates = speechSynthesis
@@ -183,15 +177,15 @@ const pickVoice = (): SpeechSynthesisVoice | undefined => {
 }
 
 onMounted(() => {
-  // getVoices() est vide tant que le navigateur n'a pas chargé la liste
+  // getVoices() is empty until the browser has loaded the list
   speechSynthesis?.getVoices?.()
   speechSynthesis?.addEventListener?.('voiceschanged', () =>
     speechSynthesis.getVoices()
   )
 })
 
-// iOS n'autorise speak() que débloqué par un geste utilisateur : on parle
-// une utterance muette pendant le clic, les vraies réponses passent ensuite
+// iOS only allows speak() once unlocked by a user gesture: speak a muted
+// utterance during the click, real replies go through afterwards
 let speechUnlocked = false
 const unlockSpeech = () => {
   if (speechUnlocked || !('speechSynthesis' in window)) return
@@ -201,14 +195,14 @@ const unlockSpeech = () => {
     speechSynthesis.speak(utterance)
     speechUnlocked = true
   } catch {
-    /* synthèse indisponible */
+    /* synthesis unavailable */
   }
 }
 
 const speak = (text: string) => {
   if (desktop.state.value.sfxMuted || !('speechSynthesis' in window)) return
   const utterance = new SpeechSynthesisUtterance(
-    // on ne lit pas les emojis ni les URLs à voix haute
+    // emojis and URLs are not read aloud
     text
       .replace(/https?:\/\/\S+/g, '')
       .replace(/[\p{Emoji_Presentation}]/gu, '')
@@ -220,14 +214,14 @@ const speak = (text: string) => {
   const fire = () => speechSynthesis.speak(utterance)
   if (speechSynthesis.speaking || speechSynthesis.pending) {
     speechSynthesis.cancel()
-    // iOS : speak() juste après cancel() est avalé sans ce léger délai
+    // iOS: speak() right after cancel() gets swallowed without this delay
     setTimeout(fire, 150)
   } else {
     fire()
   }
 }
 
-// Le modèle peut laisser passer du markdown : on l'aplatit en texte brut
+// The model may leak markdown: flatten it to plain text
 const stripMarkdown = (text: string) =>
   text
     .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
@@ -235,15 +229,13 @@ const stripMarkdown = (text: string) =>
     .replace(/^\s*[-•]\s+/gm, '')
     .trim()
 
-// ── Appel du LLM ──
-// ── Repli hors-ligne ──
-// Groq tourne sur un quota gratuit (8 requêtes/IP/min, 24 au global) et peut
-// être injoignable. Plutôt qu'une erreur, on répond avec le moteur d'intents
-// local : dégradé mais toujours utile, et hors de portée de toute panne réseau.
+// Offline fallback. Groq runs on a free quota (8 req/IP/min, 24 global)
+// and can be unreachable. Rather than an error, answer with the local
+// intent engine: degraded but still useful, and beyond any network failure.
 const intents = useChatbotIntents()
 
-// Les intents contiennent des liens HTML ; Siri affiche du texte brut et le lit
-// à voix haute, on ne garde donc que le libellé.
+// Intents contain HTML links; Siri renders plain text and reads it aloud,
+// so only the label is kept.
 const stripHtml = (html: string) =>
   html
     .replace(/<[^>]+>/g, '')
@@ -320,7 +312,7 @@ watch(
   (open) => {
     if (open) {
       sfx.pop()
-      // démarre l'écoute directement (l'ouverture vient d'un clic utilisateur)
+      // start listening right away (the open came from a user click)
       nextTick(() => toggleListening())
     } else {
       recognition?.stop?.()
@@ -332,7 +324,7 @@ watch(
 </script>
 
 <style scoped>
-/* Orbe Siri : sphère brillante aux tourbillons colorés (façon icône officielle) */
+/* Siri orb: glossy sphere with colored swirls (official-icon style) */
 .siri-orb {
   position: relative;
   overflow: hidden;

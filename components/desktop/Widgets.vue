@@ -1,15 +1,14 @@
 <template>
-  <!-- Widgets de bureau : rangée en haut à gauche, au-dessus de la fenêtre.
-       Formats macOS : petit 155 × 155, moyen 329 × 155. Un clic ouvre l'app,
-       un clic maintenu décolle la tuile pour la déplacer. -->
+  <!-- Desktop widgets: top-left row, above the window. macOS formats:
+       small 155x155, medium 329x155. A click opens the app, a held click
+       lifts the tile to move it. -->
   <div
     ref="colEl"
     class="pointer-events-none absolute left-10 top-14 z-[4] hidden gap-3.5 lg:flex xl:left-[7%]"
   >
-    <!-- ══ Horloge ══ -->
     <div class="wg flex h-[155px] w-[155px] items-center justify-center p-4">
       <div class="relative aspect-square w-[115px] rounded-full bg-white">
-        <!-- Graduations : un bras du centre au bord, la marque à son extrémité -->
+        <!-- Tick marks: an arm from center to rim, the mark at its tip -->
         <span
           v-for="h in 12"
           :key="h"
@@ -21,7 +20,7 @@
             :class="h % 3 === 0 ? 'h-[8px] bg-black/75' : 'h-[4px] bg-black/35'"
           ></span>
         </span>
-        <!-- Aiguilles : heure courte et épaisse, minute longue, seconde fine -->
+        <!-- Hands: hour short and thick, minute long, second thin -->
         <span
           class="absolute bottom-1/2 left-1/2 h-[27px] w-[3.5px] origin-bottom rounded-full bg-[#1d1d1f]"
           :style="{ transform: `translateX(-50%) rotate(${hourAngle}deg)` }"
@@ -40,7 +39,7 @@
       </div>
     </div>
 
-    <!-- ══ Météo : un clic ouvre l'app, comme les widgets macOS ══ -->
+    <!-- Weather: a click opens the app, like macOS widgets -->
     <button
       class="wg flex h-[155px] w-[155px] flex-col p-4 text-left"
       :aria-label="$t('macos.weatherTitle')"
@@ -61,7 +60,7 @@
       </p>
     </button>
 
-    <!-- ══ Musique : format moyen, pochette et transport ══ -->
+    <!-- Music: medium format, artwork and transport -->
     <div class="wg flex h-[155px] w-[329px] gap-3.5 p-4">
       <button
         class="shrink-0"
@@ -80,8 +79,8 @@
         </p>
         <p class="truncate text-[12px] text-white/70">{{ track.artist }}</p>
 
-        <!-- Un flux radio n'a ni durée ni position : la barre n'aurait aucun
-             sens, on affiche le témoin de direct comme dans l'app Musique. -->
+        <!-- A radio stream has no duration or position: a progress bar
+             would be meaningless, show the live indicator instead. -->
         <p
           v-if="track.live"
           class="mt-3 flex items-center gap-1.5 text-[10.5px] font-bold tracking-wide text-[#FA586A]"
@@ -162,8 +161,8 @@ const progressPct = computed(() => {
   return Math.min(100, Math.max(0, (progress / duration) * 100))
 })
 
-// macOS distingue les deux gestes : un clic ouvre l'app, un clic **maintenu**
-// décolle le widget pour le déplacer. Sans ça on ne sait jamais lequel on fait.
+// macOS separates the two gestures: a click opens the app, a held click
+// lifts the widget to move it. Without this you never know which one you did.
 const HOLD_MS = 420
 let dragged = false
 const openIfNotDragged = (app: string) => {
@@ -177,7 +176,7 @@ const runIfNotDragged = (fn: () => void) => {
   fn()
 }
 
-// ── Horloge : une seule minuterie, arrêtée quand l'onglet passe en fond ──
+// Clock: a single timer, stopped when the tab goes to the background
 const now = ref(new Date())
 let tick: ReturnType<typeof setInterval> | undefined
 const startTick = () => {
@@ -199,7 +198,7 @@ const hourAngle = computed(
   () => (now.value.getHours() % 12) * 30 + now.value.getMinutes() * 0.5
 )
 
-// ── Météo : même source et même cache que l'app Météo ──
+// Weather: same source and cache as the Weather app
 const wx = reactive<{
   city: string
   temp: number | null
@@ -211,7 +210,7 @@ const wx = reactive<{
 const loadWeather = async () => {
   let lat = 43.4832
   let lon = -1.514
-  // Position mémorisée par l'app Météo (24 h), sinon Anglet
+  // Position remembered by the Weather app (24h), else Anglet
   try {
     const cached = JSON.parse(localStorage.getItem('ag-geo') || 'null')
     if (cached && Date.now() - cached.ts < 24 * 3600 * 1000) {
@@ -220,7 +219,7 @@ const loadWeather = async () => {
       wx.city = cached.city
     }
   } catch {
-    /* cache illisible */
+    /* unreadable cache */
   }
   try {
     const d = await $fetch<{
@@ -241,11 +240,11 @@ const loadWeather = async () => {
     wx.max = d.daily.temperature_2m_max[0]
     wx.min = d.daily.temperature_2m_min[0]
   } catch {
-    /* le widget reste sur son tiret */
+    /* the widget keeps its dash */
   }
 }
 
-// ── Déplacement : seulement après un maintien, comme sur macOS ──
+// Dragging: only after a hold, like macOS
 let drags: ReturnType<typeof Draggable.create> = []
 let holdTimer: ReturnType<typeof setTimeout> | undefined
 const cleanups: Array<() => void> = []
@@ -266,11 +265,11 @@ const makeDraggable = () => {
         onRelease: () => {
           tile.classList.remove('wg-lifted')
           drags.forEach((d) => d[0]?.disable())
-          // le clic natif arrive juste après : on le laisse passer ensuite
+          // the native click lands right after: let it through then
           setTimeout(() => (dragged = false), 0)
         },
       })
-    // chaque appel renvoie un tableau d'une instance
+    // each call returns a one-instance array
   )
   drags.forEach((d) => d[0]?.disable())
 
@@ -279,7 +278,7 @@ const makeDraggable = () => {
       dragged = false
       clearTimeout(holdTimer)
       holdTimer = setTimeout(() => {
-        // le maintien décolle la tuile : elle grossit, puis suit la souris
+        // the hold lifts the tile: it grows, then follows the mouse
         dragged = true
         tile.classList.add('wg-lifted')
         sfx.click()
@@ -315,7 +314,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* Verre dépoli des widgets de bureau macOS */
+/* Frosted glass of macOS desktop widgets */
 .wg {
   pointer-events: auto;
   border-radius: 20px;
@@ -326,7 +325,7 @@ onUnmounted(() => {
     inset 0 0 0 1px rgba(255, 255, 255, 0.14),
     0 12px 32px -12px rgba(0, 0, 0, 0.55);
 }
-/* Témoin de direct, comme dans l'app Musique */
+/* Live indicator, like the Music app */
 .live-dot {
   animation: live-pulse 1.4s ease-in-out infinite;
 }
@@ -344,7 +343,7 @@ onUnmounted(() => {
     animation: none;
   }
 }
-/* Décollement au maintien : le widget se soulève avant de suivre la souris */
+/* Lift on hold: the widget rises before following the mouse */
 .wg-lifted {
   transform-origin: center;
   box-shadow:

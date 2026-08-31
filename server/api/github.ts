@@ -1,6 +1,8 @@
-// Dépôts publics GitHub, filtrés et mis en cache.
-// Sans cache, chaque visite consommait le quota du token (5000 req/h) et
-// renvoyait 185 Ko de JSON brut dont la page n'utilise qu'une poignée de champs.
+/**
+ * Public GitHub repos, filtered and cached. Without the cache every visit
+ * burned the token quota (5000 req/h) and shipped 185KB of raw JSON of
+ * which the page uses a handful of fields.
+ */
 
 interface GithubRepo {
   id: number
@@ -37,7 +39,7 @@ export default defineEventHandler(async () => {
       }
     )
 
-    // On ne renvoie que ce dont la page Projets a besoin
+    // Only ship what the Projects page needs
     const data = raw.map((r) => ({
       id: r.id,
       name: r.name,
@@ -56,7 +58,7 @@ export default defineEventHandler(async () => {
     cache = { at: Date.now(), data }
     return data
   } catch {
-    // GitHub indisponible ou quota atteint : on ressert le cache s'il existe
+    // GitHub down or quota hit: serve the stale cache if there is one
     if (cache) return cache.data
     throw createError({
       statusCode: 502,

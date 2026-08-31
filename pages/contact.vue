@@ -11,7 +11,7 @@
         @minimize="closeToDesktop"
         @zoom="toggleZoom"
       >
-        <!-- Bascule Boîte de réception / Nouveau message -->
+        <!-- Inbox / Compose toggle -->
         <div
           class="hidden items-center gap-1.5 border-b border-black/5 bg-white/60 px-5 py-2 lg:flex"
         >
@@ -50,9 +50,7 @@
           </button>
         </div>
 
-        <!-- ── Boîte de réception ── -->
         <div v-if="mailView === 'inbox'" class="flex-1 min-h-[380px]">
-          <!-- Mobile : en-tête de Mail -->
           <div v-if="!openedMail" class="px-5 pb-2 pt-3 lg:hidden">
             <h2
               class="text-[34px] font-bold leading-tight tracking-[-0.9px] text-aink"
@@ -64,7 +62,6 @@
             </p>
           </div>
 
-          <!-- Liste -->
           <div v-if="!openedMail" class="lg:divide-y lg:divide-black/5">
             <button
               v-for="(mail, i) in inboxMails"
@@ -113,7 +110,6 @@
             </button>
           </div>
 
-          <!-- Lecture -->
           <div v-else class="px-5 py-4 sm:px-7">
             <button
               class="mb-3 flex items-center gap-0.5 text-[13.5px] font-medium text-ablue"
@@ -180,9 +176,9 @@
           </div>
         </div>
 
-        <!-- ── Nouveau message ── (ph-no-capture : exclu du session replay) -->
+        <!-- Compose (ph-no-capture: excluded from session replay) -->
         <form v-else class="ph-no-capture" @submit.prevent="submitForm">
-          <!-- Mobile : barre de rédaction de Mail -->
+          <!-- Mobile: Mail compose bar -->
           <div
             class="relative flex items-center justify-between border-b border-black/5 px-4 py-2.5 lg:hidden"
           >
@@ -214,7 +210,7 @@
             </button>
           </div>
 
-          <!-- Barre d'outils de composition (desktop) -->
+          <!-- Compose toolbar (desktop) -->
           <div
             class="hidden items-center gap-1 border-b border-black/5 bg-white/60 px-5 py-2.5 lg:flex"
           >
@@ -336,7 +332,7 @@
             >
           </div>
 
-          <!-- Sélecteur de fichier caché (pièce jointe) -->
+          <!-- Hidden file picker (attachment) -->
           <input
             ref="fileInput"
             type="file"
@@ -346,7 +342,7 @@
           />
 
           <div class="px-6 pb-7 pt-2 sm:px-7">
-            <!-- À : (destinataire fixe) -->
+            <!-- To: (fixed recipient) -->
             <div class="mail-row">
               <span class="mail-label">{{ $t('macos.mailToShort') }}</span>
               <span
@@ -357,7 +353,7 @@
               </span>
             </div>
 
-            <!-- De : (email du visiteur) -->
+            <!-- From: (the visitor's email) -->
             <div class="mail-row">
               <span class="mail-label">{{ $t('macos.mailFrom') }}</span>
               <input
@@ -369,7 +365,6 @@
               />
             </div>
 
-            <!-- Nom -->
             <div class="mail-row">
               <span class="mail-label">{{ $t('macos.mailName') }}</span>
               <input
@@ -381,7 +376,6 @@
               />
             </div>
 
-            <!-- Objet -->
             <div class="mail-row">
               <span class="mail-label">{{ $t('macos.mailSubjectShort') }}</span>
               <span class="text-[14px] font-medium">{{
@@ -389,7 +383,6 @@
               }}</span>
             </div>
 
-            <!-- Pièce jointe -->
             <div v-if="attachedFile" class="mt-3">
               <div
                 class="inline-flex items-center gap-2.5 rounded-xl border border-black/10 bg-white px-3.5 py-2 shadow-sm"
@@ -429,7 +422,7 @@
               </div>
             </div>
 
-            <!-- Corps : éditeur riche façon Mail -->
+            <!-- Body: Mail-style rich editor -->
             <div
               ref="editorEl"
               contenteditable="true"
@@ -440,7 +433,6 @@
               @focus="emojiOpen = false"
             ></div>
 
-            <!-- Honeypot anti-bot -->
             <input
               v-model="form.honeypot"
               type="text"
@@ -465,8 +457,8 @@
           </div>
         </form>
         <!--
-          Mobile : barre d'outils de Mail. Pas de bouton flottant rond — iOS
-          pose une icône bleue sans fond, avec l'état de mise à jour au centre.
+          Mobile: Mail's toolbar. No round floating button — iOS uses an
+          unfilled blue icon with the update status in the center.
         -->
         <div
           v-if="mailView === 'inbox' && !openedMail"
@@ -490,7 +482,7 @@
           </div>
         </div>
       </UiMacWindow>
-      <!-- Balayer vers le haut pour revenir au bureau -->
+      <!-- Swipe up to return to the desktop -->
       <DesktopIosHomeBar app="page" @close="goHome" />
     </div>
   </main>
@@ -517,7 +509,7 @@ const form = ref({
 const loading = ref(false)
 const errorMessage = ref<string | null>(null)
 
-// ── Pièce jointe (3 Mo max : limite du body des fonctions Vercel) ──
+// Attachment (3MB max: Vercel function body limit)
 const fileInput = ref<HTMLInputElement | null>(null)
 const attachedFile = ref<File | null>(null)
 const MAX_ATTACH_BYTES = 3 * 1024 * 1024
@@ -552,7 +544,7 @@ const fileToBase64 = (f: File) =>
     reader.readAsDataURL(f)
   })
 
-// ── Éditeur riche façon Mail ──
+// Mail-style rich editor
 const editorEl = ref<HTMLElement | null>(null)
 const messageHtml = ref('')
 const emojiOpen = ref(false)
@@ -581,7 +573,7 @@ const FORMATS = [
   },
 ]
 
-// Jeu complet chargé depuis /api/emojis ; liste courte en secours hors-ligne
+// Full set loaded from /api/emojis; short list as offline fallback
 const EMOJIS_FALLBACK =
   '😀 😁 😂 🤣 😊 😍 😎 🤩 😅 🙂 😉 🤔 🤯 😴 😭 😡 👍 👎 👋 🙏 💪 👏 🤝 ❤️ 🔥 ⭐ 🎉 🚀 💡 ✅ ❌ ☕ 🍕 🎧 💻 📎 📅 📍 🐎'.split(
     ' '
@@ -604,7 +596,7 @@ const loadEmojis = async () => {
     const data = await $fetch<{ groups: EmojiGroup[] }>('/api/emojis')
     emojiGroups.value = data.groups
   } catch {
-    // on garde le fallback statique
+    // keep the static fallback
   } finally {
     emojiLoading.value = false
   }
@@ -630,7 +622,7 @@ const syncEditor = () => {
   messageHtml.value = el.innerHTML
 }
 
-// Collage en texte brut pour garder un mail propre
+// Paste as plain text to keep the email clean
 const onEditorPaste = (e: ClipboardEvent) => {
   e.preventDefault()
   const text = e.clipboardData?.getData('text/plain') ?? ''
@@ -650,7 +642,7 @@ const insertEmoji = (emoji: string) => {
   syncEditor()
 }
 
-// Surbrillance des formats actifs sous le curseur
+// Highlight the active formats under the caret
 const activeFormats = ref<string[]>([])
 const updateActiveFormats = () => {
   const el = editorEl.value
@@ -675,7 +667,6 @@ onUnmounted(() =>
   document.removeEventListener('selectionchange', updateActiveFormats)
 )
 
-// ── Boîte de réception ──
 interface InboxMail {
   id: string
   subjectKey: string
@@ -838,11 +829,11 @@ onUnmounted(() => ctx?.revert())
   @apply flex-1 bg-transparent text-[15px] text-aink outline-none placeholder:text-black/30 lg:text-[14px];
 }
 
-/* Éditeur riche : placeholder + puces (le reset Tailwind enlève les list-style) */
+/* Rich editor: placeholder + bullets (the Tailwind reset strips list-style) */
 .mail-editor {
   @apply relative;
 }
-/* En absolu pour ne pas occuper d'espace inline : le curseur reste au début */
+/* Absolute so it takes no inline space: the caret stays at the start */
 .mail-editor:empty::before,
 .mail-editor:has(> br:only-child)::before {
   content: attr(data-placeholder);

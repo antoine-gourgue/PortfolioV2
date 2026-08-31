@@ -1,5 +1,7 @@
-// Jeu d'emojis Unicode complet (emoji.json), groupé par catégorie.
-// Proxy + cache serveur : le client n'appelle unpkg jamais directement.
+/**
+ * Full Unicode emoji set (emoji.json), grouped by category.
+ * Server proxy + cache: the client never calls unpkg directly.
+ */
 
 interface RawEmoji {
   char: string
@@ -14,7 +16,7 @@ interface EmojiGroup {
 
 let cache: { groups: EmojiGroup[] } | null = null
 let cachedAt = 0
-const CACHE_TTL = 24 * 60 * 60 * 1000 // 24 h
+const CACHE_TTL = 24 * 60 * 60 * 1000 // 24h
 
 export default defineEventHandler(async () => {
   if (cache && Date.now() - cachedAt < CACHE_TTL) return cache
@@ -26,7 +28,7 @@ export default defineEventHandler(async () => {
   const byGroup: Record<string, EmojiGroup['emojis']> = {}
   for (const e of raw) {
     if (!e.char || !e.group || e.group === 'Component') continue
-    // on écarte les variantes de teint pour garder une grille compacte
+    // skin-tone variants are dropped to keep the grid compact
     if (/skin tone/i.test(e.name)) continue
     ;(byGroup[e.group] ??= []).push({ char: e.char, name: e.name })
   }

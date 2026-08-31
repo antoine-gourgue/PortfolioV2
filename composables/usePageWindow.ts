@@ -1,9 +1,9 @@
 import type { Ref } from 'vue'
 
 /**
- * Comportement standard d'une fenêtre-page :
- * - fermer / réduire → animation de fermeture puis retour au bureau (/)
- * - agrandir (vert) → léger zoom de la fenêtre (toggle)
+ * Standard behavior of a page window:
+ * - close / minimize → closing animation, then back to the desktop (/)
+ * - zoom (green light) → slight window zoom (toggle)
  */
 export function usePageWindow(winRef: Ref<HTMLElement | null>) {
   const { gsap } = useGsap()

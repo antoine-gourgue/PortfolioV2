@@ -1,6 +1,6 @@
 import { defineEventHandler, readBody, getRequestIP, createError } from 'h3'
 
-// Petit rate limiting en mémoire (par IP)
+// Small in-memory per-IP rate limiter
 const requests = new Map<string, { count: number; windowStart: number }>()
 const WINDOW_MS = 10 * 60 * 1000 // 10 minutes
 const MAX_REQUESTS = 5
@@ -20,7 +20,7 @@ interface ContactPayload {
   attachment?: ContactAttachment
 }
 
-// HTML de l'éditeur riche : balises de mise en forme uniquement, aucun attribut
+// Rich-editor HTML: formatting tags only, all attributes stripped
 const ALLOWED_HTML_TAGS = 'b|strong|i|em|u|s|strike|del|ul|ol|li|br|div|p|span'
 const sanitizeMessageHtml = (html: unknown): string | undefined => {
   if (html === undefined || html === null) return undefined
@@ -38,7 +38,7 @@ const sanitizeMessageHtml = (html: unknown): string | undefined => {
     .replace(new RegExp(`<(\\/?)(${ALLOWED_HTML_TAGS})[^>]*>`, 'gi'), '<$1$2>')
 }
 
-// ~3 Mo une fois décodé (base64 ≈ +33 %), sous la limite de body Vercel
+// ~3MB once decoded (base64 ≈ +33%), under Vercel's body limit
 const MAX_ATTACHMENT_BASE64 = 4_200_000
 const ALLOWED_ATTACHMENT_TYPES = [
   'application/pdf',
@@ -61,7 +61,7 @@ const validateAttachment = (
   ) {
     throw createError({ statusCode: 400, statusMessage: 'Invalid attachment' })
   }
-  // nom de fichier sans chemin, longueur bornée
+  // path-free file name, bounded length
   const safeName = name.replace(/[/\\]/g, '').slice(0, 150).trim()
   if (!safeName || !ALLOWED_ATTACHMENT_TYPES.includes(type)) {
     throw createError({
@@ -81,7 +81,7 @@ const validateAttachment = (
   return { name: safeName, type, data }
 }
 
-// échappement basique pour éviter d'injecter du HTML brut dans l'email
+// basic escaping so raw HTML never reaches the email
 const escapeHtml = (str: string): string =>
   str
     .replace(/&/g, '&amp;')
@@ -168,8 +168,8 @@ const generateEmailTemplate = (
 ) => {
   const safeName = escapeHtml(name)
   const safeEmail = escapeHtml(email)
-  // Le HTML de l'éditeur est déjà nettoyé en amont (balises de mise en forme
-  // uniquement) ; sinon on convertit le texte brut
+  // Editor HTML is already sanitized upstream (formatting tags only);
+  // otherwise convert the plain text
   const safeMessage =
     messageHtml || escapeHtml(message).replace(/\r?\n/g, '<br />')
   const received = new Intl.DateTimeFormat('fr-FR', {
@@ -222,7 +222,7 @@ const generateEmailTemplate = (
 </table></td></tr></table></body></html>`
 }
 
-// Version texte : améliore la délivrabilité et sert de repli
+// Plain-text version: improves deliverability and serves as fallback
 const generatePlainText = (
   name: string,
   email: string,
@@ -244,13 +244,11 @@ const generatePlainText = (
     .join('\n')
 
 export default defineEventHandler(async (event) => {
-  // Rate limiting très simple en mémoire
   const ip = getRequestIP(event) || 'unknown'
   const now = Date.now()
   const current = requests.get(ip)
 
   if (!current || now - current.windowStart > WINDOW_MS) {
-    // nouvelle fenêtre
     requests.set(ip, { count: 1, windowStart: now })
   } else {
     if (current.count >= MAX_REQUESTS) {
@@ -266,7 +264,7 @@ export default defineEventHandler(async (event) => {
   const { name, email, message, messageHtml, honeypot, attachment } =
     validatePayload(body)
 
-  // Honeypot rempli => probablement un bot → on fait comme si tout allait bien
+  // Filled honeypot means a bot: pretend everything went fine
   if (honeypot && honeypot.trim().length > 0) {
     return { success: true }
   }
@@ -291,7 +289,7 @@ export default defineEventHandler(async (event) => {
   const transporter = nodemailer.createTransport({
     host: process.env.MAIL_HOST,
     port: parseInt(process.env.MAIL_PORT, 10),
-    secure: process.env.MAIL_SECURE !== 'false', // par défaut true (465)
+    secure: process.env.MAIL_SECURE !== 'false', // defaults to true (port 465)
     auth: {
       user: process.env.MAIL_USER,
       pass: process.env.MAIL_PASS,

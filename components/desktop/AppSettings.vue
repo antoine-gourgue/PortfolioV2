@@ -11,7 +11,7 @@
       <div
         class="flex h-full flex-col bg-[#f2f2f7] lg:h-[460px] lg:flex-row lg:bg-transparent"
       >
-        <!-- ── Desktop : barre latérale translucide ── -->
+        <!-- Desktop: translucent sidebar -->
         <aside
           class="hidden w-[200px] shrink-0 flex-col border-r border-black/10 bg-[#EBEBF0]/95 backdrop-blur-2xl lg:flex"
         >
@@ -57,7 +57,6 @@
             ></span>
           </div>
 
-          <!-- Recherche -->
           <div
             class="mx-2.5 mt-3.5 flex items-center gap-1.5 rounded-[7px] bg-black/[0.07] px-2 py-[3.5px]"
           >
@@ -75,7 +74,6 @@
             />
           </div>
 
-          <!-- Profil -->
           <button
             class="mx-2.5 mt-3 flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-left transition hover:bg-black/5"
             @click="goSection('general')"
@@ -170,9 +168,8 @@
           </h2>
         </div>
 
-        <!-- ── Contenu ── -->
         <div class="flex flex-1 flex-col overflow-hidden bg-[#f2f2f7]">
-          <!-- Desktop : barre de titre avec navigation -->
+          <!-- Desktop: title bar with navigation -->
           <div
             class="settings-drag hidden h-[46px] shrink-0 items-center gap-2 border-b border-black/10 px-4 lg:flex"
           >
@@ -214,9 +211,9 @@
           <div
             class="flex-1 overflow-y-auto px-4 pb-8 pt-1 lg:px-6 lg:pb-6 lg:pt-4"
           >
-            <!-- Mobile : liste iOS des sections -->
+            <!-- Mobile: iOS section list -->
             <div v-if="!mobileDetail" class="mt-1 space-y-6 lg:hidden">
-              <!-- Fiche d'identité, à la place de la carte Apple ID -->
+              <!-- Identity card, in place of the Apple ID row -->
               <div class="settings-card">
                 <NuxtLink
                   :to="localePath('/about')"
@@ -319,7 +316,6 @@
             </div>
 
             <div :class="mobileDetail ? '' : 'hidden lg:block'">
-              <!-- Fond d'écran -->
               <template v-if="section === 'wallpaper'">
                 <div class="settings-card">
                   <div class="px-4 py-3.5">
@@ -370,7 +366,6 @@
                 </p>
               </template>
 
-              <!-- Son -->
               <template v-else-if="section === 'sound'">
                 <div class="settings-card">
                   <div class="flex items-center justify-between px-4 py-2.5">
@@ -431,7 +426,6 @@
                 </div>
               </template>
 
-              <!-- Langue -->
               <template v-else-if="section === 'language'">
                 <div class="settings-card">
                   <button
@@ -459,7 +453,6 @@
                 </p>
               </template>
 
-              <!-- Général -->
               <template v-else>
                 <div class="settings-card">
                   <div class="flex items-center gap-3 px-4 py-3.5">
@@ -508,7 +501,7 @@
           </div>
         </div>
       </div>
-      <!-- Balayer vers le haut pour revenir à l'écran d'accueil -->
+      <!-- Swipe up to return to the home screen -->
       <DesktopIosHomeBar app="settings" @close="desktop.closeApp('settings')" />
     </div>
   </Teleport>
@@ -541,7 +534,7 @@ const bringToFront = () => {
 
 type SectionId = 'wallpaper' | 'sound' | 'language' | 'general'
 const section = ref<SectionId>('wallpaper')
-// Réglages iOS groupe ses entrées par thème plutôt qu'en une liste unique
+// iOS Settings groups entries by theme rather than one flat list
 const mobileGroups = computed(() => [
   {
     label: 'macos.settingsGroupLook',
@@ -553,7 +546,7 @@ const mobileGroups = computed(() => [
   },
 ])
 
-/** Sorties réelles du portfolio, pour que la racine ne soit pas qu'une liste vide */
+/** Real portfolio exits, so the root is not just an empty list */
 const mobileLinks = [
   {
     raw: 'GitHub',
@@ -621,7 +614,7 @@ const sections: Array<{
   },
 ]
 
-// Recherche de la barre latérale : filtre les sections par libellé traduit
+// Sidebar search: filters sections by their translated label
 const sidebarQuery = ref('')
 const filteredSections = computed(() => {
   const q = sidebarQuery.value.trim().toLowerCase()
@@ -629,7 +622,7 @@ const filteredSections = computed(() => {
   return sections.filter((s) => t(s.label).toLowerCase().includes(q))
 })
 
-// Historique de navigation (chevrons ‹ › comme System Settings)
+// Navigation history (chevrons like System Settings)
 const history = ref<SectionId[]>([])
 const forward = ref<SectionId[]>([])
 const goSection = (id: SectionId) => {
@@ -689,13 +682,12 @@ const resetDesktop = () => {
     state.wins[id].min = false
     state.wins[id].zoom = false
   }
-  // Replace aussi les icônes du bureau à leur position d'origine
+  // Also snaps desktop icons back to their original spots
   localStorage.removeItem('ag-icon-pos')
   gsap.to('.desk-icon', { x: 0, y: 0, duration: 0.35, ease: 'power2.out' })
   music.stop()
 }
 
-// ── Ouverture : animation + déplacement ──
 let drags: ReturnType<typeof Draggable.create> = []
 watch(
   () => desktop.state.value.apps.settings,
@@ -733,7 +725,7 @@ watch(
 .settings-card {
   @apply overflow-hidden rounded-[10px] bg-white shadow-sm ring-1 ring-black/5;
 }
-/* Séparateurs en retrait, alignés sur le texte, comme System Settings */
+/* Inset separators, aligned on the text, like System Settings */
 .settings-card > * + * {
   @apply relative;
 }

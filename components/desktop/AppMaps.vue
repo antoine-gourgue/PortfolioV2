@@ -9,7 +9,6 @@
       @pointerdown="bringToFront"
     >
       <div class="flex h-full flex-col bg-[#f5f5f7] lg:h-[420px]">
-        <!-- Barre de titre -->
         <div
           class="maps-drag relative hidden items-center gap-2 border-b border-black/10 bg-[#F5F5F7]/90 backdrop-blur lg:flex lg:px-3 lg:py-2.5"
         >
@@ -58,14 +57,13 @@
         </div>
 
         <div class="relative min-h-0 flex-1">
-          <!-- Carte plein cadre -->
           <div ref="mapEl" class="absolute inset-0"></div>
 
-          <!-- Panneau flottant façon Apple Maps -->
+          <!-- Floating panel, Apple Maps style -->
           <aside
             class="absolute inset-x-0 bottom-0 z-[500] rounded-t-2xl bg-white/85 px-3 pb-[calc(26px+env(safe-area-inset-bottom,0px))] pt-2 shadow-[0_-10px_30px_-8px_rgba(0,0,0,0.35)] ring-1 ring-black/10 backdrop-blur-xl lg:inset-x-auto lg:bottom-auto lg:left-3 lg:top-3 lg:w-[230px] lg:rounded-xl lg:p-2 lg:shadow-[0_10px_30px_-8px_rgba(0,0,0,0.35)]"
           >
-            <!-- Poignée de la feuille, comme sur une sheet iOS -->
+            <!-- Sheet grabber, like an iOS sheet -->
             <span
               class="mx-auto mb-2 block h-[5px] w-9 rounded-full bg-black/20 lg:hidden"
             ></span>
@@ -135,7 +133,7 @@
           </aside>
         </div>
       </div>
-      <!-- Balayer vers le haut pour revenir à l'écran d'accueil -->
+      <!-- Swipe up to return to the home screen -->
       <DesktopIosHomeBar app="maps" @close="desktop.closeApp('maps')" />
     </div>
   </Teleport>
@@ -208,13 +206,13 @@ let L: any = null
 const initMap = async () => {
   if (map || !mapEl.value) return
   L = (await import('leaflet')).default
-  // @ts-expect-error import CSS sans types
+  // @ts-expect-error untyped CSS import
   await import('leaflet/dist/leaflet.css')
 
   map = L.map(mapEl.value, { zoomControl: false, attributionControl: true })
   map!.attributionControl.setPrefix(false)
-  // En haut à droite comme dans Plans : en bas, les contrôles passaient
-  // derrière la feuille des lieux sur mobile
+  // Top right like Apple Maps: at the bottom the controls sank behind
+  // the places sheet on mobile
   L.control.zoom({ position: 'topright' }).addTo(map)
   L.tileLayer(
     'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
@@ -245,7 +243,6 @@ const flyTo = (place: Place) => {
   map?.flyTo([place.lat, place.lon], place.zoom, { duration: 1.1 })
 }
 
-// ── Ouverture : animation + carte + déplacement ──
 let drags: ReturnType<typeof Draggable.create> = []
 watch(
   () => desktop.state.value.apps.maps,
@@ -253,8 +250,8 @@ watch(
     if (!open) {
       drags.forEach((d) => d.kill())
       drags = []
-      // Le v-if détruit le conteneur : on détruit aussi l'instance Leaflet,
-      // sinon la réouverture retrouve une carte liée à un élément mort (écran blanc)
+      // v-if destroys the container: destroy the Leaflet instance too,
+      // otherwise reopening finds a map bound to a dead element (white screen)
       map?.remove()
       map = null
       return
@@ -290,7 +287,7 @@ onUnmounted(() => {
 </script>
 
 <style>
-/* Mobile : les contrôles passent sous la barre d'état, qui recouvre la carte */
+/* Mobile: push the controls below the status bar, which overlays the map */
 .leaflet-top {
   top: 2rem !important;
 }
@@ -300,7 +297,7 @@ onUnmounted(() => {
   }
 }
 
-/* Attribution licence OSM/CARTO : obligatoire mais discrète */
+/* OSM/CARTO license attribution: mandatory but discreet */
 .leaflet-control-attribution {
   font-size: 8.5px !important;
   background: rgba(255, 255, 255, 0.6) !important;
@@ -312,7 +309,7 @@ onUnmounted(() => {
   color: rgba(0, 0, 0, 0.45) !important;
 }
 
-/* Épingle façon Plans (globale : injectée par Leaflet hors du composant) */
+/* Apple Maps-style pin (global: injected by Leaflet outside the component) */
 .map-pin {
   width: 34px;
   height: 34px;

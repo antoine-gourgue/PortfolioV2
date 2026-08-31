@@ -6,7 +6,7 @@
         'radial-gradient(110% 85% at 12% 8%, rgba(94,158,240,0.75) 0%, rgba(94,158,240,0) 52%), radial-gradient(130% 100% at 50% 108%, rgba(6,26,74,0.95) 0%, rgba(6,26,74,0) 62%), linear-gradient(165deg, #0b1f4d 0%, #1d4fa8 55%, #3f7fdc 100%)',
     }"
   >
-    <!-- Boîte de dialogue Finder -->
+    <!-- Finder dialog box -->
     <div
       class="w-full max-w-sm overflow-hidden rounded-2xl bg-white/85 text-center shadow-[0_30px_70px_-15px_rgba(0,0,0,0.5)] ring-1 ring-white/40 backdrop-blur-2xl"
     >

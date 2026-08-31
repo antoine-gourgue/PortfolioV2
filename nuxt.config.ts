@@ -77,7 +77,7 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
-    // Ancienne page fusionnée dans À propos
+    // Old page merged into About
     '/services': { redirect: '/about' },
     '/en/services': { redirect: '/en/about' },
     '/es/services': { redirect: '/es/about' },

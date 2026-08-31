@@ -8,7 +8,7 @@
       :style="{ zIndex: z }"
       @pointerdown="bringToFront"
     >
-      <!-- ══════════ MOBILE : lecteur plein écran iOS ══════════ -->
+      <!-- MOBILE: full-screen iOS player -->
       <div
         class="relative flex h-full flex-col overflow-hidden bg-[#161618] lg:hidden"
       >
@@ -112,7 +112,6 @@
           </div>
         </div>
 
-        <!-- Bibliothèque / Recherche mobile -->
         <div class="relative border-t border-white/10 px-3 py-2">
           <div class="mb-1.5 flex gap-1 px-1">
             <button
@@ -241,13 +240,11 @@
         </div>
       </div>
 
-      <!-- ══════════ DESKTOP : app Musique macOS ══════════ -->
+      <!-- DESKTOP: macOS Music app -->
       <div class="hidden h-[500px] flex-col bg-white lg:flex">
-        <!-- Barre lecteur -->
         <div
           class="music-drag flex h-[56px] shrink-0 items-center gap-2 border-b border-black/10 bg-[#F9F9FB] px-3"
         >
-          <!-- Pastilles -->
           <div class="flex items-center gap-2 pr-2">
             <button
               class="group flex h-3 w-3 items-center justify-center rounded-full border border-[#E0443E] bg-[#FF5F57]"
@@ -292,7 +289,6 @@
             ></span>
           </div>
 
-          <!-- Contrôles -->
           <div class="flex items-center gap-4 px-1 text-[#6E6E73]">
             <button
               class="transition hover:text-aink active:scale-90"
@@ -336,7 +332,6 @@
             </button>
           </div>
 
-          <!-- Écran LCD -->
           <div
             class="relative mx-2 flex h-[42px] min-w-0 flex-1 items-stretch overflow-hidden rounded-md border border-black/10 bg-[#FAF9F7]"
           >
@@ -394,7 +389,6 @@
             </div>
           </div>
 
-          <!-- Volume -->
           <div class="flex items-center gap-1.5 pl-1 text-black/35">
             <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="currentColor">
               <path d="M4 9v6h4l5 4V5L8 9z" />
@@ -416,7 +410,6 @@
           </div>
         </div>
 
-        <!-- Corps : sidebar + contenu -->
         <div class="flex min-h-0 flex-1">
           <aside
             class="flex w-[190px] shrink-0 flex-col border-r border-black/10 bg-[#F6F6F9]/90 p-3"
@@ -523,12 +516,12 @@
           <main
             class="music-scroll-light min-w-0 flex-1 overflow-y-auto bg-white"
           >
-            <!-- ── Explorer : nouveautés Apple Music ── -->
+            <!-- Browse: Apple Music new releases -->
             <template v-if="!desktopSearch && section === 'explore'">
               <h1 class="px-5 pb-1 pt-4 text-[20px] font-bold text-aink">
                 {{ $t('macos.musicNew') }}
               </h1>
-              <!-- Skeleton pendant le chargement du top Apple Music -->
+              <!-- Skeleton while the Apple Music top loads -->
               <template v-if="loadingTop">
                 <div class="px-5 pt-3">
                   <span class="skel block h-3.5 w-20"></span>
@@ -605,7 +598,7 @@
               </template>
             </template>
 
-            <!-- ── Radio : stations en direct ── -->
+            <!-- Radio: live stations -->
             <template v-else-if="!desktopSearch && section === 'radio'">
               <h1 class="px-5 pb-1 pt-4 text-[20px] font-bold text-aink">
                 {{ $t('macos.musicRadio') }}
@@ -664,7 +657,6 @@
               </div>
             </template>
 
-            <!-- ── Bibliothèque : Titres ── -->
             <template v-else-if="!desktopSearch">
               <h1 class="px-5 pb-1 pt-4 text-[20px] font-bold text-aink">
                 {{ $t('macos.musicSongs') }}
@@ -715,7 +707,6 @@
               </div>
             </template>
 
-            <!-- ── Recherche Apple Music ── -->
             <template v-else>
               <div
                 v-if="view.kind !== 'results'"
@@ -730,7 +721,7 @@
                 </button>
               </div>
 
-              <!-- Skeleton pendant la recherche / le chargement d'une fiche -->
+              <!-- Skeleton during search / while a sheet loads -->
               <div v-if="searching" class="px-5 py-4">
                 <div
                   v-for="i in 6"
@@ -745,7 +736,6 @@
                 </div>
               </div>
 
-              <!-- Résultats groupés -->
               <template v-else-if="view.kind === 'results'">
                 <p
                   v-if="!artists.length && !albums.length && !songs.length"
@@ -854,7 +844,6 @@
                 </template>
               </template>
 
-              <!-- Page artiste -->
               <template v-else-if="view.kind === 'artist'">
                 <div class="flex items-center gap-4 px-5 pb-3 pt-3">
                   <img
@@ -937,7 +926,6 @@
                 </template>
               </template>
 
-              <!-- Page album -->
               <template v-else-if="view.kind === 'album'">
                 <div class="flex items-end gap-4 px-5 pb-4 pt-3">
                   <img
@@ -997,7 +985,7 @@
           </main>
         </div>
       </div>
-      <!-- Balayer vers le haut pour revenir à l'écran d'accueil -->
+      <!-- Swipe up to return to the home screen -->
       <DesktopIosHomeBar app="music" dark @close="desktop.closeApp('music')" />
     </div>
   </Teleport>
@@ -1029,12 +1017,12 @@ const bringToFront = () => {
 
 const track = music.track
 
-// LCD actif dès qu'un morceau a été lancé
+// LCD lights up once a track has been started
 const lcdActive = computed(
   () => music.state.value.playing || music.state.value.progress > 0
 )
 
-// ── Recherche iTunes : navigation résultats / artiste / album ──
+// iTunes search: results / artist / album navigation
 type SearchView =
   | { kind: 'results' }
   | { kind: 'artist'; id: number; name: string; genre: string; cover?: string }
@@ -1043,7 +1031,7 @@ type SearchView =
 const tab = ref<'library' | 'search' | 'radio'>('library')
 const section = ref<'songs' | 'explore' | 'radio'>('songs')
 
-// Nouveautés (top albums France, flux RSS officiel Apple)
+// New releases (top albums in France, Apple's official RSS feed)
 const topAlbums = ref<MusicAlbum[]>([])
 const topArtists = ref<MusicArtist[]>([])
 const loadingTop = ref(false)
@@ -1081,7 +1069,7 @@ const albumTracks = ref<MusicTrack[]>([])
 let lastArtist: MusicArtist | null = null
 let searchTimer: ReturnType<typeof setTimeout> | null = null
 
-// Desktop : la recherche prend la main dès 2 caractères ou en navigation
+// Desktop: search takes over from 2 characters or while navigating
 const desktopSearch = computed(
   () => searchTerm.value.trim().length >= 2 || view.value.kind !== 'results'
 )
@@ -1199,14 +1187,13 @@ const onSeek = (e: MouseEvent) => {
   music.seek(Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width)))
 }
 
-// Le mute général de la barre de menu coupe aussi la musique
+// The menu bar's global mute also silences the music
 watch(
   () => desktop.state.value.sfxMuted,
   (m) => music.setMuted(m),
   { immediate: false }
 )
 
-// ── Ouverture : animation + déplacement ──
 let drags: ReturnType<typeof Draggable.create> = []
 watch(
   () => desktop.state.value.apps.music,
@@ -1240,7 +1227,7 @@ watch(
 </script>
 
 <style scoped>
-/* Défilement horizontal sans barre visible */
+/* Horizontal scroll without a visible bar */
 .no-scrollbar {
   scrollbar-width: none;
 }
@@ -1248,17 +1235,17 @@ watch(
   display: none;
 }
 
-/* Ligne de résultat claire */
+/* Light result row */
 .mrow {
   @apply flex w-full items-center gap-3 rounded-lg px-2 py-1.5 text-left transition hover:bg-black/[0.04];
 }
 
-/* En-tête de section claire */
+/* Light section header */
 .msection {
   @apply px-5 pb-1.5 pt-3 text-[13px] font-bold text-aink;
 }
 
-/* Barres de défilement */
+/* Scrollbars */
 .music-scroll {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
@@ -1282,7 +1269,7 @@ watch(
   background: rgba(0, 0, 0, 0.2);
 }
 
-/* Volume clair façon macOS */
+/* Light macOS-style volume slider */
 .music-vol-light {
   @apply h-[4px] cursor-pointer appearance-none rounded-full bg-black/15;
 }
@@ -1293,7 +1280,7 @@ watch(
   @apply h-3 w-3 rounded-full border-0 bg-white shadow;
 }
 
-/* Égaliseur animé */
+/* Animated equalizer */
 .eq i {
   @apply w-[3px] rounded-sm;
   animation: eq-bounce 0.9s ease-in-out infinite;
@@ -1338,7 +1325,7 @@ watch(
   }
 }
 
-/* Skeleton de chargement (Explorer / recherche) */
+/* Loading skeleton (Browse / search) */
 .skel {
   @apply animate-pulse rounded bg-black/[0.08];
 }

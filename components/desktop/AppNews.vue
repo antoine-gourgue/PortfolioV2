@@ -9,7 +9,6 @@
       @pointerdown="bringToFront"
     >
       <div class="flex h-full flex-col bg-white lg:h-[460px]">
-        <!-- Barre de titre -->
         <div
           class="news-drag relative flex items-center gap-2 border-b border-black/10 bg-white/90 px-4 pb-2 pt-12 backdrop-blur lg:px-3 lg:py-2.5"
         >
@@ -59,7 +58,6 @@
           </span>
         </div>
 
-        <!-- Onglets -->
         <div
           class="flex items-center gap-1.5 border-b border-black/5 px-4 py-2"
         >
@@ -87,9 +85,7 @@
           </button>
         </div>
 
-        <!-- Articles -->
         <div class="news-scroll flex-1 overflow-y-auto">
-          <!-- Chargement -->
           <div v-if="loading" class="space-y-3 p-4">
             <div
               v-for="n in 5"
@@ -104,7 +100,6 @@
             </div>
           </div>
 
-          <!-- ── Vue lecture ── -->
           <article v-else-if="opened">
             <button
               class="flex items-center gap-0.5 px-4 pt-3 text-[13.5px] font-medium text-[#FA2D48]"
@@ -149,7 +144,7 @@
           </article>
 
           <template v-else>
-            <!-- À la une : première carte en grand -->
+            <!-- Featured: first card, full width -->
             <button
               v-if="heroItem"
               class="group block w-full text-left"
@@ -179,7 +174,6 @@
               </div>
             </button>
 
-            <!-- Liste -->
             <button
               v-for="item in listItems"
               :key="item.link"
@@ -219,7 +213,7 @@
           </template>
         </div>
       </div>
-      <!-- Balayer vers le haut pour revenir à l'écran d'accueil -->
+      <!-- Swipe up to return to the home screen -->
       <DesktopIosHomeBar app="news" @close="desktop.closeApp('news')" />
     </div>
   </Teleport>
@@ -262,7 +256,7 @@ const items = computed(() =>
   tab.value === 'headlines' ? headlines.value : tech.value
 )
 
-// La grande carte : premier article illustré ; le reste en liste
+// The big card: first illustrated article; the rest as a list
 const heroItem = computed(() => items.value.find((item) => item.image))
 const listItems = computed(() =>
   items.value.filter((item) => item !== heroItem.value)
@@ -297,7 +291,6 @@ const load = async () => {
   }
 }
 
-// ── Ouverture : animation + chargement + déplacement ──
 let drags: ReturnType<typeof Draggable.create> = []
 watch(
   () => desktop.state.value.apps.news,

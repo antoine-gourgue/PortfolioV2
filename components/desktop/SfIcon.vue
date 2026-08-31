@@ -12,9 +12,10 @@
 </template>
 
 <script setup lang="ts">
+/** SF Symbol-style glyph rendered via the Framework7 Icons ligature font */
 const props = defineProps<{ name: string }>()
 
-// Correspondance nom interne → ligature Framework7 (nommage identique aux SF Symbols)
+// Internal name → Framework7 ligature (named after the SF Symbols)
 const MAP: Record<string, string> = {
   'chevron-left': 'chevron_left',
   'chevron-right': 'chevron_right',

@@ -12,7 +12,6 @@
         : 'lg:shadow-[0_15px_40px_-15px_rgba(0,0,0,0.3)]',
     ]"
   >
-    <!-- Barre de titre (desktop et tablette) -->
     <div
       class="drag-handle relative hidden items-center px-4 py-2.5 select-none lg:flex"
       :class="
@@ -22,7 +21,6 @@
       "
     >
       <div class="group flex items-center gap-2">
-        <!-- Fermer -->
         <button
           class="light border"
           :class="active ? 'border-[#E0443E] bg-[#FF5F57]' : lightOff"
@@ -39,7 +37,6 @@
             />
           </svg>
         </button>
-        <!-- Réduire -->
         <button
           class="light border"
           :class="active ? 'border-[#D89E24] bg-[#FEBC2E]' : lightOff"
@@ -56,7 +53,6 @@
             />
           </svg>
         </button>
-        <!-- Agrandir -->
         <button
           class="light border"
           :class="active ? 'border-[#1AAB29] bg-[#28C840]' : lightOff"
@@ -80,13 +76,13 @@
         >{{ title }}</span
       >
 
-      <!-- Barre d'outils intégrée (style Finder/Calendrier) -->
+      <!-- Embedded toolbar (Finder/Calendar style) -->
       <div v-if="$slots.toolbar" class="ml-4 min-w-0 flex-1">
         <slot name="toolbar" />
       </div>
     </div>
 
-    <!-- Barre d'adresse (mode Safari) -->
+    <!-- Address bar (Safari mode) -->
     <div v-if="url" class="border-b border-black/5 bg-white/60 px-4 py-2">
       <div
         class="mx-auto flex max-w-[420px] items-center justify-center gap-1.5 rounded-lg bg-black/5 px-3 py-1.5 text-xs text-black/60"
@@ -110,11 +106,15 @@
 <script setup lang="ts">
 withDefaults(
   defineProps<{
+    /** Compact title shown centered in the desktop title bar */
     title?: string
+    /** When set, renders a Safari-style address bar below the title bar */
     url?: string
+    /** Dark chrome (Terminal-style) instead of the light one */
     dark?: boolean
+    /** Frontmost window: saturated traffic lights, stronger shadow */
     active?: boolean
-    /** Fond de la coquille mobile, quand la page n'est pas blanche */
+    /** Mobile shell background, when the page is not white */
     mobileBg?: string
   }>(),
   { title: '', url: '', dark: false, active: true, mobileBg: '' }

@@ -1,8 +1,8 @@
 /**
- * News — agrège des flux RSS français équilibrés (gauche, centre, droite)
- * et le top Hacker News. Gratuit, sans clé : cache mémoire 10 min.
- * Les images/descriptions manquantes sont complétées via les balises
- * Open Graph des articles (comme les aperçus de liens iMessage).
+ * News — aggregates balanced French RSS feeds (left, center, right) and
+ * the Hacker News top stories. Free, keyless; 10min in-memory cache.
+ * Missing images/descriptions are backfilled from the articles' Open
+ * Graph tags (the way iMessage link previews work).
  */
 
 export interface NewsItem {
@@ -14,8 +14,8 @@ export interface NewsItem {
   date: number
 }
 
-// Pluralisme assumé : un média de gauche, deux du centre, un de droite,
-// entremêlés à parts égales pour ne favoriser aucune ligne éditoriale
+// Deliberate pluralism: one left-leaning outlet, two center, one right,
+// interleaved evenly so no editorial line is favored
 const FEEDS: Array<{ source: string; url: string }> = [
   {
     source: 'Libération',
@@ -35,7 +35,7 @@ let cache: {
   data: { headlines: NewsItem[]; tech: NewsItem[] }
 } | null = null
 
-// Décode les entités HTML courantes des titres RSS (&#xE8;, &amp;…)
+// Decode the HTML entities common in RSS titles (&#xE8;, &amp;…)
 const decodeEntities = (text: string) =>
   text
     .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) =>
@@ -86,7 +86,7 @@ const parseRss = (xml: string, source: string): NewsItem[] => {
   return items
 }
 
-// Complète image + description depuis les balises Open Graph de l'article
+// Backfill image + description from the article's Open Graph tags
 const enrichFromPage = async (item: NewsItem): Promise<void> => {
   try {
     const html = (
@@ -124,7 +124,7 @@ const enrichFromPage = async (item: NewsItem): Promise<void> => {
       }
     }
   } catch {
-    // article inaccessible : on garde la carte sans visuel
+    // article unreachable: keep the card without a visual
   }
 }
 
@@ -154,7 +154,7 @@ export default defineEventHandler(async () => {
     ).catch(() => [] as number[]),
   ])
 
-  // Entrelacement 1-1-1-1 entre les sources : équilibre garanti
+  // 1-1-1-1 interleaving across sources: balance guaranteed
   const perFeed = rssResults.map((result) =>
     result.status === 'fulfilled' ? result.value.slice(0, 4) : []
   )
@@ -165,7 +165,6 @@ export default defineEventHandler(async () => {
     }
   }
 
-  // Top Hacker News
   const techItems = await Promise.allSettled(
     hnIds
       .slice(0, 10)
@@ -183,7 +182,7 @@ export default defineEventHandler(async () => {
       date: (item.time ?? 0) * 1000,
     }))
 
-  // Aperçus (image + chapô) pour les cartes incomplètes
+  // Previews (image + standfirst) for incomplete cards
   await Promise.allSettled(
     [...headlines, ...tech]
       .filter((item) => !item.image || !item.description)
