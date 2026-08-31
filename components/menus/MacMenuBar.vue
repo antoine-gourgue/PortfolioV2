@@ -731,7 +731,7 @@ const menus = computed<Menu[]>(() => {
 const STATUS_TINTS: Record<string, { bg: string; light: boolean }> = {
   calculator: { bg: '#000000', light: true },
   weather: { bg: '#22509E', light: true },
-  music: { bg: '#161618', light: true },
+  music: { bg: '#000000', light: true },
   maps: { bg: '#F5F5F7', light: false },
   sports: { bg: '#000000', light: true },
   news: { bg: '#FFFFFF', light: false },
