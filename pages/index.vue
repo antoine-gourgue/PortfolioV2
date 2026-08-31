@@ -14,7 +14,7 @@
         >
           <!-- Widget Horloge : même cadran que le widget macOS -->
           <button
-            class="wg-glass flex aspect-square items-center justify-center gap-5 rounded-[22px] p-4 sm:aspect-[2/1] sm:min-h-[147px]"
+            class="wg-glass flex aspect-square min-w-0 items-center justify-center gap-5 rounded-[22px] p-4 min-[730px]:aspect-[2/1]"
             :aria-label="$t('macos.clockTitle')"
             @click="desktop.state.value.apps.settings = true"
           >
@@ -58,7 +58,7 @@
                 class="absolute left-1/2 top-1/2 h-[7px] w-[7px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[1.5px] border-[#FF453A] bg-white"
               ></span>
             </div>
-            <div class="hidden min-w-0 text-left sm:block">
+            <div class="hidden min-w-0 text-left min-[730px]:block">
               <p
                 class="truncate text-[15px] font-semibold capitalize text-[#FF6961]"
               >
@@ -72,23 +72,29 @@
 
           <!-- Widget Météo (live) -->
           <button
-            class="flex aspect-square flex-col rounded-[22px] bg-gradient-to-b from-[#2E67BE] to-[#4A86D8] p-4 text-left text-white shadow-lg sm:aspect-[2/1] sm:min-h-[147px] sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+            class="flex aspect-square min-w-0 flex-col rounded-[22px] bg-gradient-to-b from-[#2E67BE] to-[#4A86D8] p-4 text-left text-white shadow-lg min-[730px]:aspect-[2/1] min-[730px]:flex-row min-[730px]:items-center min-[730px]:justify-between min-[730px]:gap-4"
             @click="desktop.state.value.apps.weather = true"
           >
-            <div class="min-w-0 sm:flex-1">
-              <p class="truncate text-[14px] font-semibold sm:text-[16px]">
+            <div class="min-w-0 min-[730px]:flex-1">
+              <p
+                class="truncate text-[14px] font-semibold min-[730px]:text-[16px]"
+              >
                 {{ wxWidget.city }}
               </p>
-              <p class="text-[40px] font-thin leading-tight sm:text-[52px]">
+              <p
+                class="text-[40px] font-thin leading-tight min-[730px]:text-[52px]"
+              >
                 {{
                   wxWidget.temp !== null ? Math.round(wxWidget.temp) + '°' : '—'
                 }}
               </p>
             </div>
-            <div class="mt-auto sm:mt-0 sm:shrink-0 sm:text-right">
+            <div
+              class="mt-auto min-[730px]:mt-0 min-[730px]:shrink-0 min-[730px]:text-right"
+            >
               <p
                 v-if="wxWidget.code !== null"
-                class="text-[24px] leading-none sm:text-[44px]"
+                class="text-[24px] leading-none min-[730px]:text-[44px]"
               >
                 <DesktopWxIcon :code="wxWidget.code" />
               </p>
