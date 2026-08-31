@@ -305,7 +305,8 @@
             <div
               class="mt-8 flex divide-x divide-black/10 border-y border-black/10 py-4"
             >
-              <div class="stat-col">
+              <!-- Company projects have no public repo, so no star count -->
+              <div v-if="!current.pro" class="stat-col">
                 <p class="stat-label">{{ $t('macos.ghStars') }}</p>
                 <p class="stat-value">
                   {{ starsFor(current) }}
@@ -319,15 +320,11 @@
               </div>
               <div class="stat-col">
                 <p class="stat-label">{{ $t('macos.category') }}</p>
-                <p class="stat-value">{{ $t(current.categoryKey) }}</p>
+                <p class="stat-value truncate">{{ $t(current.categoryKey) }}</p>
               </div>
-              <div class="stat-col hidden sm:block">
+              <div class="stat-col">
                 <p class="stat-label">{{ $t('macos.year') }}</p>
                 <p class="stat-value">{{ current.year }}</p>
-              </div>
-              <div class="stat-col hidden md:block">
-                <p class="stat-label">{{ $t('macos.age') }}</p>
-                <p class="stat-value truncate">{{ current.stack }}</p>
               </div>
             </div>
 
