@@ -4,35 +4,47 @@
       v-if="desktop.state.value.apps.about"
       ref="winEl"
       data-window="about"
-      class="fixed inset-0 z-40 overflow-hidden lg:inset-auto lg:left-[18%] lg:top-24 lg:w-[820px] lg:rounded-2xl"
-      :style="{ zIndex: z }"
+      class="fixed inset-0 z-40 overflow-hidden lg:inset-auto"
+      :class="
+        zoomed
+          ? 'lg:inset-0 lg:rounded-none'
+          : 'lg:left-[18%] lg:top-24 lg:w-[760px] lg:rounded-2xl'
+      "
+      :style="{ zIndex: zoomed ? 600 : z }"
       @pointerdown="bringToFront"
     >
       <UiMacWindow
         :title="$t('nav.about')"
         mobile-bg="#F2F2F7"
         :active="desktop.state.value.activeApp === 'about'"
+        :maximized="zoomed"
         @close="close"
         @minimize="minimize"
         @zoom="zoom"
       >
         <div class="flex flex-1 min-h-[62vh]">
           <aside
-            class="hidden w-60 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:block"
+            class="hidden w-60 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:sticky lg:top-0 lg:block lg:self-start"
           >
-            <div
+            <label
               class="mb-4 flex items-center gap-2 rounded-lg bg-black/5 px-3 py-1.5 text-[13px] text-black/40"
             >
               <i aria-hidden="true" class="f7-icons" style="font-size: 11px"
                 >search</i
               >
-              {{ $t('macos.search') }}
-            </div>
+              <input
+                v-model="query"
+                type="search"
+                :placeholder="$t('macos.search')"
+                class="w-full bg-transparent text-aink outline-none placeholder:text-black/40"
+                @pointerdown.stop
+              />
+            </label>
             <p class="px-2 pb-1.5 text-[11px] font-semibold text-black/35">
               {{ $t('macos.allContacts') }}
             </p>
             <button
-              v-for="entry in entries"
+              v-for="entry in filtered"
               :key="entry.id"
               class="flex w-full items-center gap-2.5 rounded-lg px-2 py-1.5 text-left text-[13px] font-medium transition-colors"
               :class="
@@ -405,15 +417,19 @@ const z = ref(40)
 const bringToFront = () => {
   z.value = desktop.focusApp('about')
 }
+const zoomed = ref(false)
 const close = () => {
   sfx.minimize()
+  zoomed.value = false
   desktop.closeApp('about')
 }
 const minimize = () => {
   sfx.minimize()
   desktop.minimizeApp('about')
 }
-const zoom = () => {}
+const zoom = () => {
+  zoomed.value = !zoomed.value
+}
 
 interface ContactEntry {
   id: string

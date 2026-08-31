@@ -4,13 +4,19 @@
       v-if="desktop.state.value.apps.contact"
       ref="winEl"
       data-window="contact"
-      class="fixed inset-0 z-40 overflow-hidden lg:inset-auto lg:left-[16%] lg:top-20 lg:w-[900px] lg:rounded-2xl"
-      :style="{ zIndex: z }"
+      class="fixed inset-0 z-40 overflow-hidden lg:inset-auto"
+      :class="
+        zoomed
+          ? 'lg:inset-0 lg:rounded-none'
+          : 'lg:left-[16%] lg:top-20 lg:w-[820px] lg:rounded-2xl'
+      "
+      :style="{ zIndex: zoomed ? 600 : z }"
       @pointerdown="bringToFront"
     >
       <UiMacWindow
         :title="$t('nav.contact')"
         :active="desktop.state.value.activeApp === 'contact'"
+        :maximized="zoomed"
         @close="close"
         @minimize="minimize"
         @zoom="zoom"
@@ -507,15 +513,19 @@ const z = ref(40)
 const bringToFront = () => {
   z.value = desktop.focusApp('contact')
 }
+const zoomed = ref(false)
 const close = () => {
   sfx.minimize()
+  zoomed.value = false
   desktop.closeApp('contact')
 }
 const minimize = () => {
   sfx.minimize()
   desktop.minimizeApp('contact')
 }
-const zoom = () => {}
+const zoom = () => {
+  zoomed.value = !zoomed.value
+}
 
 const form = ref({
   name: '',

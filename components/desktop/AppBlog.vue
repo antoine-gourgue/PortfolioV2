@@ -4,21 +4,27 @@
       v-if="desktop.state.value.apps.blog"
       ref="winEl"
       data-window="blog"
-      class="fixed inset-0 z-40 overflow-hidden lg:inset-auto lg:left-[20%] lg:top-24 lg:w-[780px] lg:rounded-2xl"
-      :style="{ zIndex: z }"
+      class="fixed inset-0 z-40 overflow-hidden lg:inset-auto"
+      :class="
+        zoomed
+          ? 'lg:inset-0 lg:rounded-none'
+          : 'lg:left-[20%] lg:top-24 lg:w-[740px] lg:rounded-2xl'
+      "
+      :style="{ zIndex: zoomed ? 600 : z }"
       @pointerdown="bringToFront"
     >
       <UiMacWindow
         :title="$t('nav.blog')"
         mobile-bg="#FBF9F2"
         :active="desktop.state.value.activeApp === 'blog'"
+        :maximized="zoomed"
         @close="close"
         @minimize="minimize"
         @zoom="zoom"
       >
         <div class="flex flex-1 min-h-[64vh]">
           <aside
-            class="hidden w-44 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:block"
+            class="hidden w-44 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:sticky lg:top-0 lg:block lg:self-start"
           >
             <p class="px-2 pb-1.5 text-[11px] font-semibold text-black/35">
               {{ $t('notesApp.foldersTitle') }}
@@ -238,15 +244,19 @@ const z = ref(40)
 const bringToFront = () => {
   z.value = desktop.focusApp('blog')
 }
+const zoomed = ref(false)
 const close = () => {
   sfx.minimize()
+  zoomed.value = false
   desktop.closeApp('blog')
 }
 const minimize = () => {
   sfx.minimize()
   desktop.minimizeApp('blog')
 }
-const zoom = () => {}
+const zoom = () => {
+  zoomed.value = !zoomed.value
+}
 
 // Personal notes (i18n content)
 const PERSONAL = [

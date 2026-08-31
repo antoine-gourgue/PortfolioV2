@@ -27,7 +27,9 @@
 
       <span
         v-if="
-          item.app ? state.apps[item.app] : item.path && isActive(item.path)
+          item.app
+            ? state.apps[item.app] || state.minimizedApps[item.app]
+            : item.path && isActive(item.path)
         "
         class="absolute -bottom-[7px] left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-white/80"
       ></span>

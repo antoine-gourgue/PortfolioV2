@@ -4,34 +4,49 @@
       v-if="desktop.state.value.apps.projects"
       ref="winEl"
       data-window="projects"
-      class="fixed inset-0 z-40 overflow-hidden lg:inset-auto lg:left-[14%] lg:top-20 lg:w-[880px] lg:rounded-2xl"
-      :style="{ zIndex: z }"
+      class="fixed inset-0 z-40 overflow-hidden lg:inset-auto"
+      :class="
+        zoomed
+          ? 'lg:inset-0 lg:rounded-none'
+          : 'lg:left-[12%] lg:top-20 lg:w-[820px] lg:rounded-2xl'
+      "
+      :style="{ zIndex: zoomed ? 600 : z }"
       @pointerdown="bringToFront"
     >
       <UiMacWindow
         :title="$t('nav.projects')"
         :active="desktop.state.value.activeApp === 'projects'"
+        :maximized="zoomed"
         @close="close"
         @minimize="minimize"
         @zoom="zoom"
       >
         <div class="flex flex-1 min-h-[70vh]">
           <aside
-            class="hidden w-56 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:block"
+            class="hidden w-56 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:sticky lg:top-0 lg:block lg:self-start"
           >
-            <div
+            <label
               class="mb-4 flex items-center gap-2 rounded-lg bg-black/5 px-3 py-1.5 text-[13px] text-black/40"
             >
               <i aria-hidden="true" class="f7-icons" style="font-size: 11px"
                 >search</i
               >
-              {{ $t('macos.search') }}
-            </div>
-            <p class="px-2 pb-1.5 text-[11px] font-semibold text-black/35">
+              <input
+                v-model="query"
+                type="search"
+                :placeholder="$t('macos.search')"
+                class="w-full bg-transparent text-aink outline-none placeholder:text-black/40"
+                @pointerdown.stop
+              />
+            </label>
+            <p
+              v-if="filteredPro.length"
+              class="px-2 pb-1.5 text-[11px] font-semibold text-black/35"
+            >
               {{ $t('macos.sidebarWork') }}
             </p>
             <button
-              v-for="project in proProjects"
+              v-for="project in filteredPro"
               :key="project.key"
               class="flex w-full items-center gap-2.5 rounded-lg px-2 py-1.5 text-left text-[13px] font-medium transition-colors"
               :class="
@@ -55,11 +70,14 @@
               <span class="truncate">{{ project.name }}</span>
             </button>
 
-            <p class="px-2 pb-1.5 pt-3 text-[11px] font-semibold text-black/35">
+            <p
+              v-if="filteredPerso.length"
+              class="px-2 pb-1.5 pt-3 text-[11px] font-semibold text-black/35"
+            >
               {{ $t('macos.finderProjects') }}
             </p>
             <button
-              v-for="project in persoProjects"
+              v-for="project in filteredPerso"
               :key="project.key"
               class="flex w-full items-center gap-2.5 rounded-lg px-2 py-1.5 text-left text-[13px] font-medium transition-colors"
               :class="
@@ -384,29 +402,30 @@ const bringToFront = () => {
   z.value = desktop.focusApp('projects')
 }
 
+const zoomed = ref(false)
 const close = () => {
   sfx.minimize()
+  zoomed.value = false
   desktop.closeApp('projects')
 }
 const minimize = () => {
   sfx.minimize()
   desktop.minimizeApp('projects')
 }
-
-let zoomed = false
 const zoom = () => {
-  if (!winEl.value) return
-  zoomed = !zoomed
-  gsap.to(winEl.value, {
-    scale: zoomed ? 1.04 : 1,
-    duration: 0.35,
-    ease: 'power2.inOut',
-  })
+  zoomed.value = !zoomed.value
 }
 
 const projects = useProjects()
 const proProjects = projects.filter((p) => p.pro)
 const persoProjects = projects.filter((p) => !p.pro)
+
+// Sidebar search: filters both project groups by name
+const query = ref('')
+const matchesQuery = (p: { name: string }) =>
+  p.name.toLowerCase().includes(query.value.trim().toLowerCase())
+const filteredPro = computed(() => proProjects.filter(matchesQuery))
+const filteredPerso = computed(() => persoProjects.filter(matchesQuery))
 /** The App Store leads with one app in an editorial card */
 const featured = computed(() => proProjects[0] ?? persoProjects[0])
 

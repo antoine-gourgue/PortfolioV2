@@ -13,7 +13,7 @@
         >
           <!-- Clock widget: same dial as the macOS widget -->
           <button
-            class="flex aspect-square min-w-0 items-center justify-center gap-5 rounded-[22px] bg-white p-4 shadow-lg sm:aspect-[2/1] sm:justify-start"
+            class="wg-glass flex aspect-square min-w-0 items-center justify-center gap-5 rounded-[22px] p-4 sm:aspect-[2/1] sm:justify-start"
             :aria-label="$t('macos.clockTitle')"
             @click="desktop.state.value.apps.settings = true"
           >
@@ -71,14 +71,14 @@
               >
                 {{ clockWeekday }}
               </p>
-              <p class="text-[34px] font-light leading-tight text-[#1d1d1f]">
+              <p class="text-[34px] font-light leading-tight text-white">
                 {{ clockLabel }}
               </p>
             </div>
           </button>
 
           <button
-            class="flex aspect-square min-w-0 flex-col rounded-[22px] bg-gradient-to-b from-[#2E67BE] to-[#4A86D8] p-4 text-left text-white shadow-lg sm:aspect-[2/1] sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+            class="wg-glass flex aspect-square min-w-0 flex-col rounded-[22px] p-4 text-left text-white sm:aspect-[2/1] sm:flex-row sm:items-center sm:justify-between sm:gap-4"
             @click="desktop.state.value.apps.weather = true"
           >
             <div class="min-w-0 sm:flex-1">
