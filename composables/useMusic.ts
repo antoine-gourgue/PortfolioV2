@@ -280,11 +280,20 @@ const toAlbum = (r: ItunesResult): MusicAlbum => ({
   trackCount: r.trackCount ?? 0,
 })
 
-async function itunes(path: string): Promise<ItunesResult[]> {
-  const res = await fetch(`https://itunes.apple.com${path}`)
-  if (!res.ok) return []
-  const data = (await res.json()) as { results?: ItunesResult[] }
-  return data.results ?? []
+async function itunes(
+  params: Record<string, string | number>
+): Promise<ItunesResult[]> {
+  // Proxied through /api/itunes: direct browser calls hit Apple's per-IP
+  // rate limit, and its 429 responses have no CORS headers, which the
+  // browser reports as opaque CORS failures
+  try {
+    const data = (await $fetch('/api/itunes', { query: params })) as {
+      results?: ItunesResult[]
+    }
+    return data.results ?? []
+  } catch {
+    return []
+  }
 }
 
 /** Combined iTunes catalog search: artists, albums and songs */
@@ -293,11 +302,10 @@ export async function searchItunesAll(term: string): Promise<{
   albums: MusicAlbum[]
   songs: MusicTrack[]
 }> {
-  const q = encodeURIComponent(term)
   const [artistResults, albumResults, songResults] = await Promise.all([
-    itunes(`/search?term=${q}&entity=musicArtist&limit=4`),
-    itunes(`/search?term=${q}&entity=album&limit=6`),
-    itunes(`/search?term=${q}&entity=song&limit=8`),
+    itunes({ term, entity: 'musicArtist', limit: 4 }),
+    itunes({ term, entity: 'album', limit: 6 }),
+    itunes({ term, entity: 'song', limit: 8 }),
   ])
 
   // Artist artwork: reuse a cover found in the already-fetched albums/songs
@@ -320,9 +328,12 @@ export async function searchItunesAll(term: string): Promise<{
   // Artists still missing artwork: one batched lookup (1 album each)
   const missing = artists.filter((a) => !a.cover)
   if (missing.length) {
-    const lookup = await itunes(
-      `/lookup?id=${missing.map((a) => a.id).join(',')}&entity=album&limit=1`
-    )
+    const lookup = await itunes({
+      kind: 'lookup',
+      id: missing.map((a) => a.id).join(','),
+      entity: 'album',
+      limit: 1,
+    })
     for (const r of lookup) {
       if (r.wrapperType === 'collection' && r.artistId && r.artworkUrl100) {
         const artist = artists.find((a) => a.id === r.artistId && !a.cover)
@@ -344,8 +355,8 @@ export async function lookupItunesArtist(artistId: number): Promise<{
   songs: MusicTrack[]
 }> {
   const [albums, songs] = await Promise.all([
-    itunes(`/lookup?id=${artistId}&entity=album&limit=12`),
-    itunes(`/lookup?id=${artistId}&entity=song&limit=10`),
+    itunes({ kind: 'lookup', id: artistId, entity: 'album', limit: 12 }),
+    itunes({ kind: 'lookup', id: artistId, entity: 'song', limit: 10 }),
   ])
   return {
     albums: albums.filter((r) => r.wrapperType === 'collection').map(toAlbum),
@@ -359,9 +370,12 @@ export async function lookupItunesArtist(artistId: number): Promise<{
 export async function lookupItunesAlbum(
   collectionId: number
 ): Promise<MusicTrack[]> {
-  const results = await itunes(
-    `/lookup?id=${collectionId}&entity=song&limit=30`
-  )
+  const results = await itunes({
+    kind: 'lookup',
+    id: collectionId,
+    entity: 'song',
+    limit: 30,
+  })
   return results
     .filter((r) => r.wrapperType === 'track' && r.previewUrl)
     .map(toTrack)
