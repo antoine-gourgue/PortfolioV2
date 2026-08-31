@@ -8,15 +8,23 @@ on:
 
 jobs:
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    # Only deploy when the green CI run came from a push to main. Without the
+    # branch/event guard, every PR's CI used to trigger a production deploy of
+    # whatever main happened to contain at that moment.
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.event == 'push'
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Deploy the exact commit the CI validated, not main's current tip
+          ref: ${{ github.event.workflow_run.head_sha }}
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - run: npm ci
       - run: npm install -g vercel
       - run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes --confirm
