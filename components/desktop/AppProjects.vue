@@ -346,14 +346,14 @@
             </a>
 
             <h2 class="mt-8 text-lg font-bold">{{ $t('macos.aboutApp') }}</h2>
-            <p class="mt-2 max-w-3xl text-[15px] leading-relaxed text-agray">
+            <p class="mt-2 text-[15px] leading-relaxed text-agray">
               {{ $t(`projects.items.${current.key}.description`) }}
             </p>
 
             <h2 class="mt-8 text-lg font-bold">
               {{ $t('macos.information') }}
             </h2>
-            <dl class="mt-2 max-w-3xl text-[14px]">
+            <dl class="mt-2 text-[14px]">
               <div class="info-row">
                 <dt>{{ $t('macos.developer') }}</dt>
                 <dd>Antoine Gourgue</dd>
