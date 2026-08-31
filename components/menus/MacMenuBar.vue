@@ -65,10 +65,17 @@
         </transition>
       </div>
 
-      <!-- Mobile : heure iOS à gauche -->
-      <span class="ml-2 text-[15px] font-semibold tabular-nums lg:hidden">{{
-        clockShort
-      }}</span>
+      <!-- Mobile : heure iOS à gauche — un tap ouvre le centre de notifications,
+           le geste depuis le bord haut appartenant au système sur iPhone -->
+      <button
+        class="pointer-events-auto ml-2 rounded px-1 text-[15px] font-semibold tabular-nums lg:hidden"
+        aria-label="notification center"
+        @click.stop="
+          desktop.state.value.notifOpen = !desktop.state.value.notifOpen
+        "
+      >
+        {{ clockShort }}
+      </button>
     </div>
 
     <div class="flex h-full items-stretch gap-0.5">
