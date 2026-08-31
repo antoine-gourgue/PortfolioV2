@@ -10,55 +10,63 @@
     >
       <ClientOnly>
         <div
-          class="mx-auto grid w-full max-w-sm grid-cols-2 gap-4 sm:max-w-none sm:grid-cols-6 sm:gap-6 [&>*]:sm:col-span-3"
+          class="mx-auto grid w-full max-w-sm grid-cols-2 gap-4 sm:max-w-2xl sm:grid-cols-6 sm:gap-6 [&>*]:sm:col-span-3"
         >
           <!-- Widget Horloge : même cadran que le widget macOS -->
           <button
-            class="wg-glass flex aspect-square min-w-0 items-center justify-center gap-5 rounded-[22px] p-4 min-[730px]:aspect-[2/1]"
+            class="wg-glass flex aspect-square min-w-0 items-center justify-center gap-5 rounded-[22px] p-4 sm:aspect-[2/1]"
             :aria-label="$t('macos.clockTitle')"
             @click="desktop.state.value.apps.settings = true"
           >
             <div
-              class="relative aspect-square w-[115px] shrink-0 rounded-full bg-white"
+              class="flex h-[115px] w-[115px] shrink-0 items-center justify-center sm:max-[729px]:h-[92px] sm:max-[729px]:w-[92px]"
             >
-              <!-- Graduations : un bras du centre au bord, la marque au bout -->
-              <span
-                v-for="h in 12"
-                :key="h"
-                class="absolute left-1/2 top-1/2 h-[52px] w-[2px] origin-top"
-                :style="{ transform: `translateX(-50%) rotate(${h * 30}deg)` }"
+              <div
+                class="relative aspect-square w-[115px] shrink-0 rounded-full bg-white sm:max-[729px]:scale-[0.8]"
               >
+                <!-- Graduations : un bras du centre au bord, la marque au bout -->
                 <span
-                  class="absolute bottom-[4px] left-0 w-full rounded-full"
-                  :class="
-                    h % 3 === 0 ? 'h-[8px] bg-black/75' : 'h-[4px] bg-black/35'
-                  "
+                  v-for="h in 12"
+                  :key="h"
+                  class="absolute left-1/2 top-1/2 h-[52px] w-[2px] origin-top"
+                  :style="{
+                    transform: `translateX(-50%) rotate(${h * 30}deg)`,
+                  }"
+                >
+                  <span
+                    class="absolute bottom-[4px] left-0 w-full rounded-full"
+                    :class="
+                      h % 3 === 0
+                        ? 'h-[8px] bg-black/75'
+                        : 'h-[4px] bg-black/35'
+                    "
+                  ></span>
+                </span>
+                <!-- Aiguilles : heure courte et épaisse, minute longue, seconde fine -->
+                <span
+                  class="absolute bottom-1/2 left-1/2 h-[27px] w-[3.5px] origin-bottom rounded-full bg-[#1d1d1f]"
+                  :style="{
+                    transform: `translateX(-50%) rotate(${clock.hour}deg)`,
+                  }"
                 ></span>
-              </span>
-              <!-- Aiguilles : heure courte et épaisse, minute longue, seconde fine -->
-              <span
-                class="absolute bottom-1/2 left-1/2 h-[27px] w-[3.5px] origin-bottom rounded-full bg-[#1d1d1f]"
-                :style="{
-                  transform: `translateX(-50%) rotate(${clock.hour}deg)`,
-                }"
-              ></span>
-              <span
-                class="absolute bottom-1/2 left-1/2 h-[39px] w-[2.5px] origin-bottom rounded-full bg-[#1d1d1f]"
-                :style="{
-                  transform: `translateX(-50%) rotate(${clock.minute}deg)`,
-                }"
-              ></span>
-              <span
-                class="absolute bottom-1/2 left-1/2 h-[44px] w-[1.5px] origin-bottom rounded-full bg-[#FF453A]"
-                :style="{
-                  transform: `translateX(-50%) rotate(${clock.second}deg)`,
-                }"
-              ></span>
-              <span
-                class="absolute left-1/2 top-1/2 h-[7px] w-[7px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[1.5px] border-[#FF453A] bg-white"
-              ></span>
+                <span
+                  class="absolute bottom-1/2 left-1/2 h-[39px] w-[2.5px] origin-bottom rounded-full bg-[#1d1d1f]"
+                  :style="{
+                    transform: `translateX(-50%) rotate(${clock.minute}deg)`,
+                  }"
+                ></span>
+                <span
+                  class="absolute bottom-1/2 left-1/2 h-[44px] w-[1.5px] origin-bottom rounded-full bg-[#FF453A]"
+                  :style="{
+                    transform: `translateX(-50%) rotate(${clock.second}deg)`,
+                  }"
+                ></span>
+                <span
+                  class="absolute left-1/2 top-1/2 h-[7px] w-[7px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[1.5px] border-[#FF453A] bg-white"
+                ></span>
+              </div>
             </div>
-            <div class="hidden min-w-0 text-left min-[730px]:block">
+            <div class="hidden min-w-0 text-left sm:block">
               <p
                 class="truncate text-[15px] font-semibold capitalize text-[#FF6961]"
               >
@@ -72,29 +80,23 @@
 
           <!-- Widget Météo (live) -->
           <button
-            class="flex aspect-square min-w-0 flex-col rounded-[22px] bg-gradient-to-b from-[#2E67BE] to-[#4A86D8] p-4 text-left text-white shadow-lg min-[730px]:aspect-[2/1] min-[730px]:flex-row min-[730px]:items-center min-[730px]:justify-between min-[730px]:gap-4"
+            class="flex aspect-square min-w-0 flex-col rounded-[22px] bg-gradient-to-b from-[#2E67BE] to-[#4A86D8] p-4 text-left text-white shadow-lg sm:aspect-[2/1] sm:flex-row sm:items-center sm:justify-between sm:gap-4"
             @click="desktop.state.value.apps.weather = true"
           >
-            <div class="min-w-0 min-[730px]:flex-1">
-              <p
-                class="truncate text-[14px] font-semibold min-[730px]:text-[16px]"
-              >
+            <div class="min-w-0 sm:flex-1">
+              <p class="truncate text-[14px] font-semibold sm:text-[16px]">
                 {{ wxWidget.city }}
               </p>
-              <p
-                class="text-[40px] font-thin leading-tight min-[730px]:text-[52px]"
-              >
+              <p class="text-[40px] font-thin leading-tight sm:text-[52px]">
                 {{
                   wxWidget.temp !== null ? Math.round(wxWidget.temp) + '°' : '—'
                 }}
               </p>
             </div>
-            <div
-              class="mt-auto min-[730px]:mt-0 min-[730px]:shrink-0 min-[730px]:text-right"
-            >
+            <div class="mt-auto sm:mt-0 sm:shrink-0 sm:text-right">
               <p
                 v-if="wxWidget.code !== null"
-                class="text-[24px] leading-none min-[730px]:text-[44px]"
+                class="text-[24px] leading-none sm:text-[44px]"
               >
                 <DesktopWxIcon :code="wxWidget.code" />
               </p>
