@@ -2,86 +2,121 @@
   <Teleport to="body">
     <Transition
       enter-active-class="transition duration-300 ease-out"
-      enter-from-class="translate-y-3 opacity-0 scale-95"
+      enter-from-class="opacity-0 lg:translate-y-2 lg:scale-95"
       leave-active-class="transition duration-200 ease-in"
-      leave-to-class="translate-y-3 opacity-0 scale-95"
+      leave-to-class="opacity-0 lg:translate-y-2 lg:scale-95"
     >
       <div
         v-if="desktop.state.value.apps.siri"
-        class="fixed inset-x-3 bottom-24 z-[320] mx-auto w-auto max-w-[360px] rounded-3xl bg-[#1c1c1e]/90 p-5 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.6)] ring-1 ring-white/10 backdrop-blur-2xl lg:inset-x-auto lg:right-4 lg:top-10 lg:bottom-auto lg:w-[340px]"
-        @click.stop
+        class="fixed inset-0 z-[400] flex flex-col overflow-hidden bg-black/45 backdrop-blur-2xl lg:inset-auto lg:right-4 lg:top-10 lg:h-[564px] lg:w-[384px] lg:rounded-[30px] lg:bg-[#1c1c1e]/80 lg:shadow-[0_40px_90px_-20px_rgba(0,0,0,0.7)] lg:ring-1 lg:ring-white/10"
+        @click.self="closeSiri"
       >
+        <!-- iOS 18-style light hugging the edges; brighter while Siri works -->
+        <span
+          class="siri-edge"
+          :class="{ 'siri-edge--active': active }"
+          aria-hidden="true"
+        ></span>
+
         <button
-          class="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-[11px] text-white/60 transition hover:bg-white/20"
+          class="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-[14px] text-white/70 transition hover:bg-white/20 lg:h-7 lg:w-7 lg:text-[12px]"
           aria-label="close"
           @click="closeSiri"
         >
           ✕
         </button>
 
-        <button
-          class="mx-auto block"
-          :aria-label="listening ? 'stop' : 'listen'"
-          @click="toggleListening"
-        >
-          <span
-            class="siri-orb relative mx-auto block h-16 w-16 rounded-full"
-            :class="{ 'siri-orb--active': listening || thinking }"
-          ></span>
-        </button>
-
-        <p
-          class="mt-3 min-h-[20px] text-center text-[13px] font-medium text-white/80"
-        >
-          <template v-if="listening">{{
-            transcript || $t('macos.siriListening')
-          }}</template>
-          <template v-else-if="thinking">{{
-            $t('macos.siriThinking')
-          }}</template>
-          <template v-else-if="!exchanges.length">{{
-            $t('macos.siriHint')
-          }}</template>
-        </p>
-
+        <!-- Conversation, or the idle greeting with suggestions -->
         <div
-          v-if="exchanges.length"
           ref="convEl"
-          class="siri-scroll mt-3 max-h-56 space-y-3 overflow-y-auto pr-1"
+          class="siri-scroll relative flex-1 overflow-y-auto px-6 pt-16 lg:px-5 lg:pt-12"
         >
-          <div v-for="(exchange, i) in exchanges" :key="i">
-            <p class="text-right text-[13px] font-medium text-white/60">
-              « {{ exchange.question }} »
+          <template v-if="exchanges.length">
+            <div v-for="(exchange, i) in exchanges" :key="i" class="mb-5">
+              <p
+                class="ml-auto max-w-[86%] text-right text-[17px] font-semibold leading-snug text-white lg:text-[15px]"
+              >
+                {{ exchange.question }}
+              </p>
+              <p
+                class="mt-2 text-[17px] leading-relaxed text-white/80 lg:text-[13.5px]"
+              >
+                {{ exchange.answer }}
+              </p>
+            </div>
+          </template>
+
+          <div
+            v-else
+            class="flex h-full flex-col items-center justify-center text-center"
+          >
+            <p class="text-[22px] font-semibold text-white/90 lg:text-[18px]">
+              {{ $t('macos.siriGreeting') }}
             </p>
-            <p
-              class="mt-1.5 rounded-2xl rounded-tl-md bg-white/10 px-3.5 py-2.5 text-[13.5px] leading-relaxed text-white"
-            >
-              {{ exchange.answer }}
-            </p>
+            <div class="mt-6 flex w-full max-w-[300px] flex-col gap-2.5">
+              <button
+                v-for="s in suggestions"
+                :key="s"
+                class="siri-chip"
+                @click="askSuggestion(s)"
+              >
+                {{ s }}
+              </button>
+            </div>
           </div>
         </div>
 
-        <form class="mt-4 flex items-center gap-2" @submit.prevent="submitText">
-          <input
-            v-model="textInput"
-            type="text"
-            :placeholder="$t('macos.siriPlaceholder')"
-            class="flex-1 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-[13px] text-white outline-none placeholder:text-white/30 focus:border-white/30"
-            :disabled="thinking"
-          />
-          <button
-            type="submit"
-            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#0A84FF] text-[13px] text-white disabled:opacity-30"
-            :disabled="thinking || !textInput.trim()"
-            aria-label="send"
+        <!-- Status + orb + type-to-Siri field -->
+        <div
+          class="relative shrink-0 px-6 pb-[calc(18px+env(safe-area-inset-bottom,0px))] pt-2 lg:px-5 lg:pb-5"
+        >
+          <p
+            class="mb-3 min-h-[22px] text-center text-[15px] font-medium text-white/70 lg:text-[13px]"
           >
-            ↑
-          </button>
-        </form>
+            <template v-if="listening">{{
+              transcript || $t('macos.siriListening')
+            }}</template>
+            <template v-else-if="thinking">{{
+              $t('macos.siriThinking')
+            }}</template>
+          </p>
 
-        <p class="mt-2 text-center text-[9.5px] text-white/25">
-          {{ $t('macos.siriPowered') }}
-        </p>
+          <button
+            class="mx-auto mb-4 block"
+            :aria-label="listening ? 'stop' : 'listen'"
+            @click="toggleListening"
+          >
+            <span
+              class="siri-orb mx-auto block h-[88px] w-[88px] lg:h-[56px] lg:w-[56px]"
+              :class="{ 'siri-orb--active': active }"
+            ></span>
+          </button>
+
+          <form
+            class="flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.07] px-4 py-2 backdrop-blur-xl lg:py-1.5"
+            @submit.prevent="submitText"
+          >
+            <input
+              v-model="textInput"
+              type="text"
+              :placeholder="$t('macos.siriPlaceholder')"
+              class="min-w-0 flex-1 bg-transparent text-[16px] text-white outline-none placeholder:text-white/35 lg:text-[13px]"
+              :disabled="thinking"
+            />
+            <button
+              type="submit"
+              class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-[15px] font-bold text-black transition disabled:opacity-30 lg:h-7 lg:w-7 lg:text-[13px]"
+              :disabled="thinking || !textInput.trim()"
+              aria-label="send"
+            >
+              ↑
+            </button>
+          </form>
+
+          <p class="mt-2.5 text-center text-[10px] text-white/25">
+            {{ $t('macos.siriPowered') }}
+          </p>
+        </div>
       </div>
     </Transition>
   </Teleport>
@@ -102,11 +137,29 @@ const textInput = ref('')
 const exchanges = ref<Array<{ question: string; answer: string }>>([])
 const convEl = ref<HTMLElement | null>(null)
 
+// Orb and edge light pulse whenever Siri is busy
+const active = computed(() => listening.value || thinking.value)
+
+// Idle suggestions, like the real Siri prompts
+const suggestions = computed(() => [
+  t('macos.siriSuggestProjects'),
+  t('macos.siriSuggestAvailability'),
+  t('macos.siriSuggestSkills'),
+])
+const askSuggestion = (s: string) => {
+  unlockSpeech()
+  ask(s)
+}
+
 // History sent to the LLM
 const history: Array<{ role: 'user' | 'assistant'; content: string }> = []
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let recognition: any = null
+
+const speechSupported = () =>
+  typeof window !== 'undefined' &&
+  ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)
 
 const initRecognition = () => {
   if (recognition) return true
@@ -312,8 +365,10 @@ watch(
   (open) => {
     if (open) {
       sfx.pop()
-      // start listening right away (the open came from a user click)
-      nextTick(() => toggleListening())
+      // Start listening right away (the open came from a user gesture), but
+      // only where dictation exists — otherwise keep the idle greeting rather
+      // than flashing an "unsupported" bubble.
+      if (speechSupported()) nextTick(() => toggleListening())
     } else {
       recognition?.stop?.()
       speechSynthesis?.cancel()
@@ -324,45 +379,53 @@ watch(
 </script>
 
 <style scoped>
-/* Siri orb: glossy sphere with colored swirls (official-icon style) */
+/*
+  Siri orb: a glossy multicolor sphere that glows in the dark, like the
+  system icon. Colored blobs swirl under a white specular highlight.
+*/
 .siri-orb {
   position: relative;
   overflow: hidden;
-  background: #eaf6ff;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 50% 42%, #2b2b31, #0d0d10);
   box-shadow:
-    0 6px 22px rgba(46, 109, 246, 0.35),
-    inset 0 0 10px rgba(255, 255, 255, 0.6);
+    0 12px 40px -8px rgba(120, 90, 255, 0.5),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.16);
+  transition: box-shadow 0.4s ease;
 }
 .siri-orb::before {
   content: '';
   position: absolute;
-  inset: -22%;
+  inset: -30%;
   background:
-    radial-gradient(38% 34% at 28% 40%, #12d8f5 0%, transparent 70%),
-    radial-gradient(40% 34% at 72% 30%, #2e6df6 0%, transparent 70%),
-    radial-gradient(36% 32% at 76% 66%, #8a44f2 0%, transparent 70%),
-    radial-gradient(42% 30% at 46% 80%, #e9538f 0%, transparent 70%),
-    radial-gradient(30% 26% at 24% 72%, #ff7a5c 0%, transparent 70%),
-    radial-gradient(30% 26% at 50% 52%, #7ce7f5 0%, transparent 70%);
-  filter: blur(7px);
-  animation: siri-swirl 7s linear infinite;
+    radial-gradient(30% 30% at 30% 34%, #12d8f5 0%, transparent 60%),
+    radial-gradient(34% 30% at 70% 28%, #2e6df6 0%, transparent 60%),
+    radial-gradient(30% 28% at 74% 68%, #a24bff 0%, transparent 60%),
+    radial-gradient(34% 28% at 42% 78%, #ff5e8a 0%, transparent 60%),
+    radial-gradient(26% 24% at 26% 70%, #ff9a5c 0%, transparent 62%);
+  filter: blur(8px) saturate(1.25);
+  animation: siri-swirl 8s linear infinite;
 }
 .siri-orb::after {
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: 9999px;
+  border-radius: inherit;
   background: radial-gradient(
-    circle at 38% 25%,
-    rgba(255, 255, 255, 0.9),
-    transparent 48%
+    circle at 36% 26%,
+    rgba(255, 255, 255, 0.85),
+    transparent 44%
   );
-}
-.siri-orb--active::before {
-  animation-duration: 1.8s;
+  mix-blend-mode: screen;
 }
 .siri-orb--active {
-  animation: siri-breathe 1.1s ease-in-out infinite;
+  animation: siri-breathe 1.3s ease-in-out infinite;
+  box-shadow:
+    0 14px 60px -6px rgba(150, 90, 255, 0.75),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.22);
+}
+.siri-orb--active::before {
+  animation-duration: 2.4s;
 }
 @keyframes siri-swirl {
   to {
@@ -375,8 +438,51 @@ watch(
     transform: scale(1);
   }
   50% {
-    transform: scale(1.08);
+    transform: scale(1.07);
   }
+}
+
+/* Edge light: a blurred multicolor ring hugging the window/screen edges */
+.siri-edge {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2.5px;
+  pointer-events: none;
+  background: conic-gradient(
+    from 0deg,
+    #ff5e8a,
+    #a24bff,
+    #2e6df6,
+    #12d8f5,
+    #ff9a5c,
+    #ff5e8a
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.32;
+  filter: blur(3px);
+  animation: siri-hue 9s linear infinite;
+  transition:
+    opacity 0.4s ease,
+    filter 0.4s ease;
+}
+.siri-edge--active {
+  opacity: 0.75;
+  filter: blur(5px);
+}
+@keyframes siri-hue {
+  to {
+    filter: blur(3px) hue-rotate(360deg);
+  }
+}
+
+/* Suggestion chips */
+.siri-chip {
+  @apply rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-2.5 text-[15px] font-medium text-white/90 backdrop-blur-xl transition hover:bg-white/[0.12] active:scale-[0.98] lg:py-2 lg:text-[13.5px];
 }
 
 .siri-scroll {
@@ -389,5 +495,13 @@ watch(
 .siri-scroll::-webkit-scrollbar-thumb {
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .siri-orb::before,
+  .siri-orb--active,
+  .siri-edge {
+    animation: none;
+  }
 }
 </style>
