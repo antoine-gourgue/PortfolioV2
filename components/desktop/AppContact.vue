@@ -471,9 +471,14 @@
           Mobile: Mail's toolbar. No round floating button — iOS uses an
           unfilled blue icon with the update status in the center.
         -->
+        <!--
+          Extra bottom padding lifts the compose button clear of the home
+          bar's tap zone (40px + safe), which otherwise swallows the tap and
+          closes the app — worse on a real iPhone where the safe area is tall.
+        -->
         <div
           v-if="mailView === 'inbox' && !openedMail"
-          class="fixed inset-x-0 bottom-0 z-40 border-t border-black/[0.07] bg-white/85 pb-[calc(24px+env(safe-area-inset-bottom,0px))] pt-2.5 backdrop-blur-xl lg:hidden"
+          class="fixed inset-x-0 bottom-0 z-40 border-t border-black/[0.07] bg-white/85 pb-[calc(48px+env(safe-area-inset-bottom,0px))] pt-2.5 backdrop-blur-xl lg:hidden"
         >
           <div class="relative flex items-center px-5">
             <span
