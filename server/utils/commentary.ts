@@ -81,17 +81,17 @@ const FR_FRAGMENTS: Rules['fragments'] = [
 const FR_SENTENCES: Rules['sentences'] = [
   // VAR decisions
   [
-    /^VAR Decision: No Penalty (.+)\.?$/,
+    /^VAR Decision: No Penalty (.+?)\.?$/,
     'Décision VAR : pas de penalty pour $1.',
   ],
-  [/^VAR Decision: Penalty (.+)\.?$/, 'Décision VAR : penalty pour $1.'],
-  [/^VAR Decision: Goal (.+)\.?$/, 'Décision VAR : but accordé à $1.'],
-  [/^VAR Decision: No Goal (.+)\.?$/, 'Décision VAR : but refusé à $1.'],
+  [/^VAR Decision: Penalty (.+?)\.?$/, 'Décision VAR : penalty pour $1.'],
+  [/^VAR Decision: Goal (.+?)\.?$/, 'Décision VAR : but accordé à $1.'],
+  [/^VAR Decision: No Goal (.+?)\.?$/, 'Décision VAR : but refusé à $1.'],
   [
-    /^VAR Decision: Card upgraded (.+)\.?$/,
+    /^VAR Decision: Card upgraded (.+?)\.?$/,
     'Décision VAR : carton aggravé pour $1.',
   ],
-  [/^VAR Decision: (.+)\.?$/, 'Décision VAR : $1.'],
+  [/^VAR Decision: (.+?)\.?$/, 'Décision VAR : $1.'],
 
   // fouls and free kicks
   [/^Foul by (.+)\.$/, 'Faute de $1.'],
@@ -295,17 +295,17 @@ const ES_FRAGMENTS: Rules['fragments'] = [
 
 const ES_SENTENCES: Rules['sentences'] = [
   [
-    /^VAR Decision: No Penalty (.+)\.?$/,
+    /^VAR Decision: No Penalty (.+?)\.?$/,
     'Decisión del VAR: no hay penalti para $1.',
   ],
-  [/^VAR Decision: Penalty (.+)\.?$/, 'Decisión del VAR: penalti para $1.'],
-  [/^VAR Decision: Goal (.+)\.?$/, 'Decisión del VAR: gol para $1.'],
-  [/^VAR Decision: No Goal (.+)\.?$/, 'Decisión del VAR: gol anulado a $1.'],
+  [/^VAR Decision: Penalty (.+?)\.?$/, 'Decisión del VAR: penalti para $1.'],
+  [/^VAR Decision: Goal (.+?)\.?$/, 'Decisión del VAR: gol para $1.'],
+  [/^VAR Decision: No Goal (.+?)\.?$/, 'Decisión del VAR: gol anulado a $1.'],
   [
-    /^VAR Decision: Card upgraded (.+)\.?$/,
+    /^VAR Decision: Card upgraded (.+?)\.?$/,
     'Decisión del VAR: tarjeta agravada para $1.',
   ],
-  [/^VAR Decision: (.+)\.?$/, 'Decisión del VAR: $1.'],
+  [/^VAR Decision: (.+?)\.?$/, 'Decisión del VAR: $1.'],
 
   [/^Foul by (.+)\.$/, 'Falta de $1.'],
   [/^Hand ?ball by (.+)\.$/, 'Mano de $1.'],
