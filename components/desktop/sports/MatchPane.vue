@@ -80,7 +80,7 @@
   </div>
 
   <template v-else-if="detail">
-    <!-- Onglets : n'apparaissent que si le match a de quoi les remplir -->
+    <!-- Tabs only show when the match has content to fill them -->
     <div
       v-if="matchTabs.length > 1"
       class="mt-3 flex gap-1 rounded-[9px] bg-[#1C1C1E] p-[2px]"
@@ -96,14 +96,12 @@
       </button>
     </div>
 
-    <!-- ── Compositions ── -->
     <DesktopSportsPitch
       v-if="matchTab === 'lineups'"
       :match="match"
       :detail="detail"
     />
 
-    <!-- ── Fil du match ── -->
     <div v-else-if="matchTab === 'commentary'" class="sp-card mt-3 px-4 py-1">
       <div
         v-for="(c, i) in commentaryDesc"
@@ -122,7 +120,6 @@
       </div>
     </div>
 
-    <!-- ── Résumé ── -->
     <div v-else-if="detail.events.length" class="sp-card mt-3 px-5 py-3">
       <div
         v-for="(ev, i) in detail.events"
@@ -209,7 +206,7 @@ const sfx = useSfx()
 const { kickoff, matchDay } = useSportsFormat()
 const { backFromPane, openTeam, openAthlete } = useSportsCtx()
 
-// Onglets réellement disponibles pour ce match
+// Tabs actually available for this match
 const matchTabs = computed(() => {
   const d = props.detail
   const tabs: MatchTab[] = ['summary']
@@ -219,12 +216,12 @@ const matchTabs = computed(() => {
   if (d?.commentary.length) tabs.push('commentary')
   return tabs
 })
-// Si on change de match, l'onglet choisi peut ne plus exister
+// Switching matches may invalidate the selected tab
 watch(matchTabs, (tabs) => {
   if (!tabs.includes(matchTab.value)) matchTab.value = 'summary'
 })
 
-// Le plus récent en haut, comme un fil d'actualité
+// Most recent first, like a news feed
 const commentaryDesc = computed(() =>
   [...(props.detail?.commentary ?? [])].reverse()
 )
@@ -236,7 +233,7 @@ const commentaryDot = (kind: string) => {
   return 'bg-[#3A3A3C]'
 }
 
-// Le plus fort des deux en gras (possession comprise)
+// The higher of the two in bold (possession included)
 const statLead = (s: { home: string; away: string }) => {
   const h = parseFloat(s.home)
   const a = parseFloat(s.away)

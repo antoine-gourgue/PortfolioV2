@@ -8,15 +8,15 @@
       aria-modal="true"
       :aria-label="$t('macos.launchpad')"
     >
-      <!-- Le flou vit dans sa propre couche, sans enfant : sinon le survol
-           d'une icône forcerait le navigateur à refaire un flou plein écran. -->
+      <!-- The blur lives in its own childless layer: otherwise hovering an
+           icon would force the browser to redo a full-screen blur. -->
       <div class="lp-backdrop absolute inset-0" aria-hidden="true"></div>
 
       <div
         class="relative flex h-full w-full flex-col items-center"
         @click="onEmptyClick"
       >
-        <!-- Champ de recherche : 250 × 26, à 28 px du haut, comme macOS -->
+        <!-- Search field: 250x26, 28px from the top, like macOS -->
         <div class="relative mt-7 shrink-0">
           <svg
             viewBox="0 0 16 16"
@@ -48,7 +48,7 @@
           />
         </div>
 
-        <!-- Grille : 7 colonnes, pas de 128 px, icônes de 76 px -->
+        <!-- Grid: 7 columns, 128px pitch, 76px icons -->
         <div class="flex min-h-0 flex-1 items-center justify-center">
           <div
             v-if="shown.length"
@@ -82,7 +82,7 @@
           </p>
         </div>
 
-        <!-- Pastille de page : une seule, le catalogue tient sur un écran -->
+        <!-- Page dot: just one, the catalog fits on a single screen -->
         <div class="mb-[86px] flex shrink-0 gap-[9px]">
           <span class="h-[6px] w-[6px] rounded-full bg-white/85"></span>
         </div>
@@ -108,7 +108,7 @@ const rootEl = ref<HTMLElement | null>(null)
 const inputEl = ref<HTMLInputElement | null>(null)
 const query = ref('')
 
-// La recherche porte sur le libellé affiché, donc traduit
+// Search matches the displayed — hence translated — label
 const label = (a: LaunchpadApp) => a.raw ?? t(a.label ?? '')
 const shown = computed(() => {
   const q = query.value.trim().toLowerCase()
@@ -116,7 +116,7 @@ const shown = computed(() => {
   return apps.filter((a) => label(a).toLowerCase().includes(q))
 })
 
-// Un clic hors d'une tuile et hors du champ referme, comme le vrai Launchpad
+// Clicking outside a tile and outside the field closes, like the real Launchpad
 const onEmptyClick = (e: MouseEvent) => {
   const el = e.target as HTMLElement
   if (el.closest('.lp-tile') || el.closest('.lp-search')) return
@@ -133,11 +133,11 @@ const launch = (app: LaunchpadApp) => {
     a.download = ''
     a.click()
   }
-  // Les liens et les routes suivent leur cours, on referme dans tous les cas
+  // Links and routes run their course; close either way
   close()
 }
 
-// Entrée lance le premier résultat, comme le vrai Launchpad
+// Enter launches the first result, like the real Launchpad
 const launchFirst = () => {
   const first = shown.value[0]
   if (!first) return
@@ -146,7 +146,7 @@ const launchFirst = () => {
   launch(first)
 }
 
-// F4 ouvre et ferme, Échap ferme — seulement sur desktop, où la couche existe
+// F4 toggles, Escape closes — desktop only, where the layer exists
 const onKey = (e: KeyboardEvent) => {
   if (e.key === 'F4') {
     e.preventDefault()
@@ -159,7 +159,7 @@ const onKey = (e: KeyboardEvent) => {
 onMounted(() => window.addEventListener('keydown', onKey))
 onUnmounted(() => window.removeEventListener('keydown', onKey))
 
-// À l'ouverture : le fond se pose, les icônes montent en léger décalé
+// On open: the backdrop settles, icons rise slightly staggered
 watch(open, (isOpen) => {
   if (!isOpen) {
     query.value = ''
@@ -170,8 +170,8 @@ watch(open, (isOpen) => {
   nextTick(() => {
     inputEl.value?.focus()
     if (!rootEl.value) return
-    // Le fondu porte sur la couche floutée seule : animer l'opacité de la
-    // racine forcerait un recalcul du flou à chaque image.
+    // The fade targets the blurred layer alone: animating the root's
+    // opacity would recompute the blur every frame.
     const backdrop = rootEl.value.querySelector('.lp-backdrop')
     if (backdrop) {
       gsap.from(backdrop, { autoAlpha: 0, duration: 0.18, clearProps: 'all' })
@@ -182,8 +182,8 @@ watch(open, (isOpen) => {
       duration: 0.32,
       ease: 'back.out(1.6)',
       stagger: { each: 0.012, from: 'center' },
-      // Sans ça, une animation interrompue (onglet en arrière-plan, fermeture
-      // pendant le vol) laisse un transform figé et décale les libellés.
+      // Without this, an interrupted animation (backgrounded tab, close
+      // mid-flight) leaves a frozen transform and shifts the labels.
       clearProps: 'all',
     })
   })
@@ -191,18 +191,17 @@ watch(open, (isOpen) => {
 </script>
 
 <style scoped>
-/* Le vrai Launchpad floute très fortement l'arrière-plan et l'assombrit à
-   peine : les couleurs du fond d'écran restent lisibles. Tailwind plafonne à
-   24 px de flou, il en faut bien plus. Cette couche n'a aucun enfant : le
-   navigateur ne recalcule donc le flou que si le bureau change, pas à chaque
-   survol d'icône. */
+/* The real Launchpad blurs the background heavily and barely darkens it:
+   the wallpaper colors stay readable. Tailwind caps blur at 24px, far too
+   little. This layer has no children, so the browser only recomputes the
+   blur when the desktop changes — not on every icon hover. */
 .lp-backdrop {
   background: rgba(0, 0, 0, 0.24);
   backdrop-filter: blur(64px);
   -webkit-backdrop-filter: blur(64px);
   will-change: backdrop-filter;
 }
-/* Le survol reste une opération de composition : pas de repeinture du SVG */
+/* Hover stays a compositing operation: no SVG repaint */
 .lp-tile {
   transition: transform 0.18s ease;
   will-change: transform;
@@ -215,7 +214,7 @@ watch(open, (isOpen) => {
 .lp-tile:active {
   transform: scale(0.96);
 }
-/* Pas de croix native dans le champ, comme dans macOS */
+/* No native clear button in the field, like macOS */
 .lp-search::-webkit-search-cancel-button {
   display: none;
 }

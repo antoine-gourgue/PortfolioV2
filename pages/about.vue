@@ -12,7 +12,6 @@
         @zoom="toggleZoom"
       >
         <div class="flex flex-1 min-h-[62vh]">
-          <!-- Liste des contacts (desktop) -->
           <aside
             class="hidden w-60 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:block"
           >
@@ -66,7 +65,6 @@
             </button>
           </aside>
 
-          <!-- Liste iOS (mobile) -->
           <div
             v-if="!mobileOpen"
             class="min-w-0 flex-1 px-4 pb-6 pt-4 lg:hidden"
@@ -77,7 +75,7 @@
               {{ $t('nav.about') }}
             </h1>
 
-            <!-- Recherche réelle : filtre la liste, pas un champ décoratif -->
+            <!-- Real search: filters the list, not a decorative field -->
             <label
               class="mt-3 flex items-center gap-2 rounded-[10px] bg-black/[0.07] px-3 py-2"
             >
@@ -150,14 +148,12 @@
             </p>
           </div>
 
-          <!-- Fiche -->
           <div
             v-if="current"
             :key="current.id"
             class="min-w-0 flex-1 p-5 sm:p-8"
             :class="mobileOpen ? '' : 'hidden lg:block'"
           >
-            <!-- Retour (mobile) -->
             <button
               class="mb-3 flex items-center gap-0.5 text-[15px] font-medium text-ablue lg:hidden"
               @click="mobileOpen = false"
@@ -166,7 +162,7 @@
               {{ $t('nav.about') }}
             </button>
 
-            <!-- En-tête : centré sur mobile, en ligne sur desktop -->
+            <!-- Header: centered on mobile, inline on desktop -->
             <div
               class="flex flex-col items-center gap-3 lg:flex-row lg:items-center lg:gap-5"
             >
@@ -203,9 +199,7 @@
               </div>
             </div>
 
-            <!-- Actions (fiche Antoine) -->
             <template v-if="current.id === 'antoine'">
-              <!-- Mobile : tuiles iOS -->
               <div class="mt-5 grid grid-cols-4 gap-2 lg:hidden">
                 <NuxtLink :to="localePath('/contact')" class="ios-tile">
                   <i
@@ -256,7 +250,6 @@
                   <span>CV</span>
                 </a>
               </div>
-              <!-- Desktop : boutons ronds -->
               <div class="mt-6 hidden gap-3 lg:flex">
                 <NuxtLink
                   :to="localePath('/contact')"
@@ -312,7 +305,7 @@
               </div>
             </template>
 
-            <!-- Champs — mobile : cartes groupées iOS -->
+            <!-- Fields — mobile: grouped iOS cards -->
             <div class="mt-5 space-y-3 lg:hidden">
               <div class="ios-card">
                 <div v-if="current.periodKey" class="ios-field">
@@ -332,7 +325,7 @@
               </div>
             </div>
 
-            <!-- Champs — desktop : lignes dt/dd -->
+            <!-- Fields — desktop: dt/dd rows -->
             <dl class="mt-7 hidden max-w-2xl lg:block">
               <div class="field-row">
                 <dt>{{ $t('macos.position') }}</dt>
@@ -354,7 +347,6 @@
               </div>
             </dl>
 
-            <!-- Qualités (fiche Antoine) -->
             <template v-if="current.id === 'antoine'">
               <div class="ios-card mt-3 lg:hidden">
                 <div class="ios-field">
@@ -384,7 +376,7 @@
           </div>
         </div>
       </UiMacWindow>
-      <!-- Balayer vers le haut pour revenir au bureau -->
+      <!-- Swipe up to return to the desktop -->
       <DesktopIosHomeBar app="page" @close="goHome" />
     </div>
   </main>
@@ -477,8 +469,8 @@ const entries: ContactEntry[] = [
 const selected = ref('antoine')
 const current = computed(() => entries.find((e) => e.id === selected.value))
 
-// Mobile : liste iOS d'abord, fiche au tap
-// Recherche : filtre nom et rôle, sur la fiche comme sur les organisations
+// Mobile: iOS list first, sheet on tap
+// Search filters on name and role, for the card and organizations alike
 const query = ref('')
 
 const filtered = computed(() => {
@@ -490,7 +482,7 @@ const filtered = computed(() => {
   )
 })
 
-// Contacts isole la fiche du propriétaire sous « Ma fiche »
+// Contacts isolates the owner's card under "My Card"
 const mobileGroups = computed(() => {
   const me = filtered.value.filter((e) => e.id === 'antoine')
   const others = filtered.value.filter((e) => e.id !== 'antoine')
@@ -507,7 +499,7 @@ const openMobile = (id: string) => {
   sfx.click()
 }
 
-// Pré-sélection via ?c=<id> (liens "Ouvrir dans Contacts" du Calendrier)
+// Preselection via ?c=<id> (the Calendar's "Open in Contacts" links)
 const route = useRoute()
 const preselect = route.query.c
 if (typeof preselect === 'string' && entries.some((e) => e.id === preselect)) {
@@ -553,8 +545,8 @@ onUnmounted(() => ctx?.revert())
   @apply min-w-0 text-right font-medium text-aink;
 }
 
-/* iOS : tuiles d'action et cartes groupées */
-/* Actions de fiche : rond bleu clair + libellé dessous, comme Contacts */
+/* iOS: action tiles and grouped cards */
+/* Card actions: light-blue circle + label below, like Contacts */
 .ios-tile {
   @apply flex flex-col items-center gap-1.5 text-[19px] text-ablue transition-opacity active:opacity-60;
 }

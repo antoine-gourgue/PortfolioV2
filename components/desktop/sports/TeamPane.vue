@@ -122,7 +122,7 @@
               >{{ f.home.name }}</component
             >
           </span>
-          <!-- Le score ouvre la fiche du match : résumé, compositions et fil -->
+          <!-- The score opens the match sheet: summary, lineups, commentary -->
           <button
             class="sp-link shrink-0 px-1 text-[13.5px] font-semibold tabular-nums"
             :aria-label="$t('macos.sportsMatchDetails')"
@@ -158,7 +158,6 @@
       </div>
     </template>
 
-    <!-- Effectif -->
     <template v-for="group in rosterGroups" :key="group.titleKey">
       <p
         class="px-1 pb-2 pt-5 text-[12px] font-semibold uppercase tracking-wide text-[#636366]"
@@ -224,7 +223,7 @@ const { backFromPane, openTeam, openAthlete, openFixture } = useSportsCtx()
 
 const isSelTeam = (name: string) => !!props.selName && name === props.selName
 
-// Derniers résultats (les 5 plus récents) et 5 prochains matchs
+// Latest results (5 most recent) and next 5 fixtures
 const teamGroups = computed(() => {
   const fixtures = props.detail?.fixtures ?? []
   return [
@@ -242,7 +241,7 @@ const teamGroups = computed(() => {
   ]
 })
 
-// Forme V/N/D sur les 5 derniers matchs (du plus ancien au plus récent)
+// W/D/L form over the last 5 matches (oldest to newest)
 const teamForm = computed(() =>
   (props.detail?.fixtures ?? [])
     .filter((f) => f.state === 'post' && f.res)
@@ -250,8 +249,8 @@ const teamForm = computed(() =>
     .map((f) => f.res)
 )
 
-// Le nul reste neutre, mais sur un gris assez clair pour que la lettre se lise
-// (l'ancien `text-aink` venait de la palette claire : presque noir sur noir).
+// A draw stays neutral, but on a gray light enough for the letter to read
+// (the old `text-aink` came from the light palette: near black on black).
 const FORM_STYLE: Record<string, string> = {
   W: 'bg-[#34C759] text-white',
   D: 'bg-[#48484A] text-white',
@@ -264,7 +263,7 @@ const formLetter = (r: string) =>
       ? t('macos.sportsL')
       : t('macos.sportsD')
 
-// Effectif groupé par poste, dans l'ordre gardiens → attaquants
+// Squad grouped by position, goalkeepers → forwards
 const ROSTER_GROUPS = [
   { pos: ['G'], titleKey: 'macos.sportsGoalkeepers' },
   { pos: ['D'], titleKey: 'macos.sportsDefenders' },

@@ -1,4 +1,4 @@
-// Formes renvoyées par /api/sports, partagées par l'app Sports et ses panneaux.
+/** Shapes returned by /api/sports, shared by the Sports app and its panes. */
 
 export interface SportsTeam {
   id: string

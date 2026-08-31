@@ -4,13 +4,13 @@ export interface MusicTrack {
   artist: string
   src: string
   cover: string
-  /** Extrait 30 s issu du catalogue iTunes (vs morceau complet local) */
+  /** 30s excerpt from the iTunes catalog (vs a full local track) */
   preview?: boolean
-  /** Flux radio en direct (durée infinie, pas de seek) */
+  /** Live radio stream (infinite duration, no seeking) */
   live?: boolean
 }
 
-// Bibliothèque locale : Kevin MacLeod (incompetech.com) — licence CC BY 4.0
+/** Local library: Kevin MacLeod (incompetech.com) — CC BY 4.0 */
 export const MUSIC_TRACKS: MusicTrack[] = [
   {
     id: 'backbay-lounge',
@@ -51,7 +51,7 @@ interface MusicState {
   volume: number
 }
 
-// Élément audio unique côté client (non sérialisable, hors useState)
+// Single client-side audio element (not serializable, kept outside useState)
 let audio: HTMLAudioElement | null = null
 let loadedId: string | null = null
 
@@ -84,8 +84,8 @@ export function useMusic() {
       state.value.playing = true
     })
 
-    // Media Session : contrôles natifs (écran verrouillé, centre de contrôle,
-    // boutons des écouteurs) comme une vraie app musique
+    // Media Session: native controls (lock screen, control center, headset
+    // buttons) like a real music app
     if ('mediaSession' in navigator) {
       const handlers: Array<[MediaSessionAction, MediaSessionActionHandler]> = [
         ['play', () => play()],
@@ -97,7 +97,7 @@ export function useMusic() {
         try {
           navigator.mediaSession.setActionHandler(action, handler)
         } catch {
-          // action non supportée par ce navigateur
+          // action not supported by this browser
         }
       }
     }
@@ -108,7 +108,7 @@ export function useMusic() {
     try {
       setMetadata(item)
     } catch {
-      // métadonnées non supportées : la lecture ne doit jamais en dépendre
+      // metadata unsupported: playback must never depend on it
     }
   }
 
@@ -180,7 +180,7 @@ export function useMusic() {
   }
 
   const prev = () => {
-    // Comme sur Apple Music : retour au début si le morceau a déjà joué un peu
+    // Like Apple Music: restart the track if it has already played a bit
     if (audio && audio.currentTime > 3) {
       audio.currentTime = 0
       return
@@ -246,7 +246,7 @@ export interface MusicArtist {
   id: number
   name: string
   genre: string
-  /** Visuel dérivé d'une pochette d'album (l'API iTunes n'a pas de photos d'artistes) */
+  /** Artwork derived from an album cover (the iTunes API has no artist photos) */
   cover?: string
 }
 
@@ -287,7 +287,7 @@ async function itunes(path: string): Promise<ItunesResult[]> {
   return data.results ?? []
 }
 
-/** Recherche groupée dans le catalogue iTunes : artistes, albums et titres */
+/** Combined iTunes catalog search: artists, albums and songs */
 export async function searchItunesAll(term: string): Promise<{
   artists: MusicArtist[]
   albums: MusicAlbum[]
@@ -300,7 +300,7 @@ export async function searchItunesAll(term: string): Promise<{
     itunes(`/search?term=${q}&entity=song&limit=8`),
   ])
 
-  // Visuel d'artiste : pochette trouvée dans les albums/titres déjà chargés
+  // Artist artwork: reuse a cover found in the already-fetched albums/songs
   const coverByArtist = new Map<number, string>()
   for (const r of [...albumResults, ...songResults]) {
     if (r.artistId && r.artworkUrl100 && !coverByArtist.has(r.artistId)) {
@@ -317,7 +317,7 @@ export async function searchItunesAll(term: string): Promise<{
       cover: coverByArtist.get(r.artistId as number),
     }))
 
-  // Pour les artistes encore sans visuel : un seul lookup groupé (1 album chacun)
+  // Artists still missing artwork: one batched lookup (1 album each)
   const missing = artists.filter((a) => !a.cover)
   if (missing.length) {
     const lookup = await itunes(
@@ -338,7 +338,7 @@ export async function searchItunesAll(term: string): Promise<{
   }
 }
 
-/** Page artiste : albums + titres populaires */
+/** Artist page: albums + popular songs */
 export async function lookupItunesArtist(artistId: number): Promise<{
   albums: MusicAlbum[]
   songs: MusicTrack[]
@@ -355,7 +355,7 @@ export async function lookupItunesArtist(artistId: number): Promise<{
   }
 }
 
-/** Pistes d'un album, dans l'ordre */
+/** Tracks of an album, in order */
 export async function lookupItunesAlbum(
   collectionId: number
 ): Promise<MusicTrack[]> {
@@ -367,7 +367,7 @@ export async function lookupItunesAlbum(
     .map(toTrack)
 }
 
-// ── Radios en direct (flux publics Radio France) ──
+/** Live radios (public Radio France streams, plus a few commercial ones) */
 export const RADIO_STATIONS: MusicTrack[] = [
   {
     id: 'radio-fip',
@@ -491,7 +491,7 @@ export const RADIO_STATIONS: MusicTrack[] = [
   },
 ]
 
-/** Nouveautés : top albums France via le flux RSS officiel d'Apple */
+/** New releases: top albums in France via Apple's official RSS feed */
 export async function fetchItunesTop(): Promise<{
   albums: MusicAlbum[]
   artists: MusicArtist[]

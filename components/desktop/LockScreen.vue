@@ -14,7 +14,6 @@
     >
       <div class="pointer-events-none absolute inset-0 bg-black/25"></div>
 
-      <!-- Horloge géante façon écran verrouillé -->
       <div class="relative mt-6 text-center">
         <p class="text-[17px] font-medium text-white/85">{{ dateLine }}</p>
         <p
@@ -24,7 +23,6 @@
         </p>
       </div>
 
-      <!-- Profil + indication -->
       <div class="relative flex flex-col items-center gap-3">
         <span
           class="flex h-16 w-16 items-center justify-center rounded-full bg-white/15 shadow-lg ring-1 ring-white/25 backdrop-blur"
@@ -48,7 +46,7 @@ const music = useMusic()
 const sfx = useSfx()
 const { locale } = useI18n()
 
-const IDLE_DELAY = 150_000 // 2 min 30 d'inactivité
+const IDLE_DELAY = 150_000 // 2min30 of inactivity
 
 const now = ref(new Date())
 let clockTimer: ReturnType<typeof setInterval> | null = null
@@ -69,7 +67,7 @@ const dateLine = computed(() =>
 )
 
 const lock = () => {
-  // Pas de verrouillage pendant l'écoute de musique : le visiteur est actif
+  // Never lock while music is playing: the visitor is active
   if (music.state.value.playing) {
     resetIdle()
     return

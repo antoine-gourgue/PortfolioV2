@@ -1,7 +1,7 @@
 <template>
   <Teleport to="body">
-    <!-- Mobile : voile façon centre de contrôle, l'écran d'accueil ne doit
-         pas transparaître entre les cartes -->
+    <!-- Mobile: control-center scrim — the home screen must not show
+         through between the cards -->
     <Transition
       enter-active-class="transition duration-300 ease-out"
       enter-from-class="opacity-0"
@@ -27,9 +27,9 @@
         @click.stop
       >
         <!--
-          Poignée : on referme en la tirant vers le haut. Le geste ne peut pas
-          vivre sur le panneau lui-même, qui défile — le navigateur y annule
-          les événements pointeur dès qu'il prend la main sur le scroll.
+          Grabber: drag it up to close. The gesture cannot live on the panel
+          itself, which scrolls — the browser cancels pointer events there
+          as soon as it takes over the scroll.
         -->
         <div
           class="-mt-1 mb-1 flex touch-none justify-center py-2 lg:hidden"
@@ -40,7 +40,6 @@
         >
           <span class="block h-[5px] w-9 rounded-full bg-white/60"></span>
         </div>
-        <!-- Date -->
         <p
           class="px-1 pb-2 text-[13px] font-semibold text-white/80 drop-shadow"
         >
@@ -48,7 +47,7 @@
         </p>
 
         <div class="flex flex-col gap-3">
-          <!-- Widget GitHub : contributions réelles -->
+          <!-- GitHub widget: real contributions -->
           <a
             href="https://github.com/antoine-gourgue"
             target="_blank"
@@ -95,7 +94,6 @@
             </p>
           </a>
 
-          <!-- Widget Musique -->
           <div
             class="flex items-center gap-3 rounded-2xl bg-white/80 p-3.5 shadow-lg backdrop-blur-2xl"
           >
@@ -145,7 +143,6 @@
             </button>
           </div>
 
-          <!-- Widget Disponibilité -->
           <NuxtLink
             :to="localePath('/contact')"
             class="block rounded-2xl bg-white/80 p-4 shadow-lg backdrop-blur-2xl transition hover:bg-white/90"
@@ -166,8 +163,9 @@
     </Transition>
 
     <!--
-      Mobile : la barre d'état n'est pas cliquable (comme sur iOS), on ouvre
-      le centre de contrôle en tirant vers le bas depuis le haut de l'écran.
+      Mobile: the status bar is not clickable (like iOS); the control center
+      opens by pulling down from the top of the screen where the browser
+      still owns that edge — otherwise via the clock tap.
     -->
     <div
       v-if="!desktop.state.value.notifOpen"
@@ -187,7 +185,7 @@ const music = useMusic()
 const localePath = useLocalePath()
 const { locale } = useI18n()
 
-// Palette officielle de la heatmap GitHub
+// Official GitHub heatmap palette
 const LEVELS = ['#EBEDF0', '#9BE9A8', '#40C463', '#30A14E', '#216E39']
 
 const dateLine = computed(() =>
@@ -198,7 +196,7 @@ const dateLine = computed(() =>
   })
 )
 
-// ── Contributions GitHub (16 dernières semaines) ──
+// GitHub contributions (last 16 weeks)
 const weeks = useState<number[][]>('gh-weeks', () => [])
 const contribTotal = useState<number | null>('gh-total', () => null)
 let fetched = false
@@ -223,7 +221,7 @@ const loadContributions = async () => {
     weeks.value = grouped
     contribTotal.value = Object.values(data.total ?? {})[0] ?? null
   } catch {
-    // widget silencieux en cas d'échec réseau
+    // widget stays silent on network failure
   }
 }
 
@@ -234,8 +232,8 @@ watch(
   }
 )
 
-// ── Gestes mobiles ──
-// Tirer vers le bas depuis le bord haut ouvre ; balayer vers le haut referme.
+// Mobile gestures: pulling down from the top edge opens, swiping the
+// grabber up closes.
 const PULL = 45
 
 let edgeY = 0
@@ -274,7 +272,7 @@ const onPanelMove = (e: PointerEvent) => {
 }
 const onPanelUp = () => (panelDragging = false)
 
-// Fermeture au clic en dehors
+// Close on outside click
 const onOutside = () => {
   desktop.state.value.notifOpen = false
 }

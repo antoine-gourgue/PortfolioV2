@@ -1,6 +1,6 @@
 /**
- * Top albums France — proxy du flux RSS officiel Apple
- * (bloqué par CORS côté navigateur), cache mémoire 30 min.
+ * Top albums in France — proxy for Apple's official RSS feed (CORS-blocked
+ * in the browser), 30min in-memory cache.
  */
 let cache: { at: number; data: unknown } | null = null
 

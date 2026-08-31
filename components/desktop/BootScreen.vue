@@ -1,9 +1,9 @@
 <template>
   <Teleport to="body">
     <!--
-      Rendu visible dès le HTML serveur : il couvre la page avant toute
-      hydratation. Séquence complète à la première visite de la session,
-      boot express (~0,9 s) sur les rechargements suivants.
+      Visible straight from the server HTML: it covers the page before any
+      hydration. Full sequence on the session's first visit, express boot
+      (~0.9s) on subsequent reloads.
     -->
     <div
       v-if="visible"
@@ -31,7 +31,7 @@ const bootEl = ref<HTMLElement | null>(null)
 const barEl = ref<HTMLElement | null>(null)
 
 onMounted(() => {
-  // ?noboot : saute la séquence (captures d'écran, audits automatisés)
+  // ?noboot skips the sequence (screenshots, automated audits)
   if (
     window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
     new URLSearchParams(window.location.search).has('noboot')
@@ -46,8 +46,8 @@ onMounted(() => {
     },
   })
 
-  // Rechargement dans la même session : boot express (bon pour le LCP),
-  // la séquence complète avec carillon reste pour la première visite
+  // Same-session reload: express boot (good for the LCP); the full
+  // sequence with the chime is kept for the first visit
   if (sessionStorage.getItem('ag-booted')) {
     timeline
       .to(barEl.value, { width: '100%', duration: 0.55, ease: 'power2.out' })
@@ -60,7 +60,7 @@ onMounted(() => {
   }
   sessionStorage.setItem('ag-booted', '1')
 
-  // Carillon de démarrage (joué seulement si le navigateur l'autorise)
+  // Startup chime (only plays if the browser allows it)
   useSfx().boot()
 
   timeline

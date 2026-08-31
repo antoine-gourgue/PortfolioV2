@@ -17,7 +17,7 @@ export interface PortfolioProject {
   pro?: boolean
 }
 
-// Source unique des projets mis en avant (accueil, /projects, Spotlight)
+/** Single source of truth for featured projects (home, /projects, Spotlight) */
 export function useProjects(): PortfolioProject[] {
   return [
     {

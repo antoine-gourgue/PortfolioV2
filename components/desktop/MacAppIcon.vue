@@ -1,5 +1,5 @@
 <template>
-  <!-- Icône "lettre" générique (projets, liens) -->
+  <!-- Generic "letter" icon (projects, links) -->
   <svg v-if="letter" viewBox="0 0 100 100" class="h-full w-full drop-shadow-sm">
     <defs>
       <linearGradient :id="`lg-${uid}`" x1="0" y1="0" x2="0" y2="1">
@@ -107,7 +107,7 @@
     </g>
   </svg>
 
-  <!-- Contacts (carnet d'adresses) -->
+  <!-- Contacts (address book) -->
   <svg
     v-else-if="name === 'contacts'"
     viewBox="0 0 100 100"
@@ -132,7 +132,7 @@
     </defs>
     <g :clip-path="`url(#cc-${uid})`">
       <rect width="100" height="100" :fill="`url(#ca-${uid})`" />
-      <!-- Bande cuir + couture -->
+      <!-- Leather band + stitching -->
       <rect width="100" height="17" :fill="`url(#cb-${uid})`" />
       <line
         x1="6"
@@ -144,13 +144,13 @@
         stroke-dasharray="3 3.4"
         stroke-linecap="round"
       />
-      <!-- Silhouette (glyphe SF person_fill, Framework7 Icons MIT) -->
+      <!-- Silhouette (SF glyph person_fill, Framework7 Icons MIT) -->
       <path
         transform="translate(17 24) scale(1.18)"
         :fill="`url(#cs-${uid})`"
         d="M 28.0117 27.3672 C 33.0508 27.3672 37.3867 22.8672 37.3867 17.0078 C 37.3867 11.2187 33.0274 6.9297 28.0117 6.9297 C 22.9961 6.9297 18.6367 11.3125 18.6367 17.0547 C 18.6367 22.8672 22.9961 27.3672 28.0117 27.3672 Z M 13.2930 49.0703 L 42.7305 49.0703 C 46.4101 49.0703 47.7226 48.0156 47.7226 45.9531 C 47.7226 39.9062 40.1523 31.5625 28.0117 31.5625 C 15.8477 31.5625 8.2774 39.9062 8.2774 45.9531 C 8.2774 48.0156 9.5898 49.0703 13.2930 49.0703 Z"
       />
-      <!-- Onglets colorés sur la tranche -->
+      <!-- Colored tabs on the edge -->
       <rect x="91" y="26" width="9" height="13" rx="2.5" fill="#F87171" />
       <rect x="91" y="44" width="9" height="13" rx="2.5" fill="#FBBF24" />
       <rect x="91" y="62" width="9" height="13" rx="2.5" fill="#34D399" />
@@ -312,7 +312,7 @@
     />
   </svg>
 
-  <!-- Sports : terrain de foot, réplique de l'icône Apple Sports -->
+  <!-- Sports: football pitch, replica of the Apple Sports icon -->
   <svg
     v-else-if="name === 'sports'"
     viewBox="0 0 100 100"
@@ -367,7 +367,7 @@
     <circle cx="50" cy="50" r="47" :fill="`url(#sis-${uid})`" />
   </svg>
 
-  <!-- Plans -->
+  <!-- Maps -->
   <svg
     v-else-if="name === 'maps'"
     viewBox="0 0 100 100"
@@ -436,7 +436,7 @@
     </g>
   </svg>
 
-  <!-- Réglages -->
+  <!-- Settings -->
   <svg
     v-else-if="name === 'settings'"
     viewBox="0 0 100 100"
@@ -488,7 +488,7 @@
     />
   </svg>
 
-  <!-- Musique -->
+  <!-- Music -->
   <svg
     v-else-if="name === 'music'"
     viewBox="0 0 100 100"
@@ -507,7 +507,7 @@
     />
   </svg>
 
-  <!-- Météo -->
+  <!-- Weather -->
   <svg
     v-else-if="name === 'weather'"
     viewBox="0 0 100 100"
@@ -531,7 +531,7 @@
     />
   </svg>
 
-  <!-- Calculatrice -->
+  <!-- Calculator -->
   <svg
     v-else-if="name === 'calculator'"
     viewBox="0 0 100 100"
@@ -601,7 +601,7 @@
     </g>
   </svg>
 
-  <!-- Calendrier -->
+  <!-- Calendar -->
   <svg
     v-else-if="name === 'calendar'"
     viewBox="0 0 100 100"
@@ -640,7 +640,7 @@
     </g>
   </svg>
 
-  <!-- Corbeille -->
+  <!-- Trash -->
   <svg
     v-else-if="name === 'trash'"
     viewBox="0 0 100 100"
@@ -697,7 +697,7 @@
     />
   </svg>
 
-  <!-- Dossier -->
+  <!-- Folder -->
   <svg
     v-else-if="name === 'folder'"
     viewBox="0 0 100 84"
@@ -723,7 +723,7 @@
     />
   </svg>
 
-  <!-- Launchpad : grille 3 × 3 de pastilles colorées sur fond blanc -->
+  <!-- Launchpad: 3x3 grid of colored dots on white -->
   <svg
     v-else-if="name === 'launchpad'"
     viewBox="0 0 100 100"
@@ -734,7 +734,7 @@
         <stop offset="0" stop-color="#FFFFFF" />
         <stop offset="1" stop-color="#EFF0F2" />
       </linearGradient>
-      <!-- Reflet unique, réappliqué sur chaque pastille -->
+      <!-- Single highlight, reapplied to every dot -->
       <linearGradient :id="`lpgl-${uid}`" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stop-color="#fff" stop-opacity="0.3" />
         <stop offset="0.55" stop-color="#fff" stop-opacity="0.04" />
@@ -762,7 +762,7 @@
     </template>
   </svg>
 
-  <!-- Fichier PDF -->
+  <!-- PDF file -->
   <svg
     v-else-if="name === 'pdf'"
     viewBox="0 0 80 100"
@@ -793,18 +793,22 @@
 <script setup lang="ts">
 withDefaults(
   defineProps<{
+    /** Icon id (finder, mail, siri…); unknown ids fall back to the letter icon */
     name?: string
+    /** Letter shown by the generic gradient icon */
     letter?: string
+    /** Top color of the generic icon's gradient */
     colorTop?: string
+    /** Bottom color of the generic icon's gradient */
     colorBottom?: string
   }>(),
   { name: '', letter: '', colorTop: '#4FB0F8', colorBottom: '#1E7BE8' }
 )
 
-// Identifiant unique pour les défs SVG (évite les collisions d'id entre instances)
+// Unique id for SVG defs (avoids id collisions across instances)
 const uid = useId().replace(/[^a-zA-Z0-9]/g, '')
 
-// Pastilles du Launchpad, dans l'ordre de lecture
+// Launchpad dots, in reading order
 const LAUNCHPAD_TILES = [
   '#43CB58',
   '#FFC42E',

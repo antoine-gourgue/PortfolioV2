@@ -9,7 +9,6 @@
       @pointerdown="bringToFront"
     >
       <div class="flex h-full flex-col bg-white lg:h-[380px]">
-        <!-- Barre de titre -->
         <div
           class="trash-drag flex items-center gap-2 border-b border-black/10 bg-[#F5F5F7]/90 px-4 pb-2 pt-12 backdrop-blur lg:px-3 lg:py-2.5"
         >
@@ -66,9 +65,7 @@
           </button>
         </div>
 
-        <!-- Contenu -->
         <div class="flex-1 overflow-y-auto p-4">
-          <!-- Corbeille vide -->
           <div
             v-if="emptied"
             class="flex h-full flex-col items-center justify-center gap-2 text-center"
@@ -84,7 +81,6 @@
             </p>
           </div>
 
-          <!-- Fichiers rejetés -->
           <div v-else class="grid grid-cols-3 gap-x-2 gap-y-4 sm:grid-cols-4">
             <button
               v-for="item in items"
@@ -118,7 +114,7 @@
           </div>
         </div>
 
-        <!-- Barre d'état : motif du rejet -->
+        <!-- Status bar: why the file was rejected -->
         <div
           class="border-t border-black/10 bg-[#F5F5F7] px-4 py-2 text-center text-[11.5px] text-black/55"
         >
@@ -133,7 +129,7 @@
           </template>
         </div>
       </div>
-      <!-- Balayer vers le haut pour revenir à l'écran d'accueil -->
+      <!-- Swipe up to return to the home screen -->
       <DesktopIosHomeBar app="trash" @close="desktop.closeApp('trash')" />
     </div>
   </Teleport>
@@ -150,7 +146,7 @@ const bringToFront = () => {
   z.value = desktop.focusApp('trash')
 }
 
-// Les vrais rejets de la conception de ce portfolio 🪦
+// The real rejects from designing this portfolio 🪦
 const items = [
   {
     name: 'drapeaux-emoji.zip',
@@ -205,7 +201,7 @@ const selectedItem = computed(() =>
 const emptyTrash = () => {
   sfx.trash()
   selected.value = ''
-  // Les fichiers s'envolent avant de disparaître
+  // Files fly away before vanishing
   gsap.to('.trash-file', {
     scale: 0.3,
     autoAlpha: 0,
@@ -219,7 +215,6 @@ const emptyTrash = () => {
   })
 }
 
-// ── Ouverture : animation + déplacement ──
 let drags: ReturnType<typeof Draggable.create> = []
 watch(
   () => desktop.state.value.apps.trash,

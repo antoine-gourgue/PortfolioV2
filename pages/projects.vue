@@ -11,7 +11,6 @@
         @zoom="toggleZoom"
       >
         <div class="flex flex-1 min-h-[70vh]">
-          <!-- Sidebar -->
           <aside
             class="hidden w-56 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:block"
           >
@@ -80,12 +79,11 @@
             </button>
           </aside>
 
-          <!-- Liste iOS (mobile) -->
           <div
             v-if="!mobileOpen"
             class="min-w-0 flex-1 px-4 pb-6 pt-4 lg:hidden"
           >
-            <!-- En-tête : grand titre + avatar, comme l'onglet Apps -->
+            <!-- Header: large title + avatar, like the Apps tab -->
             <div class="flex items-start justify-between gap-3 px-1">
               <div class="min-w-0">
                 <h1
@@ -107,8 +105,8 @@
             </div>
 
             <!--
-              Carte éditoriale : la signature de l'App Store, une rubrique
-              en vedette avec visuel puis la ligne d'app en pied de carte.
+              Editorial card: the App Store's signature — a featured spot
+              with a visual, then the app row as the card's footer.
             -->
             <button
               v-if="featured"
@@ -128,7 +126,7 @@
                   {{ featured.stack }}
                 </p>
               </div>
-              <!-- Capture entière : un recadrage coupe l'interface montrée -->
+              <!-- Full screenshot: cropping cuts the interface it shows -->
               <img
                 :src="featured.image"
                 :alt="featured.name"
@@ -166,7 +164,7 @@
               </div>
             </button>
 
-            <!-- En-tête de rubrique avec « Tout afficher », comme l'App Store -->
+            <!-- Section header with "See All", like the App Store -->
             <div
               class="flex items-baseline justify-between gap-3 px-1 pb-1 pt-7"
             >
@@ -225,14 +223,12 @@
             </div>
           </div>
 
-          <!-- Fiche de l'app -->
           <div
             v-if="current"
             :key="current.key"
             class="min-w-0 flex-1 p-6 sm:p-8"
             :class="mobileOpen ? '' : 'hidden lg:block'"
           >
-            <!-- Retour (mobile) -->
             <button
               class="mb-4 flex items-center gap-0.5 text-[15px] font-medium text-ablue lg:hidden"
               @click="mobileOpen = false"
@@ -240,7 +236,6 @@
               <span class="text-[19px] leading-none">‹</span> Apps
             </button>
 
-            <!-- En-tête -->
             <div class="flex items-start gap-5">
               <span class="block h-24 w-24 shrink-0 sm:h-28 sm:w-28">
                 <DesktopProjectIcon
@@ -280,7 +275,6 @@
               </div>
             </div>
 
-            <!-- Rangée de stats -->
             <div
               class="mt-8 flex divide-x divide-black/10 border-y border-black/10 py-4"
             >
@@ -310,7 +304,6 @@
               </div>
             </div>
 
-            <!-- Aperçu -->
             <h2 class="mt-8 text-lg font-bold">{{ $t('macos.preview') }}</h2>
             <a
               :href="current.url"
@@ -325,13 +318,11 @@
               />
             </a>
 
-            <!-- À propos -->
             <h2 class="mt-8 text-lg font-bold">{{ $t('macos.aboutApp') }}</h2>
             <p class="mt-2 max-w-3xl text-[15px] leading-relaxed text-agray">
               {{ $t(`projects.items.${current.key}.description`) }}
             </p>
 
-            <!-- Informations -->
             <h2 class="mt-8 text-lg font-bold">
               {{ $t('macos.information') }}
             </h2>
@@ -368,7 +359,7 @@
           </div>
         </div>
       </UiMacWindow>
-      <!-- Balayer vers le haut pour revenir au bureau -->
+      <!-- Swipe up to return to the desktop -->
       <DesktopIosHomeBar app="page" @close="goHome" />
     </div>
   </main>
@@ -383,10 +374,10 @@ const localePath = useLocalePath()
 const projects = useProjects()
 const proProjects = projects.filter((p) => p.pro)
 const persoProjects = projects.filter((p) => !p.pro)
-/** L'App Store met une app en vedette dans une carte éditoriale */
+/** The App Store leads with one app in an editorial card */
 const featured = computed(() => proProjects[0] ?? persoProjects[0])
 
-/** La rubrique n'affiche que trois entrées avant « Tout afficher » */
+/** The section shows three entries before "See All" */
 const restProjects = computed(() =>
   projects.filter((p) => p.key !== featured.value?.key)
 )
@@ -398,7 +389,7 @@ const visibleProjects = computed(() =>
 const selected = ref(projects[0].key)
 const current = computed(() => projects.find((p) => p.key === selected.value))
 
-// Mobile : liste iOS d'abord, fiche au tap
+// Mobile: iOS list first, sheet on tap
 const mobileOpen = ref(false)
 const sfxStore = useSfx()
 const openMobile = (key: string) => {
@@ -407,7 +398,7 @@ const openMobile = (key: string) => {
   sfxStore.click()
 }
 
-// Étoiles GitHub réelles via l'API du site
+// Real GitHub stars via the site's own API
 interface GithubRepo {
   name: string
   stargazers_count: number

@@ -8,7 +8,7 @@ interface DesktopState {
   wins: Record<string, WinState>
   topZ: number
   activeWin: string
-  /** App au premier plan : pilote le nom et les menus de la barre de menu */
+  /** Frontmost app id — drives the menu bar's name and menus */
   activeApp: string
   wallpaper: number
   spotlightOpen: boolean
@@ -20,7 +20,7 @@ interface DesktopState {
   sfxMuted: boolean
 }
 
-// Fonds d'écran façon macOS : dégradés riches multi-couches (radial + linear)
+/** macOS-style wallpapers: layered radial + linear gradients */
 export const WALLPAPERS = [
   // Tahoe Blue
   'radial-gradient(110% 85% at 12% 8%, rgba(94,158,240,0.75) 0%, rgba(94,158,240,0) 52%), radial-gradient(95% 75% at 88% 18%, rgba(140,190,255,0.55) 0%, rgba(140,190,255,0) 55%), radial-gradient(130% 100% at 50% 108%, rgba(6,26,74,0.95) 0%, rgba(6,26,74,0) 62%), linear-gradient(165deg, #0b1f4d 0%, #1d4fa8 55%, #3f7fdc 100%)',
@@ -60,16 +60,16 @@ export function useDesktop() {
   }))
 
   /**
-   * Passe une app flottante au premier plan et renvoie son nouveau z-index.
-   * Toutes les apps y passent, à l'ouverture comme au clic : c'est ce qui
-   * permet à la barre de menu de savoir quelle app est active.
+   * Bring a floating app to the front and return its new z-index.
+   * Every app routes through here, on open and on click alike — this is
+   * what lets the menu bar know which app is active.
    */
   const focusApp = (id: string) => {
     state.value.activeApp = id
     return 40 + ++state.value.topZ
   }
 
-  // Une app qui disparaît rend la main au bureau
+  // An app that goes away hands focus back to the desktop
   const blurApp = (id: string) => {
     if (state.value.activeApp === id) state.value.activeApp = ''
   }
@@ -79,7 +79,7 @@ export function useDesktop() {
     state.value.minimizedApps[id] = false
     if (!state.value.apps[id]) blurApp(id)
   }
-  // Ouvre sans basculer : le Launchpad ne doit jamais refermer une app déjà là
+  // Open without toggling: Launchpad must never close an app that is already up
   const openApp = (id: string) => {
     state.value.apps[id] = true
     state.value.minimizedApps[id] = false
@@ -90,22 +90,22 @@ export function useDesktop() {
     blurApp(id)
   }
   /**
-   * Aspiration vers le Dock, comme le « genie » de macOS. La bascule d'état
-   * n'a lieu qu'à la fin : sinon la fenêtre disparaîtrait avant de bouger.
-   * Les positions sont remises à zéro après coup, car les fenêtres du bureau
-   * survivent en v-show et resteraient invisibles et décalées à la réouverture.
+   * Suck the window into the Dock, like macOS's genie effect. State only
+   * flips once the animation completes — otherwise the window would vanish
+   * before it moves. Transforms are cleared afterwards because desktop
+   * windows live behind v-show and would reopen invisible and offset.
    */
   const genie = (id: string, done: () => void) => {
     if (!import.meta.client) return done()
 
     const el = document.querySelector<HTMLElement>(`[data-window="${id}"]`)
-    // Sur mobile les apps sont en plein écran et il n'y a pas de Dock à viser
+    // On mobile apps are full-screen and there is no Dock to aim at
     if (!el || !window.matchMedia('(min-width: 1024px)').matches) return done()
 
     const { gsap } = useGsap()
     const rect = el.getBoundingClientRect()
     gsap.to(el, {
-      // décalages relatifs : la fenêtre a pu être déplacée à la souris
+      // relative offsets: the window may have been dragged around
       x: `+=${Math.round(window.innerWidth / 2 - (rect.left + rect.width / 2))}`,
       y: `+=${Math.round(window.innerHeight - rect.top)}`,
       scale: 0.15,
@@ -120,7 +120,7 @@ export function useDesktop() {
     })
   }
 
-  // Réduite : fenêtre masquée mais app « en cours » (point dans le Dock)
+  // Minimized: window hidden but app still "running" (dot in the Dock)
   const minimizeApp = (id: string) =>
     genie(id, () => {
       state.value.apps[id] = false
@@ -128,14 +128,14 @@ export function useDesktop() {
       blurApp(id)
     })
 
-  // Clic sur le bureau : plus aucune app au premier plan
+  // Desktop click: nothing is frontmost any more
   const blurAll = () => {
     state.value.activeApp = ''
     state.value.activeWin = ''
   }
 
-  // Même échelle de z que les fenêtres d'app (bringToFront : 40 + topZ),
-  // pour qu'un clic fasse toujours passer la fenêtre devant, quel que soit son type
+  // Same z scale as floating apps (40 + topZ) so a click always brings a
+  // window to the front regardless of its kind
   const register = (id: string) => {
     if (!state.value.wins[id]) {
       state.value.wins[id] = {
@@ -180,7 +180,7 @@ export function useDesktop() {
   }
 
   const cycleWallpaper = () => {
-    // Le choix manuel désactive le mode automatique (selon l'heure)
+    // A manual pick disables the time-of-day automatic mode
     state.value.wallpaperAuto = false
     state.value.wallpaper = (state.value.wallpaper + 1) % WALLPAPERS.length
   }

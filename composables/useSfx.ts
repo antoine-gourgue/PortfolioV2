@@ -1,7 +1,7 @@
 /**
- * Effets sonores système façon macOS, synthétisés en Web Audio.
- * Aucun asset audio : sons courts générés (licence-free), volume doux.
- * Coupables via le haut-parleur de la barre de menu (persisté).
+ * macOS-style system sound effects, synthesized with Web Audio.
+ * No audio assets: short generated tones, soft volume, mutable via the
+ * menu-bar speaker (persisted).
  */
 
 let ctx: AudioContext | null = null
@@ -96,27 +96,27 @@ export function useSfx() {
   }
 
   return {
-    /** Clic doux (dock, menus, Spotlight) */
+    /** Soft click (dock, menus, Spotlight) */
     click() {
       if (!enabled()) return
       tone({ from: 1900, to: 1300, dur: 0.035, peak: 0.08 })
     },
-    /** Ouverture de fenêtre / Quick Look */
+    /** Window open / Quick Look */
     pop() {
       if (!enabled()) return
       tone({ from: 360, to: 650, dur: 0.1, peak: 0.14 })
     },
-    /** Fermeture / réduction : "thup" feutré, très discret */
+    /** Close / minimize: a muffled, very discreet "thup" */
     minimize() {
       if (!enabled()) return
       tone({ from: 300, to: 190, dur: 0.08, peak: 0.09, lowpass: 800 })
     },
-    /** Restauration depuis le dock */
+    /** Restore from the dock */
     restore() {
       if (!enabled()) return
       tone({ from: 180, to: 560, dur: 0.2, peak: 0.12 })
     },
-    /** Touche de la calculatrice */
+    /** Calculator key press */
     key() {
       if (!enabled()) return
       tone({
@@ -127,14 +127,14 @@ export function useSfx() {
         lowpass: 1400,
       })
     },
-    /** Corbeille (froissement) */
+    /** Trash (paper crumple) */
     trash() {
       if (!enabled()) return
       noise({ dur: 0.07, peak: 0.12, filterFrom: 1400 })
       noise({ dur: 0.06, peak: 0.1, filterFrom: 1000, delay: 0.07 })
       noise({ dur: 0.09, peak: 0.08, filterFrom: 700, delay: 0.13 })
     },
-    /** Envoi du message (swoosh Mail) */
+    /** Message sent (Mail swoosh) */
     send() {
       if (!enabled()) return
       noise({
@@ -146,13 +146,13 @@ export function useSfx() {
       })
       tone({ from: 480, to: 980, dur: 0.32, peak: 0.1 })
     },
-    /** Erreur (bonk) */
+    /** Error (bonk) */
     error() {
       if (!enabled()) return
       tone({ from: 200, dur: 0.16, peak: 0.18, type: 'triangle' })
       tone({ from: 150, dur: 0.2, peak: 0.12, type: 'triangle', delay: 0.02 })
     },
-    /** Carillon de démarrage (accord fa dièse majeur, hommage synthétisé) */
+    /** Startup chime (F-sharp major chord, a synthesized homage) */
     boot() {
       if (!enabled()) return
       const chord = [92.5, 138.59, 185, 233.08, 277.18]

@@ -171,7 +171,7 @@ const athleteFacts = computed(() => {
   ].filter((f) => f.value)
 })
 
-// SV et GA n'existent que pour les gardiens : les colonnes s'adaptent au poste
+// SV and GA only exist for goalkeepers: the columns adapt to the position
 const ATHLETE_STATS = ['G', 'A', 'SHOT', 'SV', 'GA', 'YC', 'RC']
 const athleteColumns = computed(() => {
   const labels = props.detail?.labels ?? []

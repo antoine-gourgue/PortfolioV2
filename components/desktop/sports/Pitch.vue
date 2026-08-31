@@ -16,7 +16,6 @@
         }}</span>
       </p>
 
-      <!-- Le onze sur le terrain -->
       <div class="sp-pitch relative rounded-[16px] px-3 py-4">
         <svg
           class="pointer-events-none absolute inset-0 h-full w-full text-white/15"
@@ -69,7 +68,6 @@
         </div>
       </div>
 
-      <!-- Banc -->
       <div
         v-if="detail.lineups[side]!.subs.length"
         class="sp-card mt-2 px-4 py-1"
@@ -107,21 +105,21 @@ defineProps<{ match: SportsMatch; detail: MatchDetail }>()
 const { lastName, dropPhoto } = useSportsFormat()
 const { openAthlete } = useSportsCtx()
 
-// ── Placement des titulaires sur le terrain ──
-// ESPN numérote les joueurs de 1 à 11 mais sans suivre les lignes de la
-// formation ; le poste est bien plus fiable pour reconstituer le dispositif.
+// Starters' placement on the pitch. ESPN numbers players 1 to 11 without
+// following the formation lines; the position is far more reliable for
+// reconstructing the shape.
 const ROWS = [
-  /^G/, // gardien
-  /^(D|CD|CB|RB|LB|RCB|LCB|SW|RWB|LWB)/, // défense
-  /^(DM|CM|M|RM|LM)/, // milieu
-  /^AM/, // milieu offensif
-  /^(F|S|CF|ST|RW|LW|W)/, // attaque
+  /^G/, // goalkeeper
+  /^(D|CD|CB|RB|LB|RCB|LCB|SW|RWB|LWB)/, // defense
+  /^(DM|CM|M|RM|LM)/, // midfield
+  /^AM/, // attacking midfield
+  /^(F|S|CF|ST|RW|LW|W)/, // attack
 ]
 const rowOf = (pos: string) => {
   const i = ROWS.findIndex((r) => r.test(pos))
   return i < 0 ? 2 : i
 }
-// Un latéral se place plus au large qu'un défenseur central du même côté
+// A full-back sits wider than a center-back on the same side
 const xOf = (pos: string) => {
   const side = /(-L|^L)/.test(pos) ? -1 : /(-R|^R)/.test(pos) ? 1 : 0
   const wide = /^(RB|LB|RM|LM|RW|LW|RWB|LWB)/.test(pos) ? 1 : 0.55

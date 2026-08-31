@@ -5,7 +5,6 @@
     @mouseenter="captureRestPositions"
     @mouseleave="resetAll"
   >
-    <!-- Apps -->
     <component
       :is="item.href ? 'a' : NuxtLinkComponent"
       v-for="item in apps"
@@ -30,7 +29,6 @@
       ></span>
     </component>
 
-    <!-- Launchpad -->
     <button
       :ref="setItemRef"
       class="dock-icon group"
@@ -41,7 +39,6 @@
       <span class="dock-tip">{{ $t('macos.launchpad') }}</span>
     </button>
 
-    <!-- Apps utilitaires (Météo, Calculatrice) -->
     <button
       v-for="app in utilApps"
       :key="app.id"
@@ -61,7 +58,6 @@
       ></span>
     </button>
 
-    <!-- Fenêtres réduites -->
     <template v-if="minimized.length">
       <div class="mx-1 h-11 w-px self-center bg-white/30"></div>
       <button
@@ -79,7 +75,6 @@
       </button>
     </template>
 
-    <!-- Corbeille -->
     <div class="mx-1 h-11 w-px self-center bg-white/30"></div>
     <button
       :ref="setItemRef"
@@ -116,10 +111,10 @@ const utilApps = [
   { id: 'settings', label: 'macos.settingsTitle', icon: 'settings' },
 ]
 
-// Résolution explicite : une chaîne 'NuxtLink' dans <component :is> ne se résout pas
+// Explicit resolution: a 'NuxtLink' string in <component :is> does not resolve
 const NuxtLinkComponent = resolveComponent('NuxtLink')
 
-// Icône et libellé des fenêtres réduites, par identifiant
+// Icon and label of minimized windows, by id
 const minimizedMeta: Record<
   string,
   { icon: string; label?: string; raw?: string }
@@ -168,8 +163,8 @@ const setItemRef = (el: Element | ComponentPublicInstance | null) => {
   if (dom instanceof HTMLElement && !itemEls.includes(dom)) itemEls.push(dom)
 }
 
-// Magnification par taille réelle (width/height) et non par transform scale :
-// les SVG restent vectoriels et parfaitement nets, comme le vrai Dock.
+// Magnification via real width/height rather than transform scale: the
+// SVGs stay vector-crisp, like the real Dock.
 const BASE = 52
 const GROW = 32
 
@@ -202,9 +197,9 @@ const resetAll = () => {
   })
 }
 
-// Positions au repos, figées à l'entrée du curseur : la magnification se calcule
-// toujours contre ces centres fixes, jamais contre les positions courantes
-// (sinon les icônes qui grossissent déplacent les distances → dock instable).
+// Rest positions, frozen when the cursor enters: magnification is always
+// computed against these fixed centers, never the live positions —
+// otherwise growing icons shift the distances and the dock jitters.
 let restCenters: number[] = []
 
 const captureRestPositions = () => {

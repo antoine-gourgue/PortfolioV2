@@ -9,7 +9,6 @@
       @pointerdown="bringToFront"
     >
       <div class="flex h-full flex-col bg-black lg:h-auto lg:bg-[#2a2a2c]">
-        <!-- Barre de titre (desktop : pastilles / mobile : chevron iOS) -->
         <div
           class="cal-drag flex items-center gap-2 px-4 pb-1 pt-10 lg:px-3 lg:pt-2.5"
         >
@@ -54,14 +53,12 @@
           ></span>
         </div>
 
-        <!-- Affichage -->
         <div
           class="cal-drag flex flex-1 select-none items-end justify-end truncate px-6 pb-3 pt-3 text-[76px] font-light leading-none text-white lg:flex-none lg:px-4 lg:pb-2 lg:text-[38px]"
         >
           {{ display }}
         </div>
 
-        <!-- Clavier -->
         <div
           class="grid grid-cols-4 gap-3 p-4 pb-8 lg:gap-px lg:bg-[#2a2a2c] lg:p-px lg:pt-0"
           @click.capture="sfx.key()"
@@ -106,7 +103,7 @@
           <button class="key key-op" @click="equals">=</button>
         </div>
       </div>
-      <!-- Balayer vers le haut pour revenir à l'écran d'accueil -->
+      <!-- Swipe up to return to the home screen -->
       <DesktopIosHomeBar
         app="calculator"
         dark
@@ -127,7 +124,6 @@ const bringToFront = () => {
   z.value = desktop.focusApp('calculator')
 }
 
-// ── Logique ──
 const display = ref('0')
 const prev = ref<number | null>(null)
 const op = ref<string | null>(null)
@@ -198,7 +194,6 @@ const percent = () => {
 const opActive = (o: string) =>
   op.value === o && fresh.value ? 'bg-white !text-[#FF9F0A]' : ''
 
-// ── Ouverture : animation + déplacement ──
 let drags: ReturnType<typeof Draggable.create> = []
 watch(
   () => desktop.state.value.apps.calculator,
@@ -232,7 +227,7 @@ watch(
 </script>
 
 <style scoped>
-/* Mobile-first : boutons ronds iOS ; desktop (lg:) : tuiles macOS */
+/* Mobile-first: round iOS keys; desktop (lg:): macOS tiles */
 .key {
   @apply aspect-square rounded-full bg-[#333336] text-center text-[30px] font-normal text-white transition-colors duration-100 active:bg-[#7d7d83] lg:aspect-auto lg:rounded-none lg:bg-[#5A5A5E] lg:py-3 lg:text-[17px] lg:hover:bg-[#6b6b70];
 }

@@ -1,5 +1,5 @@
 <template>
-  <!-- Dock mobile (iOS) — sur desktop, MacMenuBar + MacDock prennent le relais -->
+  <!-- Mobile dock (iOS) — on desktop, MacMenuBar + MacDock take over -->
   <nav
     v-show="!appOpen"
     class="lg:hidden fixed bottom-3 left-1/2 z-[300] flex -translate-x-1/2 items-center gap-3 rounded-[26px] border border-white/30 bg-white/20 px-4 py-2.5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.45)] backdrop-blur-2xl sm:bottom-5 sm:gap-4 sm:rounded-[32px] sm:px-5 sm:py-3"
@@ -52,8 +52,8 @@ const isActive = (path: string) => {
   return currentPath === path || (path !== '/' && currentPath.startsWith(path))
 }
 
-// Comme sur iOS : le dock n'existe que sur l'écran d'accueil. Une app ouverte
-// ou une page consultée occupent tout l'écran — on en sort en balayant.
+// Like iOS: the dock only exists on the home screen. An open app or a
+// visited page takes the whole screen — you leave it by swiping.
 const appOpen = computed(
   () =>
     Object.values(desktop.state.value.apps).some(Boolean) ||

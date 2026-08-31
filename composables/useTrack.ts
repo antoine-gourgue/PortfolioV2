@@ -1,5 +1,7 @@
-// Envoi d'événements PostHog : no-op si le plugin n'est pas initialisé
-// (clé absente, SSR, ou pendant les 2,5 s de différé du chargement)
+/**
+ * PostHog event capture. No-op when the plugin is not initialized —
+ * missing key, SSR, or during the 2.5s deferred load.
+ */
 export function useTrack() {
   const nuxtApp = useNuxtApp()
   return (event: string, properties?: Record<string, unknown>) => {

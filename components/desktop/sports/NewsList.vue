@@ -52,7 +52,6 @@
           </p>
         </div>
       </a>
-      <!-- Clubs et joueurs cités, cliquables -->
       <div v-if="a.entities.length" class="flex flex-wrap gap-1.5 px-4 pb-3.5">
         <button
           v-for="e in a.entities"
@@ -76,7 +75,7 @@ const track = useTrack()
 const { articleDay } = useSportsFormat()
 const { openTeam, openAthlete } = useSportsCtx()
 
-// Un club ou un joueur cité dans un article s'ouvre dans l'app
+// A club or player mentioned in an article opens inside the app
 const openEntity = (e: NewsEntity) => {
   if (e.kind === 'team') openTeam({ id: e.id, name: e.name }, 'main')
   else openAthlete(e.id, e.name, 'main')
