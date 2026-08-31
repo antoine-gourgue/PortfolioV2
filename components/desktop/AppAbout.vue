@@ -17,6 +17,7 @@
         :title="$t('nav.about')"
         mobile-bg="#F2F2F7"
         :active="desktop.state.value.activeApp === 'about'"
+        :fill="true"
         :maximized="zoomed"
         @close="close"
         @minimize="minimize"

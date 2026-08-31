@@ -17,6 +17,7 @@
         :title="$t('nav.blog')"
         mobile-bg="#FBF9F2"
         :active="desktop.state.value.activeApp === 'blog'"
+        :fill="true"
         :maximized="zoomed"
         @close="close"
         @minimize="minimize"

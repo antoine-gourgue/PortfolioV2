@@ -16,6 +16,7 @@
       <UiMacWindow
         :title="$t('nav.contact')"
         :active="desktop.state.value.activeApp === 'contact'"
+        :fill="true"
         :maximized="zoomed"
         @close="close"
         @minimize="minimize"

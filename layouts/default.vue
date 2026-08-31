@@ -87,4 +87,14 @@ onMounted(() => {
 onUnmounted(() => {
   if (wallpaperTimer) clearInterval(wallpaperTimer)
 })
+
+// An open app is a full-screen sheet (mobile) or a floating window (desktop);
+// either way the long home page behind it must not scroll under the pointer.
+const anyAppOpen = computed(() =>
+  Object.values(desktop.state.value.apps).some(Boolean)
+)
+watch(anyAppOpen, (open) => {
+  if (import.meta.client)
+    document.documentElement.style.overflow = open ? 'hidden' : ''
+})
 </script>

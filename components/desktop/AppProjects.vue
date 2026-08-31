@@ -16,6 +16,7 @@
       <UiMacWindow
         :title="$t('nav.projects')"
         :active="desktop.state.value.activeApp === 'projects'"
+        :fill="true"
         :maximized="zoomed"
         @close="close"
         @minimize="minimize"
