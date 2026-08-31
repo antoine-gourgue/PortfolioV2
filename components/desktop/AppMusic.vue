@@ -8,159 +8,121 @@
       :style="{ zIndex: z }"
       @pointerdown="bringToFront"
     >
-      <!-- MOBILE: full-screen iOS player -->
-      <div
-        class="relative flex h-full flex-col overflow-hidden bg-[#161618] lg:hidden"
-      >
-        <div
-          class="pointer-events-none absolute inset-0 scale-125 bg-cover bg-center opacity-40 blur-3xl"
-          :style="{ backgroundImage: `url(${track.cover})` }"
-        ></div>
-        <div class="pointer-events-none absolute inset-0 bg-black/45"></div>
-
-        <div class="relative flex min-h-[20px] items-center px-4 pb-1 pt-12">
-          <span
-            class="absolute left-1/2 -translate-x-1/2 text-[13px] font-semibold text-white/60"
-          >
-            {{ $t('macos.musicTitle') }}
-          </span>
-        </div>
-
-        <div
-          class="relative flex flex-1 flex-col justify-center px-8 pb-4 pt-4"
-        >
-          <img
-            :src="track.cover"
-            :alt="track.title"
-            class="mx-auto aspect-square w-full max-w-[300px] rounded-xl shadow-[0_18px_45px_-12px_rgba(0,0,0,0.7)] transition-transform duration-500"
-            :class="music.state.value.playing ? 'scale-100' : 'scale-[0.88]'"
-          />
-          <div class="mt-6">
-            <p class="text-[19px] font-semibold text-white">
-              {{ track.title }}
-            </p>
-            <p class="text-[15px] text-white/50">{{ track.artist }}</p>
-          </div>
-          <div v-if="!track.live" class="mt-4">
-            <div
-              class="group relative h-[5px] cursor-pointer rounded-full bg-white/20"
-              @click="onSeek"
-            >
-              <div
-                class="absolute inset-y-0 left-0 rounded-full bg-white/70"
-                :style="{ width: `${progressPct}%` }"
-              ></div>
-            </div>
-            <div
-              class="mt-1.5 flex justify-between font-mono text-[11px] text-white/40"
-            >
-              <span>{{ fmt(music.state.value.progress) }}</span>
-              <span>-{{ fmt(remaining) }}</span>
-            </div>
-          </div>
-          <p
-            v-if="track.live"
-            class="mt-4 flex items-center justify-center gap-1.5 text-[11px] font-bold text-[#FA586A]"
-          >
-            <span class="live-dot h-1.5 w-1.5 rounded-full bg-[#FA586A]"></span>
-            {{ $t('macos.musicLive') }}
-          </p>
-          <div class="mt-2 flex items-center justify-center gap-10">
+      <!-- MOBILE: Apple Music, dark mode — tab screens, mini player,
+           full-screen Now Playing sheet -->
+      <div class="relative flex h-full flex-col bg-black lg:hidden">
+        <div class="music-scroll flex-1 overflow-y-auto px-5 pb-[190px] pt-12">
+          <!-- Album detail: pick a track instead of autoplaying the album -->
+          <template v-if="view.kind === 'album'">
             <button
-              class="text-white/80 active:scale-90"
-              aria-label="previous"
-              @pointerdown.stop
-              @click="music.prev()"
+              class="mb-4 flex items-center gap-0.5 text-[15px] font-medium text-[#FA2D48]"
+              @click="goBack"
             >
-              <svg viewBox="0 0 24 24" class="h-8 w-8" fill="currentColor">
-                <path d="M6 5h2v14H6zM20 5v14L9.5 12z" />
-              </svg>
+              <span class="text-2xl leading-none">‹</span>
+              {{
+                tab === 'search'
+                  ? $t('macos.musicSearch')
+                  : $t('macos.musicNew')
+              }}
             </button>
+
+            <div class="flex flex-col items-center text-center">
+              <img
+                :src="view.album.cover"
+                :alt="view.album.title"
+                class="aspect-square w-56 rounded-[10px] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.8)]"
+              />
+              <p class="mt-4 text-[20px] font-semibold text-white">
+                {{ view.album.title }}
+              </p>
+              <p class="text-[15px] font-medium text-[#FA2D48]">
+                {{ view.album.artist }}
+              </p>
+              <p class="mt-0.5 text-[13px] text-[#8E8E93]">
+                {{ view.album.year
+                }}<template v-if="view.album.trackCount">
+                  · {{ view.album.trackCount }} titres</template
+                >
+              </p>
+            </div>
+
             <button
-              class="text-white active:scale-90"
-              aria-label="play-pause"
-              @pointerdown.stop
-              @click="(sfx.click(), music.toggle())"
+              class="mt-5 flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-[#2c2c2e] text-[16px] font-medium text-[#FA2D48] active:scale-[0.98] disabled:opacity-40"
+              :disabled="!albumTracks.length"
+              @click="playAnd(0, albumTracks)"
             >
-              <svg
-                v-if="!music.state.value.playing"
-                viewBox="0 0 24 24"
-                class="h-12 w-12"
-                fill="currentColor"
-              >
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor">
                 <path d="M8 5v14l11-7z" />
               </svg>
-              <svg
-                v-else
-                viewBox="0 0 24 24"
-                class="h-12 w-12"
-                fill="currentColor"
+              {{ $t('macos.musicPlay') }}
+            </button>
+
+            <div v-if="searching" class="mt-4">
+              <div
+                v-for="n in 8"
+                :key="`skalb-${n}`"
+                class="flex items-center gap-3 py-2.5"
               >
-                <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" />
-              </svg>
-            </button>
-            <button
-              class="text-white/80 active:scale-90"
-              aria-label="next"
-              @pointerdown.stop
-              @click="music.next()"
-            >
-              <svg viewBox="0 0 24 24" class="h-8 w-8" fill="currentColor">
-                <path d="M16 5h2v14h-2zM4 5v14l10.5-7z" />
-              </svg>
-            </button>
-          </div>
-        </div>
+                <span class="am-skeleton h-4 w-4 rounded"></span>
+                <span class="am-skeleton h-3.5 w-1/2 rounded"></span>
+              </div>
+            </div>
+            <template v-else>
+              <button
+                v-for="(item, i) in albumTracks"
+                :key="item.id"
+                class="am-row"
+                @click="playAnd(i, albumTracks)"
+              >
+                <span
+                  v-if="i > 0"
+                  class="absolute inset-x-0 top-0 h-px bg-white/10"
+                ></span>
+                <span
+                  class="w-5 shrink-0 text-center text-[15px] tabular-nums text-[#8E8E93]"
+                >
+                  <span
+                    v-if="track.id === item.id && music.state.value.playing"
+                    class="eq eq--light inline-flex h-3.5 items-end gap-[2px]"
+                  >
+                    <i></i><i></i><i></i>
+                  </span>
+                  <template v-else>{{ i + 1 }}</template>
+                </span>
+                <span
+                  class="min-w-0 flex-1 truncate text-[16px]"
+                  :class="
+                    track.id === item.id ? 'text-[#FA2D48]' : 'text-white'
+                  "
+                  >{{ item.title }}</span
+                >
+              </button>
+              <p class="mt-4 text-center text-[11px] text-[#8E8E93]">
+                {{ $t('macos.musicPreviewNote') }}
+              </p>
+            </template>
+          </template>
 
-        <div class="relative border-t border-white/10 px-3 py-2">
-          <div class="mb-1.5 flex gap-1 px-1">
-            <button
-              class="rounded-full px-3 py-1 text-[11px] font-semibold transition"
-              :class="
-                tab === 'library' ? 'bg-white/20 text-white' : 'text-white/45'
-              "
-              @click="tab = 'library'"
-            >
-              {{ $t('macos.musicLibrary') }}
-            </button>
-            <button
-              class="rounded-full px-3 py-1 text-[11px] font-semibold transition"
-              :class="
-                tab === 'search' ? 'bg-white/20 text-white' : 'text-white/45'
-              "
-              @click="tab = 'search'"
-            >
-              {{ $t('macos.musicSearch') }}
-            </button>
-            <button
-              class="rounded-full px-3 py-1 text-[11px] font-semibold transition"
-              :class="
-                tab === 'radio' ? 'bg-white/20 text-white' : 'text-white/45'
-              "
-              @click="tab = 'radio'"
-            >
-              {{ $t('macos.musicRadio') }}
-            </button>
-          </div>
-
-          <template v-if="tab === 'library'">
+          <template v-else-if="tab === 'library'">
+            <h1 class="am-title">{{ $t('macos.musicLibrary') }}</h1>
+            <p class="am-section">{{ $t('macos.musicSongs') }}</p>
             <button
               v-for="(item, i) in music.tracks"
               :key="item.id"
-              class="flex w-full items-center gap-3 rounded-lg px-2 py-1.5 text-left transition"
-              :class="{ 'bg-white/10': track.id === item.id }"
-              @click="music.play(i, music.tracks)"
+              class="am-row"
+              @click="playAnd(i, music.tracks)"
             >
-              <img
-                :src="item.cover"
-                :alt="item.title"
-                class="h-9 w-9 rounded-md"
-              />
-              <span class="flex-1">
-                <span class="block text-[13px] font-medium text-white">{{
-                  item.title
-                }}</span>
-                <span class="block text-[11px] text-white/45">{{
+              <span v-if="i > 0" class="am-sep"></span>
+              <img :src="item.cover" :alt="item.title" class="am-art" />
+              <span class="min-w-0 flex-1">
+                <span
+                  class="block truncate text-[16px]"
+                  :class="
+                    track.id === item.id ? 'text-[#FA2D48]' : 'text-white'
+                  "
+                  >{{ item.title }}</span
+                >
+                <span class="block truncate text-[13px] text-[#8E8E93]">{{
                   item.artist
                 }}</span>
               </span>
@@ -172,72 +134,359 @@
               </span>
             </button>
           </template>
-          <template v-else-if="tab === 'radio'">
-            <div class="music-scroll max-h-48 overflow-y-auto pr-1">
+
+          <template v-else-if="tab === 'browse'">
+            <h1 class="am-title">{{ $t('macos.musicNew') }}</h1>
+            <p class="am-section">{{ $t('macos.musicTopAlbums') }}</p>
+            <div v-if="loadingTop" class="grid grid-cols-2 gap-x-4 gap-y-6">
+              <div v-for="n in 6" :key="n">
+                <div
+                  class="am-skeleton aspect-square w-full rounded-[8px]"
+                ></div>
+                <div class="am-skeleton mt-2 h-3 w-3/4 rounded"></div>
+              </div>
+            </div>
+            <div v-else class="grid grid-cols-2 gap-x-4 gap-y-6">
               <button
-                v-for="(station, i) in RADIO_STATIONS"
-                :key="station.id"
-                class="flex w-full items-center gap-3 rounded-lg px-2 py-1.5 text-left transition"
-                :class="{ 'bg-white/10': track.id === station.id }"
-                @click="music.play(i, RADIO_STATIONS)"
+                v-for="album in topAlbums"
+                :key="album.id"
+                class="text-left"
+                @click="openAlbum(album)"
               >
                 <img
-                  :src="station.cover"
-                  :alt="station.title"
-                  class="h-9 w-9 rounded-md"
+                  :src="album.cover"
+                  :alt="album.title"
+                  class="aspect-square w-full rounded-[8px] shadow-[0_6px_18px_-6px_rgba(0,0,0,0.8)]"
                 />
-                <span class="flex-1">
-                  <span class="block text-[13px] font-medium text-white">{{
-                    station.title
-                  }}</span>
-                  <span class="block text-[11px] text-white/45">{{
-                    station.artist
-                  }}</span>
-                </span>
-                <span
-                  v-if="track.id === station.id && music.state.value.playing"
-                  class="text-[9px] font-bold text-[#FA586A]"
-                  >● {{ $t('macos.musicLive') }}</span
-                >
+                <span class="mt-1.5 block truncate text-[13px] text-white">{{
+                  album.title
+                }}</span>
+                <span class="block truncate text-[13px] text-[#8E8E93]">{{
+                  album.artist
+                }}</span>
               </button>
             </div>
+            <p class="mt-6 text-center text-[11px] text-[#8E8E93]">
+              {{ $t('macos.musicPreviewNote') }}
+            </p>
           </template>
+
+          <template v-else-if="tab === 'radio'">
+            <h1 class="am-title">{{ $t('macos.musicRadio') }}</h1>
+            <button
+              v-for="(station, i) in RADIO_STATIONS"
+              :key="station.id"
+              class="am-row"
+              @click="playAnd(i, RADIO_STATIONS)"
+            >
+              <span v-if="i > 0" class="am-sep"></span>
+              <img :src="station.cover" :alt="station.title" class="am-art" />
+              <span class="min-w-0 flex-1">
+                <span
+                  class="block truncate text-[16px]"
+                  :class="
+                    track.id === station.id ? 'text-[#FA2D48]' : 'text-white'
+                  "
+                  >{{ station.title }}</span
+                >
+                <span class="block truncate text-[13px] text-[#8E8E93]">{{
+                  station.artist
+                }}</span>
+              </span>
+              <span
+                v-if="track.id === station.id && music.state.value.playing"
+                class="shrink-0 text-[9px] font-bold text-[#FA2D48]"
+                >● {{ $t('macos.musicLive') }}</span
+              >
+            </button>
+          </template>
+
           <template v-else>
-            <div class="px-1 pb-1.5">
+            <h1 class="am-title">{{ $t('macos.musicSearch') }}</h1>
+            <label
+              class="flex h-9 items-center gap-2 rounded-[10px] bg-[#1c1c1e] px-3"
+            >
+              <i
+                aria-hidden="true"
+                class="f7-icons text-[15px] text-[#8E8E93]"
+                style="font-size: 15px"
+                >search</i
+              >
               <input
                 v-model="searchTerm"
                 type="search"
                 :placeholder="$t('macos.musicSearchPlaceholder')"
-                class="w-full rounded-lg bg-white/10 px-3.5 py-1.5 text-[13px] text-white outline-none placeholder:text-white/35"
+                class="w-full bg-transparent text-[17px] text-white outline-none placeholder:text-[#8E8E93]"
                 @input="onSearchInput"
               />
-            </div>
-            <div class="music-scroll max-h-44 overflow-y-auto pr-1">
+            </label>
+            <template v-if="songs.length">
+              <p class="am-section">{{ $t('macos.musicSongs') }}</p>
               <button
                 v-for="(item, i) in songs"
                 :key="item.id"
-                class="flex w-full items-center gap-3 rounded-lg px-2 py-1.5 text-left"
-                :class="{ 'bg-white/10': track.id === item.id }"
-                @click="music.play(i, songs)"
+                class="am-row"
+                @click="playAnd(i, songs)"
               >
-                <img
-                  :src="item.cover"
-                  :alt="item.title"
-                  class="h-9 w-9 rounded-md"
-                />
+                <span v-if="i > 0" class="am-sep"></span>
+                <img :src="item.cover" :alt="item.title" class="am-art" />
                 <span class="min-w-0 flex-1">
                   <span
-                    class="block truncate text-[13px] font-medium text-white"
+                    class="block truncate text-[16px]"
+                    :class="
+                      track.id === item.id ? 'text-[#FA2D48]' : 'text-white'
+                    "
                     >{{ item.title }}</span
                   >
-                  <span class="block truncate text-[11px] text-white/45">{{
+                  <span class="block truncate text-[13px] text-[#8E8E93]">{{
                     item.artist
                   }}</span>
                 </span>
               </button>
-            </div>
+            </template>
+            <template v-if="albums.length">
+              <p class="am-section">{{ $t('macos.musicAlbums') }}</p>
+              <div class="grid grid-cols-2 gap-x-4 gap-y-6">
+                <button
+                  v-for="album in albums"
+                  :key="album.id"
+                  class="text-left"
+                  @click="openAlbum(album)"
+                >
+                  <img
+                    :src="album.cover"
+                    :alt="album.title"
+                    class="aspect-square w-full rounded-[8px]"
+                  />
+                  <span class="mt-1.5 block truncate text-[13px] text-white">{{
+                    album.title
+                  }}</span>
+                  <span class="block truncate text-[13px] text-[#8E8E93]">{{
+                    album.artist
+                  }}</span>
+                </button>
+              </div>
+            </template>
+            <p
+              v-if="
+                searchTerm.trim().length >= 2 &&
+                !searching &&
+                !songs.length &&
+                !albums.length
+              "
+              class="mt-8 text-center text-[15px] text-[#8E8E93]"
+            >
+              {{ $t('macos.musicNoResults') }}
+            </p>
           </template>
         </div>
+
+        <!-- Mini player + tab bar -->
+        <div class="absolute inset-x-0 bottom-0 z-10">
+          <button
+            class="mx-2 mb-1 flex h-14 w-[calc(100%-16px)] items-center gap-3 rounded-xl bg-[#2c2c2e]/95 px-3 text-left shadow-[0_8px_24px_-8px_rgba(0,0,0,0.8)] backdrop-blur-xl"
+            @click="nowPlaying = true"
+          >
+            <img
+              :src="track.cover"
+              :alt="track.title"
+              class="h-10 w-10 rounded-md shadow"
+            />
+            <span class="min-w-0 flex-1 truncate text-[15px] text-white">{{
+              track.title
+            }}</span>
+            <span
+              class="flex h-9 w-9 items-center justify-center text-white active:scale-90"
+              aria-label="play-pause"
+              @click.stop="music.toggle()"
+            >
+              <svg
+                v-if="!music.state.value.playing"
+                viewBox="0 0 24 24"
+                class="h-6 w-6"
+                fill="currentColor"
+              >
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              <svg
+                v-else
+                viewBox="0 0 24 24"
+                class="h-6 w-6"
+                fill="currentColor"
+              >
+                <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" />
+              </svg>
+            </span>
+            <span
+              class="flex h-9 w-9 items-center justify-center text-white active:scale-90"
+              aria-label="next"
+              @click.stop="music.next()"
+            >
+              <svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor">
+                <path d="M16 5h2v14h-2zM4 5v14l10.5-7z" />
+              </svg>
+            </span>
+          </button>
+
+          <nav
+            class="grid grid-cols-4 border-t border-white/10 bg-black/90 pb-[34px] pt-1.5 backdrop-blur-xl"
+          >
+            <button
+              v-for="item in MOBILE_TABS"
+              :key="item.id"
+              class="flex flex-col items-center gap-0.5"
+              :class="tab === item.id ? 'text-[#FA2D48]' : 'text-[#8E8E93]'"
+              @click="openTab(item.id)"
+            >
+              <i aria-hidden="true" class="f7-icons" style="font-size: 24px">{{
+                item.icon
+              }}</i>
+              <span class="text-[10px] font-medium">{{ $t(item.label) }}</span>
+            </button>
+          </nav>
+        </div>
+
+        <!-- Now Playing sheet -->
+        <Transition
+          enter-active-class="transition-transform duration-300 ease-out"
+          enter-from-class="translate-y-full"
+          leave-active-class="transition-transform duration-250 ease-in"
+          leave-to-class="translate-y-full"
+        >
+          <div
+            v-if="nowPlaying"
+            class="absolute inset-0 z-20 flex flex-col overflow-hidden bg-[#1c1c1e]"
+          >
+            <div
+              class="pointer-events-none absolute inset-0 scale-125 bg-cover bg-center opacity-40 blur-3xl"
+              :style="{ backgroundImage: `url(${track.cover})` }"
+            ></div>
+            <div class="pointer-events-none absolute inset-0 bg-black/45"></div>
+
+            <!-- Grabber: tap or swipe down closes the sheet -->
+            <div
+              class="relative flex touch-none justify-center pb-2 pt-11"
+              @pointerdown="onSheetDown"
+              @pointerup="onSheetUp"
+              @pointercancel="sheetY = null"
+            >
+              <span class="h-[5px] w-9 rounded-full bg-white/40"></span>
+            </div>
+
+            <div class="relative flex flex-1 flex-col justify-center px-8 pb-8">
+              <img
+                :src="track.cover"
+                :alt="track.title"
+                class="mx-auto aspect-square w-full max-w-[330px] rounded-[10px] shadow-[0_24px_60px_-12px_rgba(0,0,0,0.8)] transition-transform duration-500"
+                :class="
+                  music.state.value.playing ? 'scale-100' : 'scale-[0.78]'
+                "
+              />
+              <div class="mt-8">
+                <p class="truncate text-[20px] font-semibold text-white">
+                  {{ track.title }}
+                </p>
+                <p class="truncate text-[17px] text-white/60">
+                  {{ track.artist }}
+                </p>
+              </div>
+
+              <div v-if="!track.live" class="mt-5">
+                <div
+                  class="relative h-[6px] cursor-pointer rounded-full bg-white/25"
+                  @click="onSeek"
+                >
+                  <div
+                    class="absolute inset-y-0 left-0 rounded-full bg-white/80"
+                    :style="{ width: `${progressPct}%` }"
+                  ></div>
+                </div>
+                <div
+                  class="mt-1.5 flex justify-between font-mono text-[11px] text-white/40"
+                >
+                  <span>{{ fmt(music.state.value.progress) }}</span>
+                  <span>-{{ fmt(remaining) }}</span>
+                </div>
+              </div>
+              <p
+                v-else
+                class="mt-5 flex items-center justify-center gap-1.5 text-[11px] font-bold text-[#FA2D48]"
+              >
+                <span
+                  class="live-dot h-1.5 w-1.5 rounded-full bg-[#FA2D48]"
+                ></span>
+                {{ $t('macos.musicLive') }}
+              </p>
+
+              <div class="mt-4 flex items-center justify-center gap-14">
+                <button
+                  class="text-white active:scale-90"
+                  aria-label="previous"
+                  @click="music.prev()"
+                >
+                  <svg viewBox="0 0 24 24" class="h-9 w-9" fill="currentColor">
+                    <path d="M6 5h2v14H6zM20 5v14L9.5 12z" />
+                  </svg>
+                </button>
+                <button
+                  class="text-white active:scale-90"
+                  aria-label="play-pause"
+                  @click="music.toggle()"
+                >
+                  <svg
+                    v-if="!music.state.value.playing"
+                    viewBox="0 0 24 24"
+                    class="h-14 w-14"
+                    fill="currentColor"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                  <svg
+                    v-else
+                    viewBox="0 0 24 24"
+                    class="h-14 w-14"
+                    fill="currentColor"
+                  >
+                    <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" />
+                  </svg>
+                </button>
+                <button
+                  class="text-white active:scale-90"
+                  aria-label="next"
+                  @click="music.next()"
+                >
+                  <svg viewBox="0 0 24 24" class="h-9 w-9" fill="currentColor">
+                    <path d="M16 5h2v14h-2zM4 5v14l10.5-7z" />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="mt-7 flex items-center gap-2.5">
+                <i
+                  aria-hidden="true"
+                  class="f7-icons text-white/50"
+                  style="font-size: 12px"
+                  >speaker_fill</i
+                >
+                <div
+                  class="relative h-[6px] flex-1 cursor-pointer rounded-full bg-white/25"
+                  @click="onVolume"
+                >
+                  <div
+                    class="absolute inset-y-0 left-0 rounded-full bg-white/80"
+                    :style="{ width: `${music.state.value.volume * 100}%` }"
+                  ></div>
+                </div>
+                <i
+                  aria-hidden="true"
+                  class="f7-icons text-white/50"
+                  style="font-size: 15px"
+                  >speaker_3_fill</i
+                >
+              </div>
+            </div>
+          </div>
+        </Transition>
       </div>
 
       <!-- DESKTOP: macOS Music app -->
@@ -1028,7 +1277,53 @@ type SearchView =
   | { kind: 'artist'; id: number; name: string; genre: string; cover?: string }
   | { kind: 'album'; album: MusicAlbum; from: 'results' | 'artist' }
 
-const tab = ref<'library' | 'search' | 'radio'>('library')
+const tab = ref<'library' | 'browse' | 'search' | 'radio'>('library')
+
+// Apple Music's bottom tab bar; every tab is backed by real content
+const MOBILE_TABS = [
+  { id: 'library', icon: 'music_note_list', label: 'macos.musicLibrary' },
+  { id: 'browse', icon: 'square_grid_2x2_fill', label: 'macos.musicNew' },
+  {
+    id: 'radio',
+    icon: 'antenna_radiowaves_left_right',
+    label: 'macos.musicRadio',
+  },
+  { id: 'search', icon: 'search', label: 'macos.musicSearch' },
+] as const
+
+const openTab = (id: (typeof MOBILE_TABS)[number]['id']) => {
+  tab.value = id
+  view.value = { kind: 'results' }
+  if (id === 'browse') loadTop()
+}
+
+// Full-screen Now Playing sheet, opened from the mini player
+const nowPlaying = ref(false)
+
+const playAnd = (index: number, queue: MusicTrack[]) => {
+  music.play(index, queue)
+  nowPlaying.value = true
+}
+
+// Grabber gesture: a tap or a downward swipe closes the sheet
+let sheetY: number | null = null
+const onSheetDown = (e: PointerEvent) => {
+  sheetY = e.clientY
+  ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+}
+const onSheetUp = (e: PointerEvent) => {
+  if (sheetY === null) return
+  const dy = e.clientY - sheetY
+  sheetY = null
+  if (dy > 40 || Math.abs(dy) < 10) nowPlaying.value = false
+}
+
+const onVolume = (e: MouseEvent) => {
+  const rect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+  music.setVolume(
+    Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width))
+  )
+}
 const section = ref<'songs' | 'explore' | 'radio'>('songs')
 
 // New releases (top albums in France, Apple's official RSS feed)
@@ -1199,6 +1494,7 @@ watch(
   () => desktop.state.value.apps.music,
   (open) => {
     if (!open) {
+      nowPlaying.value = false
       drags.forEach((d) => d.kill())
       drags = []
       return
@@ -1227,6 +1523,26 @@ watch(
 </script>
 
 <style scoped>
+/* Apple Music mobile: large title, section header, list rows */
+.am-title {
+  @apply pb-3 text-[34px] font-bold leading-tight tracking-[-0.9px] text-white;
+}
+.am-section {
+  @apply border-b border-white/10 pb-2 pt-4 text-[20px] font-bold text-white;
+}
+.am-row {
+  @apply relative flex w-full items-center gap-3 py-2 text-left;
+}
+.am-sep {
+  @apply absolute left-[60px] right-0 top-0 h-px bg-white/10;
+}
+.am-art {
+  @apply h-12 w-12 shrink-0 rounded-[5px];
+}
+.am-skeleton {
+  @apply animate-pulse bg-white/10;
+}
+
 /* Horizontal scroll without a visible bar */
 .no-scrollbar {
   scrollbar-width: none;
