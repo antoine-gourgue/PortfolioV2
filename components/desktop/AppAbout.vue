@@ -4,11 +4,11 @@
       v-if="desktop.state.value.apps.about"
       ref="winEl"
       data-window="about"
-      class="fixed inset-0 z-40 overflow-hidden lg:inset-auto"
+      class="fixed inset-0 z-40 overflow-hidden"
       :class="
         zoomed
           ? 'lg:inset-0 lg:rounded-none'
-          : 'lg:left-[18%] lg:top-24 lg:w-[760px] lg:rounded-2xl'
+          : 'lg:inset-auto lg:left-[18%] lg:top-24 lg:w-[760px] lg:rounded-2xl'
       "
       :style="{ zIndex: zoomed ? 600 : z }"
       @pointerdown="bringToFront"
@@ -23,9 +23,11 @@
         @minimize="minimize"
         @zoom="zoom"
       >
-        <div class="flex flex-1 min-h-[62vh]">
+        <div
+          class="flex flex-1 min-h-[62vh] lg:h-full lg:min-h-0 lg:overflow-hidden"
+        >
           <aside
-            class="hidden w-60 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:sticky lg:top-0 lg:block lg:self-start"
+            class="hidden w-60 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:block lg:h-full lg:overflow-y-auto"
           >
             <label
               class="mb-4 flex items-center gap-2 rounded-lg bg-black/5 px-3 py-1.5 text-[13px] text-black/40"
@@ -169,7 +171,7 @@
           <div
             v-if="current"
             :key="current.id"
-            class="min-w-0 flex-1 p-5 sm:p-8"
+            class="min-w-0 flex-1 p-5 sm:p-8 lg:h-full lg:overflow-y-auto"
             :class="mobileOpen ? '' : 'hidden lg:block'"
           >
             <button

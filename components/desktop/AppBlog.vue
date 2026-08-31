@@ -4,11 +4,11 @@
       v-if="desktop.state.value.apps.blog"
       ref="winEl"
       data-window="blog"
-      class="fixed inset-0 z-40 overflow-hidden lg:inset-auto"
+      class="fixed inset-0 z-40 overflow-hidden"
       :class="
         zoomed
           ? 'lg:inset-0 lg:rounded-none'
-          : 'lg:left-[20%] lg:top-24 lg:w-[740px] lg:rounded-2xl'
+          : 'lg:inset-auto lg:left-[20%] lg:top-24 lg:w-[740px] lg:rounded-2xl'
       "
       :style="{ zIndex: zoomed ? 600 : z }"
       @pointerdown="bringToFront"
@@ -23,9 +23,11 @@
         @minimize="minimize"
         @zoom="zoom"
       >
-        <div class="flex flex-1 min-h-[64vh]">
+        <div
+          class="flex flex-1 min-h-[64vh] lg:h-full lg:min-h-0 lg:overflow-hidden"
+        >
           <aside
-            class="hidden w-44 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:sticky lg:top-0 lg:block lg:self-start"
+            class="hidden w-44 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:block lg:h-full lg:overflow-y-auto"
           >
             <p class="px-2 pb-1.5 text-[11px] font-semibold text-black/35">
               {{ $t('notesApp.foldersTitle') }}
@@ -50,7 +52,7 @@
           </aside>
 
           <aside
-            class="w-full shrink-0 border-r border-black/5 bg-[#FBF9F2]/80 px-3 py-4 lg:w-72"
+            class="w-full shrink-0 border-r border-black/5 bg-[#FBF9F2]/80 px-3 py-4 lg:h-full lg:w-72 lg:overflow-y-auto"
             :class="selectedId ? 'hidden lg:block' : ''"
           >
             <h1
@@ -180,7 +182,7 @@
           </aside>
 
           <div
-            class="min-w-0 flex-1 bg-white/60"
+            class="min-w-0 flex-1 bg-white/60 lg:h-full lg:overflow-y-auto"
             :class="selectedId ? '' : 'hidden lg:block'"
           >
             <template v-if="currentNote">

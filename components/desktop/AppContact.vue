@@ -4,11 +4,11 @@
       v-if="desktop.state.value.apps.contact"
       ref="winEl"
       data-window="contact"
-      class="fixed inset-0 z-40 overflow-hidden lg:inset-auto"
+      class="fixed inset-0 z-40 overflow-hidden"
       :class="
         zoomed
           ? 'lg:inset-0 lg:rounded-none'
-          : 'lg:left-[16%] lg:top-20 lg:w-[820px] lg:rounded-2xl'
+          : 'lg:inset-auto lg:left-[16%] lg:top-20 lg:w-[820px] lg:rounded-2xl'
       "
       :style="{ zIndex: zoomed ? 600 : z }"
       @pointerdown="bringToFront"
