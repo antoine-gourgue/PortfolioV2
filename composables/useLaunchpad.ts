@@ -17,10 +17,10 @@ export interface LaunchpadApp {
  * decides how to open it.
  */
 export const LAUNCHPAD_APPS: LaunchpadApp[] = [
-  { id: 'projects', icon: 'appstore', label: 'nav.projects', to: '/projects' },
-  { id: 'about', icon: 'contacts', label: 'nav.about', to: '/about' },
-  { id: 'blog', icon: 'notes', label: 'nav.blog', to: '/blog' },
-  { id: 'contact', icon: 'mail', label: 'nav.contact', to: '/contact' },
+  { id: 'projects', icon: 'appstore', label: 'nav.projects', app: 'projects' },
+  { id: 'about', icon: 'contacts', label: 'nav.about', app: 'about' },
+  { id: 'blog', icon: 'notes', label: 'nav.blog', app: 'blog' },
+  { id: 'contact', icon: 'mail', label: 'nav.contact', app: 'contact' },
   {
     id: 'weather',
     icon: 'weather',

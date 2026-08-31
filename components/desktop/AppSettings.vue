@@ -215,10 +215,12 @@
             <div v-if="!mobileDetail" class="mt-1 space-y-6 lg:hidden">
               <!-- Identity card, in place of the Apple ID row -->
               <div class="settings-card">
-                <NuxtLink
-                  :to="localePath('/about')"
-                  class="flex items-center gap-3.5 px-4 py-3.5"
-                  @click="desktop.closeApp('settings')"
+                <button
+                  type="button"
+                  class="flex w-full items-center gap-3.5 px-4 py-3.5 text-left"
+                  @click="
+                    (desktop.openApp('about'), desktop.closeApp('settings'))
+                  "
                 >
                   <span
                     class="flex h-[58px] w-[58px] shrink-0 items-center justify-center rounded-full bg-aink"
@@ -234,7 +236,7 @@
                     }}</span>
                   </span>
                   <span class="text-[17px] text-black/25">›</span>
-                </NuxtLink>
+                </button>
               </div>
 
               <div v-for="group in mobileGroups" :key="group.label">
@@ -519,7 +521,6 @@ const { gsap, Draggable } = useGsap()
 const { locale, locales } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
 const router = useRouter()
-const localePath = useLocalePath()
 const track = useTrack()
 const { t } = useI18n()
 const buildSha = (

@@ -127,6 +127,10 @@ const go = (path: string) => {
   router.push(localePath(path))
   close()
 }
+const openApp = (id: string) => {
+  desktop.openApp(id)
+  close()
+}
 const open = (url: string) => {
   window.open(url, '_blank', 'noopener,noreferrer')
   close()
@@ -147,7 +151,7 @@ const items = computed<Item[]>(() => [
     icon: { name: 'appstore' },
     kind: 'App',
     group: 'apps',
-    action: () => go('/projects'),
+    action: () => openApp('projects'),
   },
   {
     id: 'about',
@@ -155,7 +159,7 @@ const items = computed<Item[]>(() => [
     icon: { name: 'contacts' },
     kind: 'App',
     group: 'apps',
-    action: () => go('/about'),
+    action: () => openApp('about'),
   },
   {
     id: 'blog',
@@ -163,7 +167,7 @@ const items = computed<Item[]>(() => [
     icon: { name: 'notes' },
     kind: 'App',
     group: 'apps',
-    action: () => go('/blog'),
+    action: () => openApp('blog'),
   },
   {
     id: 'contact',
@@ -171,7 +175,7 @@ const items = computed<Item[]>(() => [
     icon: { name: 'mail' },
     kind: 'App',
     group: 'apps',
-    action: () => go('/contact'),
+    action: () => openApp('contact'),
   },
   {
     id: 'weather',

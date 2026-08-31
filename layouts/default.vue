@@ -47,6 +47,10 @@
     <LazyDesktopAppSiri hydrate-on-idle />
     <LazyDesktopAppNews hydrate-on-idle />
     <LazyDesktopAppSports hydrate-on-idle />
+    <LazyDesktopAppProjects hydrate-on-idle />
+    <LazyDesktopAppAbout hydrate-on-idle />
+    <LazyDesktopAppBlog hydrate-on-idle />
+    <LazyDesktopAppContact hydrate-on-idle />
     <LazyDesktopLockScreen hydrate-on-idle />
     <LazyDesktopNotificationBanner hydrate-on-idle />
   </div>

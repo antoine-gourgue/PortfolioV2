@@ -41,8 +41,6 @@ const desktop = useDesktop()
 const track = useTrack()
 const music = useMusic()
 const projects = useProjects()
-const router = useRouter()
-const localePath = useLocalePath()
 const { t, locale } = useI18n()
 
 const bodyEl = ref<HTMLElement | null>(null)
@@ -73,14 +71,15 @@ const focusInput = () => inputEl.value?.focus()
 const projectList = () =>
   projects.map((p) => `${p.key.toLowerCase()}/`).join('&nbsp;&nbsp;')
 
-const PAGES: Record<string, string> = {
-  projects: '/projects',
-  projets: '/projects',
-  about: '/about',
-  apropos: '/about',
-  blog: '/blog',
-  notes: '/blog',
-  contact: '/contact',
+// Command aliases → desktop app id (the former routes are apps now)
+const APPS: Record<string, string> = {
+  projects: 'projects',
+  projets: 'projects',
+  about: 'about',
+  apropos: 'about',
+  blog: 'blog',
+  notes: 'blog',
+  contact: 'contact',
 }
 
 const COMMANDS = [
@@ -257,7 +256,7 @@ const execute = (raw: string) => {
       return
     case 'contact':
       printOut(t('macos.term.openMail'))
-      router.push(localePath('/contact'))
+      desktop.openApp('contact')
       return
     case 'weather':
       desktop.state.value.apps.weather = true
@@ -312,9 +311,9 @@ const execute = (raw: string) => {
     case 'open': {
       if (!arg)
         return printOut('usage: open &lt;project|page&gt;', 'text-red-400')
-      if (PAGES[arg]) {
-        printOut(`→ antoinegourgue.dev${PAGES[arg]}`)
-        router.push(localePath(PAGES[arg]))
+      if (APPS[arg]) {
+        printOut(`→ antoinegourgue.dev/${APPS[arg]}`)
+        desktop.openApp(APPS[arg])
         return
       }
       const project = projects.find(

@@ -1,14 +1,19 @@
 <template>
-  <main
-    ref="container"
-    class="mx-auto w-full pt-8 lg:max-w-6xl lg:px-8 lg:pt-16"
-  >
-    <div ref="winEl" class="win" data-window="page">
+  <Teleport to="body">
+    <div
+      v-if="desktop.state.value.apps.projects"
+      ref="winEl"
+      data-window="projects"
+      class="fixed inset-0 z-40 overflow-hidden lg:inset-auto lg:left-[14%] lg:top-20 lg:w-[880px] lg:rounded-2xl"
+      :style="{ zIndex: z }"
+      @pointerdown="bringToFront"
+    >
       <UiMacWindow
-        title="App Store"
-        @close="closeToDesktop"
-        @minimize="closeToDesktop"
-        @zoom="toggleZoom"
+        :title="$t('nav.projects')"
+        :active="desktop.state.value.activeApp === 'projects'"
+        @close="close"
+        @minimize="minimize"
+        @zoom="zoom"
       >
         <div class="flex flex-1 min-h-[70vh]">
           <aside
@@ -95,13 +100,14 @@
                   {{ $t('macos.projectsSub') }}
                 </p>
               </div>
-              <NuxtLink
-                :to="localePath('/about')"
+              <button
+                type="button"
                 class="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-[#3b4048] to-[#17181b]"
                 :aria-label="$t('nav.about')"
+                @click="desktop.openApp('about')"
               >
                 <AgLogo class="h-4 w-5 text-white" />
-              </NuxtLink>
+              </button>
             </div>
 
             <!--
@@ -360,16 +366,43 @@
         </div>
       </UiMacWindow>
       <!-- Swipe up to return to the desktop -->
-      <DesktopIosHomeBar app="page" @close="goHome" />
+      <DesktopIosHomeBar app="projects" @close="close" />
     </div>
-  </main>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
 import AgLogo from '~/components/ui/AGLogo.vue'
 
-const { gsap } = useGsap()
-const localePath = useLocalePath()
+const desktop = useDesktop()
+const sfx = useSfx()
+const { gsap, Draggable } = useGsap()
+
+const winEl = ref<HTMLElement | null>(null)
+const z = ref(40)
+const bringToFront = () => {
+  z.value = desktop.focusApp('projects')
+}
+
+const close = () => {
+  sfx.minimize()
+  desktop.closeApp('projects')
+}
+const minimize = () => {
+  sfx.minimize()
+  desktop.minimizeApp('projects')
+}
+
+let zoomed = false
+const zoom = () => {
+  if (!winEl.value) return
+  zoomed = !zoomed
+  gsap.to(winEl.value, {
+    scale: zoomed ? 1.04 : 1,
+    duration: 0.35,
+    ease: 'power2.inOut',
+  })
+}
 
 const projects = useProjects()
 const proProjects = projects.filter((p) => p.pro)
@@ -391,11 +424,10 @@ const current = computed(() => projects.find((p) => p.key === selected.value))
 
 // Mobile: iOS list first, sheet on tap
 const mobileOpen = ref(false)
-const sfxStore = useSfx()
 const openMobile = (key: string) => {
   selected.value = key
   mobileOpen.value = true
-  sfxStore.click()
+  sfx.click()
 }
 
 // Real GitHub stars via the site's own API
@@ -412,28 +444,37 @@ const starsFor = (p: { repoHint: string }) => {
   return repo ? repo.stargazers_count : '—'
 }
 
-const container = ref<HTMLElement | null>(null)
-const winEl = ref<HTMLElement | null>(null)
-const { closeToDesktop, goHome, toggleZoom } = usePageWindow(winEl)
-let ctx: gsap.Context | undefined
-
-onMounted(() => {
-  if (!container.value) return
-  ctx = gsap.context(() => {
-    const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
-      gsap.from('.win', {
+let drags: ReturnType<typeof Draggable.create> = []
+watch(
+  () => desktop.state.value.apps.projects,
+  (open) => {
+    if (!open) {
+      mobileOpen.value = false
+      drags.forEach((d) => d.kill())
+      drags = []
+      return
+    }
+    sfx.pop()
+    nextTick(() => {
+      if (!winEl.value) return
+      bringToFront()
+      gsap.from(winEl.value, {
+        scale: 0.85,
         autoAlpha: 0,
-        scale: 0.94,
-        y: 30,
-        duration: 0.65,
-        ease: 'back.out(1.2)',
+        y: 20,
+        duration: 0.35,
+        ease: 'back.out(1.4)',
       })
+      if (window.matchMedia('(min-width: 1024px)').matches) {
+        drags = Draggable.create(winEl.value, {
+          trigger: winEl.value.querySelectorAll('.drag-handle'),
+          cursor: 'grab',
+          activeCursor: 'grabbing',
+        })
+      }
     })
-  }, container.value)
-})
-
-onUnmounted(() => ctx?.revert())
+  }
+)
 </script>
 
 <style scoped>

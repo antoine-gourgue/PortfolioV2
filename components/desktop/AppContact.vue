@@ -1,15 +1,19 @@
 <template>
-  <main
-    ref="container"
-    class="mx-auto w-full pt-8 lg:max-w-3xl lg:px-8 lg:pt-16"
-  >
-    <h1 class="sr-only">{{ $t('contact.title') }} — Antoine Gourgue</h1>
-    <div ref="winEl" class="win" data-window="page">
+  <Teleport to="body">
+    <div
+      v-if="desktop.state.value.apps.contact"
+      ref="winEl"
+      data-window="contact"
+      class="fixed inset-0 z-40 overflow-hidden lg:inset-auto lg:left-[16%] lg:top-20 lg:w-[900px] lg:rounded-2xl"
+      :style="{ zIndex: z }"
+      @pointerdown="bringToFront"
+    >
       <UiMacWindow
-        :title="$t('macos.mailTitle')"
-        @close="closeToDesktop"
-        @minimize="closeToDesktop"
-        @zoom="toggleZoom"
+        :title="$t('nav.contact')"
+        :active="desktop.state.value.activeApp === 'contact'"
+        @close="close"
+        @minimize="minimize"
+        @zoom="zoom"
       >
         <!-- Inbox / Compose toggle -->
         <div
@@ -482,22 +486,36 @@
           </div>
         </div>
       </UiMacWindow>
-      <!-- Swipe up to return to the desktop -->
-      <DesktopIosHomeBar app="page" @close="goHome" />
+      <!-- Swipe up to return to the home screen -->
+      <DesktopIosHomeBar app="contact" @close="close" />
     </div>
-  </main>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useI18n } from '#imports'
 import AgLogo from '~/components/ui/AGLogo.vue'
 
 const { t } = useI18n()
-const { gsap } = useGsap()
+const desktop = useDesktop()
 const sfx = useSfx()
+const { gsap, Draggable } = useGsap()
 const track = useTrack()
 const { notify } = useNotify()
+
+const winEl = ref<HTMLElement | null>(null)
+const z = ref(40)
+const bringToFront = () => {
+  z.value = desktop.focusApp('contact')
+}
+const close = () => {
+  sfx.minimize()
+  desktop.closeApp('contact')
+}
+const minimize = () => {
+  sfx.minimize()
+  desktop.minimizeApp('contact')
+}
+const zoom = () => {}
 
 const form = ref({
   name: '',
@@ -794,28 +812,36 @@ const submitForm = async () => {
   }
 }
 
-const container = ref<HTMLElement | null>(null)
-const winEl = ref<HTMLElement | null>(null)
-const { closeToDesktop, goHome, toggleZoom } = usePageWindow(winEl)
-let ctx: gsap.Context | undefined
-
-onMounted(() => {
-  if (!container.value) return
-  ctx = gsap.context(() => {
-    const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
-      gsap.from('.win', {
+let drags: ReturnType<typeof Draggable.create> = []
+watch(
+  () => desktop.state.value.apps.contact,
+  (open) => {
+    if (!open) {
+      drags.forEach((d) => d.kill())
+      drags = []
+      return
+    }
+    sfx.pop()
+    nextTick(() => {
+      if (!winEl.value) return
+      bringToFront()
+      gsap.from(winEl.value, {
+        scale: 0.85,
         autoAlpha: 0,
-        scale: 0.94,
-        y: 30,
-        duration: 0.65,
-        ease: 'back.out(1.2)',
+        y: 20,
+        duration: 0.35,
+        ease: 'back.out(1.4)',
       })
+      if (window.matchMedia('(min-width: 1024px)').matches) {
+        drags = Draggable.create(winEl.value, {
+          trigger: winEl.value.querySelectorAll('.drag-handle'),
+          cursor: 'grab',
+          activeCursor: 'grabbing',
+        })
+      }
     })
-  }, container.value)
-})
-
-onUnmounted(() => ctx?.revert())
+  }
+)
 </script>
 
 <style scoped>

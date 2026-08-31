@@ -143,10 +143,13 @@
             </button>
           </div>
 
-          <NuxtLink
-            :to="localePath('/contact')"
-            class="block rounded-2xl bg-white/80 p-4 shadow-lg backdrop-blur-2xl transition hover:bg-white/90"
-            @click="desktop.state.value.notifOpen = false"
+          <button
+            type="button"
+            class="block w-full rounded-2xl bg-white/80 p-4 text-left shadow-lg backdrop-blur-2xl transition hover:bg-white/90"
+            @click="
+              (desktop.openApp('contact'),
+              (desktop.state.value.notifOpen = false))
+            "
           >
             <p
               class="flex items-center gap-2 text-[12.5px] font-bold text-aink"
@@ -157,7 +160,7 @@
             <p class="mt-1 text-[11.5px] leading-snug text-black/50">
               {{ $t('macos.notifAvailabilityHint') }}
             </p>
-          </NuxtLink>
+          </button>
         </div>
       </aside>
     </Transition>
@@ -182,7 +185,6 @@
 const desktop = useDesktop()
 const sfx = useSfx()
 const music = useMusic()
-const localePath = useLocalePath()
 const { locale } = useI18n()
 
 // Official GitHub heatmap palette

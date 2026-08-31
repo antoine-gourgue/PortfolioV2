@@ -6,25 +6,29 @@
     @mouseleave="resetAll"
   >
     <component
-      :is="item.href ? 'a' : NuxtLinkComponent"
+      :is="item.href ? 'a' : item.app ? 'button' : NuxtLinkComponent"
       v-for="item in apps"
       :key="item.id"
       :ref="setItemRef"
       v-bind="
         item.href
           ? { href: item.href, target: '_blank' }
-          : { to: localePath(item.path!) }
+          : item.app
+            ? {}
+            : { to: localePath(item.path!) }
       "
       class="dock-icon group"
       :aria-label="item.raw ?? $t(item.label)"
-      @click="bounce"
+      @click="(item.app && openApp(item.app), bounce($event))"
     >
       <DesktopMacAppIcon :name="item.icon" />
 
       <span class="dock-tip">{{ item.raw ? item.label : $t(item.label) }}</span>
 
       <span
-        v-if="item.path && isActive(item.path)"
+        v-if="
+          item.app ? state.apps[item.app] : item.path && isActive(item.path)
+        "
         class="absolute -bottom-[7px] left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-white/80"
       ></span>
     </component>
@@ -95,7 +99,7 @@ import type { ComponentPublicInstance } from 'vue'
 const localePath = useLocalePath()
 const route = useRoute()
 const { gsap } = useGsap()
-const { minimized, restore, toggleApp, state } = useDesktop()
+const { minimized, restore, toggleApp, openApp, state } = useDesktop()
 const launchpad = useLaunchpad()
 
 const musicPlaying = computed(() => useMusic().state.value.playing)
@@ -131,6 +135,7 @@ interface DockApp {
   label: string
   raw?: boolean
   path?: string
+  app?: string
   href?: string
   icon: string
 }
@@ -140,12 +145,12 @@ const apps: DockApp[] = [
   {
     id: 'appstore',
     label: 'nav.projects',
-    path: '/projects',
+    app: 'projects',
     icon: 'appstore',
   },
-  { id: 'contacts', label: 'nav.about', path: '/about', icon: 'contacts' },
-  { id: 'notes', label: 'nav.blog', path: '/blog', icon: 'notes' },
-  { id: 'mail', label: 'nav.contact', path: '/contact', icon: 'mail' },
+  { id: 'contacts', label: 'nav.about', app: 'about', icon: 'contacts' },
+  { id: 'notes', label: 'nav.blog', app: 'blog', icon: 'notes' },
+  { id: 'mail', label: 'nav.contact', app: 'contact', icon: 'mail' },
   {
     id: 'github',
     label: 'GitHub',
