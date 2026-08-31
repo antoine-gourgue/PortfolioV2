@@ -47,6 +47,10 @@
     <LazyDesktopAppSiri hydrate-on-idle />
     <LazyDesktopAppNews hydrate-on-idle />
     <LazyDesktopAppSports hydrate-on-idle />
+    <LazyDesktopAppProjects hydrate-on-idle />
+    <LazyDesktopAppAbout hydrate-on-idle />
+    <LazyDesktopAppBlog hydrate-on-idle />
+    <LazyDesktopAppContact hydrate-on-idle />
     <LazyDesktopLockScreen hydrate-on-idle />
     <LazyDesktopNotificationBanner hydrate-on-idle />
   </div>
@@ -82,5 +86,15 @@ onMounted(() => {
 })
 onUnmounted(() => {
   if (wallpaperTimer) clearInterval(wallpaperTimer)
+})
+
+// An open app is a full-screen sheet (mobile) or a floating window (desktop);
+// either way the long home page behind it must not scroll under the pointer.
+const anyAppOpen = computed(() =>
+  Object.values(desktop.state.value.apps).some(Boolean)
+)
+watch(anyAppOpen, (open) => {
+  if (import.meta.client)
+    document.documentElement.style.overflow = open ? 'hidden' : ''
 })
 </script>

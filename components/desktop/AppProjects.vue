@@ -1,32 +1,55 @@
 <template>
-  <main
-    ref="container"
-    class="mx-auto w-full pt-8 lg:max-w-6xl lg:px-8 lg:pt-16"
-  >
-    <div ref="winEl" class="win" data-window="page">
+  <Teleport to="body">
+    <div
+      v-if="desktop.state.value.apps.projects"
+      ref="winEl"
+      data-window="projects"
+      class="fixed inset-0 z-40 overflow-hidden"
+      :class="
+        zoomed
+          ? 'lg:inset-0 lg:rounded-none'
+          : 'lg:inset-auto lg:left-[12%] lg:top-20 lg:w-[820px] lg:rounded-2xl'
+      "
+      :style="{ zIndex: zoomed ? 600 : z }"
+      @pointerdown="bringToFront"
+    >
       <UiMacWindow
-        title="App Store"
-        @close="closeToDesktop"
-        @minimize="closeToDesktop"
-        @zoom="toggleZoom"
+        :title="$t('nav.projects')"
+        :active="desktop.state.value.activeApp === 'projects'"
+        :fill="true"
+        :maximized="zoomed"
+        @close="close"
+        @minimize="minimize"
+        @zoom="zoom"
       >
-        <div class="flex flex-1 min-h-[70vh]">
+        <div
+          class="flex flex-1 min-h-[70vh] lg:h-full lg:min-h-0 lg:overflow-hidden"
+        >
           <aside
-            class="hidden w-56 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:block"
+            class="hidden w-56 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:block lg:h-full lg:overflow-y-auto"
           >
-            <div
+            <label
               class="mb-4 flex items-center gap-2 rounded-lg bg-black/5 px-3 py-1.5 text-[13px] text-black/40"
             >
               <i aria-hidden="true" class="f7-icons" style="font-size: 11px"
                 >search</i
               >
-              {{ $t('macos.search') }}
-            </div>
-            <p class="px-2 pb-1.5 text-[11px] font-semibold text-black/35">
+              <input
+                v-model="query"
+                type="search"
+                :placeholder="$t('macos.search')"
+                class="w-full bg-transparent text-aink outline-none placeholder:text-black/40"
+                @pointerdown.stop
+              />
+            </label>
+            <p
+              v-if="filteredPro.length"
+              class="px-2 pb-1.5 text-[11px] font-semibold text-black/35"
+            >
               {{ $t('macos.sidebarWork') }}
             </p>
             <button
-              v-for="project in proProjects"
+              v-for="project in filteredPro"
               :key="project.key"
               class="flex w-full items-center gap-2.5 rounded-lg px-2 py-1.5 text-left text-[13px] font-medium transition-colors"
               :class="
@@ -50,11 +73,14 @@
               <span class="truncate">{{ project.name }}</span>
             </button>
 
-            <p class="px-2 pb-1.5 pt-3 text-[11px] font-semibold text-black/35">
+            <p
+              v-if="filteredPerso.length"
+              class="px-2 pb-1.5 pt-3 text-[11px] font-semibold text-black/35"
+            >
               {{ $t('macos.finderProjects') }}
             </p>
             <button
-              v-for="project in persoProjects"
+              v-for="project in filteredPerso"
               :key="project.key"
               class="flex w-full items-center gap-2.5 rounded-lg px-2 py-1.5 text-left text-[13px] font-medium transition-colors"
               :class="
@@ -95,13 +121,14 @@
                   {{ $t('macos.projectsSub') }}
                 </p>
               </div>
-              <NuxtLink
-                :to="localePath('/about')"
+              <button
+                type="button"
                 class="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-[#3b4048] to-[#17181b]"
                 :aria-label="$t('nav.about')"
+                @click="desktop.openApp('about')"
               >
                 <AgLogo class="h-4 w-5 text-white" />
-              </NuxtLink>
+              </button>
             </div>
 
             <!--
@@ -226,7 +253,7 @@
           <div
             v-if="current"
             :key="current.key"
-            class="min-w-0 flex-1 p-6 sm:p-8"
+            class="min-w-0 flex-1 p-6 sm:p-8 lg:h-full lg:overflow-y-auto"
             :class="mobileOpen ? '' : 'hidden lg:block'"
           >
             <button
@@ -278,7 +305,8 @@
             <div
               class="mt-8 flex divide-x divide-black/10 border-y border-black/10 py-4"
             >
-              <div class="stat-col">
+              <!-- Company projects have no public repo, so no star count -->
+              <div v-if="!current.pro" class="stat-col">
                 <p class="stat-label">{{ $t('macos.ghStars') }}</p>
                 <p class="stat-value">
                   {{ starsFor(current) }}
@@ -292,15 +320,11 @@
               </div>
               <div class="stat-col">
                 <p class="stat-label">{{ $t('macos.category') }}</p>
-                <p class="stat-value">{{ $t(current.categoryKey) }}</p>
+                <p class="stat-value truncate">{{ $t(current.categoryKey) }}</p>
               </div>
-              <div class="stat-col hidden sm:block">
+              <div class="stat-col">
                 <p class="stat-label">{{ $t('macos.year') }}</p>
                 <p class="stat-value">{{ current.year }}</p>
-              </div>
-              <div class="stat-col hidden md:block">
-                <p class="stat-label">{{ $t('macos.age') }}</p>
-                <p class="stat-value truncate">{{ current.stack }}</p>
               </div>
             </div>
 
@@ -319,14 +343,14 @@
             </a>
 
             <h2 class="mt-8 text-lg font-bold">{{ $t('macos.aboutApp') }}</h2>
-            <p class="mt-2 max-w-3xl text-[15px] leading-relaxed text-agray">
+            <p class="mt-2 text-[15px] leading-relaxed text-agray">
               {{ $t(`projects.items.${current.key}.description`) }}
             </p>
 
             <h2 class="mt-8 text-lg font-bold">
               {{ $t('macos.information') }}
             </h2>
-            <dl class="mt-2 max-w-3xl text-[14px]">
+            <dl class="mt-2 text-[14px]">
               <div class="info-row">
                 <dt>{{ $t('macos.developer') }}</dt>
                 <dd>Antoine Gourgue</dd>
@@ -360,20 +384,48 @@
         </div>
       </UiMacWindow>
       <!-- Swipe up to return to the desktop -->
-      <DesktopIosHomeBar app="page" @close="goHome" />
+      <DesktopIosHomeBar app="projects" @close="close" />
     </div>
-  </main>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
 import AgLogo from '~/components/ui/AGLogo.vue'
 
-const { gsap } = useGsap()
-const localePath = useLocalePath()
+const desktop = useDesktop()
+const sfx = useSfx()
+const { gsap, Draggable } = useGsap()
+
+const winEl = ref<HTMLElement | null>(null)
+const z = ref(40)
+const bringToFront = () => {
+  z.value = desktop.focusApp('projects')
+}
+
+const zoomed = ref(false)
+const close = () => {
+  sfx.minimize()
+  zoomed.value = false
+  desktop.closeApp('projects')
+}
+const minimize = () => {
+  sfx.minimize()
+  desktop.minimizeApp('projects')
+}
+const zoom = () => {
+  zoomed.value = !zoomed.value
+}
 
 const projects = useProjects()
 const proProjects = projects.filter((p) => p.pro)
 const persoProjects = projects.filter((p) => !p.pro)
+
+// Sidebar search: filters both project groups by name
+const query = ref('')
+const matchesQuery = (p: { name: string }) =>
+  p.name.toLowerCase().includes(query.value.trim().toLowerCase())
+const filteredPro = computed(() => proProjects.filter(matchesQuery))
+const filteredPerso = computed(() => persoProjects.filter(matchesQuery))
 /** The App Store leads with one app in an editorial card */
 const featured = computed(() => proProjects[0] ?? persoProjects[0])
 
@@ -391,11 +443,10 @@ const current = computed(() => projects.find((p) => p.key === selected.value))
 
 // Mobile: iOS list first, sheet on tap
 const mobileOpen = ref(false)
-const sfxStore = useSfx()
 const openMobile = (key: string) => {
   selected.value = key
   mobileOpen.value = true
-  sfxStore.click()
+  sfx.click()
 }
 
 // Real GitHub stars via the site's own API
@@ -412,28 +463,37 @@ const starsFor = (p: { repoHint: string }) => {
   return repo ? repo.stargazers_count : '—'
 }
 
-const container = ref<HTMLElement | null>(null)
-const winEl = ref<HTMLElement | null>(null)
-const { closeToDesktop, goHome, toggleZoom } = usePageWindow(winEl)
-let ctx: gsap.Context | undefined
-
-onMounted(() => {
-  if (!container.value) return
-  ctx = gsap.context(() => {
-    const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
-      gsap.from('.win', {
+let drags: ReturnType<typeof Draggable.create> = []
+watch(
+  () => desktop.state.value.apps.projects,
+  (open) => {
+    if (!open) {
+      mobileOpen.value = false
+      drags.forEach((d) => d.kill())
+      drags = []
+      return
+    }
+    sfx.pop()
+    nextTick(() => {
+      if (!winEl.value) return
+      bringToFront()
+      gsap.from(winEl.value, {
+        scale: 0.85,
         autoAlpha: 0,
-        scale: 0.94,
-        y: 30,
-        duration: 0.65,
-        ease: 'back.out(1.2)',
+        y: 20,
+        duration: 0.35,
+        ease: 'back.out(1.4)',
       })
+      if (window.matchMedia('(min-width: 1024px)').matches) {
+        drags = Draggable.create(winEl.value, {
+          trigger: winEl.value.querySelectorAll('.drag-handle'),
+          cursor: 'grab',
+          activeCursor: 'grabbing',
+        })
+      }
     })
-  }, container.value)
-})
-
-onUnmounted(() => ctx?.revert())
+  }
+)
 </script>
 
 <style scoped>

@@ -1,8 +1,16 @@
 <template>
   <div
-    class="flex min-h-[calc(100svh-2rem)] flex-col pb-[calc(48px+env(safe-area-inset-bottom,0px))] transition-shadow duration-300 lg:block lg:min-h-0 lg:overflow-hidden lg:rounded-2xl lg:border lg:pb-0 lg:backdrop-blur-2xl"
+    class="flex h-full flex-col overflow-y-auto pb-[calc(48px+env(safe-area-inset-bottom,0px))] transition-shadow duration-300 lg:min-h-0 lg:overflow-hidden lg:border lg:pb-0 lg:backdrop-blur-2xl"
     :style="!dark && mobileBg ? { '--mw-bg': mobileBg } : undefined"
     :class="[
+      // A full app window gets a definite height so its content scrolls
+      // inside it; zoom fills the whole desktop. Preview windows on the home
+      // stay content-sized.
+      maximized
+        ? 'lg:h-full lg:rounded-none'
+        : fill
+          ? 'lg:h-[calc(100dvh-12rem)] lg:rounded-2xl'
+          : 'lg:h-auto lg:max-h-[calc(100dvh-12rem)] lg:rounded-2xl',
       !dark ? (mobileBg ? 'bg-[var(--mw-bg)]' : 'bg-white') : '',
       dark
         ? 'bg-[#1e1e20] lg:border-white/10 lg:ring-1 lg:ring-white/10'
@@ -97,7 +105,14 @@
       </div>
     </div>
 
-    <div class="flex flex-1 flex-col lg:block">
+    <!--
+      Mobile: clear the status bar (the window fills the screen under it) and
+      scroll inside the fixed overlay. Desktop: the content area scrolls
+      within the capped window height.
+    -->
+    <div
+      class="flex flex-1 flex-col overscroll-contain pt-[max(2.75rem,env(safe-area-inset-top))] lg:block lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pt-0"
+    >
       <slot />
     </div>
   </div>
@@ -116,8 +131,20 @@ withDefaults(
     active?: boolean
     /** Mobile shell background, when the page is not white */
     mobileBg?: string
+    /** Zoomed (green button): the window fills the desktop */
+    maximized?: boolean
+    /** Full app window: definite desktop height with an inner scroll area */
+    fill?: boolean
   }>(),
-  { title: '', url: '', dark: false, active: true, mobileBg: '' }
+  {
+    title: '',
+    url: '',
+    dark: false,
+    active: true,
+    mobileBg: '',
+    maximized: false,
+    fill: false,
+  }
 )
 
 defineEmits<{

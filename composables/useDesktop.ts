@@ -51,6 +51,11 @@ export function useDesktop() {
       siri: false,
       news: false,
       sports: false,
+      // Former standalone routes, now desktop/mobile apps opened from home
+      projects: false,
+      about: false,
+      blog: false,
+      contact: false,
     },
     minimizedApps: {},
     wallpaperAuto: true,

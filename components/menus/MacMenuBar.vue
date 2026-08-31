@@ -515,7 +515,6 @@ const localePath = useLocalePath()
 const { t, locale, locales } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
 const router = useRouter()
-const route = useRoute()
 const desktop = useDesktop()
 const track = useTrack()
 const music = useMusic()
@@ -561,10 +560,18 @@ const goMenu: Menu = {
   label: 'macos.menuGo',
   items: [
     { label: 'nav.home', hint: '⌘1', action: () => go('/') },
-    { label: 'nav.projects', hint: '⌘2', action: () => go('/projects') },
-    { label: 'nav.about', hint: '⌘3', action: () => go('/about') },
-    { label: 'nav.blog', hint: '⌘4', action: () => go('/blog') },
-    { label: 'nav.contact', hint: '⌘5', action: () => go('/contact') },
+    {
+      label: 'nav.projects',
+      hint: '⌘2',
+      action: () => desktop.openApp('projects'),
+    },
+    { label: 'nav.about', hint: '⌘3', action: () => desktop.openApp('about') },
+    { label: 'nav.blog', hint: '⌘4', action: () => desktop.openApp('blog') },
+    {
+      label: 'nav.contact',
+      hint: '⌘5',
+      action: () => desktop.openApp('contact'),
+    },
   ],
 }
 
@@ -588,7 +595,7 @@ const siteMenus: Menu[] = [
     bold: true,
     raw: true,
     items: [
-      { label: 'macos.menuAboutSite', action: () => go('/about') },
+      { label: 'macos.menuAboutSite', action: () => desktop.openApp('about') },
       'sep',
       {
         label: 'GitHub',
@@ -615,7 +622,7 @@ const siteMenus: Menu[] = [
       {
         label: 'macos.menuNewProject',
         hint: '⌘N',
-        action: () => go('/contact'),
+        action: () => desktop.openApp('contact'),
       },
       'sep',
       { label: 'macos.menuDownloadCv', hint: '⌘S', action: downloadCv },
@@ -737,25 +744,17 @@ const STATUS_TINTS: Record<string, { bg: string; light: boolean }> = {
   news: { bg: '#FFFFFF', light: false },
   settings: { bg: '#F2F2F7', light: false },
   trash: { bg: '#FFFFFF', light: false },
+  // Former routes, now apps: keep their own mobile-window backgrounds
+  projects: { bg: '#FFFFFF', light: false },
+  about: { bg: '#F2F2F7', light: false },
+  blog: { bg: '#FBF9F2', light: false },
+  contact: { bg: '#FFFFFF', light: false },
 }
 
-const isHome = computed(
-  () => route.path.replace(/^\/[a-z]{2}(\/|$)/, '/') === '/'
+// No frontmost app → home screen, where the bar stays translucent
+const statusTint = computed(
+  () => STATUS_TINTS[desktop.state.value.activeApp] ?? null
 )
-
-/** Page-specific background, so the bar blends into those too */
-const PAGE_TINTS: Record<string, string> = {
-  '/blog': '#FBF9F2',
-  '/about': '#F2F2F7',
-}
-
-const statusTint = computed(() => {
-  const app = STATUS_TINTS[desktop.state.value.activeApp]
-  if (app) return app
-  if (isHome.value) return null
-  const path = route.path.replace(/^\/[a-z]{2}(\/|$)/, '/')
-  return { bg: PAGE_TINTS[path] ?? '#FFFFFF', light: false }
-})
 
 const openMenu = ref('')
 // Switching apps closes the open dropdown: its id may no longer exist
@@ -817,11 +816,11 @@ const tick = () => {
 // Global keyboard shortcuts
 const shortcuts: Record<string, () => void> = {
   '1': () => go('/'),
-  '2': () => go('/projects'),
-  '3': () => go('/about'),
-  '4': () => go('/blog'),
-  '5': () => go('/contact'),
-  n: () => go('/contact'),
+  '2': () => desktop.openApp('projects'),
+  '3': () => desktop.openApp('about'),
+  '4': () => desktop.openApp('blog'),
+  '5': () => desktop.openApp('contact'),
+  n: () => desktop.openApp('contact'),
   s: downloadCv,
   k: () => {
     desktop.state.value.spotlightOpen = !desktop.state.value.spotlightOpen

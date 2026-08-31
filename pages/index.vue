@@ -13,15 +13,15 @@
         >
           <!-- Clock widget: same dial as the macOS widget -->
           <button
-            class="wg-glass flex aspect-square min-w-0 items-center justify-center gap-5 rounded-[22px] p-4 sm:aspect-[2/1]"
+            class="wg-glass flex aspect-square min-w-0 items-center justify-center gap-5 rounded-[22px] p-4 sm:aspect-[2/1] sm:justify-start"
             :aria-label="$t('macos.clockTitle')"
             @click="desktop.state.value.apps.settings = true"
           >
             <div
-              class="flex h-[115px] w-[115px] shrink-0 items-center justify-center sm:max-[729px]:h-[92px] sm:max-[729px]:w-[92px]"
+              class="flex aspect-square h-full max-h-[150px] shrink-0 items-center justify-center sm:max-[729px]:h-[92px] sm:max-[729px]:w-[92px]"
             >
               <div
-                class="relative aspect-square w-[115px] shrink-0 rounded-full bg-white sm:max-[729px]:scale-[0.8]"
+                class="relative aspect-square w-[115px] shrink-0 rounded-full bg-white ring-1 ring-black/5 max-[389px]:scale-90 sm:scale-110 sm:max-[729px]:scale-[0.8]"
               >
                 <!-- Tick marks: an arm from center to rim, the mark at its tip -->
                 <span
@@ -78,7 +78,7 @@
           </button>
 
           <button
-            class="flex aspect-square min-w-0 flex-col rounded-[22px] bg-gradient-to-b from-[#2E67BE] to-[#4A86D8] p-4 text-left text-white shadow-lg sm:aspect-[2/1] sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+            class="wg-glass flex aspect-square min-w-0 flex-col rounded-[22px] p-4 text-left text-white sm:aspect-[2/1] sm:flex-row sm:items-center sm:justify-between sm:gap-4"
             @click="desktop.state.value.apps.weather = true"
           >
             <div class="min-w-0 sm:flex-1">
@@ -167,19 +167,19 @@
       </div>
 
       <div
-        v-show="!desktop.state.value.wins.about?.min"
+        v-show="!desktop.state.value.wins.aboutcard?.min"
         ref="aboutEl"
-        data-window="about"
+        data-window="aboutcard"
         class="win absolute left-10 top-60 z-10 w-[500px] min-[1360px]:left-[calc(7%+84px)]"
-        :style="{ zIndex: desktop.state.value.wins.about?.z ?? 10 }"
-        @pointerdown="desktop.focus('about')"
+        :style="{ zIndex: desktop.state.value.wins.aboutcard?.z ?? 10 }"
+        @pointerdown="desktop.focus('aboutcard')"
       >
         <UiMacWindow
           :title="$t('macos.aboutTitle')"
-          :active="desktop.state.value.activeWin === 'about'"
-          @close="animateMinimize('about')"
-          @minimize="animateMinimize('about')"
-          @zoom="go('/about')"
+          :active="desktop.state.value.activeWin === 'aboutcard'"
+          @close="animateMinimize('aboutcard')"
+          @minimize="animateMinimize('aboutcard')"
+          @zoom="desktop.openApp('about')"
         >
           <div class="px-8 pb-8 pt-7 text-center">
             <AgLogo class="mx-auto h-16 w-20 text-aink" />
@@ -221,12 +221,13 @@
             </div>
 
             <div class="mt-7 flex items-center justify-center gap-3">
-              <NuxtLink
-                :to="localePath('/contact')"
+              <button
+                type="button"
                 class="rounded-md bg-ablue px-4 py-1.5 text-[13px] font-medium text-white shadow-sm transition-colors duration-200 hover:bg-[#0077ed]"
+                @click="desktop.openApp('contact')"
               >
                 {{ $t('home.contactMe') }}
-              </NuxtLink>
+              </button>
               <a
                 href="/assets/antoinegourgue-cv.pdf"
                 download
@@ -307,7 +308,7 @@
         <UiMacWindow
           @close="animateMinimize('finder')"
           @minimize="animateMinimize('finder')"
-          @zoom="go('/projects')"
+          @zoom="desktop.openApp('projects')"
         >
           <!-- Finder toolbar, embedded in the title bar -->
           <template #toolbar>
@@ -444,7 +445,7 @@
               </button>
               <button
                 class="sidebar-item w-full text-left hover:bg-black/5"
-                @click="navigateTo(localePath('/projects'))"
+                @click="desktop.openApp('projects')"
               >
                 <span class="sf"><DesktopSfIcon name="grid" /></span>
                 {{ $t('macos.finderApps') }}
@@ -495,7 +496,7 @@
               </p>
               <button
                 class="sidebar-item w-full text-left hover:bg-black/5"
-                @click="navigateTo(localePath('/about'))"
+                @click="desktop.openApp('about')"
               >
                 <span class="sf"><DesktopSfIcon name="laptop" /></span>
                 {{ $t('macos.finderMac') }}
@@ -709,7 +710,7 @@
         <UiMacWindow
           @close="animateMinimize('notes')"
           @minimize="animateMinimize('notes')"
-          @zoom="go('/about')"
+          @zoom="desktop.openApp('about')"
         >
           <template #toolbar>
             <div class="flex items-center gap-3">
@@ -820,7 +821,7 @@
           :title="$t('macos.mailTitle')"
           @close="animateMinimize('mail')"
           @minimize="animateMinimize('mail')"
-          @zoom="go('/contact')"
+          @zoom="desktop.openApp('contact')"
         >
           <div
             class="flex items-center gap-5 border-b border-black/5 bg-white/60 px-5 py-2.5 text-black/35"
@@ -850,12 +851,13 @@
             </p>
             <p class="pb-5 text-[15px] text-agray">— Antoine</p>
             <div class="flex flex-wrap items-center gap-5">
-              <NuxtLink
-                :to="localePath('/contact')"
+              <button
+                type="button"
                 class="rounded-full bg-ablue px-5 py-2.5 text-sm font-medium text-white transition-colors duration-300 hover:bg-[#0077ed]"
+                @click="desktop.openApp('contact')"
               >
                 {{ $t('macos.mailSend') }}
-              </NuxtLink>
+              </button>
               <a
                 href="/assets/antoinegourgue-cv.pdf"
                 download
@@ -896,15 +898,13 @@
             >
               {{ $t(evtStep.descKey) }}
             </p>
-            <NuxtLink
-              :to="{
-                path: localePath('/about'),
-                query: { c: evtStep.aboutId },
-              }"
+            <button
+              type="button"
               class="mt-3 inline-block rounded-md bg-ablue px-3.5 py-1.5 text-[12.5px] font-medium text-white shadow-sm transition-colors hover:bg-[#0077ed]"
+              @click="desktop.openApp('about')"
             >
               {{ $t('macos.openInContacts') }} ›
-            </NuxtLink>
+            </button>
           </div>
         </div>
       </Transition>
@@ -956,12 +956,13 @@
                   {{ qlProject.stack }}
                 </p>
               </div>
-              <NuxtLink
-                :to="localePath('/projects')"
+              <button
+                type="button"
                 class="shrink-0 rounded-md bg-ablue px-4 py-1.5 text-[13px] font-medium text-white shadow-sm hover:bg-[#0077ed]"
+                @click="desktop.openApp('projects')"
               >
                 {{ $t('macos.aboutApp') }} ›
-              </NuxtLink>
+              </button>
             </div>
           </div>
         </div>
@@ -1020,22 +1021,19 @@ const notesEl = ref<HTMLElement | null>(null)
 const mailEl = ref<HTMLElement | null>(null)
 let ctxGsap: gsap.Context | undefined
 
-desktop.register('about')
+desktop.register('aboutcard')
 desktop.register('terminal')
 desktop.register('finder')
 desktop.register('notes')
 desktop.register('mail')
 
 const winEls: Record<string, Ref<HTMLElement | null>> = {
-  about: aboutEl,
+  aboutcard: aboutEl,
   terminal: termEl,
   finder: finderEl,
   notes: notesEl,
   mail: mailEl,
 }
-
-const router = useRouter()
-const go = (path: string) => router.push(localePath(path))
 
 // Calendar-style timeline: checkable categories, clickable events
 const calCategories = [
@@ -1264,10 +1262,30 @@ interface SpringboardApp {
 }
 
 const springboard: SpringboardApp[] = [
-  { id: 'projects', icon: 'appstore', label: 'nav.projects', to: '/projects' },
-  { id: 'about', icon: 'contacts', label: 'nav.about', to: '/about' },
-  { id: 'blog', icon: 'notes', label: 'nav.blog', to: '/blog' },
-  { id: 'contact', icon: 'mail', label: 'nav.contact', to: '/contact' },
+  {
+    id: 'projects',
+    icon: 'appstore',
+    label: 'nav.projects',
+    action: () => desktop.openApp('projects'),
+  },
+  {
+    id: 'about',
+    icon: 'contacts',
+    label: 'nav.about',
+    action: () => desktop.openApp('about'),
+  },
+  {
+    id: 'blog',
+    icon: 'notes',
+    label: 'nav.blog',
+    action: () => desktop.openApp('blog'),
+  },
+  {
+    id: 'contact',
+    icon: 'mail',
+    label: 'nav.contact',
+    action: () => desktop.openApp('contact'),
+  },
   {
     id: 'weather',
     icon: 'weather',
@@ -1497,7 +1515,7 @@ const deskIcons = [
     id: 'projects',
     label: 'macos.deskProjects',
     icon: 'folder',
-    action: () => router.push(localePath('/projects')),
+    action: () => desktop.openApp('projects'),
   },
   {
     id: 'github',

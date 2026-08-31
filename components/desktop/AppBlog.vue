@@ -1,19 +1,33 @@
 <template>
-  <main
-    ref="container"
-    class="mx-auto w-full pt-8 lg:max-w-6xl lg:px-8 lg:pt-16"
-  >
-    <div ref="winEl" class="win" data-window="page">
+  <Teleport to="body">
+    <div
+      v-if="desktop.state.value.apps.blog"
+      ref="winEl"
+      data-window="blog"
+      class="fixed inset-0 z-40 overflow-hidden"
+      :class="
+        zoomed
+          ? 'lg:inset-0 lg:rounded-none'
+          : 'lg:inset-auto lg:left-[20%] lg:top-24 lg:w-[740px] lg:rounded-2xl'
+      "
+      :style="{ zIndex: zoomed ? 600 : z }"
+      @pointerdown="bringToFront"
+    >
       <UiMacWindow
-        title="Notes"
+        :title="$t('nav.blog')"
         mobile-bg="#FBF9F2"
-        @close="closeToDesktop"
-        @minimize="closeToDesktop"
-        @zoom="toggleZoom"
+        :active="desktop.state.value.activeApp === 'blog'"
+        :fill="true"
+        :maximized="zoomed"
+        @close="close"
+        @minimize="minimize"
+        @zoom="zoom"
       >
-        <div class="flex flex-1 min-h-[64vh]">
+        <div
+          class="flex flex-1 min-h-[64vh] lg:h-full lg:min-h-0 lg:overflow-hidden"
+        >
           <aside
-            class="hidden w-44 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:block"
+            class="hidden w-44 shrink-0 border-r border-black/5 bg-white/40 px-3 py-4 lg:block lg:h-full lg:overflow-y-auto"
           >
             <p class="px-2 pb-1.5 text-[11px] font-semibold text-black/35">
               {{ $t('notesApp.foldersTitle') }}
@@ -38,7 +52,7 @@
           </aside>
 
           <aside
-            class="w-full shrink-0 border-r border-black/5 bg-[#FBF9F2]/80 px-3 py-4 lg:w-72"
+            class="w-full shrink-0 border-r border-black/5 bg-[#FBF9F2]/80 px-3 py-4 lg:h-full lg:w-72 lg:overflow-y-auto"
             :class="selectedId ? 'hidden lg:block' : ''"
           >
             <h1
@@ -168,7 +182,7 @@
           </aside>
 
           <div
-            class="min-w-0 flex-1 bg-white/60"
+            class="min-w-0 flex-1 bg-white/60 lg:h-full lg:overflow-y-auto"
             :class="selectedId ? '' : 'hidden lg:block'"
           >
             <template v-if="currentNote">
@@ -216,16 +230,36 @@
           </div>
         </div>
       </UiMacWindow>
-      <!-- Swipe up to return to the desktop -->
-      <DesktopIosHomeBar app="page" @close="goHome" />
+      <!-- Swipe up to return to the home screen -->
+      <DesktopIosHomeBar app="blog" @close="close" />
     </div>
-  </main>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
-const { gsap } = useGsap()
 const { t, locale } = useI18n()
+const desktop = useDesktop()
 const sfx = useSfx()
+const { gsap, Draggable } = useGsap()
+
+const winEl = ref<HTMLElement | null>(null)
+const z = ref(40)
+const bringToFront = () => {
+  z.value = desktop.focusApp('blog')
+}
+const zoomed = ref(false)
+const close = () => {
+  sfx.minimize()
+  zoomed.value = false
+  desktop.closeApp('blog')
+}
+const minimize = () => {
+  sfx.minimize()
+  desktop.minimizeApp('blog')
+}
+const zoom = () => {
+  zoomed.value = !zoomed.value
+}
 
 // Personal notes (i18n content)
 const PERSONAL = [
@@ -353,28 +387,36 @@ onMounted(() => {
   if (window.innerWidth >= 1024) selectedId.value = 'colophon'
 })
 
-const container = ref<HTMLElement | null>(null)
-const winEl = ref<HTMLElement | null>(null)
-const { closeToDesktop, goHome, toggleZoom } = usePageWindow(winEl)
-let ctx: gsap.Context | undefined
-
-onMounted(() => {
-  if (!container.value) return
-  ctx = gsap.context(() => {
-    const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
-      gsap.from('.win', {
+let drags: ReturnType<typeof Draggable.create> = []
+watch(
+  () => desktop.state.value.apps.blog,
+  (open) => {
+    if (!open) {
+      drags.forEach((d) => d.kill())
+      drags = []
+      return
+    }
+    sfx.pop()
+    nextTick(() => {
+      if (!winEl.value) return
+      bringToFront()
+      gsap.from(winEl.value, {
+        scale: 0.85,
         autoAlpha: 0,
-        scale: 0.94,
-        y: 30,
-        duration: 0.65,
-        ease: 'back.out(1.2)',
+        y: 20,
+        duration: 0.35,
+        ease: 'back.out(1.4)',
       })
+      if (window.matchMedia('(min-width: 1024px)').matches) {
+        drags = Draggable.create(winEl.value, {
+          trigger: winEl.value.querySelectorAll('.drag-handle'),
+          cursor: 'grab',
+          activeCursor: 'grabbing',
+        })
+      }
     })
-  }, container.value)
-})
-
-onUnmounted(() => ctx?.revert())
+  }
+)
 </script>
 
 <style scoped>
