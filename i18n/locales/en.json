@@ -138,6 +138,9 @@
       "thor": {
         "description": "THOR (Travel Order Resolver): say \"I want to go from Paris to Lyon\" by voice or text — the system transcribes it (Speech-to-Text), extracts origin and destination (spaCy NLP) and computes the best rail route on SNCF data with an interactive map. Epitech project — Next.js frontend, Flask API, Python pipeline, deployed with Docker on my VPS with CI/CD."
       },
+      "epihardware": {
+        "description": "An e-commerce store for PC components (graphics cards, processors, gaming peripherals), rebuilt from scratch as a Next.js 15 monorepo (Turborepo/pnpm): filterable catalog with instant search, persistent cart, Auth.js authentication with customer/admin roles, orders, PDF invoices and an admin back office. Real official product images and a built-in demo mode that runs with no database. Deployed on Vercel."
+      },
       "trinity": {
         "description": "Full online supermarket built at Epitech: real product catalog with Nutri-Score, aisle search, cart, orders and PDF invoices, admin back office with statistics, installable PWA (with an Android app) and simulated checkout. Next.js 15, Prisma and PostgreSQL."
       },

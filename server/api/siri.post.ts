@@ -47,6 +47,7 @@ SES PROJETS (tous sur antoinegourgue.dev/projects) :
 - TailTCG (tailtcg.vercel.app) — suivi de collection de cartes Pokémon, Next.js
 - THOR (thor.antoinegourgue.dev) — commande de voyage en langage naturel : voix → NLP → itinéraire ferroviaire, Next.js + Flask, déployé en Docker sur son VPS avec CI/CD
 - Trinity Shop (trinity-shop-rho.vercel.app) — supermarché en ligne Next.js 15 + Prisma + PostgreSQL
+- EpiHardware (epihardware.vercel.app) — boutique e-commerce de composants PC, monorepo Next.js 15 + Turborepo + Prisma + Auth.js, factures PDF, admin par rôles, mode démo, déployé sur Vercel
 - Mosaic (mosaic.antoinegourgue.dev) — tableaux d'images façon Pinterest, Next.js + Prisma
 - Sapia (sapia.antoinegourgue.dev) — assistant IA, Vue + Node
 - EchoConnect (echoconnect-weld.vercel.app) — messagerie temps réel Vue 3 + Socket.io avec mode démo
