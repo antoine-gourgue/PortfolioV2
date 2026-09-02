@@ -131,9 +131,9 @@ export const useChatbotIntents = (): Intent[] => [
       en: ['yes', 'sure', 'go ahead', 'ok'],
     },
     response: {
-      fr: `🚀 Commence par ${link('https://tailtcg.vercel.app', 'TailTCG', true)} : suivi de collection de cartes Pokémon avec pré-gradation sur photos, en Next.js/TypeScript. Et la fiche complète est dans l'${link('/projects', 'App Store')}.`,
-      es: `🚀 Empieza por ${link('https://tailtcg.vercel.app', 'TailTCG', true)}: seguimiento de colecciones de cartas Pokémon con pre-gradación sobre fotos, en Next.js/TypeScript. La ficha completa está en el ${link('/projects', 'App Store')}.`,
-      en: `🚀 Start with ${link('https://tailtcg.vercel.app', 'TailTCG', true)}: a Pokémon card collection tracker with photo-based pre-grading, built with Next.js/TypeScript. Full details in the ${link('/projects', 'App Store')}.`,
+      fr: `🚀 Commence par ${link('https://tailtcg.antoinegourgue.dev', 'TailTCG', true)} : suivi de collection de cartes Pokémon avec pré-gradation sur photos, en Next.js/TypeScript. Et la fiche complète est dans l'${link('/projects', 'App Store')}.`,
+      es: `🚀 Empieza por ${link('https://tailtcg.antoinegourgue.dev', 'TailTCG', true)}: seguimiento de colecciones de cartas Pokémon con pre-gradación sobre fotos, en Next.js/TypeScript. La ficha completa está en el ${link('/projects', 'App Store')}.`,
+      en: `🚀 Start with ${link('https://tailtcg.antoinegourgue.dev', 'TailTCG', true)}: a Pokémon card collection tracker with photo-based pre-grading, built with Next.js/TypeScript. Full details in the ${link('/projects', 'App Store')}.`,
     },
   },
   {
@@ -144,9 +144,9 @@ export const useChatbotIntents = (): Intent[] => [
       en: ['tailtcg', 'pokemon', 'cards', 'tcg'],
     },
     response: {
-      fr: `🎴 ${link('https://tailtcg.vercel.app', 'TailTCG', true)} : suis tes cartes Pokémon, leur état et leur valeur, pré-grade-les sur tes photos, range-les en classeurs et partage ta vitrine. Gratuit, sans pub. Next.js + TypeScript.`,
-      es: `🎴 ${link('https://tailtcg.vercel.app', 'TailTCG', true)}: sigue tus cartas Pokémon, su estado y valor, pre-gradúalas sobre fotos, organízalas en archivadores y comparte tu vitrina. Gratis, sin anuncios. Next.js + TypeScript.`,
-      en: `🎴 ${link('https://tailtcg.vercel.app', 'TailTCG', true)}: track your Pokémon cards, their condition and value, pre-grade them from photos, sort them into binders and share your showcase. Free, ad-free. Next.js + TypeScript.`,
+      fr: `🎴 ${link('https://tailtcg.antoinegourgue.dev', 'TailTCG', true)} : suis tes cartes Pokémon, leur état et leur valeur, pré-grade-les sur tes photos, range-les en classeurs et partage ta vitrine. Gratuit, sans pub. Next.js + TypeScript.`,
+      es: `🎴 ${link('https://tailtcg.antoinegourgue.dev', 'TailTCG', true)}: sigue tus cartas Pokémon, su estado y valor, pre-gradúalas sobre fotos, organízalas en archivadores y comparte tu vitrina. Gratis, sin anuncios. Next.js + TypeScript.`,
+      en: `🎴 ${link('https://tailtcg.antoinegourgue.dev', 'TailTCG', true)}: track your Pokémon cards, their condition and value, pre-grade them from photos, sort them into binders and share your showcase. Free, ad-free. Next.js + TypeScript.`,
     },
   },
   {

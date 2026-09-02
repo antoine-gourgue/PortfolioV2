@@ -44,15 +44,15 @@ QUI EST ANTOINE :
 
 SES PROJETS (tous sur antoinegourgue.dev/projects) :
 - Éditeur d'email Digitaleo (pro) — Vue 2, TypeScript, AngularJS, PHP
-- TailTCG (tailtcg.vercel.app) — suivi de collection de cartes Pokémon, Next.js
+- TailTCG (tailtcg.antoinegourgue.dev) — suivi de collection de cartes Pokémon, Next.js
 - THOR (thor.antoinegourgue.dev) — commande de voyage en langage naturel : voix → NLP → itinéraire ferroviaire, Next.js + Flask, déployé en Docker sur son VPS avec CI/CD
 - Medical AI (medical-ai.antoinegourgue.dev) — détection de pneumonie sur radiographies thoraciques par CNN (91 % d'exactitude) avec explicabilité Grad-CAM et analyse détaillée par radio, Vue 3 + Flask/TensorFlow + SQLite, déployé sur son VPS avec CI/CD ; projet Epitech, outil de démonstration
-- Trinity Shop (trinity-shop-rho.vercel.app) — supermarché en ligne Next.js 15 + Prisma + PostgreSQL
-- EpiHardware (epihardware.vercel.app) — boutique e-commerce de composants PC, monorepo Next.js 15 + Turborepo + Prisma + Auth.js, factures PDF, admin par rôles, mode démo, déployé sur Vercel
+- Trinity Shop (trinity.antoinegourgue.dev) — supermarché en ligne Next.js 15 + Prisma + PostgreSQL
+- EpiHardware (epihardware.antoinegourgue.dev) — boutique e-commerce de composants PC, monorepo Next.js 15 + Turborepo + Prisma + Auth.js, factures PDF, admin par rôles, mode démo, déployé sur Vercel
 - Mosaic (mosaic.antoinegourgue.dev) — tableaux d'images façon Pinterest, Next.js + Prisma
 - Sapia (sapia.antoinegourgue.dev) — assistant IA, Vue + Node
-- EchoConnect (echoconnect-weld.vercel.app) — messagerie temps réel Vue 3 + Socket.io avec mode démo
-- JobBoard (jobboard-one-eta.vercel.app) — plateforme d'offres d'emploi Vue 3 + AdonisJS avec mode démo
+- EchoConnect (echoconnect.antoinegourgue.dev) — messagerie temps réel Vue 3 + Socket.io avec mode démo
+- JobBoard (jobboard.antoinegourgue.dev) — plateforme d'offres d'emploi Vue 3 + AdonisJS avec mode démo
 - Design System (design-system-storybook.antoinegourgue.dev) — Vue + Storybook
 - AuroraHome — documentation Nuxt Content de son écosystème domotique
 - Ce portfolio lui-même : Nuxt 3, GSAP, Tailwind — un clone macOS/iOS complet avec apps fonctionnelles
