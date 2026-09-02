@@ -110,9 +110,9 @@ export const useChatbotIntents = (): Intent[] => [
       en: ['projects', 'portfolio', 'work', 'project'],
     },
     response: {
-      fr: `📁 Tout est dans l'${link('/projects', 'App Store')} : TailTCG, THOR, Trinity Shop, EpiHardware, Mosaic, Sapia, EchoConnect, JobBoard, mon Design System, AuroraHome — et l'éditeur d'email Digitaleo côté pro.`,
-      es: `📁 Todo está en el ${link('/projects', 'App Store')}: TailTCG, THOR, Trinity Shop, EpiHardware, Mosaic, Sapia, EchoConnect, JobBoard, mi Design System, AuroraHome — y el editor de email de Digitaleo en la parte profesional.`,
-      en: `📁 Everything is in the ${link('/projects', 'App Store')}: TailTCG, THOR, Trinity Shop, EpiHardware, Mosaic, Sapia, EchoConnect, JobBoard, my Design System, AuroraHome — plus the Digitaleo email editor on the pro side.`,
+      fr: `📁 Tout est dans l'${link('/projects', 'App Store')} : TailTCG, THOR, Medical AI, Trinity Shop, EpiHardware, Mosaic, Sapia, EchoConnect, JobBoard, mon Design System, AuroraHome — et l'éditeur d'email Digitaleo côté pro.`,
+      es: `📁 Todo está en el ${link('/projects', 'App Store')}: TailTCG, THOR, Medical AI, Trinity Shop, EpiHardware, Mosaic, Sapia, EchoConnect, JobBoard, mi Design System, AuroraHome — y el editor de email de Digitaleo en la parte profesional.`,
+      en: `📁 Everything is in the ${link('/projects', 'App Store')}: TailTCG, THOR, Medical AI, Trinity Shop, EpiHardware, Mosaic, Sapia, EchoConnect, JobBoard, my Design System, AuroraHome — plus the Digitaleo email editor on the pro side.`,
     },
     followUp: {
       question: {

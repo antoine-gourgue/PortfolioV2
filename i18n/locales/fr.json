@@ -138,6 +138,9 @@
       "thor": {
         "description": "THOR (Travel Order Resolver) : dites « Je veux aller de Paris à Lyon » à la voix ou au texte, et le système transcrit (Speech-to-Text), extrait origine et destination (NLP spaCy) puis calcule le meilleur itinéraire ferroviaire sur les données SNCF avec carte interactive. Projet Epitech — front Next.js, API Flask, pipeline Python, déployé en Docker sur mon VPS avec CI/CD."
       },
+      "medicalAi": {
+        "description": "Détection de pneumonie sur radiographies thoraciques par réseau de neurones convolutif (CNN, 91 % d'exactitude). Envoyez une radio : verdict Normal/Pneumonie, niveau de confiance et surtout une carte de chaleur Grad-CAM qui met en évidence les zones observées par le modèle, avec une analyse détaillée par radio (attention par région, histogramme d'intensité, asymétrie d'opacité). Front Vue 3 + Tailwind avec dashboard de statistiques et charts, API Flask/TensorFlow et base SQLite, déployé sur mon VPS en CI/CD. Projet Epitech, outil de démonstration — pas un dispositif médical."
+      },
       "epihardware": {
         "description": "Boutique e-commerce de composants PC (cartes graphiques, processeurs, périphériques gaming) refaite de zéro en monorepo Next.js 15 (Turborepo/pnpm) : catalogue filtrable avec recherche instantanée, panier persistant, authentification Auth.js avec rôles client/admin, commandes, factures PDF et un back-office d'administration. Vraies images produit officielles et mode démo intégré qui tourne sans base de données. Déployé sur Vercel."
       },
@@ -487,6 +490,7 @@
     "catChat": "Messagerie",
     "catJobs": "Emploi",
     "catNlp": "IA & Voyage",
+    "catHealth": "IA médicale",
     "catShop": "E-commerce",
     "errTitle": "Fichier introuvable",
     "errDesc": "L'élément demandé n'existe pas sur ce Mac.",
