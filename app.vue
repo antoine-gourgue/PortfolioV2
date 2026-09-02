@@ -42,7 +42,7 @@ useHead({
             name: 'Antoine Gourgue',
             jobTitle: 'Développeur fullstack',
             url: 'https://antoinegourgue.dev',
-            image: 'https://antoinegourgue.dev/og-image.jpg',
+            image: 'https://antoinegourgue.dev/og.png',
             address: {
               '@type': 'PostalAddress',
               addressLocality: 'Anglet',

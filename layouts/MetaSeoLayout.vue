@@ -24,14 +24,15 @@ useHead({
     { property: 'og:description', content: DESCRIPTION },
     {
       property: 'og:image',
-      content: 'https://antoinegourgue.dev/og-image.jpg',
+      content: 'https://antoinegourgue.dev/og.png',
     },
     { property: 'og:image:width', content: '1200' },
     { property: 'og:image:height', content: '630' },
+    { property: 'og:image:type', content: 'image/png' },
     { name: 'twitter:card', content: 'summary_large_image' },
     {
       name: 'twitter:image',
-      content: 'https://antoinegourgue.dev/og-image.jpg',
+      content: 'https://antoinegourgue.dev/og.png',
     },
   ],
 })
