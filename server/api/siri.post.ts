@@ -49,6 +49,7 @@ SES PROJETS (tous sur antoinegourgue.dev/projects) :
 - Medical AI (medical-ai.antoinegourgue.dev) — détection de pneumonie sur radiographies thoraciques par CNN (91 % d'exactitude) avec explicabilité Grad-CAM et analyse détaillée par radio, Vue 3 + Flask/TensorFlow + SQLite, déployé sur son VPS avec CI/CD ; projet Epitech, outil de démonstration
 - Trinity Shop (trinity.antoinegourgue.dev) — supermarché en ligne Next.js 15 + Prisma + PostgreSQL
 - EpiHardware (epihardware.antoinegourgue.dev) — boutique e-commerce de composants PC, monorepo Next.js 15 + Turborepo + Prisma + Auth.js, factures PDF, admin par rôles, mode démo, déployé sur Vercel
+- TrellTech (trelltech.antoinegourgue.dev) — espace de travail façon Trello (kanban, documents type Notion, whiteboards Excalidraw) en temps réel, monorepo Next.js 15 + Fastify + Prisma + WebSocket, déployé en Docker sur son VPS
 - Mosaic (mosaic.antoinegourgue.dev) — tableaux d'images façon Pinterest, Next.js + Prisma
 - Sapia (sapia.antoinegourgue.dev) — assistant IA, Vue + Node
 - EchoConnect (echoconnect.antoinegourgue.dev) — messagerie temps réel Vue 3 + Socket.io avec mode démo

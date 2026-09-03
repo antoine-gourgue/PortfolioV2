@@ -141,6 +141,9 @@
       "medicalAi": {
         "description": "Pneumonia detection on chest X-rays with a convolutional neural network (CNN, 91% accuracy). Upload an X-ray to get a Normal/Pneumonia verdict, a confidence score and, above all, a Grad-CAM heatmap that highlights the regions the model looked at, plus a detailed per-image report (attention by region, intensity histogram, opacity asymmetry). Vue 3 + Tailwind front end with a stats dashboard and charts, Flask/TensorFlow API with a SQLite database, deployed on my VPS with CI/CD. Epitech project, a demonstration tool — not a medical device."
       },
+      "trelltech": {
+        "description": "A Trello-like collaborative workspace, only more complete: kanban boards (drag & drop, rich cards — due dates, labels, checklists, comments), Notion-style block documents and Excalidraw whiteboards, all in real time with granular sharing and Trello sync. Next.js 15 / Fastify / Prisma / WebSocket monorepo, deployed with Docker on my VPS."
+      },
       "epihardware": {
         "description": "An e-commerce store for PC components (graphics cards, processors, gaming peripherals), rebuilt from scratch as a Next.js 15 monorepo (Turborepo/pnpm): filterable catalog with instant search, persistent cart, Auth.js authentication with customer/admin roles, orders, PDF invoices and an admin back office. Real official product images and a built-in demo mode that runs with no database. Deployed on Vercel."
       },
