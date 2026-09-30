@@ -854,9 +854,9 @@ const StatSlot: React.FC<{
 }> = ({ at, len, children }) => {
   const f = useCurrentFrame()
   const last = len === undefined
-  if (f < at - 2 || (!last && f > at + len + 4)) return null
+  if (f < at - 2 || (!last && f > at + len)) return null
   const inT = ease(f, [at, at + 14], [0, 1], easeOut)
-  const outT = last ? 0 : ease(f, [at + len - 8, at + len + 4], [0, 1], easeIn)
+  const outT = last ? 0 : ease(f, [at + len - 10, at + len], [0, 1], easeIn)
   return (
     <AbsoluteFill
       style={{
@@ -1088,7 +1088,7 @@ const NumbersScene: React.FC = () => {
       </StatSlot>
       <StatSlot at={SLOT.users} len={SLOT.networks - SLOT.users}>
         <div style={col}>
-          <Kicker>Mon éditeur d’e-mails, utilisé par</Kicker>
+          <Kicker>Des fonctionnalités utilisées par</Kicker>
           <BigNumber sweepAt={SLOT.users + 24}>
             <Counter to={37000} start={SLOT.users + 2} duration={32} />
           </BigNumber>
@@ -1105,7 +1105,7 @@ const NumbersScene: React.FC = () => {
       </StatSlot>
       <StatSlot at={SLOT.networks}>
         <div style={col}>
-          <Kicker>Et déployé chez plus de</Kicker>
+          <Kicker>Une plateforme déployée chez plus de</Kicker>
           <BigNumber sweepAt={SLOT.networks + 22}>
             <Counter to={600} start={SLOT.networks + 2} duration={26} />
           </BigNumber>
@@ -1127,11 +1127,86 @@ const NumbersScene: React.FC = () => {
 }
 
 const PHONE_W = 370
+const PHONE_LEN = 240
+
+type MobileStep = { at: number; src: string; from?: [number, number] }
+
+// The main phone's session: home screen, the App Store of projects, then a
+// project's site in responsive; `from` is the icon or row that was tapped
+const MAIN_FLOW: MobileStep[] = [
+  { at: 0, src: 'mobile-home.jpg' },
+  { at: 66, src: 'mobile-projects.jpg', from: [0.16, 0.3] },
+  { at: 112, src: 'tailtcg-mobile.jpg', from: [0.22, 0.69] },
+]
+
+const CAPTIONS = [
+  { at: 66, text: 'L’App Store de mes projets.' },
+  { at: 112, text: 'Chaque projet, en responsive.' },
+  { at: 156, text: 'Mon parcours, et Siri pour répondre.' },
+]
+
+/** Screens of a phone, each opening from the spot tapped before it. */
+const MobileFlow: React.FC<{ steps: MobileStep[] }> = ({ steps }) => {
+  const f = useCurrentFrame()
+  return (
+    <>
+      {steps.map((step, i) => {
+        const next = steps[i + 1]
+        if (f < step.at || (next && f >= next.at + 16)) return null
+        if (!step.from) return <Shot key={step.src} src={footage(step.src)} />
+        const t = ease(f, [step.at, step.at + 16], [0, 1])
+        const [ox, oy] = step.from
+        return (
+          <div
+            key={step.src}
+            style={{
+              position: 'absolute',
+              left: `${ox * 100 * (1 - t)}%`,
+              top: `${oy * 100 * (1 - t)}%`,
+              width: '100%',
+              height: '100%',
+              transform: `scale(${0.1 + t * 0.9})`,
+              transformOrigin: 'top left',
+              borderRadius: 60 * (1 - t),
+              overflow: 'hidden',
+              opacity: Math.min(1, t * 3),
+            }}
+          >
+            <Shot src={footage(step.src)} />
+          </div>
+        )
+      })}
+      {steps.slice(1).map((step) => {
+        // A finger tap just before each screen opens
+        const t = (f - step.at + 6) / 14
+        if (!step.from || t < 0 || t > 1) return null
+        return (
+          <div
+            key={`tap-${step.at}`}
+            style={{
+              position: 'absolute',
+              left: `${step.from[0] * 100}%`,
+              top: `${step.from[1] * 100}%`,
+              width: 60,
+              height: 60,
+              marginLeft: -30,
+              marginTop: -30,
+              borderRadius: 30,
+              background: `rgba(255,255,255,${0.5 * (1 - t)})`,
+              transform: `scale(${0.6 + t * 0.8})`,
+            }}
+          />
+        )
+      })}
+    </>
+  )
+}
 
 /**
- * The iPhone turns slowly out of the dark, back first so the titanium and
- * the camera catch the light, then settles on its home screen, which wakes
- * as it faces us, and opens Projets.
+ * The mobile chapter. The iPhone turns out of the dark (back first so the
+ * titanium and the camera catch the light), wakes facing us, then the
+ * camera moves in while it navigates the portfolio; two more iPhones join
+ * it in a lineup showing the other apps.
  */
 const PhoneScene: React.FC = () => {
   const f = useCurrentFrame()
@@ -1139,26 +1214,59 @@ const PhoneScene: React.FC = () => {
   const rise = spring({
     frame: f,
     fps,
-    config: { damping: 200, stiffness: 36 },
+    config: { damping: 200, stiffness: 40 },
   })
-  const turn = ease(f, [0, 80], [0, 1], easeInOut)
-  const settled = ease(f, [70, 90], [0, 1])
+  const turn = ease(f, [0, 58], [0, 1], easeInOut)
+  const zoom = ease(f, [58, 92], [0, 1])
+  const line = spring({
+    frame: f - 148,
+    fps,
+    config: { damping: 20, stiffness: 60 },
+  })
+  const exit = ease(f, [PHONE_LEN - 20, PHONE_LEN], [0, 1], easeIn)
   const ry =
-    interpolate(turn, [0, 1], [-205, 0]) + Math.sin((f - 80) / 26) * 5 * settled
-  const rx = interpolate(turn, [0, 1], [16, 3]) + Math.sin(f / 32) * 2 * settled
+    interpolate(turn, [0, 1], [-200, 0]) + Math.sin((f - 58) / 30) * 4 * turn
+  const rx = interpolate(turn, [0, 1], [16, 3]) + Math.sin(f / 34) * 1.5
   const rz = interpolate(turn, [0, 1], [-12, 0])
-  const exit = ease(f, [106, 124], [0, 1], easeIn)
-  const launch = ease(f, [84, 98], [0, 1])
+  const mainScale = (1 + 0.15 * zoom) * (1 - 0.3 * line)
   const screenOn = interpolate(ry, [-60, -15], [0, 1], clamp)
-  return (
-    <AbsoluteFill>
-      <StageLight y={60} w={46} h={42} opacity={rise * (1 - exit)} />
+  const side = (dir: -1 | 1, src: string, delay: number) => {
+    const t = spring({
+      frame: f - 150 - delay,
+      fps,
+      config: { damping: 20, stiffness: 60 },
+    })
+    if (t <= 0.001) return null
+    const angle = dir * -22 * t + dir * -60 * (1 - t) + Math.sin(f / 30) * 3
+    return (
       <div
         style={{
           position: 'absolute',
-          left: 540 - 260,
-          top: 1170,
-          width: 520,
+          left: 540 - PHONE_W / 2,
+          top: 380,
+          transformStyle: 'preserve-3d',
+          transform: `translate3d(${dir * (340 + (1 - t) * 520)}px, ${40 + exit * 900}px, -60px) scale(0.8) rotateY(${angle}deg)`,
+        }}
+      >
+        <IPhone3D
+          width={PHONE_W}
+          angle={angle}
+          screen={<Shot src={footage(src)} />}
+        />
+      </div>
+    )
+  }
+  const caption = [...CAPTIONS].reverse().find((c) => f >= c.at)
+  const capT = caption ? ease(f, [caption.at, caption.at + 12], [0, 1]) : 0
+  return (
+    <AbsoluteFill>
+      <StageLight y={60} w={60} h={42} opacity={rise * (1 - exit)} />
+      <div
+        style={{
+          position: 'absolute',
+          left: 540 - 300,
+          top: 1180,
+          width: 600,
           height: 70,
           borderRadius: '50%',
           background:
@@ -1166,65 +1274,56 @@ const PhoneScene: React.FC = () => {
           opacity: rise * (1 - exit),
         }}
       />
-      {/* Opacity on the preserve-3d element itself would flatten the phone */}
+      {/* Opacity on the preserve-3d elements themselves would flatten them */}
       <AbsoluteFill
         style={{
           perspective: 2200,
           perspectiveOrigin: '50% 55%',
-          opacity: Math.min(1, rise * 1.5),
+          opacity: Math.min(1, rise * 1.5) * (1 - exit),
         }}
       >
+        {side(-1, 'mobile-about-digitaleo.jpg', 0)}
+        {side(1, 'mobile-siri-answer.jpg', 8)}
         <div
           style={{
             position: 'absolute',
             left: 540 - PHONE_W / 2,
-            top: 360,
+            top: 380,
             transformStyle: 'preserve-3d',
-            transform: `translateY(${(1 - rise) * 520 + exit * 900}px) rotateX(${rx}deg) rotateY(${ry}deg) rotateZ(${rz}deg)`,
+            transform: `translateY(${(1 - rise) * 520 + line * 40 + exit * 900}px) scale(${mainScale}) rotateX(${rx}deg) rotateY(${ry}deg) rotateZ(${rz}deg)`,
           }}
         >
           <IPhone3D
             width={PHONE_W}
             angle={ry}
             screenOn={screenOn}
-            screen={
-              <>
-                <Shot src={footage('mobile-home.jpg')} />
-                {launch > 0 && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      left: `${16 * (1 - launch)}%`,
-                      top: `${30 * (1 - launch)}%`,
-                      width: '100%',
-                      height: '100%',
-                      transform: `scale(${0.12 + launch * 0.88})`,
-                      transformOrigin: 'top left',
-                      borderRadius: 60 * (1 - launch),
-                      overflow: 'hidden',
-                      opacity: Math.min(1, launch * 3),
-                    }}
-                  >
-                    <Shot src={footage('mobile-projects.jpg')} />
-                  </div>
-                )}
-              </>
-            }
+            screen={<MobileFlow steps={MAIN_FLOW} />}
           />
         </div>
       </AbsoluteFill>
       <div
         style={{
           position: 'absolute',
-          top: 130,
+          top: 120,
           width: '100%',
           opacity: 1 - exit,
         }}
       >
-        <Letters text="Aussi sur iPhone." at={40} size={100} silver />
-        <Rise at={56}>
-          <Body size={42}>Chaque app, repensée pour le mobile.</Body>
-        </Rise>
+        <Letters text="Aussi sur iPhone." at={24} size={100} silver />
+        <div style={{ height: 56, marginTop: 6 }}>
+          {caption && (
+            <div
+              key={caption.at}
+              style={{
+                opacity: capT,
+                transform: `translateY(${(1 - capT) * 16}px)`,
+                filter: capT < 1 ? `blur(${(1 - capT) * 6}px)` : undefined,
+              }}
+            >
+              <Body size={42}>{caption.text}</Body>
+            </div>
+          )}
+        </div>
       </div>
     </AbsoluteFill>
   )
@@ -1439,13 +1538,13 @@ export const Keynote: React.FC<{ withAudio?: boolean }> = ({
     <Sequence from={848} durationInFrames={234} name="Numbers">
       <NumbersScene />
     </Sequence>
-    <Sequence from={1080} durationInFrames={124} name="iPhone">
+    <Sequence from={1080} durationInFrames={PHONE_LEN + 4} name="iPhone">
       <PhoneScene />
     </Sequence>
-    <Sequence from={1200} durationInFrames={62} name="One more thing">
+    <Sequence from={1320} durationInFrames={62} name="One more thing">
       <OneMoreThing />
     </Sequence>
-    <Sequence from={1260} name="Availability">
+    <Sequence from={1380} name="Availability">
       <Availability />
     </Sequence>
     <Grain opacity={0.05} />

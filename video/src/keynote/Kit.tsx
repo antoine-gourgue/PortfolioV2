@@ -247,10 +247,28 @@ export const LogoTrace: React.FC<{
   )
 }
 
+// Silver aluminium; `k` scales the lightness for shading
+const ALU = [214, 216, 220]
+const alu = (k: number) =>
+  `rgb(${ALU.map((c) => Math.round(Math.max(0, Math.min(255, c * k)))).join(',')})`
+
+// Keyboard rows as key widths in units, laid out across the well
+const KEY_ROWS: { h: number; keys: number[] }[] = [
+  { h: 0.034, keys: [1.4, ...Array(13).fill(1)] },
+  { h: 0.062, keys: [...Array(13).fill(1), 1.5] },
+  { h: 0.062, keys: [1.5, ...Array(13).fill(1)] },
+  { h: 0.062, keys: [1.8, ...Array(11).fill(1), 1.7] },
+  { h: 0.062, keys: [2.3, ...Array(10).fill(1), 2.2] },
+  { h: 0.062, keys: [1, 1, 1, 1.25, 5.3, 1.25, 1, 3] },
+]
+
 /**
- * MacBook Pro in real CSS 3D: aluminium deck with keyboard and trackpad,
- * a lid hinged on the back edge (screen in front, logo on the back), and a
- * soft stage light under it. The parent sets the orbit.
+ * MacBook Pro in real CSS 3D. The base is a solid aluminium slab (stacked
+ * slices with a rounded underside) whose deck carries a key-by-key
+ * keyboard, speaker grilles and a glass trackpad; the lid has thickness,
+ * a notched display with slim bezels and a logo on its back. Hinged on the
+ * back edge; the parent sets the orbit. `sheen` (0-1) sweeps the light
+ * across the aluminium.
  */
 export const MacBook3D: React.FC<{
   width: number
@@ -258,15 +276,27 @@ export const MacBook3D: React.FC<{
   screen: React.ReactNode
   sheen?: number
 }> = ({ width: W, lid, screen, sheen = 0 }) => {
-  const H = W * 0.64
-  const D = W * 0.68
-  const T = W * 0.018
-  const bezel = W * 0.017
-  const face: React.CSSProperties = {
+  const D = W * 0.69
+  const Tb = W * 0.028
+  const Hl = W * 0.66
+  const Tl = W * 0.011
+  const r = W * 0.03
+  const bz = W * 0.014
+  const chin = W * 0.03
+  const glare = sheen * 140 - 20
+  const flat: React.CSSProperties = {
     position: 'absolute',
-    backfaceVisibility: 'hidden',
-    WebkitBackfaceVisibility: 'hidden',
+    left: 0,
+    top: 0,
+    width: W,
+    height: D,
+    transformOrigin: 'top center',
+    borderRadius: r,
   }
+  const wellX = 0.085 * W
+  const wellW = 0.83 * W
+  const keyGap = 0.006 * W
+  let rowY = 0.05 * D
   return (
     <div
       style={{
@@ -276,107 +306,176 @@ export const MacBook3D: React.FC<{
         transformStyle: 'preserve-3d',
       }}
     >
-      {/* Stage light pooling under the machine */}
       <div
         style={{
           position: 'absolute',
-          left: -W * 0.4,
+          left: -W * 0.45,
           top: 0,
-          width: W * 1.8,
-          height: D * 1.8,
+          width: W * 1.9,
+          height: D * 1.9,
           transformOrigin: 'top center',
-          transform: `translateY(${T}px) rotateX(90deg) translateY(${-D * 0.4}px)`,
+          transform: `translateY(${Tb + 2}px) rotateX(90deg) translateY(${-D * 0.45}px)`,
           background:
-            'radial-gradient(ellipse 50% 40% at 50% 45%, rgba(255,255,255,0.10), transparent 70%)',
+            'radial-gradient(ellipse 34% 32% at 50% 50%, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 60%, transparent 100%), radial-gradient(ellipse 50% 46% at 50% 50%, rgba(190,210,255,0.13) 0%, transparent 72%)',
         }}
       />
-      {/* Deck */}
+      {Array.from({ length: 6 }, (_, i) => {
+        const t = (i + 1) / 6
+        // The underside rolls in, like the machined edge of the real base
+        const inset = t * t * Tb * 0.7
+        return (
+          <div
+            key={i}
+            style={{
+              ...flat,
+              left: inset,
+              width: W - inset * 2,
+              height: D - inset,
+              transform: `translateY(${Tb * t}px) rotateX(90deg)`,
+              background: `linear-gradient(90deg, ${alu(0.62 - t * 0.2)}, ${alu(0.86 - t * 0.25)} 50%, ${alu(0.62 - t * 0.2)})`,
+            }}
+          />
+        )
+      })}
       <div
         style={{
-          ...face,
-          left: 0,
-          top: 0,
-          width: W,
-          height: D,
-          transformOrigin: 'top center',
+          ...flat,
           transform: 'rotateX(90deg)',
-          borderRadius: W * 0.02,
-          background:
-            'linear-gradient(180deg, #b9b9be 0%, #d6d6db 60%, #c4c4c9 100%)',
-          backfaceVisibility: 'visible',
+          overflow: 'hidden',
+          background: `linear-gradient(180deg, ${alu(0.97)}, ${alu(0.9)})`,
+          boxShadow: `inset 0 0 0 1px ${alu(1.05)}`,
         }}
       >
+        {[0.022, 0.908].map((x) => (
+          <div
+            key={x}
+            style={{
+              position: 'absolute',
+              left: x * W,
+              top: 0.05 * D,
+              width: 0.07 * W,
+              height: 0.4 * D,
+              backgroundImage:
+                'radial-gradient(circle, rgba(0,0,0,0.5) 0.9px, transparent 1.3px)',
+              backgroundSize: '5px 5px',
+            }}
+          />
+        ))}
         <div
           style={{
             position: 'absolute',
-            left: W * 0.08,
-            right: W * 0.08,
-            top: D * 0.08,
-            height: D * 0.42,
-            borderRadius: W * 0.01,
-            background: '#1c1c1e',
-            backgroundImage:
-              'repeating-linear-gradient(90deg, transparent 0, transparent 6.2%, #3a3a3c 6.2%, #3a3a3c 6.6%), repeating-linear-gradient(0deg, transparent 0, transparent 16%, #3a3a3c 16%, #3a3a3c 17.5%)',
+            left: wellX - 4,
+            top: 0.05 * D - 4,
+            width: wellW + 8,
+            height: 0.39 * D + 8,
+            borderRadius: 8,
+            background: '#2a2a2d',
+          }}
+        />
+        {KEY_ROWS.map((row, ri) => {
+          const units = row.keys.reduce((a, k) => a + k, 0)
+          const unit = (wellW - keyGap * (row.keys.length - 1)) / units
+          const y = rowY
+          rowY += row.h * D + 0.008 * D
+          let x = wellX
+          return row.keys.map((k, ki) => {
+            const left = x
+            x += k * unit + keyGap
+            return (
+              <div
+                key={`${ri}-${ki}`}
+                style={{
+                  position: 'absolute',
+                  left,
+                  top: y,
+                  width: k * unit,
+                  height: row.h * D,
+                  borderRadius: 3,
+                  background: '#0f0f11',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.09)',
+                }}
+              />
+            )
+          })
+        })}
+        <div
+          style={{
+            position: 'absolute',
+            left: 0.29 * W,
+            top: 0.52 * D,
+            width: 0.42 * W,
+            height: 0.41 * D,
+            borderRadius: 0.014 * W,
+            background: `linear-gradient(180deg, ${alu(0.99)}, ${alu(0.94)})`,
+            boxShadow:
+              'inset 0 0 0 1px rgba(0,0,0,0.12), inset 0 1px 2px rgba(255,255,255,0.6)',
           }}
         />
         <div
           style={{
             position: 'absolute',
-            left: W * 0.3,
-            right: W * 0.3,
-            top: D * 0.56,
-            height: D * 0.36,
-            borderRadius: W * 0.012,
-            background: 'linear-gradient(180deg, #cfcfd4, #bcbcc1)',
-            boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.08)',
+            left: 0.455 * W,
+            bottom: -0.012 * D,
+            width: 0.09 * W,
+            height: 0.03 * D,
+            borderRadius: '50%',
+            background: 'rgba(0,0,0,0.14)',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: `linear-gradient(100deg, transparent ${glare - 18}%, rgba(255,255,255,0.32) ${glare}%, transparent ${glare + 18}%)`,
           }}
         />
       </div>
-      {/* Front edge of the deck */}
-      <div
-        style={{
-          ...face,
-          left: 0,
-          top: 0,
-          width: W,
-          height: T,
-          transform: `translateZ(${D}px)`,
-          background: 'linear-gradient(180deg, #d1d1d6, #8e8e93)',
-          borderRadius: `0 0 ${T}px ${T}px`,
-          backfaceVisibility: 'visible',
-        }}
-      />
-      {/* Lid, hinged on the back edge */}
       <div
         style={{
           position: 'absolute',
           left: 0,
-          top: -H,
+          top: -Hl - 1,
           width: W,
-          height: H,
+          height: Hl,
           transformOrigin: 'bottom center',
           transform: `rotateX(${lid - 90}deg)`,
           transformStyle: 'preserve-3d',
         }}
       >
+        {Array.from({ length: 4 }, (_, j) => (
+          <div
+            key={j}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              borderRadius: `${r}px ${r}px ${r * 0.4}px ${r * 0.4}px`,
+              transform: `translateZ(${(-Tl * (j + 0.5)) / 4}px)`,
+              background: `linear-gradient(90deg, ${alu(0.6)}, ${alu(0.82)} 50%, ${alu(0.6)})`,
+            }}
+          />
+        ))}
         <div
           style={{
-            ...face,
+            position: 'absolute',
             inset: 0,
-            borderRadius: `${W * 0.028}px ${W * 0.028}px ${W * 0.006}px ${W * 0.006}px`,
-            background: '#0b0b0c',
-            padding: bezel,
-            boxSizing: 'border-box',
-            boxShadow: '0 0 0 1.5px #48484a',
+            borderRadius: `${r}px ${r}px ${r * 0.4}px ${r * 0.4}px`,
+            overflow: 'hidden',
+            background: '#08080a',
+            boxShadow: `inset 0 0 0 1.5px ${alu(0.55)}`,
+            transform: 'translateZ(0.6px)',
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
           }}
         >
           <div
             style={{
-              position: 'relative',
-              width: '100%',
-              height: '100%',
+              position: 'absolute',
+              left: bz,
+              right: bz,
+              top: bz,
+              bottom: chin,
+              borderRadius: r * 0.45,
               overflow: 'hidden',
-              borderRadius: W * 0.008,
               background: '#000',
             }}
           >
@@ -385,24 +484,39 @@ export const MacBook3D: React.FC<{
               style={{
                 position: 'absolute',
                 inset: 0,
-                background: `linear-gradient(115deg, transparent ${sheen * 100 - 30}%, rgba(255,255,255,0.16) ${sheen * 100}%, transparent ${sheen * 100 + 20}%)`,
+                background: `linear-gradient(115deg, transparent ${glare - 26}%, rgba(255,255,255,0.12) ${glare}%, transparent ${glare + 26}%)`,
               }}
             />
           </div>
+          <div
+            style={{
+              position: 'absolute',
+              left: W / 2 - W * 0.05,
+              top: bz - 1,
+              width: W * 0.1,
+              height: W * 0.022,
+              borderRadius: `0 0 ${W * 0.009}px ${W * 0.009}px`,
+              background: '#08080a',
+            }}
+          />
         </div>
         <div
           style={{
-            ...face,
+            position: 'absolute',
             inset: 0,
-            transform: 'rotateY(180deg)',
-            borderRadius: `${W * 0.028}px ${W * 0.028}px ${W * 0.006}px ${W * 0.006}px`,
-            background: `linear-gradient(${120 + sheen * 60}deg, #9a9aa0 0%, #d8d8dd 45%, #a5a5ab 100%)`,
+            borderRadius: `${r}px ${r}px ${r * 0.4}px ${r * 0.4}px`,
+            transform: `rotateY(180deg) translateZ(${Tl + 0.6}px)`,
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+            background: `linear-gradient(${150 + sheen * 50}deg, ${alu(0.82)} 0%, ${alu(1.02)} 48%, ${alu(0.86)} 100%)`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
-          <AGLogo size={W * 0.12} color="#6e6e73" />
+          <div style={{ filter: 'drop-shadow(0 1px 0 rgba(255,255,255,0.6))' }}>
+            <AGLogo size={W * 0.13} color={alu(0.7)} />
+          </div>
         </div>
       </div>
     </div>
