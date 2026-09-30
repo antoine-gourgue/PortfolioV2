@@ -662,7 +662,7 @@ const MobileAppStore: React.FC = () => {
 
 const JOB_MAIL = {
   subject: 'Recherche d’emploi — CDI Fullstack × IA',
-  body: 'Bonjour, diplômé d’un Master of Science en IA (Epitech Rennes) après 2,5 ans chez Digitaleo, je recherche un CDI de développeur Fullstack × IA dès octobre 2026, à Anglet, Bordeaux, Paris ou Lille.',
+  body: 'Bonjour, diplômé d’un Master of Science en IA (Epitech Rennes) après 2,5 ans chez Digitaleo, je recherche un CDI de développeur Fullstack × IA dès octobre 2026, à Biarritz, Bordeaux, Paris ou Lille.',
 }
 
 /** The job search as an email: typed, CV attached, sent, received on iPhone. */

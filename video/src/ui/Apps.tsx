@@ -525,7 +525,7 @@ export const CalendarApp: React.FC<{
               {
                 title: 'CDI — Développeur Fullstack × IA',
                 period: 'dès oct. 2026',
-                text: 'Votre équipe ? Front, back et IA · Anglet, Bordeaux, Paris ou Lille.',
+                text: 'Votre équipe ? Front, back et IA · Biarritz, Bordeaux, Paris ou Lille.',
                 color: '#AF52DE',
               },
               {

@@ -1,6 +1,6 @@
 {
   "id": "Keynote",
-  "durationInFrames": 1440,
+  "durationInFrames": 1500,
   "bpm": 120,
   "gridOffset": 0,
   "style": "pop",
@@ -43,12 +43,12 @@
     {
       "name": "finale",
       "from": 1260,
-      "to": 1380
+      "to": 1440
     },
     {
       "name": "outro",
-      "from": 1380,
-      "to": 1440
+      "from": 1440,
+      "to": 1500
     }
   ],
   "sfx": [
@@ -244,37 +244,42 @@
     },
     {
       "type": "hit",
-      "at": 1263,
+      "at": 1264,
       "gain": 0.8
     },
     {
-      "type": "tick",
-      "at": 1294
+      "type": "pop",
+      "at": 1344
+    },
+    {
+      "type": "pop",
+      "at": 1359
+    },
+    {
+      "type": "pop",
+      "at": 1374
+    },
+    {
+      "type": "pop",
+      "at": 1389
+    },
+    {
+      "type": "swoosh",
+      "at": 1404,
+      "gain": 0.5
+    },
+    {
+      "type": "whoosh",
+      "at": 1428,
+      "gain": 0.6
     },
     {
       "type": "chime",
-      "at": 1300
+      "at": 1442
     },
     {
-      "type": "pop",
-      "at": 1318
-    },
-    {
-      "type": "pop",
-      "at": 1329
-    },
-    {
-      "type": "pop",
-      "at": 1340
-    },
-    {
-      "type": "pop",
-      "at": 1350
-    },
-    {
-      "type": "notify",
-      "at": 1362,
-      "gain": 0.7
+      "type": "click",
+      "at": 1452
     }
   ]
 }

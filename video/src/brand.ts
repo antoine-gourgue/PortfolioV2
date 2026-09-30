@@ -35,7 +35,7 @@ export const person = {
   lastName: 'Gourgue',
   role: 'Développeur Fullstack × IA',
   availability: 'Disponible en CDI · octobre 2026',
-  mobility: 'Anglet · Bordeaux · Paris · Lille',
+  mobility: 'Biarritz · Bordeaux · Paris · Lille',
   url: 'antoinegourgue.dev',
   degree: 'Master of Science — Intelligence Artificielle',
   school: 'Epitech Rennes',
@@ -154,9 +154,9 @@ export type City = {
 
 export const cities: City[] = [
   {
-    name: 'Anglet',
+    name: 'Biarritz',
     lat: 43.4832,
-    lon: -1.5146,
+    lon: -1.5586,
     color: '#0A84FF',
     icon: 'house_fill',
     note: 'Pays basque · domicile',

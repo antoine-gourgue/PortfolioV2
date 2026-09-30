@@ -410,7 +410,7 @@ export const WhereMap: React.FC<{ duration: number }> = ({ duration }) => {
       <Wallpaper dim={0.45} />
       <Caption
         first="Où ?"
-        second="Anglet, Bordeaux, Paris ou Lille."
+        second="Biarritz, Bordeaux, Paris ou Lille."
         size={60}
         top={60}
       />

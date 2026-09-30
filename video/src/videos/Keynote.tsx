@@ -15,7 +15,6 @@ import { asset, cities, fonts, person } from '../brand'
 import { AnamorphicFlare, Grain } from '../fx/Overlays'
 import {
   BeatWords,
-  CalendarIcon,
   IPhone3D,
   Letters,
   LogoTrace,
@@ -31,14 +30,7 @@ import {
 import { footage } from '../scenes/OsScenes'
 import { TrafficLights } from '../ui/Apps'
 import { DigitaleoEditor, DigitaleoWordmark } from '../ui/DigitaleoEditor'
-import {
-  AGLogo,
-  Counter,
-  clamp,
-  easeIn,
-  easeInOut,
-  easeOut,
-} from '../ui/Primitives'
+import { Counter, clamp, easeIn, easeInOut, easeOut } from '../ui/Primitives'
 
 // An Apple launch film: black stage, silver type, and nothing ever at rest.
 // Every scene carries its own slow camera move so no frame is a still.
@@ -1068,7 +1060,7 @@ const NumbersScene: React.FC = () => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          gap: 18,
+          gap: 12,
           opacity: ease(f, [0, 14], [0, 1]),
         }}
       >
@@ -1134,36 +1126,61 @@ const NumbersScene: React.FC = () => {
   )
 }
 
+const PHONE_W = 370
+
 /**
- * The iPhone falls into frame spinning, lands on its home screen and opens
- * Projets.
+ * The iPhone turns slowly out of the dark, back first so the titanium and
+ * the camera catch the light, then settles on its home screen, which wakes
+ * as it faces us, and opens Projets.
  */
 const PhoneScene: React.FC = () => {
   const f = useCurrentFrame()
   const { fps } = useVideoConfig()
-  const spin = spring({
+  const rise = spring({
     frame: f,
     fps,
-    config: { damping: 24, stiffness: 26, mass: 1.3 },
+    config: { damping: 200, stiffness: 36 },
   })
+  const turn = ease(f, [0, 80], [0, 1], easeInOut)
+  const settled = ease(f, [70, 90], [0, 1])
+  const ry =
+    interpolate(turn, [0, 1], [-205, 0]) + Math.sin((f - 80) / 26) * 5 * settled
+  const rx = interpolate(turn, [0, 1], [16, 3]) + Math.sin(f / 32) * 2 * settled
+  const rz = interpolate(turn, [0, 1], [-12, 0])
   const exit = ease(f, [106, 124], [0, 1], easeIn)
-  const launch = ease(f, [76, 90], [0, 1])
-  const float = Math.sin(f / 20) * 5 * spin
+  const launch = ease(f, [84, 98], [0, 1])
+  const screenOn = interpolate(ry, [-60, -15], [0, 1], clamp)
   return (
-    <AbsoluteFill style={{ background: '#000' }}>
-      <StageLight y={62} w={50} h={45} opacity={spin} />
-      <AbsoluteFill style={{ perspective: 1800, perspectiveOrigin: '50% 55%' }}>
+    <AbsoluteFill>
+      <StageLight y={60} w={46} h={42} opacity={rise * (1 - exit)} />
+      <div
+        style={{
+          position: 'absolute',
+          left: 540 - 260,
+          top: 1170,
+          width: 520,
+          height: 70,
+          borderRadius: '50%',
+          background:
+            'radial-gradient(ellipse, rgba(255,255,255,0.12), transparent 70%)',
+          opacity: rise * (1 - exit),
+        }}
+      />
+      <AbsoluteFill style={{ perspective: 2200, perspectiveOrigin: '50% 55%' }}>
         <div
           style={{
             position: 'absolute',
-            left: 540 - 200,
-            top: 400,
+            left: 540 - PHONE_W / 2,
+            top: 360,
             transformStyle: 'preserve-3d',
-            transform: `translateY(${(1 - spin) * 900 + exit * 1100}px) rotateX(${(1 - spin) * 30}deg) rotateY(${interpolate(spin, [0, 1], [-640, 0]) + float}deg) rotateZ(${(1 - spin) * -20}deg)`,
+            opacity: Math.min(1, rise * 1.5),
+            transform: `translateY(${(1 - rise) * 520 + exit * 900}px) rotateX(${rx}deg) rotateY(${ry}deg) rotateZ(${rz}deg)`,
           }}
         >
           <IPhone3D
-            width={400}
+            width={PHONE_W}
+            angle={ry}
+            screenOn={screenOn}
             screen={
               <>
                 <Shot src={footage('mobile-home.jpg')} />
@@ -1198,8 +1215,8 @@ const PhoneScene: React.FC = () => {
           opacity: 1 - exit,
         }}
       >
-        <Letters text="Aussi sur iPhone." at={36} size={100} silver />
-        <Rise at={52}>
+        <Letters text="Aussi sur iPhone." at={40} size={100} silver />
+        <Rise at={56}>
           <Body size={42}>Chaque app, repensée pour le mobile.</Body>
         </Rise>
       </div>
@@ -1236,175 +1253,153 @@ const OneMoreThing: React.FC = () => {
   )
 }
 
-/** The job search, as a product announcement. */
+const CITY_AT = 84
+const CITY_BEAT = 15
+const CARD_AT = 168
+
+/**
+ * The job search as an Apple end card, in three movements of type:
+ * availability, the cities one per beat, then the signature.
+ */
 const Availability: React.FC = () => {
   const f = useCurrentFrame()
   const { fps } = useVideoConfig()
-  const drop = spring({
-    frame: f - 2,
-    fps,
-    config: { damping: 15, stiffness: 80 },
-  })
-  const word = ease(f, [12, 28], [0, 1], easeOut)
-  const route = ease(f, [58, 90], [0, 1])
+  const word = ease(f, [4, 22], [0, 1], easeOut)
+  const aOut = ease(f, [68, 82], [0, 1], easeIn)
+  const allAt = CITY_AT + cities.length * CITY_BEAT
+  const row = ease(f, [allAt, allAt + 14], [0, 1], easeOut)
+  const bOut = ease(f, [CARD_AT - 12, CARD_AT], [0, 1], easeIn)
   const url = spring({
-    frame: f - 100,
+    frame: f - CARD_AT - 22,
     fps,
-    config: { damping: 16, stiffness: 110 },
+    config: { damping: 18, stiffness: 110 },
   })
-  const fade = ease(f, [150, 180], [0, 1])
-  const lineW = 820
+  const fade = ease(f, [218, 240], [0, 1])
+  const out = (t: number): React.CSSProperties => ({
+    opacity: 1 - t,
+    transform: `translateY(${-t * 70}px)`,
+    filter: t > 0 ? `blur(${t * 10}px)` : undefined,
+  })
   return (
-    <AbsoluteFill style={{ background: '#000' }}>
-      <StageLight y={30} w={60} h={35} opacity={ease(f, [30, 60], [0, 1])} />
-      <AbsoluteFill
-        style={{
-          transform: `scale(${1.02 + f * 0.0003})`,
-          opacity: 1 - fade,
-        }}
-      >
-        <div
-          style={{
-            position: 'absolute',
-            left: 540 - 100,
-            top: 150,
-            transform: `translateY(${(1 - drop) * -500}px) rotate(${(1 - drop) * -18}deg)`,
-            filter: 'drop-shadow(0 30px 60px rgba(255,59,48,0.25))',
-          }}
-        >
-          <CalendarIcon
-            size={200}
-            flipAt={34}
-            fromMonth="SEPT."
-            toMonth="OCT."
-            label="2026"
-          />
-        </div>
-        <div
-          style={{
-            position: 'absolute',
-            top: 420,
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            opacity: word,
-            transform: `scale(${1.15 - word * 0.15})`,
-            filter: word < 1 ? `blur(${(1 - word) * 14}px)` : undefined,
-          }}
-        >
-          <SilverText size={172} sweepAt={40} weight={800}>
-            Disponible.
-          </SilverText>
-        </div>
-        <Rise at={34} style={{ position: 'absolute', top: 640, width: '100%' }}>
-          <Body size={60} color={stage.white} weight={700}>
-            CDI · octobre 2026
-          </Body>
-        </Rise>
-        <Rise at={44} style={{ position: 'absolute', top: 725, width: '100%' }}>
-          <Body size={40}>{person.role}</Body>
-        </Rise>
-        <div
-          style={{
-            position: 'absolute',
-            left: 540 - lineW / 2,
-            top: 880,
-            width: lineW,
-            height: 120,
-          }}
-        >
+    <AbsoluteFill style={{ opacity: 1 - fade }}>
+      <StageLight y={44} w={62} h={38} opacity={ease(f, [0, 30], [0, 1])} />
+      {f < CITY_AT && (
+        <AbsoluteFill style={{ transform: `scale(${1 + f * 0.0006})` }}>
           <div
             style={{
               position: 'absolute',
-              top: 9,
-              left: 0,
-              width: lineW * route,
-              height: 3,
-              background: `linear-gradient(90deg, ${cities.map((c) => c.color).join(', ')})`,
-              backgroundSize: `${lineW}px 3px`,
-              opacity: 0.8,
+              top: 420,
+              width: '100%',
+              ...out(aOut),
             }}
-          />
-          {cities.map((c, i) => {
-            const p = i / (cities.length - 1)
-            const on = spring({
-              frame: f - 58 - p * 32,
-              fps,
-              config: { damping: 12, stiffness: 160 },
-            })
-            return (
-              <div
-                key={c.name}
-                style={{
-                  position: 'absolute',
-                  left: p * lineW,
-                  top: 0,
-                  width: 0,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}
-              >
-                <div
-                  style={{
-                    flexShrink: 0,
-                    width: 22,
-                    height: 22,
-                    borderRadius: 11,
-                    background: c.color,
-                    transform: `scale(${on})`,
-                    boxShadow: `0 0 24px ${c.color}`,
-                  }}
-                />
-                <div
-                  style={{
-                    marginTop: 16,
-                    fontFamily: fonts.display,
-                    fontSize: 36,
-                    fontWeight: 600,
-                    color: stage.white,
-                    whiteSpace: 'nowrap',
-                    opacity: Math.min(1, on),
-                    transform: `translateY(${(1 - Math.min(1, on)) * 14}px)`,
-                  }}
-                >
-                  {c.name}
-                </div>
-              </div>
-            )
-          })}
-        </div>
+          >
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                opacity: word,
+                transform: `scale(${1.12 - word * 0.12})`,
+                filter: word < 1 ? `blur(${(1 - word) * 14}px)` : undefined,
+              }}
+            >
+              <SilverText size={190} sweepAt={26} weight={800}>
+                Disponible.
+              </SilverText>
+            </div>
+            <Rise at={24}>
+              <Body size={62} color={stage.white} weight={700}>
+                En CDI, dès octobre 2026.
+              </Body>
+            </Rise>
+            <Rise at={36} style={{ marginTop: 14 }}>
+              <Body size={40}>{person.role}</Body>
+            </Rise>
+          </div>
+        </AbsoluteFill>
+      )}
+      {f >= CITY_AT - 6 && f < CARD_AT && (
         <div
           style={{
             position: 'absolute',
-            top: 1080,
+            top: 440,
             width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: 26,
-            transform: `scale(${0.8 + url * 0.2})`,
-            opacity: Math.min(1, url),
+            ...out(bOut),
           }}
         >
-          <AGLogo size={86} color={stage.white} />
+          <Rise at={CITY_AT - 6}>
+            <Body size={44}>Pour un poste à</Body>
+          </Rise>
           <div
             style={{
-              padding: '18px 38px',
+              marginTop: 18,
+              height: 200,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <BeatWords
+              size={170}
+              until={allAt}
+              words={cities.map((c, i) => ({
+                text: `${c.name}.`,
+                at: CITY_AT + i * CITY_BEAT,
+                silver: true,
+              }))}
+            />
+            {f >= allAt && (
+              <div
+                style={{
+                  opacity: row,
+                  transform: `scale(${1.08 - row * 0.08})`,
+                  filter: row < 1 ? `blur(${(1 - row) * 10}px)` : undefined,
+                }}
+              >
+                <Body size={60} color={stage.white} weight={700}>
+                  {cities.map((c) => c.name).join(' · ')}
+                </Body>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+      {f >= CARD_AT && (
+        <AbsoluteFill
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            transform: `scale(${1 + (f - CARD_AT) * 0.0006})`,
+          }}
+        >
+          <LogoTrace at={CARD_AT} size={200} fillAt={CARD_AT + 14} />
+          <div style={{ marginTop: 34 }}>
+            <Letters
+              text="Antoine Gourgue"
+              at={CARD_AT + 8}
+              size={100}
+              silver
+            />
+          </div>
+          <div
+            style={{
+              marginTop: 40,
+              padding: '20px 44px',
               borderRadius: 999,
               background: '#0071e3',
               fontFamily: fonts.display,
-              fontSize: 44,
+              fontSize: 46,
               fontWeight: 700,
               color: '#fff',
               letterSpacing: '-0.02em',
               boxShadow: '0 0 60px rgba(0,113,227,0.45)',
+              transform: `scale(${0.85 + url * 0.15})`,
+              opacity: Math.min(1, url * 1.5),
             }}
           >
             {person.url}
           </div>
-        </div>
-      </AbsoluteFill>
+        </AbsoluteFill>
+      )}
     </AbsoluteFill>
   )
 }

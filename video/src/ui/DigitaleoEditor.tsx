@@ -67,22 +67,20 @@ const tilePos = (i: number) => ({
 const GRAB_TILE = 3
 const DROP_Y = 318
 
-/** The Digitaleo wordmark, whose "D" is a mirrored c. */
 export const DigitaleoWordmark: React.FC<{ size: number; color?: string }> = ({
   size,
   color = navy,
 }) => (
   <div
     style={{
-      fontFamily: fonts.body,
+      fontFamily: fonts.display,
       fontSize: size,
-      fontWeight: 500,
+      fontWeight: 600,
       color,
-      letterSpacing: '0.01em',
+      letterSpacing: '-0.01em',
     }}
   >
-    <span style={{ display: 'inline-block', transform: 'scaleX(-1)' }}>c</span>
-    igitaleo
+    Digitaleo
   </div>
 )
 

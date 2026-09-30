@@ -1,14 +1,6 @@
 import React from 'react'
-import {
-  Img,
-  interpolate,
-  random,
-  spring,
-  useCurrentFrame,
-  useVideoConfig,
-} from 'remotion'
+import { Img, interpolate, random, useCurrentFrame } from 'remotion'
 import { fonts } from '../brand'
-import { PHONE_RATIO, Phone } from '../ui/Apps'
 import { AGLogo, AG_PATH, clamp, easeInOut, easeOut } from '../ui/Primitives'
 
 export const stage = {
@@ -417,24 +409,92 @@ export const MacBook3D: React.FC<{
   )
 }
 
+// Natural titanium, lit by a key light at the front upper left
+const TITANIUM = [182, 177, 168]
+const metal = (k: number) => {
+  const m = Math.max(0.28, Math.min(1.32, k))
+  return `rgb(${TITANIUM.map((c) => Math.round(Math.min(255, c * m))).join(',')})`
+}
+
 /**
- * iPhone with a back (glass, camera plateau, logo) and titanium edges, so
- * it can spin a full turn in 3D.
+ * iPhone in natural titanium, built as a real volume: the frame is a stack
+ * of rounded slices (so the edge stays solid and rounded at any angle),
+ * glass front with the live screen, frosted back with a raised camera
+ * plateau, and side buttons. `angle` is the rotateY the parent applies,
+ * used to light the flanks and slide the reflections.
  */
 export const IPhone3D: React.FC<{
   width: number
   screen: React.ReactNode
-}> = ({ width: W, screen }) => {
-  const SW = W * 0.936
-  const H = SW * PHONE_RATIO + W * 0.064
-  const T = W * 0.05
+  angle?: number
+  screenOn?: number
+}> = ({ width: W, screen, angle = 0, screenOn = 1 }) => {
+  const H = W * 2.07
+  const R = W * 0.17
+  const T = W * 0.105
+  const N = 12
+  const th = (angle * Math.PI) / 180
+  const lit = (d: number) => 0.5 + 0.8 * Math.max(0, d)
+  const leftK = lit(0.5 * Math.cos(th) + 0.8 * Math.sin(th))
+  const rightK = lit(-0.5 * Math.cos(th) - 0.8 * Math.sin(th))
+  const glint = 50 + ((((angle % 360) + 540) % 360) - 180) * 0.9
+  const rim = W * 0.014
+  const bezel = W * 0.04
   const face: React.CSSProperties = {
     position: 'absolute',
     left: 0,
     top: 0,
+    width: W,
+    height: H,
+    borderRadius: R,
+    overflow: 'hidden',
     backfaceVisibility: 'hidden',
     WebkitBackfaceVisibility: 'hidden',
   }
+  const P = W * 0.46
+  const lens = (x: number, y: number, d: number, key: string) => (
+    <div
+      key={key}
+      style={{
+        position: 'absolute',
+        left: x * P - d / 2,
+        top: y * P - d / 2,
+        width: d,
+        height: d,
+        borderRadius: '50%',
+        background:
+          'radial-gradient(circle, #121214 0 50%, #54514c 51% 60%, #1c1b1a 61% 68%, #9a968e 69% 100%)',
+        boxShadow: '0 3px 6px rgba(0,0,0,0.45)',
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          inset: '26%',
+          borderRadius: '50%',
+          background:
+            'radial-gradient(circle at 36% 34%, rgba(150,170,255,0.75) 0 7%, rgba(70,40,120,0.65) 18%, #06060a 46%)',
+        }}
+      />
+    </div>
+  )
+  const button = (side: -1 | 1, top: number, len: number) => (
+    <div
+      key={`${side}-${top}`}
+      style={{
+        position: 'absolute',
+        left: side < 0 ? -1.5 - T * 0.25 : W + 1.5 - T * 0.25,
+        top: H * top,
+        width: T * 0.5,
+        height: H * len,
+        borderRadius: T * 0.25,
+        background: metal((side < 0 ? leftK : rightK) * 0.95),
+        transform: `rotateY(${side * 90}deg)`,
+        backfaceVisibility: 'hidden',
+        WebkitBackfaceVisibility: 'hidden',
+      }}
+    />
+  )
   return (
     <div
       style={{
@@ -444,57 +504,141 @@ export const IPhone3D: React.FC<{
         transformStyle: 'preserve-3d',
       }}
     >
-      <div style={{ ...face, transform: `translateZ(${T / 2}px)` }}>
-        <Phone width={W} glow="rgba(255,255,255,0.05)">
-          {screen}
-        </Phone>
-      </div>
+      {Array.from({ length: N }, (_, i) => {
+        const t = (i / (N - 1)) * 2 - 1
+        // Rounded profile: outer slices step inwards like a radiused edge
+        const inset = (1 - Math.sqrt(1 - t * t)) * T * 0.28
+        const k = 1 - Math.abs(t) * 0.22
+        return (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              left: inset,
+              top: inset,
+              width: W - inset * 2,
+              height: H - inset * 2,
+              borderRadius: R - inset,
+              transform: `translateZ(${(t * T) / 2}px)`,
+              background: `linear-gradient(180deg, rgba(255,255,255,0.12), rgba(0,0,0,0.18)), linear-gradient(90deg, ${metal(leftK * k)}, ${metal(0.95 * k)} 50%, ${metal(rightK * k)})`,
+            }}
+          />
+        )
+      })}
+      {button(-1, 0.19, 0.045)}
+      {button(-1, 0.27, 0.075)}
+      {button(-1, 0.37, 0.075)}
+      {button(1, 0.29, 0.11)}
+      {/* The glass sits just inside the frame so a titanium rim shows */}
       <div
         style={{
           ...face,
-          width: W,
-          height: H,
-          borderRadius: W * 0.15,
-          transform: `rotateY(180deg) translateZ(${T / 2}px)`,
-          background:
-            'linear-gradient(160deg, #3a3a3e 0%, #1c1c1e 55%, #2c2c30 100%)',
-          boxShadow: 'inset 0 0 0 3px #5a5a5f',
+          left: rim,
+          top: rim,
+          width: W - rim * 2,
+          height: H - rim * 2,
+          borderRadius: R - rim,
+          transform: `translateZ(${T / 2 + 0.6}px)`,
+          background: '#050506',
+          boxShadow: `inset 0 0 0 ${W * 0.004}px #2c2c2e`,
         }}
       >
         <div
           style={{
             position: 'absolute',
-            left: W * 0.06,
-            top: W * 0.06,
-            width: W * 0.42,
-            height: W * 0.42,
-            borderRadius: W * 0.1,
-            background: 'rgba(255,255,255,0.06)',
-            boxShadow: 'inset 0 0 0 2px rgba(255,255,255,0.08)',
+            left: bezel,
+            top: bezel,
+            right: bezel,
+            bottom: bezel,
+            borderRadius: R - bezel,
+            overflow: 'hidden',
+            background: '#000',
           }}
         >
-          {[
-            [0.27, 0.27],
-            [0.27, 0.73],
-            [0.73, 0.5],
-          ].map(([x, y], i) => (
-            <div
-              key={i}
-              style={{
-                position: 'absolute',
-                left: `${x * 100}%`,
-                top: `${y * 100}%`,
-                width: W * 0.14,
-                height: W * 0.14,
-                marginLeft: -W * 0.07,
-                marginTop: -W * 0.07,
-                borderRadius: '50%',
-                background:
-                  'radial-gradient(circle at 40% 40%, #3a4a6a 0%, #0a0a0c 55%, #000 100%)',
-                boxShadow: '0 0 0 3px #48484a',
-              }}
-            />
-          ))}
+          {screen}
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: '#000',
+              opacity: 1 - screenOn,
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              top: W * 0.03,
+              left: '50%',
+              width: W * 0.3,
+              height: W * 0.085,
+              marginLeft: -W * 0.15,
+              borderRadius: W,
+              background: '#000',
+            }}
+          />
+        </div>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: `linear-gradient(115deg, transparent ${glint - 22}%, rgba(255,255,255,0.13) ${glint}%, transparent ${glint + 22}%)`,
+          }}
+        />
+      </div>
+      <div
+        style={{
+          ...face,
+          transform: `rotateY(180deg) translateZ(${T / 2 + 0.6}px)`,
+          background:
+            'linear-gradient(160deg, #d9d5cd 0%, #c3beb4 45%, #aea99f 100%)',
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: `linear-gradient(115deg, transparent ${100 - glint - 25}%, rgba(255,255,255,0.35) ${100 - glint}%, transparent ${100 - glint + 25}%)`,
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            left: W * 0.05,
+            top: W * 0.05,
+            width: P,
+            height: P,
+            borderRadius: W * 0.13,
+            background: 'linear-gradient(145deg, #cfcac1, #aca79e)',
+            boxShadow:
+              '0 4px 10px rgba(0,0,0,0.35), inset 0 0 0 1.5px rgba(255,255,255,0.45), inset 0 -2px 3px rgba(0,0,0,0.15)',
+          }}
+        >
+          {lens(0.29, 0.27, P * 0.42, 'wide')}
+          {lens(0.29, 0.73, P * 0.42, 'ultra')}
+          {lens(0.73, 0.5, P * 0.42, 'tele')}
+          <div
+            style={{
+              position: 'absolute',
+              left: 0.73 * P - P * 0.065,
+              top: 0.16 * P - P * 0.065,
+              width: P * 0.13,
+              height: P * 0.13,
+              borderRadius: '50%',
+              background:
+                'radial-gradient(circle, #fff8e2, #d8cfb4 60%, #9c958a)',
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              left: 0.73 * P - P * 0.06,
+              top: 0.84 * P - P * 0.06,
+              width: P * 0.12,
+              height: P * 0.12,
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, #2a2a2e, #0c0c0e)',
+            }}
+          />
         </div>
         <div
           style={{
@@ -502,25 +646,12 @@ export const IPhone3D: React.FC<{
             left: '50%',
             top: '50%',
             transform: 'translate(-50%, -50%)',
+            filter: 'drop-shadow(0 1px 0 rgba(255,255,255,0.5))',
           }}
         >
-          <AGLogo size={W * 0.26} color="#6e6e73" />
+          <AGLogo size={W * 0.26} color="#9a958c" />
         </div>
       </div>
-      {[0, 1].map((side) => (
-        <div
-          key={side}
-          style={{
-            position: 'absolute',
-            left: side ? W - T / 2 : -T / 2,
-            top: W * 0.1,
-            width: T,
-            height: H - W * 0.2,
-            transform: `rotateY(${side ? 90 : -90}deg)`,
-            background: 'linear-gradient(90deg, #6e6e73, #c7c7cc, #6e6e73)',
-          }}
-        />
-      ))}
     </div>
   )
 }
@@ -570,90 +701,6 @@ export const Ring: React.FC<{
         style={{ filter: `drop-shadow(0 0 18px ${to}88)` }}
       />
     </svg>
-  )
-}
-
-/** Apple Calendar icon whose page flips from `fromMonth` to `toMonth`. */
-export const CalendarIcon: React.FC<{
-  size: number
-  flipAt: number
-  fromMonth: string
-  toMonth: string
-  label: string
-}> = ({ size, flipAt, fromMonth, toMonth, label }) => {
-  const f = useCurrentFrame()
-  const { fps } = useVideoConfig()
-  const flip = spring({
-    frame: f - flipAt,
-    fps,
-    config: { damping: 14, stiffness: 110 },
-  })
-  const page = (m: string, extra?: React.CSSProperties) => (
-    <div
-      style={{
-        position: 'absolute',
-        inset: 0,
-        borderRadius: size * 0.22,
-        background: '#fff',
-        overflow: 'hidden',
-        backfaceVisibility: 'hidden',
-        ...extra,
-      }}
-    >
-      <div
-        style={{
-          height: size * 0.28,
-          background: '#ff3b30',
-          color: '#fff',
-          fontFamily: fonts.body,
-          fontWeight: 700,
-          fontSize: size * 0.16,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          letterSpacing: '0.04em',
-        }}
-      >
-        {m}
-      </div>
-      <div
-        style={{
-          fontFamily: fonts.display,
-          fontWeight: 600,
-          fontSize: size * (label.length > 2 ? 0.3 : 0.42),
-          color: '#1d1d1f',
-          textAlign: 'center',
-          lineHeight: `${size * 0.66}px`,
-          letterSpacing: '-0.03em',
-        }}
-      >
-        {label}
-      </div>
-    </div>
-  )
-  return (
-    <div
-      style={{
-        position: 'relative',
-        width: size,
-        height: size,
-        perspective: size * 4,
-      }}
-    >
-      {page(toMonth)}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          transformOrigin: 'top center',
-          transform: `rotateX(${flip * 180}deg)`,
-          transformStyle: 'preserve-3d',
-          opacity: flip < 0.98 ? 1 : 0,
-        }}
-      >
-        {page(fromMonth)}
-      </div>
-    </div>
   )
 }
 
