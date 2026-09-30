@@ -313,7 +313,7 @@ const PICKS: Pick[] = [
     ],
   },
 ]
-const PICK_LEN = 110
+const PICK_LEN = 130
 
 const AppStoreWindow: React.FC<{
   shot: string
@@ -558,7 +558,7 @@ const ProjectPick: React.FC<{ pick: Pick; prevShot: string }> = ({
             placement="below"
             value={c.value}
             caption={c.caption}
-            from={74 + i * 8}
+            from={70 + i * 10}
             maxWidth={420}
           />
         ))}
@@ -639,8 +639,8 @@ const MobileAppStore: React.FC = () => {
         lx={PX - 30}
         ly={PY + 16 + SH * 0.68 - 160}
         placement="left"
-        value="Même App Store"
-        caption="version iPhone"
+        value="App Store"
+        caption="le même, sur iPhone"
         from={30}
         to={96}
         maxWidth={PX - 70}
@@ -893,15 +893,15 @@ export const AppStore: React.FC<{ withAudio?: boolean }> = ({
         />
       </Sequence>
     ))}
-    <Sequence from={660} durationInFrames={180} name="Mobile App Store">
+    <Sequence from={720} durationInFrames={180} name="Mobile App Store">
       <Stage />
       <MobileAppStore />
     </Sequence>
-    <Sequence from={840} durationInFrames={250} name="Job mail">
+    <Sequence from={900} durationInFrames={250} name="Job mail">
       <Stage />
       <JobMail />
     </Sequence>
-    <Sequence from={1080} name="Closing">
+    <Sequence from={1140} name="Closing">
       <ClosingCard
         start={0}
         dark={false}

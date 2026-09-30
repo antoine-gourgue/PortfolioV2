@@ -1196,15 +1196,15 @@ export const Annotation: React.FC<{
 }) => {
   const f = useCurrentFrame()
   const out = to === Infinity ? 0 : interpolate(f, [to - 10, to], [0, 1], clamp)
-  const ring = interpolate(f, [from, from + 8], [0, 1], {
+  const ring = interpolate(f, [from, from + 6], [0, 1], {
     ...clamp,
     easing: easeOut,
   })
-  const draw = interpolate(f, [from + 4, from + 16], [0, 1], {
+  const draw = interpolate(f, [from + 2, from + 10], [0, 1], {
     ...clamp,
     easing: easeInOut,
   })
-  const label = interpolate(f, [from + 12, from + 26], [0, 1], {
+  const label = interpolate(f, [from + 6, from + 16], [0, 1], {
     ...clamp,
     easing: easeOut,
   })
