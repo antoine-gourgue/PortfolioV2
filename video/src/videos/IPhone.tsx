@@ -107,7 +107,8 @@ const TRANSITION = 14
 const ScreenLayer: React.FC<{
   screen: Screen
   t: number
-  leaving: boolean
+  /** Set on the outgoing screen: the transition of the one replacing it. */
+  leaving?: Transition
 }> = ({ screen, t, leaving }) => {
   const img = (
     <Img
@@ -122,19 +123,22 @@ const ScreenLayer: React.FC<{
     overflow: 'hidden',
   }
   if (leaving) {
-    // The outgoing screen only moves for pushes and pops, as on iOS
-    const nextIsPush = screen.transition === 'push'
-    return (
-      <div
-        style={{
-          ...base,
-          transform: nextIsPush ? `translateX(${-e * 30}%)` : undefined,
-          filter: nextIsPush ? `brightness(${1 - e * 0.15})` : undefined,
-        }}
-      >
-        {img}
-      </div>
-    )
+    // Pushed screens slide a third under the new one; an app sent home
+    // shrinks away; anything else stays put under the incoming screen
+    const style: React.CSSProperties =
+      leaving === 'push'
+        ? {
+            transform: `translateX(${-e * 30}%)`,
+            filter: `brightness(${1 - e * 0.15})`,
+          }
+        : leaving === 'home'
+          ? {
+              transform: `scale(${1 - e * 0.3})`,
+              borderRadius: 60 * e,
+              opacity: 1 - e,
+            }
+          : {}
+    return <div style={{ ...base, ...style }}>{img}</div>
   }
   switch (screen.transition) {
     case 'launch': {
@@ -209,7 +213,7 @@ const Screens: React.FC = () => {
     // The lock screen slides up and away, revealing the springboard
     return (
       <>
-        <ScreenLayer screen={cur} t={1} leaving={false} />
+        <ScreenLayer screen={cur} t={1} />
         <div
           style={{
             position: 'absolute',
@@ -225,9 +229,9 @@ const Screens: React.FC = () => {
   return (
     <>
       {idx > 0 && t < 1 && !popping && (
-        <ScreenLayer screen={prev} t={t} leaving={cur.transition === 'push'} />
+        <ScreenLayer screen={prev} t={t} leaving={cur.transition} />
       )}
-      {popping && <ScreenLayer screen={cur} t={t} leaving={false} />}
+      {popping && <ScreenLayer screen={cur} t={t} />}
       {popping && (
         <div
           style={{
@@ -240,9 +244,7 @@ const Screens: React.FC = () => {
           <Img src={footage(prev.src)} style={{ width: SW, height: SH }} />
         </div>
       )}
-      {!popping && (
-        <ScreenLayer screen={cur} t={idx === 0 ? 1 : t} leaving={false} />
-      )}
+      {!popping && <ScreenLayer screen={cur} t={idx === 0 ? 1 : t} />}
     </>
   )
 }
@@ -250,7 +252,9 @@ const Screens: React.FC = () => {
 /** The real Contact form, filled in by a recruiter over the capture. */
 const ComposeFill: React.FC = () => {
   const f = useCurrentFrame()
-  if (f < 680 || f >= 870) return null
+  if (f < 680 || f >= 870 + TRANSITION) return null
+  // Leaves with the form when the app is sent home at 870
+  const e = easeInOut(interpolate(f, [870, 870 + TRANSITION], [0, 1], clamp))
   const field = (
     y: number,
     text: string,
@@ -259,7 +263,14 @@ const ComposeFill: React.FC = () => {
     opts: { cover?: boolean; bold?: boolean; wrap?: boolean } = {}
   ) => <Field key={text} y={y} text={text} start={start} cps={cps} {...opts} />
   return (
-    <>
+    <div
+      style={{
+        position: 'absolute',
+        inset: 0,
+        transform: `scale(${1 - e * 0.3})`,
+        opacity: 1 - e,
+      }}
+    >
       {field(0.21, 'vous@entreprise.fr', 690, 24, { cover: true })}
       {field(0.268, 'Équipe recrutement', 716, 24, { cover: true })}
       {field(0.325, 'Entretien — CDI Fullstack × IA', 742, 30, {
@@ -276,7 +287,7 @@ const ComposeFill: React.FC = () => {
           wrap: true,
         }
       )}
-    </>
+    </div>
   )
 }
 
