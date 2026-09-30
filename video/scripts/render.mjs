@@ -36,7 +36,10 @@ for (const id of ids.length ? ids : all) {
     // invisible once H.264 has been applied
     imageFormat: 'jpeg',
     jpegQuality: 95,
-    crf: 16,
+    // CRF 19 on the slow preset is visually lossless here and keeps a 40 s
+    // video around 20 MB; LinkedIn re-encodes uploads anyway
+    crf: 19,
+    x264Preset: 'slow',
     pixelFormat: 'yuv420p',
     audioCodec: 'aac',
     audioBitrate: '320k',
