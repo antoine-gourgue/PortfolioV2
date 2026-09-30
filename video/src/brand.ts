@@ -35,7 +35,7 @@ export const person = {
   lastName: 'Gourgue',
   role: 'Développeur Fullstack × IA',
   availability: 'Disponible en CDI · octobre 2026',
-  mobility: 'Anglet · Bordeaux · Paris',
+  mobility: 'Anglet · Bordeaux · Paris · Lille',
   url: 'antoinegourgue.dev',
   degree: 'Master of Science — Intelligence Artificielle',
   school: 'Epitech Rennes',
@@ -68,7 +68,7 @@ export const projects: Project[] = [
     id: 'tailtcg',
     name: 'TailTCG',
     stack: 'Next.js · TypeScript',
-    image: 'tailtcg.jpg',
+    image: 'footage:tailtcg.jpg',
     tint: '#ffcb05',
   },
   {
@@ -136,8 +136,90 @@ export const projects: Project[] = [
   },
 ]
 
+// `footage:` images are fresh captures kept in public/footage, for projects
+// whose portfolio asset is out of date
 export const projectImage = (p: Project) =>
-  staticFile(`assets/projects/${p.image}`)
+  p.image.startsWith('footage:')
+    ? staticFile(`footage/${p.image.slice(8)}`)
+    : staticFile(`assets/projects/${p.image}`)
+
+export type City = {
+  name: string
+  lat: number
+  lon: number
+  color: string
+  icon: string
+  note: string
+}
+
+export const cities: City[] = [
+  {
+    name: 'Anglet',
+    lat: 43.4832,
+    lon: -1.5146,
+    color: '#0A84FF',
+    icon: 'house_fill',
+    note: 'Pays basque · domicile',
+  },
+  {
+    name: 'Bordeaux',
+    lat: 44.8378,
+    lon: -0.5792,
+    color: '#FF9F0A',
+    icon: 'briefcase_fill',
+    note: 'Nouvelle-Aquitaine',
+  },
+  {
+    name: 'Paris',
+    lat: 48.8566,
+    lon: 2.3522,
+    color: '#5E5CE6',
+    icon: 'briefcase_fill',
+    note: 'Île-de-France',
+  },
+  {
+    name: 'Lille',
+    lat: 50.6292,
+    lon: 3.0573,
+    color: '#FF375F',
+    icon: 'briefcase_fill',
+    note: 'Hauts-de-France',
+  },
+]
+
+// Career timeline, as the portfolio's Calendar app shows it
+export const journey = [
+  {
+    title: 'Développeur Full Stack — Digitaleo',
+    period: 'janv. 2024 — juil. 2026',
+    text: "Éditeur d'email de la plateforme (blocs dynamiques, compatibilité Outlook/VML), Design System, archivage des campagnes, statistiques Marketing Direct.",
+    color: '#0A84FF',
+  },
+  {
+    title: 'Master - Epitech Rennes',
+    period: '2023 - 2026',
+    text: "Spécialisation en Intelligence Artificielle & Data, axée sur l'apprentissage automatique, la science des données et les solutions innovantes.",
+    color: '#30A46C',
+  },
+  {
+    title: 'KPME-Development',
+    period: 'mai — juin 2022',
+    text: 'Création de site web pour KPME-Development à Boucau — première expérience professionnelle en développement.',
+    color: '#0A84FF',
+  },
+  {
+    title: 'Lycée Saint Joseph — Hasparren',
+    period: '2021 — 2023',
+    text: "Formation technique aux systèmes numériques, option informatique et réseaux — les fondations avant le passage à l'ingénierie logicielle.",
+    color: '#30A46C',
+  },
+  {
+    title: 'Lycée André Malraux — Biarritz',
+    period: '2016 — 2020',
+    text: 'Baccalauréats scientifique et sciences de laboratoire — les bases scientifiques du parcours.',
+    color: '#E5484D',
+  },
+]
 
 export const digitaleo = {
   image: 'digitaleo-editor.jpg',

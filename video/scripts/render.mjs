@@ -15,7 +15,14 @@ const ids = process.argv.slice(2)
 const frameRange = process.env.FRAMES
   ? process.env.FRAMES.split('-').map(Number)
   : null
-const all = ['AntoineOS', 'Trailer', 'CodeToReality']
+const all = [
+  'AntoineOS',
+  'Spotlight',
+  'iPhone',
+  'Keynote',
+  'Trailer',
+  'CodeToReality',
+]
 const serveUrl = await makeBundle()
 mkdirSync(join(root, 'out'), { recursive: true })
 

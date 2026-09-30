@@ -1,0 +1,112 @@
+{
+  "id": "iPhone",
+  "durationInFrames": 960,
+  "bpm": 120,
+  "gridOffset": 0,
+  "style": "soft",
+  "sections": [
+    {
+      "name": "intro",
+      "from": 0,
+      "to": 120
+    },
+    {
+      "name": "lite",
+      "from": 120,
+      "to": 600
+    },
+    {
+      "name": "groove",
+      "from": 600,
+      "to": 720
+    },
+    {
+      "name": "finale",
+      "from": 720,
+      "to": 780
+    },
+    {
+      "name": "outro",
+      "from": 780,
+      "to": 960
+    }
+  ],
+  "sfx": [
+    {
+      "type": "notify",
+      "at": 14
+    },
+    {
+      "type": "tap",
+      "at": 68
+    },
+    {
+      "type": "unlock",
+      "at": 76
+    },
+    {
+      "type": "send",
+      "at": 136
+    },
+    {
+      "type": "pop",
+      "at": 180
+    },
+    {
+      "type": "send",
+      "at": 220
+    },
+    {
+      "type": "pop",
+      "at": 258
+    },
+    {
+      "type": "send",
+      "at": 314
+    },
+    {
+      "type": "pop",
+      "at": 352
+    },
+    {
+      "type": "send",
+      "at": 410
+    },
+    {
+      "type": "pop",
+      "at": 444
+    },
+    {
+      "type": "send",
+      "at": 500
+    },
+    {
+      "type": "pop",
+      "at": 534
+    },
+    {
+      "type": "send",
+      "at": 576
+    },
+    {
+      "type": "pop",
+      "at": 610
+    },
+    {
+      "type": "ring",
+      "at": 680
+    },
+    {
+      "type": "ring",
+      "at": 710
+    },
+    {
+      "type": "click",
+      "at": 740
+    },
+    {
+      "type": "tail",
+      "at": 772
+    }
+  ]
+}

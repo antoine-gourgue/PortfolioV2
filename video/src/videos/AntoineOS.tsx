@@ -21,7 +21,6 @@ import {
 } from '../brand'
 import { CueSheet, cueFrames } from '../cues'
 import { Distort, Shake, glitchEnvelope } from '../fx/Distort'
-import { NeuralNet } from '../fx/NeuralNet'
 import { Flash, Grain, LightLeak, Vignette } from '../fx/Overlays'
 import { Dust } from '../fx/Particles'
 import { ShaderBackground } from '../fx/Shader'
@@ -39,6 +38,13 @@ import {
   easeOut,
   useSpring,
 } from '../ui/Primitives'
+import {
+  CareerCalendar,
+  MissionControl,
+  MobileTour,
+  WhereMap,
+  WriteAndClose,
+} from '../scenes/OsScenes'
 import sheet from './AntoineOS.cues.json'
 
 const cues = sheet as CueSheet
@@ -145,11 +151,11 @@ const Desktop: React.FC = () => {
   const f = useCurrentFrame()
   const cam = interpolate(f, [0, 50], [0, 1], { ...clamp, easing: easeOut })
   const tilt = interpolate(f, [10, 80], [0, 1], { ...clamp, easing: easeInOut })
-  const drift = interpolate(f, [0, 130], [0, 1])
+  const drift = interpolate(f, [0, 180], [0, 1])
   const scale = 2.8 - 1.8 * cam
   const term = useSpring(40, { damping: 14 })
   const about = useSpring(52, { damping: 14 })
-  const exit = interpolate(f, [112, 130], [0, 1], { ...clamp, easing: easeIn })
+  const exit = interpolate(f, [164, 180], [0, 1], { ...clamp, easing: easeIn })
   const sheen = interpolate(f, [18, 70], [-60, 160], clamp)
 
   return (
@@ -259,118 +265,6 @@ const Desktop: React.FC = () => {
           </Chip>
         </div>
       </div>
-    </AbsoluteFill>
-  )
-}
-
-const PHONE_W = 440
-const SCREEN_W = PHONE_W - 28
-const SCREEN_H = Math.round((SCREEN_W * 2532) / 1170)
-
-const Phone: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div
-    style={{
-      width: PHONE_W,
-      height: SCREEN_H + 28,
-      borderRadius: 66,
-      padding: 14,
-      background: 'linear-gradient(145deg, #3a3a3e, #0d0d0f 40%, #2a2a2e)',
-      boxShadow:
-        '0 60px 140px rgba(0,0,0,0.7), 0 0 0 2px rgba(255,255,255,0.08), 0 0 120px rgba(41,151,255,0.35)',
-    }}
-  >
-    <div
-      style={{
-        position: 'relative',
-        width: SCREEN_W,
-        height: SCREEN_H,
-        borderRadius: 52,
-        overflow: 'hidden',
-        background: '#000',
-      }}
-    >
-      {children}
-      <div
-        style={{
-          position: 'absolute',
-          top: 14,
-          left: SCREEN_W / 2 - 62,
-          width: 124,
-          height: 36,
-          borderRadius: 18,
-          background: '#000',
-        }}
-      />
-    </div>
-  </div>
-)
-
-const Mobile: React.FC = () => {
-  const f = useCurrentFrame()
-  const enter = useSpring(0, { damping: 16, stiffness: 110 })
-  const swipe = interpolate(f, [36, 48], [0, 1], {
-    ...clamp,
-    easing: easeInOut,
-  })
-  const exit = interpolate(f, [70, 83], [0, 1], { ...clamp, easing: easeIn })
-  const bg = interpolate(f, [0, 16], [0, 1], clamp)
-  return (
-    <AbsoluteFill style={{ opacity: 1 - exit }}>
-      <AbsoluteFill style={{ opacity: bg }}>
-        <Img
-          src={footage('desktop-blur.jpg')}
-          style={{
-            position: 'absolute',
-            height: '100%',
-            left: '50%',
-            transform: 'translateX(-50%) scale(1.15)',
-          }}
-        />
-        <AbsoluteFill
-          style={{
-            background:
-              'radial-gradient(ellipse 60% 50% at 50% 60%, rgba(5,7,13,0.2) 0%, rgba(5,7,13,0.85) 100%)',
-          }}
-        />
-      </AbsoluteFill>
-      <div style={{ position: 'absolute', top: 64, width: '100%' }}>
-        <RevealText text="Et sur mobile," start={4} size={76} />
-        <RevealText
-          text="c'est un iPhone."
-          start={12}
-          size={76}
-          gradient={GRADIENT}
-        />
-      </div>
-      <AbsoluteFill style={{ perspective: 1600 }}>
-        <div
-          style={{
-            position: 'absolute',
-            left: 540 - PHONE_W / 2,
-            top: 262,
-            opacity: enter,
-            transform: `translateY(${(1 - enter) * 420}px) rotateY(${(1 - enter) * 38 - 6 + f * 0.08}deg) rotateX(${(1 - enter) * 12}deg) scale(${1 + exit * 0.4})`,
-          }}
-        >
-          <Phone>
-            <div
-              style={{
-                display: 'flex',
-                width: SCREEN_W * 2,
-                transform: `translateX(${-swipe * SCREEN_W}px)`,
-              }}
-            >
-              {['mobile-home.jpg', 'mobile-projects.jpg'].map((name) => (
-                <Img
-                  key={name}
-                  src={footage(name)}
-                  style={{ width: SCREEN_W, height: SCREEN_H }}
-                />
-              ))}
-            </div>
-          </Phone>
-        </div>
-      </AbsoluteFill>
     </AbsoluteFill>
   )
 }
@@ -600,54 +494,41 @@ const Wall: React.FC = () => {
 
 const AI: React.FC = () => {
   const f = useCurrentFrame()
-  const net = interpolate(f, [0, 70], [0, 1], { ...clamp, easing: easeOut })
-  const win = useSpring(66, { damping: 16, stiffness: 90 })
-  const scan = interpolate(f, [90, 150], [0, 1], clamp)
-  const cnn = useSpring(104, { damping: 12 })
-  const thor = useSpring(122, { damping: 12 })
+  const siri = useSpring(34, { damping: 17, stiffness: 100 })
+  const win = useSpring(54, { damping: 16, stiffness: 90 })
+  const scan = interpolate(f, [80, 140], [0, 1], clamp)
+  const chip = (d: number) => ({
+    opacity: interpolate(f, [d, d + 10], [0, 1], clamp),
+    transform: `translateY(${interpolate(f, [d, d + 16], [16, 0], { ...clamp, easing: easeOut })}px)`,
+  })
   return (
     <AbsoluteFill style={{ background: '#04040c' }}>
       <ShaderBackground
         preset="aurora"
-        colorA="#160a42"
-        colorB="#137aa6"
-        intensity={0.62}
-        speed={1.6}
-      />
-      <AbsoluteFill
-        style={{
-          background:
-            'radial-gradient(ellipse 60% 22% at 50% 44%, rgba(4,4,12,0.75) 0%, transparent 100%)',
-        }}
-      />
-      <NeuralNet
-        layers={[4, 7, 7, 5, 2]}
-        x={110}
-        y={110}
-        width={860}
-        height={300}
-        reveal={net}
+        colorA="#140a3a"
+        colorB="#10688f"
+        intensity={0.5}
+        speed={1.2}
       />
       <div
         style={{
           position: 'absolute',
-          top: 440,
+          top: 70,
           width: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: 22,
+          gap: 18,
         }}
       >
         <div
           style={{
             fontFamily: fonts.mono,
-            fontSize: 28,
+            fontSize: 26,
             fontWeight: 700,
             color: '#bdf3ff',
             opacity: interpolate(f, [4, 12], [0, 1], clamp),
             letterSpacing: '0.08em',
-            textShadow: '0 0 18px rgba(0,0,0,0.9)',
           }}
         >
           {'// MASTER OF SCIENCE'}
@@ -655,27 +536,44 @@ const AI: React.FC = () => {
         <RevealText
           text={'Intelligence\nArtificielle.'}
           start={8}
-          size={112}
+          size={104}
           gradient={AI_GRADIENT}
         />
-        <div style={{ opacity: interpolate(f, [30, 42], [0, 1], clamp) }}>
+        <div style={{ opacity: interpolate(f, [26, 38], [0, 1], clamp) }}>
           <Chip color={colors.cyan}>{person.school} · 2023 — 2026</Chip>
         </div>
+      </div>
+      <Img
+        src={footage('window-siri-answer.webp')}
+        style={{
+          position: 'absolute',
+          left: 60,
+          top: 470,
+          width: 400,
+          opacity: siri,
+          transform: `translateX(${(1 - siri) * -300}px) rotate(${(1 - siri) * -4}deg)`,
+          filter: 'drop-shadow(0 30px 60px rgba(0,0,0,0.6))',
+        }}
+      />
+      <div style={{ position: 'absolute', left: 60, top: 1080, ...chip(70) }}>
+        <Chip color={colors.violet} style={{ fontSize: 26 }}>
+          Siri du portfolio · LLM via Groq
+        </Chip>
       </div>
       <AbsoluteFill style={{ perspective: 1400 }}>
         <div
           style={{
             position: 'absolute',
-            left: 540 - 380,
-            top: 870,
+            left: 500,
+            top: 500,
             opacity: win,
-            transform: `translateY(${(1 - win) * 500}px) rotateX(${14 - win * 6}deg)`,
+            transform: `translateX(${(1 - win) * 300}px) rotateY(${-10 + win * 4}deg)`,
           }}
         >
           <MacWindow
-            width={760}
-            height={420}
-            title="Zoidberg 2.0 — Détection de pneumonie"
+            width={520}
+            height={362}
+            title="Zoidberg 2.0"
             src={projectImage(projects[1])}
             glow={colors.teal}
           >
@@ -697,28 +595,23 @@ const AI: React.FC = () => {
       <div
         style={{
           position: 'absolute',
-          left: 90,
-          top: 820,
-          transform: `scale(${cnn})`,
-          transformOrigin: 'left center',
+          left: 500,
+          top: 900,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 16,
         }}
       >
-        <Chip color={colors.teal} style={{ fontSize: 30 }}>
-          CNN · 91,2 % d&apos;exactitude
-        </Chip>
-      </div>
-      <div
-        style={{
-          position: 'absolute',
-          right: 80,
-          top: 1250,
-          transform: `scale(${thor})`,
-          transformOrigin: 'right center',
-        }}
-      >
-        <Chip color={colors.violet} style={{ fontSize: 30 }}>
-          THOR · Speech-to-Text · NLP
-        </Chip>
+        <div style={chip(96)}>
+          <Chip color={colors.teal} style={{ fontSize: 26 }}>
+            CNN · 91,2 % d&apos;exactitude
+          </Chip>
+        </div>
+        <div style={chip(112)}>
+          <Chip color={colors.sky} style={{ fontSize: 26 }}>
+            THOR · Speech-to-Text · NLP
+          </Chip>
+        </div>
       </div>
     </AbsoluteFill>
   )
@@ -785,7 +678,7 @@ const Digitaleo: React.FC = () => {
           ...stat(16),
         }}
       >
-        utilisateurs actifs sur mon éditeur
+        utilisateurs actifs sur l’app
       </div>
       <AbsoluteFill style={{ perspective: 1500 }}>
         <div
@@ -956,219 +849,11 @@ const Stack: React.FC = () => {
   )
 }
 
-const Cursor: React.FC<{ x: number; y: number; pressed: boolean }> = ({
-  x,
-  y,
-  pressed,
-}) => (
-  <svg
-    width={44}
-    height={60}
-    viewBox="0 0 22 30"
-    style={{
-      position: 'absolute',
-      left: x,
-      top: y,
-      transform: `scale(${pressed ? 0.88 : 1})`,
-      filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))',
-    }}
-  >
-    <path
-      d="M1 1 L1 23 L6.5 17.5 L10.5 27 L14 25.5 L10 16.5 L18 16.5 Z"
-      fill="#000"
-      stroke="#fff"
-      strokeWidth={1.6}
-      strokeLinejoin="round"
-    />
-  </svg>
-)
-
-const CTA: React.FC = () => {
-  const f = useCurrentFrame()
-  const banner = useSpring(8, { damping: 16, stiffness: 140 })
-  const card = (d: number) => ({
-    opacity: interpolate(f, [d, d + 12], [0, 1], clamp),
-    transform: `translateY(${interpolate(f, [d, d + 20], [26, 0], { ...clamp, easing: easeOut })}px)`,
-  })
-  const cx = interpolate(f, [80, 112], [900, 640], {
-    ...clamp,
-    easing: easeInOut,
-  })
-  const cy = interpolate(f, [80, 112], [1300, 1072], {
-    ...clamp,
-    easing: easeInOut,
-  })
-  const pressed = f >= 116 && f < 122
-  const glow = interpolate(f, [116, 140], [1, 0], clamp)
-  const zoom = interpolate(f, [0, 180], [1.04, 1])
-  return (
-    <AbsoluteFill style={{ background: colors.night }}>
-      <Img
-        src={footage('desktop-blur.jpg')}
-        style={{
-          position: 'absolute',
-          height: '100%',
-          left: '50%',
-          transform: `translateX(-50%) scale(${zoom * 1.1})`,
-        }}
-      />
-      <AbsoluteFill style={{ background: 'rgba(5,7,13,0.45)' }} />
-      <AbsoluteFill
-        style={{
-          background:
-            'radial-gradient(ellipse 70% 60% at 50% 50%, transparent 0%, rgba(5,7,13,0.65) 100%)',
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          left: 60,
-          right: 60,
-          top: 70,
-          padding: '26px 30px',
-          borderRadius: 30,
-          background: 'rgba(40,40,46,0.82)',
-          border: '1px solid rgba(255,255,255,0.14)',
-          boxShadow: '0 30px 80px rgba(0,0,0,0.5)',
-          display: 'flex',
-          gap: 24,
-          alignItems: 'center',
-          opacity: banner,
-          transform: `translateY(${(1 - banner) * -220}px)`,
-        }}
-      >
-        <div
-          style={{
-            width: 88,
-            height: 88,
-            flexShrink: 0,
-            borderRadius: 22,
-            background: 'linear-gradient(145deg, #2997ff, #7b5cff)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <AGLogo size={62} />
-        </div>
-        <div style={{ fontFamily: fonts.body, color: colors.white, flex: 1 }}>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              fontSize: 30,
-              fontWeight: 700,
-            }}
-          >
-            {person.firstName} {person.lastName}
-            <span style={{ fontWeight: 400, color: '#a1a1a6', fontSize: 26 }}>
-              maintenant
-            </span>
-          </div>
-          <div style={{ fontSize: 28, color: '#d1d1d6', marginTop: 6 }}>
-            Diplômé en septembre, disponible en CDI dès octobre 2026 —
-            discutons-en !
-          </div>
-        </div>
-      </div>
-      <div
-        style={{
-          position: 'absolute',
-          top: 300,
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          textAlign: 'center',
-        }}
-      >
-        <div style={card(22)}>
-          <AGLogo size={170} />
-        </div>
-        <div
-          style={{
-            ...card(28),
-            marginTop: 40,
-            fontFamily: fonts.display,
-            fontWeight: 800,
-            fontSize: 108,
-            letterSpacing: '-0.035em',
-            color: colors.white,
-            lineHeight: 1,
-          }}
-        >
-          {person.firstName} {person.lastName}
-        </div>
-        <div
-          style={{
-            ...card(34),
-            marginTop: 18,
-            fontFamily: fonts.display,
-            fontWeight: 700,
-            fontSize: 56,
-            letterSpacing: '-0.02em',
-            backgroundImage: GRADIENT,
-            WebkitBackgroundClip: 'text',
-            color: 'transparent',
-          }}
-        >
-          {person.role}
-        </div>
-        <div
-          style={{
-            ...card(42),
-            marginTop: 44,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: 18,
-          }}
-        >
-          <Chip
-            color={colors.green}
-            style={{ fontSize: 34, padding: '14px 28px' }}
-          >
-            {person.availability}
-          </Chip>
-          <div
-            style={{
-              fontFamily: fonts.body,
-              fontSize: 30,
-              color: '#a1a1a6',
-              fontWeight: 500,
-            }}
-          >
-            {person.mobility}
-          </div>
-        </div>
-        <div
-          style={{
-            ...card(50),
-            marginTop: 60,
-            padding: '26px 64px',
-            borderRadius: 999,
-            background: colors.blue,
-            fontFamily: fonts.body,
-            fontWeight: 700,
-            fontSize: 44,
-            color: '#fff',
-            transform: `${card(50).transform} scale(${pressed ? 0.95 : 1})`,
-            boxShadow: `0 0 ${40 + glow * 60}px rgba(0,113,227,${0.45 + glow * 0.5})`,
-          }}
-        >
-          {person.url}
-        </div>
-      </div>
-      {f > 78 && <Cursor x={cx} y={cy} pressed={pressed} />}
-    </AbsoluteFill>
-  )
-}
-
 export const AntoineOS: React.FC<{ withAudio?: boolean }> = ({
   withAudio = true,
 }) => {
   const frame = useCurrentFrame()
-  const glitchHits = [...cueFrames(cues, 'glitch'), 567, 573]
+  const glitchHits = [...cueFrames(cues, 'glitch'), 927, 933]
   const g = glitchEnvelope(frame, glitchHits, 9)
   const impacts = cueFrames(cues, 'impact', 'hit')
 
@@ -1176,7 +861,7 @@ export const AntoineOS: React.FC<{ withAudio?: boolean }> = ({
     <AbsoluteFill style={{ background: colors.night }}>
       <Shake hits={impacts} amount={14}>
         <Distort displace={g * 110} split={g * 22 + 0} seed={3}>
-          <Sequence from={150} durationInFrames={130} name="Desktop">
+          <Sequence from={150} durationInFrames={180} name="Desktop">
             <Desktop />
           </Sequence>
           <Sequence from={0} durationInFrames={84} name="Hook">
@@ -1185,40 +870,49 @@ export const AntoineOS: React.FC<{ withAudio?: boolean }> = ({
           <Sequence from={72} durationInFrames={90} name="Boot">
             <Boot />
           </Sequence>
-          <Sequence from={262} durationInFrames={83} name="Mobile">
-            <Mobile />
+          <Sequence from={326} durationInFrames={124} name="Mission Control">
+            <MissionControl duration={124} />
           </Sequence>
-          <Sequence from={330} durationInFrames={126} name="Corridor">
+          <Sequence from={450} durationInFrames={240} name="Mobile">
+            <MobileTour />
+          </Sequence>
+          <Sequence from={690} durationInFrames={126} name="Corridor">
             <CameraMotionBlur samples={3} shutterAngle={180}>
               <Corridor />
             </CameraMotionBlur>
           </Sequence>
-          <Sequence from={450} durationInFrames={122} name="Wall">
+          <Sequence from={810} durationInFrames={122} name="Wall">
             <Wall />
           </Sequence>
-          <Sequence from={570} durationInFrames={180} name="AI">
+          <Sequence from={930} durationInFrames={180} name="AI">
             <AI />
           </Sequence>
-          <Sequence from={750} durationInFrames={180} name="Digitaleo">
+          <Sequence from={1110} durationInFrames={180} name="Digitaleo">
             <Digitaleo />
           </Sequence>
-          <Sequence from={930} durationInFrames={122} name="Stack">
+          <Sequence from={1290} durationInFrames={122} name="Stack">
             <Stack />
           </Sequence>
-          <Sequence from={1050} durationInFrames={180} name="CTA">
-            <CTA />
+          <Sequence from={1410} durationInFrames={120} name="Calendar">
+            <CareerCalendar duration={120} />
+          </Sequence>
+          <Sequence from={1530} durationInFrames={120} name="Maps">
+            <WhereMap duration={120} />
+          </Sequence>
+          <Sequence from={1650} name="Mail + closing">
+            <WriteAndClose mailDuration={96} />
           </Sequence>
           <Flash at={150} decay={16} max={0.9} />
-          <Flash at={450} decay={10} max={0.5} color="#9fc8ff" />
-          <Flash at={750} decay={18} />
-          <Flash at={930} decay={10} max={0.6} />
-          <Flash at={1050} decay={20} />
+          <Flash at={810} decay={10} max={0.5} color="#9fc8ff" />
+          <Flash at={1110} decay={18} max={0.8} />
+          <Flash at={1290} decay={10} max={0.5} />
           <LightLeak start={150} duration={60} />
           <LightLeak
-            start={1050}
-            duration={70}
+            start={1740}
+            duration={90}
             colors={['#2997ff', '#7b5cff']}
             direction={-1}
+            intensity={0.5}
           />
         </Distort>
       </Shake>

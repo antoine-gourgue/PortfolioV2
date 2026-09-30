@@ -1,6 +1,6 @@
 {
   "id": "AntoineOS",
-  "durationInFrames": 1230,
+  "durationInFrames": 1890,
   "bpm": 120,
   "gridOffset": 30,
   "style": "pop",
@@ -13,27 +13,32 @@
     {
       "name": "groove",
       "from": 150,
-      "to": 570
+      "to": 930
     },
     {
       "name": "break",
-      "from": 570,
-      "to": 750
+      "from": 930,
+      "to": 1110
     },
     {
       "name": "groove2",
-      "from": 750,
-      "to": 990
+      "from": 1110,
+      "to": 1350
     },
     {
       "name": "build",
-      "from": 990,
-      "to": 1050
+      "from": 1350,
+      "to": 1410
+    },
+    {
+      "name": "finale",
+      "from": 1410,
+      "to": 1770
     },
     {
       "name": "outro",
-      "from": 1050,
-      "to": 1230
+      "from": 1770,
+      "to": 1890
     }
   ],
   "sfx": [
@@ -64,140 +69,193 @@
       "at": 202
     },
     {
+      "type": "swoosh",
+      "at": 330
+    },
+    {
       "type": "whoosh",
-      "at": 268
+      "at": 452
+    },
+    {
+      "type": "notify",
+      "at": 462
+    },
+    {
+      "type": "unlock",
+      "at": 496
+    },
+    {
+      "type": "tap",
+      "at": 526
     },
     {
       "type": "swoosh",
-      "at": 303
-    },
-    {
-      "type": "whoosh",
-      "at": 324
-    },
-    {
-      "type": "tick",
-      "at": 345
-    },
-    {
-      "type": "tick",
-      "at": 360
-    },
-    {
-      "type": "tick",
-      "at": 375
-    },
-    {
-      "type": "tick",
-      "at": 390
-    },
-    {
-      "type": "tick",
-      "at": 405
-    },
-    {
-      "type": "tick",
-      "at": 420
-    },
-    {
-      "type": "tick",
-      "at": 435
+      "at": 576
     },
     {
       "type": "swoosh",
-      "at": 450
+      "at": 616
     },
     {
-      "type": "riser",
-      "at": 530,
-      "len": 40
-    },
-    {
-      "type": "glitch",
-      "at": 564
-    },
-    {
-      "type": "glitch",
-      "at": 570
-    },
-    {
-      "type": "sub",
-      "at": 570
+      "type": "swoosh",
+      "at": 654
     },
     {
       "type": "whoosh",
-      "at": 636
+      "at": 686
     },
     {
-      "type": "scan",
-      "at": 660
+      "type": "tick",
+      "at": 705
     },
     {
-      "type": "riser",
-      "at": 720,
-      "len": 30
+      "type": "tick",
+      "at": 720
     },
     {
-      "type": "impact",
+      "type": "tick",
+      "at": 735
+    },
+    {
+      "type": "tick",
       "at": 750
     },
     {
-      "type": "counter",
-      "at": 760,
-      "len": 42
+      "type": "tick",
+      "at": 765
     },
     {
-      "type": "whoosh",
-      "at": 800
+      "type": "tick",
+      "at": 780
     },
     {
-      "type": "pop",
-      "at": 842
+      "type": "tick",
+      "at": 795
     },
     {
-      "type": "pop",
-      "at": 858
+      "type": "swoosh",
+      "at": 810
+    },
+    {
+      "type": "riser",
+      "at": 890,
+      "len": 40
     },
     {
       "type": "glitch",
       "at": 924
     },
     {
-      "type": "impact",
+      "type": "glitch",
       "at": 930
     },
     {
-      "type": "hit",
-      "at": 960
-    },
-    {
-      "type": "hit",
-      "at": 990
-    },
-    {
-      "type": "riser",
-      "at": 1005,
-      "len": 45
-    },
-    {
-      "type": "impact",
-      "at": 1050
-    },
-    {
-      "type": "notify",
-      "at": 1058
+      "type": "sub",
+      "at": 930
     },
     {
       "type": "whoosh",
-      "at": 1072
+      "at": 966
+    },
+    {
+      "type": "whoosh",
+      "at": 986
+    },
+    {
+      "type": "scan",
+      "at": 1010
+    },
+    {
+      "type": "riser",
+      "at": 1080,
+      "len": 30
+    },
+    {
+      "type": "impact",
+      "at": 1110
+    },
+    {
+      "type": "counter",
+      "at": 1120,
+      "len": 42
+    },
+    {
+      "type": "whoosh",
+      "at": 1162
+    },
+    {
+      "type": "pop",
+      "at": 1202
+    },
+    {
+      "type": "pop",
+      "at": 1218
+    },
+    {
+      "type": "glitch",
+      "at": 1284
+    },
+    {
+      "type": "impact",
+      "at": 1290
+    },
+    {
+      "type": "hit",
+      "at": 1320
+    },
+    {
+      "type": "hit",
+      "at": 1350
+    },
+    {
+      "type": "riser",
+      "at": 1365,
+      "len": 45
+    },
+    {
+      "type": "notify",
+      "at": 1414
+    },
+    {
+      "type": "pop",
+      "at": 1454
+    },
+    {
+      "type": "whoosh",
+      "at": 1536
+    },
+    {
+      "type": "drop",
+      "at": 1556
+    },
+    {
+      "type": "drop",
+      "at": 1570
+    },
+    {
+      "type": "drop",
+      "at": 1584
+    },
+    {
+      "type": "drop",
+      "at": 1598
+    },
+    {
+      "type": "type",
+      "at": 1654,
+      "len": 70
     },
     {
       "type": "click",
-      "at": 1166
+      "at": 1730
+    },
+    {
+      "type": "send",
+      "at": 1736
     },
     {
       "type": "tail",
-      "at": 1170
+      "at": 1744
     }
   ]
 }

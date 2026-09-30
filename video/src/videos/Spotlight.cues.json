@@ -1,0 +1,139 @@
+{
+  "id": "Spotlight",
+  "durationInFrames": 1080,
+  "bpm": 120,
+  "gridOffset": 0,
+  "style": "soft",
+  "sections": [
+    {
+      "name": "intro",
+      "from": 0,
+      "to": 120
+    },
+    {
+      "name": "lite",
+      "from": 120,
+      "to": 540
+    },
+    {
+      "name": "groove",
+      "from": 540,
+      "to": 780
+    },
+    {
+      "name": "finale",
+      "from": 780,
+      "to": 960
+    },
+    {
+      "name": "outro",
+      "from": 960,
+      "to": 1080
+    }
+  ],
+  "sfx": [
+    {
+      "type": "type",
+      "at": 24,
+      "len": 36
+    },
+    {
+      "type": "pop",
+      "at": 62
+    },
+    {
+      "type": "click",
+      "at": 96
+    },
+    {
+      "type": "swoosh",
+      "at": 104
+    },
+    {
+      "type": "whoosh",
+      "at": 118
+    },
+    {
+      "type": "swoosh",
+      "at": 236
+    },
+    {
+      "type": "click",
+      "at": 282
+    },
+    {
+      "type": "click",
+      "at": 287
+    },
+    {
+      "type": "whoosh",
+      "at": 292
+    },
+    {
+      "type": "swoosh",
+      "at": 324
+    },
+    {
+      "type": "swoosh",
+      "at": 358
+    },
+    {
+      "type": "swoosh",
+      "at": 392
+    },
+    {
+      "type": "swoosh",
+      "at": 416
+    },
+    {
+      "type": "type",
+      "at": 432,
+      "len": 30
+    },
+    {
+      "type": "notify",
+      "at": 544
+    },
+    {
+      "type": "pop",
+      "at": 584
+    },
+    {
+      "type": "whoosh",
+      "at": 664
+    },
+    {
+      "type": "drop",
+      "at": 686
+    },
+    {
+      "type": "drop",
+      "at": 700
+    },
+    {
+      "type": "drop",
+      "at": 714
+    },
+    {
+      "type": "drop",
+      "at": 728
+    },
+    {
+      "type": "type",
+      "at": 784,
+      "len": 70
+    },
+    {
+      "type": "click",
+      "at": 860
+    },
+    {
+      "type": "send",
+      "at": 866
+    },
+    {
+      "type": "tail",
+      "at": 872
+    }
+  ]
+}

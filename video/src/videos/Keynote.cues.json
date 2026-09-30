@@ -1,0 +1,150 @@
+{
+  "id": "Keynote",
+  "durationInFrames": 900,
+  "bpm": 120,
+  "gridOffset": 0,
+  "style": "soft",
+  "sections": [
+    {
+      "name": "intro",
+      "from": 0,
+      "to": 120
+    },
+    {
+      "name": "lite",
+      "from": 120,
+      "to": 260
+    },
+    {
+      "name": "groove",
+      "from": 260,
+      "to": 720
+    },
+    {
+      "name": "finale",
+      "from": 720,
+      "to": 780
+    },
+    {
+      "name": "outro",
+      "from": 780,
+      "to": 900
+    }
+  ],
+  "sfx": [
+    {
+      "type": "swell",
+      "at": 0,
+      "len": 20
+    },
+    {
+      "type": "pop",
+      "at": 12
+    },
+    {
+      "type": "swoosh",
+      "at": 100
+    },
+    {
+      "type": "whoosh",
+      "at": 112
+    },
+    {
+      "type": "unlock",
+      "at": 150
+    },
+    {
+      "type": "swoosh",
+      "at": 152
+    },
+    {
+      "type": "swoosh",
+      "at": 258
+    },
+    {
+      "type": "pop",
+      "at": 270
+    },
+    {
+      "type": "counter",
+      "at": 274,
+      "len": 36
+    },
+    {
+      "type": "pop",
+      "at": 284
+    },
+    {
+      "type": "pop",
+      "at": 292
+    },
+    {
+      "type": "pop",
+      "at": 304
+    },
+    {
+      "type": "pop",
+      "at": 312
+    },
+    {
+      "type": "pop",
+      "at": 320
+    },
+    {
+      "type": "pop",
+      "at": 330
+    },
+    {
+      "type": "pop",
+      "at": 336
+    },
+    {
+      "type": "swoosh",
+      "at": 518
+    },
+    {
+      "type": "tick",
+      "at": 536
+    },
+    {
+      "type": "tick",
+      "at": 547
+    },
+    {
+      "type": "tick",
+      "at": 558
+    },
+    {
+      "type": "tick",
+      "at": 569
+    },
+    {
+      "type": "tick",
+      "at": 580
+    },
+    {
+      "type": "tick",
+      "at": 591
+    },
+    {
+      "type": "tick",
+      "at": 602
+    },
+    {
+      "type": "tick",
+      "at": 613
+    },
+    {
+      "type": "tick",
+      "at": 624
+    },
+    {
+      "type": "swoosh",
+      "at": 714
+    },
+    {
+      "type": "tail",
+      "at": 780
+    }
+  ]
+}

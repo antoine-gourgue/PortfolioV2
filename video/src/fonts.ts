@@ -1,6 +1,8 @@
 import '@fontsource-variable/inter'
 import '@fontsource-variable/inter-tight'
 import '@fontsource-variable/jetbrains-mono'
+// Same icon font as the portfolio's apps (Maps pins, toolbars)
+import 'framework7-icons/css/framework7-icons.css'
 import { continueRender, delayRender } from 'remotion'
 
 // @font-face rules only download a face once text uses it, which can be
@@ -13,6 +15,7 @@ const faces = [
   '300 32px "Inter Tight Variable"',
   '400 32px "JetBrains Mono Variable"',
   '700 32px "JetBrains Mono Variable"',
+  '32px "Framework7 Icons"',
 ]
 
 if (typeof document !== 'undefined') {

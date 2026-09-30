@@ -393,6 +393,53 @@ def sfx_type(length, seed=3):
     return pan(out * 0.35, 0.1)
 
 
+def sfx_tap():
+    n = int(0.06 * SR)
+    x = sine(1300, n) * exp_env(n, 0.006) * 0.5
+    x += filt(noise(n), "bandpass", [2000, 6000]) * exp_env(n, 0.002) * 0.3
+    return pan(x, 0)
+
+
+def sfx_unlock():
+    n = int(0.2 * SR)
+    out = np.zeros(n)
+    for off, f0 in ((0, 1600), (0.07, 2200)):
+        s = int(off * SR)
+        m = int(0.04 * SR)
+        out[s : s + m] += sine(f0, m) * exp_env(m, 0.008)
+    return pan(out * 0.45, 0)
+
+
+def sfx_drop():
+    # Map pin landing: short downward blip with a soft thud
+    n = int(0.18 * SR)
+    f = 700 * np.exp(-np.arange(n) / (0.05 * SR)) + 220
+    x = sine(f, n) * exp_env(n, 0.05) * 0.6
+    x += sine(90, n) * exp_env(n, 0.04) * 0.5
+    return pan(x, 0)
+
+
+def sfx_send():
+    # Mail "sent": a quick rising swoosh
+    n = int(0.5 * SR)
+    t = np.linspace(0, 1, n)
+    x = sweep(filt(noise(n), "highpass", 400), "lowpass", 900 + 7000 * t**1.5)
+    x *= np.sin(np.pi * t) ** 2
+    return pan(x * 0.6, np.linspace(-0.4, 0.6, n))
+
+
+def sfx_ring():
+    # Marimba-like ringtone phrase, two short bursts
+    n = int(0.9 * SR)
+    out = np.zeros(n)
+    for k, m in enumerate((76, 79, 84, 79, 76, 79)):
+        s = int(k * 0.12 * SR)
+        m_n = int(0.5 * SR)
+        note = bell(midi(m), m_n)
+        out[s : s + m_n] += note[: n - s]
+    return pan(out * 0.4, 0)
+
+
 def sfx_tail():
     n = int(5 * SR)
     out = np.zeros((n, 2))
@@ -400,6 +447,36 @@ def sfx_tail():
         out += supersaw(midi(m), n, voices=3, cutoff=1800) * 0.12
     out *= env_adsr(n, 0.05, 0.5, 0.6, 3.5, sustain_len=0.5)[:, None]
     return reverb(out, 4.0, 5000, 0.5)
+
+
+# Relative levels under the music. Whooshes ("slides") sit lowest: they
+# should be felt more than heard.
+SFX_LEVEL = {
+    "whoosh": 0.32,
+    "swoosh": 0.3,
+    "send": 0.35,
+    "impact": 0.5,
+    "hit": 0.45,
+    "glitch": 0.4,
+    "riser": 0.45,
+    "swell": 0.55,
+    "sub": 0.55,
+    "pop": 0.5,
+    "tick": 0.45,
+    "tap": 0.6,
+    "unlock": 0.6,
+    "drop": 0.6,
+    "scan": 0.5,
+    "counter": 0.5,
+    "notify": 0.7,
+    "ring": 0.6,
+    "click": 0.6,
+    "type": 0.45,
+    "chime": 0.8,
+    "tail": 0.9,
+    "braam": 0.8,
+    "tom": 0.8,
+}
 
 
 def place_sfx(mix, cue, bus="sfx"):
@@ -424,10 +501,15 @@ def place_sfx(mix, cue, bus="sfx"):
         "click": lambda: sfx_click(),
         "type": lambda: sfx_type(length, cue["at"]),
         "tail": lambda: sfx_tail(),
+        "tap": lambda: sfx_tap(),
+        "unlock": lambda: sfx_unlock(),
+        "drop": lambda: sfx_drop(),
+        "send": lambda: sfx_send(),
+        "ring": lambda: sfx_ring(),
         "braam": lambda: braam(midi(cue.get("note", 33)), int(4 * SR)),
         "tom": lambda: pan(tom(), 0),
     }
-    sig = table[kind]()
+    sig = table[kind]() * SFX_LEVEL.get(kind, 0.6)
     # Whooshes and risers are cued at their peak, so they start before it
     lead = {"whoosh": 0.8 * 0.55, "swoosh": 0.45 * 0.55}.get(kind, 0)
     if kind in ("riser", "swell"):
@@ -468,54 +550,91 @@ def sidechain(mix, kick_frames, depth=0.6, release=0.16):
 # Arrangements
 
 
-def arrange_pop(sheet, mix):
+# What plays in each named section of a pop-style cue sheet
+POP_LAYERS = {
+    "intro": {"pad", "arp"},
+    "groove": {"pad", "kick", "clap", "hat", "bass", "arp"},
+    "lite": {"pad", "kick2", "hat", "bass", "arp"},
+    "break": {"pad", "kick1", "hat", "arp"},
+    "groove2": {"pad", "kick", "clap", "ohat", "bass", "arp"},
+    "build": {"pad", "kick", "roll", "arp"},
+    "finale": {"pad", "kick", "hat", "bass", "arp"},
+    "outro": {"pad", "arp"},
+}
+
+
+def arrange_pop(sheet, mix, soft=False):
     # vi - IV - I - V in C: bright but not saccharine
     prog = [(57, [57, 60, 64, 71]), (53, [53, 57, 60, 67]), (48, [55, 60, 64, 67]), (55, [55, 59, 62, 69])]
     dark = [(57, [57, 60, 64, 67]), (53, [53, 57, 60, 64]), (50, [50, 57, 62, 65]), (52, [52, 56, 59, 64])]
+    # The outro sits on the tonic so the video resolves instead of stopping
+    tonic = (48, [48, 55, 60, 64, 67])
     beat_len = 60 / sheet["bpm"]
     kicks = []
+    outro_played = False
     for f, bar, b, sec in beats(sheet):
+        if sec is None:
+            continue
         at = fs(f)
-        chords = dark if sec == "break" else prog
-        root, chord = chords[bar % 4]
-        # First two outro bars keep the groove under the end card
-        early_outro = sec == "outro" and bar - sheet_bar(sheet, section_start(sheet, "outro")) < 2
-        if b == 0 and sec is not None:
+        layers = POP_LAYERS.get(sec, POP_LAYERS["groove"])
+        root, chord = tonic if sec == "outro" else (dark if sec == "break" else prog)[bar % 4]
+        # The outro is one long chord from its first beat, whatever the bar
+        outro_start = sec == "outro" and not outro_played
+        if (b == 0 and "pad" in layers and sec != "outro") or outro_start:
             n = int(beat_len * 4 * SR)
-            cut = {"intro": 900, "break": 1400, "outro": 2200}.get(sec, 3000)
+            if sec == "outro":
+                outro_played = True
+                n = mix.n - at
+            cut = {"intro": 900, "break": 1400, "outro": 2000, "lite": 2200}.get(sec, 3000)
             pad = np.zeros((n, 2))
             for m in chord:
                 pad += supersaw(midi(m), n, cutoff=cut) * 0.1
-            pad *= env_adsr(n, 0.15 if sec == "intro" else 0.03, 0.3, 0.8, 0.4)[:, None]
-            mix.add("pad", pad, at, gain=1.0 if sec != "outro" else 1.2)
-        if sec in ("groove", "groove2", "build") or (sec == "break" and b == 0) or early_outro:
-            if sec != "build" or b < 3:
-                mix.add("drums", kick(), at, gain=0.95)
-                kicks.append(f)
-        if sec in ("groove", "groove2") and b in (1, 3):
-            mix.add("drums", clap(), at, gain=0.55, p=0.05)
-        if sec in ("groove", "groove2", "break") or early_outro:
+            if sec == "outro":
+                # Held at full level under the closing card, gone by the end
+                fade = min(n, int(2.5 * SR))
+                env = np.ones(n)
+                env[-fade:] = np.linspace(1, 0, fade) ** 1.5
+                env[: int(0.03 * SR)] = np.linspace(0, 1, int(0.03 * SR))
+                pad *= env[:, None]
+            else:
+                pad *= env_adsr(n, 0.15 if sec == "intro" else 0.03, 0.3, 0.8, 0.4)[:, None]
+            mix.add("pad", pad, at, gain=2.4 if sec == "outro" else 1.0)
+        kick_gain = 0.6 if soft else 0.95
+        if (
+            "kick" in layers and (sec != "build" or b < 3)
+            or "kick2" in layers and b in (0, 2)
+            or "kick1" in layers and b == 0
+        ):
+            mix.add("drums", kick(), at, gain=kick_gain)
+            kicks.append(f)
+        if "clap" in layers and b in (1, 3) and not (soft and sec == "groove"):
+            mix.add("drums", clap(), at, gain=0.5, p=0.05)
+        if "hat" in layers or "ohat" in layers:
             off = at + int(beat_len / 2 * SR)
-            mix.add("drums", hat(open_=(sec == "groove2")), off, gain=0.35, p=0.25)
-        if sec in ("groove", "groove2") or early_outro:
+            mix.add("drums", hat(open_="ohat" in layers), off, gain=0.3, p=0.25)
+        if "bass" in layers:
             for e in range(2):
                 n = int(beat_len / 2 * SR)
-                mix.add("bass", bass_note(midi(root - 24), n, 700 + 500 * e), at + e * n, gain=0.55)
-        if sec in ("intro", "groove", "break", "groove2", "build"):
+                mix.add("bass", bass_note(midi(root - 24), n, 700 + 500 * e), at + e * n, gain=0.5)
+        if "arp" in layers:
             pattern = [chord[0], chord[2], chord[1] + 12, chord[3]]
             for s16 in range(4):
                 n = int(beat_len / 4 * SR)
                 note = pattern[(b * 4 + s16) % 4] + (12 if sec == "groove2" else 0)
-                bright = {"intro": 1200, "break": 2500}.get(sec, 4500)
+                bright = {"intro": 1200, "break": 2500, "lite": 3000, "outro": 1500}.get(sec, 4500)
                 mix.add("arp", pluck(midi(note), n * 2, bright), at + s16 * n, gain=0.28, p=0.3 * ((s16 % 2) * 2 - 1))
-        if sec == "build":
-            # 16ths snare roll accelerating into the last drop
+        if "roll" in layers:
+            # Snare roll accelerating into the drop
             subdiv = 4 if b < 2 else 8
             for k in range(subdiv):
                 pos = at + int(k * beat_len / subdiv * SR)
-                g = 0.25 + 0.5 * ((b * subdiv + k) / 32)
+                g = 0.2 + 0.4 * ((b * subdiv + k) / 32)
                 mix.add("drums", snare(), pos, gain=g)
     return kicks
+
+
+def arrange_soft(sheet, mix):
+    return arrange_pop(sheet, mix, soft=True)
 
 
 def section_start(sheet, name):
@@ -621,7 +740,12 @@ def arrange_tech(sheet, mix):
     return kicks
 
 
-ARRANGERS = {"pop": arrange_pop, "trailer": arrange_trailer, "tech": arrange_tech}
+ARRANGERS = {
+    "pop": arrange_pop,
+    "soft": arrange_soft,
+    "trailer": arrange_trailer,
+    "tech": arrange_tech,
+}
 
 
 def render(video_id):
@@ -640,7 +764,7 @@ def render(video_id):
         + mix.bus("drums")
     )
     music = reverb(music, 1.6, 7000, 0.12)
-    out = music * 0.85 + mix.bus("sfx")
+    out = music * 0.9 + mix.bus("sfx") * 0.8
 
     # Gentle bus glue then a soft clipper instead of a hard limiter
     out = np.tanh(out * 1.1) / np.tanh(1.1)
@@ -648,7 +772,10 @@ def render(video_id):
     out = out / peak * 0.89
     fade = int(0.02 * SR)
     out[:fade] *= np.linspace(0, 1, fade)[:, None]
-    out[-fade:] *= np.linspace(1, 0, fade)[:, None]
+    # Last second and a half fades out: the closing card should not end on
+    # a cut-off sound
+    tail = int(1.5 * SR)
+    out[-tail:] *= (np.linspace(1, 0, tail) ** 2)[:, None]
 
     dest = ROOT / "public" / "audio" / f"{video_id}.wav"
     dest.parent.mkdir(parents=True, exist_ok=True)
