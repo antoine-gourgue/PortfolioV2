@@ -24,7 +24,7 @@ npm run still -- AntoineOS 120   # single frames into out/stills/ for review
 ```
 
 On a machine without a GPU the WebGL shaders run on SwiftShader; renders take
-roughly 10–20 minutes per video on 4 cores. `REMOTION_BROWSER` can point to a
+roughly 30–40 minutes per video on 4 cores. `REMOTION_BROWSER` can point to a
 Chrome headless shell if Remotion should not download its own.
 
 ## How it is organised
