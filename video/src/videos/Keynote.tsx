@@ -1166,14 +1166,20 @@ const PhoneScene: React.FC = () => {
           opacity: rise * (1 - exit),
         }}
       />
-      <AbsoluteFill style={{ perspective: 2200, perspectiveOrigin: '50% 55%' }}>
+      {/* Opacity on the preserve-3d element itself would flatten the phone */}
+      <AbsoluteFill
+        style={{
+          perspective: 2200,
+          perspectiveOrigin: '50% 55%',
+          opacity: Math.min(1, rise * 1.5),
+        }}
+      >
         <div
           style={{
             position: 'absolute',
             left: 540 - PHONE_W / 2,
             top: 360,
             transformStyle: 'preserve-3d',
-            opacity: Math.min(1, rise * 1.5),
             transform: `translateY(${(1 - rise) * 520 + exit * 900}px) rotateX(${rx}deg) rotateY(${ry}deg) rotateZ(${rz}deg)`,
           }}
         >
