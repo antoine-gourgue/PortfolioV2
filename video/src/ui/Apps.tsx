@@ -367,125 +367,6 @@ export const Phone: React.FC<{
   )
 }
 
-export type SpotlightResult = {
-  title: string
-  subtitle: string
-  icon: React.ReactNode
-}
-
-/**
- * Spotlight as Spotlight.vue renders it: frosted bar, grouped results, the
- * selected row in system blue.
- */
-export const SpotlightPanel: React.FC<{
-  query: string
-  typeAt: number
-  results: SpotlightResult[]
-  resultsAt: number
-  selected?: number
-  width?: number
-}> = ({ query, typeAt, results, resultsAt, selected = 0, width = 900 }) => {
-  const f = useCurrentFrame()
-  const typed = useTyped(query, typeAt, 20)
-  const reveal = interpolate(f, [resultsAt, resultsAt + 10], [0, 1], {
-    ...clamp,
-    easing: easeOut,
-  })
-  return (
-    <div
-      style={{
-        width,
-        borderRadius: 28,
-        overflow: 'hidden',
-        background: 'rgba(246,246,248,0.9)',
-        boxShadow:
-          '0 40px 120px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(255,255,255,0.7)',
-        fontFamily: fonts.body,
-        color: ui.label,
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 22,
-          padding: '26px 30px',
-          fontSize: 44,
-        }}
-      >
-        <Icon name="search" size={40} color={ui.secondary} />
-        <span>
-          {typed.text}
-          <Caret on={typed.caret} color={ui.label} />
-        </span>
-        {!typed.started && (
-          <span style={{ color: 'rgba(60,60,67,0.35)', marginLeft: -12 }}>
-            Recherche Spotlight
-          </span>
-        )}
-      </div>
-      <div
-        style={{
-          maxHeight: reveal * 520,
-          overflow: 'hidden',
-          borderTop: reveal > 0 ? `1px solid ${ui.separator}` : undefined,
-        }}
-      >
-        <div
-          style={{
-            padding: '14px 30px 6px',
-            fontSize: 20,
-            fontWeight: 700,
-            color: ui.secondary,
-          }}
-        >
-          Meilleur résultat
-        </div>
-        {results.map((r, i) => {
-          const on = i === selected
-          const rowIn = interpolate(
-            f,
-            [resultsAt + i * 3, resultsAt + i * 3 + 8],
-            [0, 1],
-            clamp
-          )
-          return (
-            <div
-              key={r.title}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 20,
-                margin: '4px 14px',
-                padding: '14px 16px',
-                borderRadius: 14,
-                background: on ? ui.blue : 'transparent',
-                color: on ? '#fff' : ui.label,
-                opacity: rowIn,
-                transform: `translateY(${(1 - rowIn) * 10}px)`,
-              }}
-            >
-              {r.icon}
-              <div style={{ minWidth: 0 }}>
-                <div style={{ fontSize: 30, fontWeight: 600 }}>{r.title}</div>
-                <div
-                  style={{
-                    fontSize: 23,
-                    color: on ? 'rgba(255,255,255,0.8)' : ui.secondary,
-                  }}
-                >
-                  {r.subtitle}
-                </div>
-              </div>
-            </div>
-          )
-        })}
-        <div style={{ height: 14 }} />
-      </div>
-    </div>
-  )
-}
-
 /**
  * The portfolio's Calendar app ("Mon parcours"). `insertAt` slides a new
  * event in at the top and pushes the career down, the CDI to come.
@@ -965,6 +846,39 @@ export const MapView: React.FC<{
  * Contact app compose sheet (AppContact.vue): fields fill in, the cursor
  * presses "Envoyer le message", the sheet flies off.
  */
+export const PdfIcon: React.FC<{ size: number }> = ({ size }) => (
+  <div
+    style={{
+      width: size * 0.78,
+      height: size,
+      position: 'relative',
+      borderRadius: size * 0.06,
+      background: '#fff',
+      boxShadow:
+        '0 6px 16px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(0,0,0,0.08)',
+      flexShrink: 0,
+    }}
+  >
+    <div
+      style={{
+        position: 'absolute',
+        left: '50%',
+        top: '52%',
+        transform: 'translate(-50%, -50%)',
+        padding: `${size * 0.03}px ${size * 0.07}px`,
+        borderRadius: size * 0.04,
+        background: '#E5484D',
+        color: '#fff',
+        fontFamily: fonts.body,
+        fontWeight: 800,
+        fontSize: size * 0.17,
+      }}
+    >
+      PDF
+    </div>
+  </div>
+)
+
 export const MailCompose: React.FC<{
   width: number
   height: number
@@ -973,11 +887,33 @@ export const MailCompose: React.FC<{
   typeAt: number
   sendAt: number
   style?: React.CSSProperties
-}> = ({ width, height, subject, body, typeAt, sendAt, style }) => {
+  /** Recipient chip label; defaults to Antoine (a recruiter writing). */
+  to?: string
+  /** A file chip that lands in the body at `at`. */
+  attachment?: { name: string; at: number }
+  cps?: number
+}> = ({
+  width,
+  height,
+  subject,
+  body,
+  typeAt,
+  sendAt,
+  style,
+  to = `${person.firstName} ${person.lastName}`,
+  attachment,
+  cps = 34,
+}) => {
   const f = useCurrentFrame()
   const subj = useTyped(subject, typeAt, 26)
   const bodyStart = typeAt + Math.ceil((subject.length / 26) * 30) + 6
-  const txt = useTyped(body, bodyStart, 34)
+  const txt = useTyped(body, bodyStart, cps)
+  const attach = attachment
+    ? interpolate(f, [attachment.at, attachment.at + 10], [0, 1], {
+        ...clamp,
+        easing: easeOut,
+      })
+    : 0
   const pressed = f >= sendAt && f < sendAt + 5
   const fly = interpolate(f, [sendAt + 5, sendAt + 20], [0, 1], {
     ...clamp,
@@ -1028,7 +964,7 @@ export const MailCompose: React.FC<{
             }}
           >
             <Icon name="person_crop_circle_fill" size={24} color={ui.blue} />
-            {person.firstName} {person.lastName}
+            {to}
           </span>
         )}
         {row(
@@ -1050,6 +986,32 @@ export const MailCompose: React.FC<{
           {txt.text}
           {subj.done && !txt.done && <Caret on={txt.caret} />}
         </div>
+        {attachment && attach > 0 && (
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 14,
+              padding: '12px 20px 12px 14px',
+              borderRadius: 14,
+              background: 'rgba(0,0,0,0.04)',
+              border: `1px solid ${ui.separator}`,
+              opacity: attach,
+              transform: `scale(${0.8 + attach * 0.2})`,
+              transformOrigin: 'left center',
+            }}
+          >
+            <PdfIcon size={44} />
+            <div>
+              <div style={{ fontSize: 21, fontWeight: 600 }}>
+                {attachment.name}
+              </div>
+              <div style={{ fontSize: 17, color: ui.secondary }}>
+                PDF · 1 page
+              </div>
+            </div>
+          </div>
+        )}
         <div
           style={{
             position: 'absolute',
@@ -1069,228 +1031,6 @@ export const MailCompose: React.FC<{
         </div>
       </div>
     </LightWindow>
-  )
-}
-
-export type Bubble = {
-  from: 'me' | 'them'
-  text: string
-  at: number
-  /** Renders an iMessage rich link preview instead of plain text. */
-  link?: { image: string; title: string; domain: string }
-}
-
-/**
- * iMessage thread (the portfolio's Messages app). Each bubble is preceded by
- * a typing indicator on the sender's side; the thread scrolls by the real
- * height of what is on screen, so long answers push the conversation up.
- */
-export const MessagesThread: React.FC<{
-  bubbles: Bubble[]
-  contact: string
-  width: number
-  height: number
-}> = ({ bubbles, contact, width, height }) => {
-  const f = useCurrentFrame()
-  const { fps } = useVideoConfig()
-  const font = width * 0.05
-  const padY = width * 0.024
-  const gap = width * 0.022
-  const charsPerLine = (width * 0.76 - width * 0.072) / (font * 0.5)
-  const bubbleH = (b: Bubble) =>
-    b.link
-      ? width * 0.62 + gap
-      : Math.ceil(b.text.length / charsPerLine) * font * 1.3 + padY * 2 + gap
-  const typingH = font * 1.3 + padY * 2 + gap
-  const top = height * 0.15
-  const inputH = height * 0.085
-  const avail = height - top - inputH - gap
-  const contentAt = (t: number) =>
-    bubbles.filter((b) => t >= b.at).reduce((h, b) => h + bubbleH(b), 0) +
-    (bubbles.some((b) => t >= b.at - 18 && t < b.at) ? typingH : 0)
-  // Box-filtered target: a 10-frame glide instead of a jump
-  let scroll = 0
-  for (let k = 0; k < 10; k++) scroll += Math.max(0, contentAt(f - k) - avail)
-  scroll /= 10
-  const visible = bubbles.filter((b) => f >= b.at)
-  const typing = bubbles.find((b) => f >= b.at - 18 && f < b.at)
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        inset: 0,
-        background: '#fff',
-        fontFamily: fonts.body,
-        width,
-        height,
-        overflow: 'hidden',
-      }}
-    >
-      <div
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          top: top,
-          padding: `0 ${width * 0.04}px`,
-          display: 'flex',
-          flexDirection: 'column',
-          gap,
-          transform: `translateY(${-scroll}px)`,
-        }}
-      >
-        {visible.map((b, i) => {
-          const s = spring({
-            frame: f - b.at,
-            fps,
-            config: { damping: 15, stiffness: 180 },
-          })
-          const me = b.from === 'me'
-          const common: React.CSSProperties = {
-            alignSelf: me ? 'flex-end' : 'flex-start',
-            opacity: s,
-            transform: `scale(${0.7 + s * 0.3})`,
-            transformOrigin: me ? 'bottom right' : 'bottom left',
-          }
-          if (b.link) {
-            return (
-              <div
-                key={i}
-                style={{
-                  ...common,
-                  width: width * 0.7,
-                  borderRadius: width * 0.045,
-                  overflow: 'hidden',
-                  background: '#e9e9eb',
-                }}
-              >
-                <Img
-                  src={b.link.image}
-                  style={{
-                    width: '100%',
-                    height: width * 0.4,
-                    objectFit: 'cover',
-                    display: 'block',
-                  }}
-                />
-                <div
-                  style={{ padding: `${width * 0.025}px ${width * 0.035}px` }}
-                >
-                  <div
-                    style={{
-                      fontSize: font * 0.85,
-                      fontWeight: 700,
-                      color: ui.label,
-                    }}
-                  >
-                    {b.link.title}
-                  </div>
-                  <div style={{ fontSize: font * 0.75, color: ui.secondary }}>
-                    {b.link.domain}
-                  </div>
-                </div>
-              </div>
-            )
-          }
-          return (
-            <div
-              key={i}
-              style={{
-                ...common,
-                maxWidth: '76%',
-                padding: `${padY}px ${width * 0.036}px`,
-                borderRadius: width * 0.05,
-                background: me ? ui.blue : '#e9e9eb',
-                color: me ? '#fff' : ui.label,
-                fontSize: font,
-                lineHeight: 1.3,
-              }}
-            >
-              {b.text}
-            </div>
-          )
-        })}
-        {typing && (
-          <div
-            style={{
-              alignSelf: typing.from === 'me' ? 'flex-end' : 'flex-start',
-              padding: `${width * 0.03}px ${width * 0.04}px`,
-              borderRadius: width * 0.05,
-              background: typing.from === 'me' ? ui.blue : '#e9e9eb',
-              display: 'flex',
-              gap: width * 0.012,
-            }}
-          >
-            {[0, 1, 2].map((k) => (
-              <div
-                key={k}
-                style={{
-                  width: width * 0.018,
-                  height: width * 0.018,
-                  borderRadius: '50%',
-                  background: typing.from === 'me' ? '#fff' : '#8e8e93',
-                  opacity: 0.4 + 0.6 * Math.max(0, Math.sin((f / 4 - k) * 1.2)),
-                }}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-      <div
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          top: 0,
-          height: top - gap,
-          paddingTop: height * 0.055,
-          boxSizing: 'border-box',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 4,
-          background: 'rgba(249,249,249,0.97)',
-          borderBottom: `1px solid ${ui.separator}`,
-        }}
-      >
-        <AGAppIcon size={width * 0.12} />
-        <div style={{ fontSize: width * 0.032, color: ui.label }}>
-          {contact}
-        </div>
-      </div>
-      <div
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
-          height: inputH,
-          padding: `${width * 0.02}px ${width * 0.04}px`,
-          boxSizing: 'border-box',
-          background: 'rgba(249,249,249,0.97)',
-          display: 'flex',
-          alignItems: 'flex-start',
-          gap: width * 0.03,
-        }}
-      >
-        <Icon name="plus_circle_fill" size={width * 0.075} color="#c7c7cc" />
-        <div
-          style={{
-            flex: 1,
-            height: width * 0.075,
-            borderRadius: width * 0.04,
-            border: '1.5px solid #d1d1d6',
-            fontSize: width * 0.035,
-            color: '#c7c7cc',
-            display: 'flex',
-            alignItems: 'center',
-            paddingLeft: width * 0.03,
-          }}
-        >
-          iMessage
-        </div>
-      </div>
-    </div>
   )
 }
 

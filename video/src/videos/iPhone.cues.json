@@ -1,6 +1,6 @@
 {
   "id": "iPhone",
-  "durationInFrames": 960,
+  "durationInFrames": 1080,
   "bpm": 120,
   "gridOffset": 0,
   "style": "soft",
@@ -13,22 +13,22 @@
     {
       "name": "lite",
       "from": 120,
-      "to": 600
+      "to": 480
     },
     {
       "name": "groove",
-      "from": 600,
-      "to": 720
+      "from": 480,
+      "to": 840
     },
     {
       "name": "finale",
-      "from": 720,
-      "to": 780
+      "from": 840,
+      "to": 900
     },
     {
       "name": "outro",
-      "from": 780,
-      "to": 960
+      "from": 900,
+      "to": 1080
     }
   ],
   "sfx": [
@@ -38,75 +38,123 @@
     },
     {
       "type": "tap",
-      "at": 68
+      "at": 60
     },
     {
       "type": "unlock",
-      "at": 76
+      "at": 64
     },
     {
-      "type": "send",
-      "at": 136
+      "type": "tap",
+      "at": 100
     },
     {
-      "type": "pop",
-      "at": 180
+      "type": "swoosh",
+      "at": 104
     },
     {
-      "type": "send",
-      "at": 220
+      "type": "tap",
+      "at": 150
     },
     {
-      "type": "pop",
+      "type": "swoosh",
+      "at": 154
+    },
+    {
+      "type": "swoosh",
+      "at": 232
+    },
+    {
+      "type": "tap",
       "at": 258
     },
     {
-      "type": "send",
-      "at": 314
+      "type": "swoosh",
+      "at": 262
+    },
+    {
+      "type": "swoosh",
+      "at": 330
+    },
+    {
+      "type": "tap",
+      "at": 350
+    },
+    {
+      "type": "swoosh",
+      "at": 354
+    },
+    {
+      "type": "tap",
+      "at": 390
+    },
+    {
+      "type": "swoosh",
+      "at": 394
+    },
+    {
+      "type": "swoosh",
+      "at": 490
+    },
+    {
+      "type": "tap",
+      "at": 512
     },
     {
       "type": "pop",
-      "at": 352
+      "at": 516
     },
     {
-      "type": "send",
-      "at": 410
-    },
-    {
-      "type": "pop",
-      "at": 444
-    },
-    {
-      "type": "send",
-      "at": 500
+      "type": "tap",
+      "at": 552
     },
     {
       "type": "pop",
-      "at": 534
+      "at": 556
+    },
+    {
+      "type": "swoosh",
+      "at": 640
+    },
+    {
+      "type": "tap",
+      "at": 662
+    },
+    {
+      "type": "swoosh",
+      "at": 666
+    },
+    {
+      "type": "type",
+      "at": 690,
+      "len": 20
+    },
+    {
+      "type": "type",
+      "at": 716,
+      "len": 20
+    },
+    {
+      "type": "type",
+      "at": 742,
+      "len": 30
+    },
+    {
+      "type": "type",
+      "at": 782,
+      "len": 55
+    },
+    {
+      "type": "tap",
+      "at": 864
     },
     {
       "type": "send",
-      "at": 576
-    },
-    {
-      "type": "pop",
-      "at": 610
-    },
-    {
-      "type": "ring",
-      "at": 680
-    },
-    {
-      "type": "ring",
-      "at": 710
-    },
-    {
-      "type": "click",
-      "at": 740
+      "at": 868
     },
     {
       "type": "tail",
-      "at": 772
+      "at": 892
     }
   ]
 }

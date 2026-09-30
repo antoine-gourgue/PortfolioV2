@@ -8,14 +8,14 @@ the visuals.
 | Composition     | Concept                                                                             | Length |
 | --------------- | ----------------------------------------------------------------------------------- | ------ |
 | `AntoineOS`     | The portfolio is an OS: boot, desktop, Mission Control, iPhone tour, projects, CDI  | 63 s   |
-| `Spotlight`     | A recruiter's search: Spotlight, About card, Finder + Quick Look, terminal, Maps    | 36 s   |
-| `iPhone`        | iOS only: lock-screen notification, an iMessage Q&A with a recruiter, incoming call | 32 s   |
-| `Keynote`       | Apple product page: launch hero, MacBook + iPhone, bento highlights, tech specs     | 30 s   |
+| `Keynote`       | An Apple event: black stage, Magic Move project slides, stats, "One more thing…"    | 43 s   |
+| `AppStore`      | Projects opened from the portfolio's App Store, job-search email received on iPhone | 41 s   |
+| `iPhone`        | The portfolio's own iOS apps: notification, App Store, À propos, Siri, Contact form | 36 s   |
 | `Trailer`       | Dark cinematic trailer: volumetric light, big numbers, particle portrait            | 38 s   |
 | `CodeToReality` | Typed code explodes into particles and rebuilds as real apps, then deploys          | 38 s   |
 
 The OS-style videos rebuild the portfolio's own apps (`src/ui/Apps.tsx`:
-Spotlight, Calendar, Maps, Mail, Messages, notifications) and reuse shared
+Calendar, Maps, Mail, notifications, iPhone, cursor and taps) and reuse shared
 scenes (`src/scenes/OsScenes.tsx`), so they stay faithful to the live site.
 
 ## Render

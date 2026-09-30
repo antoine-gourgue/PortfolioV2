@@ -617,7 +617,7 @@ const AI: React.FC = () => {
   )
 }
 
-const Digitaleo: React.FC = () => {
+export const Digitaleo: React.FC = () => {
   const f = useCurrentFrame()
   const win = useSpring(50, { damping: 18, stiffness: 80 })
   const orange = '#f26a36'

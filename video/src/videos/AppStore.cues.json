@@ -1,0 +1,228 @@
+{
+  "id": "AppStore",
+  "durationInFrames": 1230,
+  "bpm": 120,
+  "gridOffset": 0,
+  "style": "soft",
+  "sections": [
+    {
+      "name": "intro",
+      "from": 0,
+      "to": 120
+    },
+    {
+      "name": "lite",
+      "from": 120,
+      "to": 180
+    },
+    {
+      "name": "groove",
+      "from": 180,
+      "to": 660
+    },
+    {
+      "name": "lite",
+      "from": 660,
+      "to": 840
+    },
+    {
+      "name": "groove2",
+      "from": 840,
+      "to": 1080
+    },
+    {
+      "name": "outro",
+      "from": 1080,
+      "to": 1230
+    }
+  ],
+  "sfx": [
+    {
+      "type": "pop",
+      "at": 8
+    },
+    {
+      "type": "click",
+      "at": 58
+    },
+    {
+      "type": "swoosh",
+      "at": 72
+    },
+    {
+      "type": "click",
+      "at": 128
+    },
+    {
+      "type": "pop",
+      "at": 156
+    },
+    {
+      "type": "click",
+      "at": 164
+    },
+    {
+      "type": "whoosh",
+      "at": 180
+    },
+    {
+      "type": "counter",
+      "at": 190,
+      "len": 42
+    },
+    {
+      "type": "pop",
+      "at": 272
+    },
+    {
+      "type": "pop",
+      "at": 288
+    },
+    {
+      "type": "click",
+      "at": 348
+    },
+    {
+      "type": "click",
+      "at": 371
+    },
+    {
+      "type": "pop",
+      "at": 388
+    },
+    {
+      "type": "click",
+      "at": 392
+    },
+    {
+      "type": "whoosh",
+      "at": 400
+    },
+    {
+      "type": "pop",
+      "at": 404
+    },
+    {
+      "type": "pop",
+      "at": 412
+    },
+    {
+      "type": "click",
+      "at": 458
+    },
+    {
+      "type": "click",
+      "at": 481
+    },
+    {
+      "type": "pop",
+      "at": 498
+    },
+    {
+      "type": "click",
+      "at": 502
+    },
+    {
+      "type": "whoosh",
+      "at": 510
+    },
+    {
+      "type": "pop",
+      "at": 514
+    },
+    {
+      "type": "pop",
+      "at": 522
+    },
+    {
+      "type": "click",
+      "at": 568
+    },
+    {
+      "type": "click",
+      "at": 591
+    },
+    {
+      "type": "pop",
+      "at": 608
+    },
+    {
+      "type": "click",
+      "at": 612
+    },
+    {
+      "type": "whoosh",
+      "at": 620
+    },
+    {
+      "type": "pop",
+      "at": 624
+    },
+    {
+      "type": "pop",
+      "at": 632
+    },
+    {
+      "type": "whoosh",
+      "at": 664
+    },
+    {
+      "type": "pop",
+      "at": 690
+    },
+    {
+      "type": "tap",
+      "at": 712
+    },
+    {
+      "type": "tap",
+      "at": 726
+    },
+    {
+      "type": "whoosh",
+      "at": 732
+    },
+    {
+      "type": "pop",
+      "at": 760
+    },
+    {
+      "type": "type",
+      "at": 848,
+      "len": 34
+    },
+    {
+      "type": "type",
+      "at": 888,
+      "len": 90
+    },
+    {
+      "type": "swoosh",
+      "at": 960
+    },
+    {
+      "type": "drop",
+      "at": 986
+    },
+    {
+      "type": "click",
+      "at": 1002
+    },
+    {
+      "type": "send",
+      "at": 1006
+    },
+    {
+      "type": "whoosh",
+      "at": 1020
+    },
+    {
+      "type": "notify",
+      "at": 1028
+    },
+    {
+      "type": "tail",
+      "at": 1082
+    }
+  ]
+}

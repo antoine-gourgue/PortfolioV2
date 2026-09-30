@@ -17,9 +17,9 @@ const frameRange = process.env.FRAMES
   : null
 const all = [
   'AntoineOS',
-  'Spotlight',
-  'iPhone',
   'Keynote',
+  'AppStore',
+  'iPhone',
   'Trailer',
   'CodeToReality',
 ]

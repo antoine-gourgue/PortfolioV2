@@ -1,6 +1,6 @@
 {
   "id": "Keynote",
-  "durationInFrames": 900,
+  "durationInFrames": 1290,
   "bpm": 120,
   "gridOffset": 0,
   "style": "soft",
@@ -13,138 +13,95 @@
     {
       "name": "lite",
       "from": 120,
-      "to": 260
+      "to": 240
     },
     {
       "name": "groove",
-      "from": 260,
-      "to": 720
+      "from": 240,
+      "to": 840
     },
     {
-      "name": "finale",
-      "from": 720,
-      "to": 780
+      "name": "lite",
+      "from": 840,
+      "to": 960
+    },
+    {
+      "name": "hush",
+      "from": 960,
+      "to": 1020
+    },
+    {
+      "name": "groove2",
+      "from": 1020,
+      "to": 1200
     },
     {
       "name": "outro",
-      "from": 780,
-      "to": 900
+      "from": 1200,
+      "to": 1290
     }
   ],
   "sfx": [
     {
       "type": "swell",
       "at": 0,
-      "len": 20
+      "len": 30
     },
     {
-      "type": "pop",
-      "at": 12
-    },
-    {
-      "type": "swoosh",
-      "at": 100
-    },
-    {
-      "type": "whoosh",
-      "at": 112
-    },
-    {
-      "type": "unlock",
-      "at": 150
+      "type": "chime",
+      "at": 58
     },
     {
       "type": "swoosh",
-      "at": 152
+      "at": 120
     },
     {
       "type": "swoosh",
-      "at": 258
-    },
-    {
-      "type": "pop",
-      "at": 270
-    },
-    {
-      "type": "counter",
-      "at": 274,
-      "len": 36
-    },
-    {
-      "type": "pop",
-      "at": 284
-    },
-    {
-      "type": "pop",
-      "at": 292
-    },
-    {
-      "type": "pop",
-      "at": 304
-    },
-    {
-      "type": "pop",
-      "at": 312
-    },
-    {
-      "type": "pop",
-      "at": 320
-    },
-    {
-      "type": "pop",
-      "at": 330
-    },
-    {
-      "type": "pop",
-      "at": 336
+      "at": 240
     },
     {
       "type": "swoosh",
-      "at": 518
-    },
-    {
-      "type": "tick",
-      "at": 536
-    },
-    {
-      "type": "tick",
-      "at": 547
-    },
-    {
-      "type": "tick",
-      "at": 558
-    },
-    {
-      "type": "tick",
-      "at": 569
-    },
-    {
-      "type": "tick",
-      "at": 580
-    },
-    {
-      "type": "tick",
-      "at": 591
-    },
-    {
-      "type": "tick",
-      "at": 602
-    },
-    {
-      "type": "tick",
-      "at": 613
-    },
-    {
-      "type": "tick",
-      "at": 624
+      "at": 300
     },
     {
       "type": "swoosh",
-      "at": 714
+      "at": 390
+    },
+    {
+      "type": "swoosh",
+      "at": 480
+    },
+    {
+      "type": "swoosh",
+      "at": 570
+    },
+    {
+      "type": "pop",
+      "at": 660
+    },
+    {
+      "type": "pop",
+      "at": 705
+    },
+    {
+      "type": "pop",
+      "at": 750
+    },
+    {
+      "type": "pop",
+      "at": 795
+    },
+    {
+      "type": "swoosh",
+      "at": 840
+    },
+    {
+      "type": "hit",
+      "at": 1020
     },
     {
       "type": "tail",
-      "at": 780
+      "at": 1200
     }
   ]
 }

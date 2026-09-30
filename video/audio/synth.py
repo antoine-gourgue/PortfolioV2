@@ -560,6 +560,8 @@ POP_LAYERS = {
     "build": {"pad", "kick", "roll", "arp"},
     "finale": {"pad", "kick", "hat", "bass", "arp"},
     "outro": {"pad", "arp"},
+    # "One more thing": everything drops out but a dark pad
+    "hush": {"pad"},
 }
 
 
@@ -585,7 +587,7 @@ def arrange_pop(sheet, mix, soft=False):
             if sec == "outro":
                 outro_played = True
                 n = mix.n - at
-            cut = {"intro": 900, "break": 1400, "outro": 2000, "lite": 2200}.get(sec, 3000)
+            cut = {"intro": 900, "break": 1400, "outro": 2000, "lite": 2200, "hush": 600}.get(sec, 3000)
             pad = np.zeros((n, 2))
             for m in chord:
                 pad += supersaw(midi(m), n, cutoff=cut) * 0.1
