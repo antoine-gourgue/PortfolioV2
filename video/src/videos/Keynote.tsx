@@ -1088,7 +1088,7 @@ const NumbersScene: React.FC = () => {
       </StatSlot>
       <StatSlot at={SLOT.users} len={SLOT.networks - SLOT.users}>
         <div style={col}>
-          <Kicker>Des fonctionnalités utilisées par</Kicker>
+          <Kicker>Une plateforme utilisée par</Kicker>
           <BigNumber sweepAt={SLOT.users + 24}>
             <Counter to={37000} start={SLOT.users + 2} duration={32} />
           </BigNumber>
@@ -1098,14 +1098,14 @@ const NumbersScene: React.FC = () => {
             weight={600}
             style={{ marginTop: -6 }}
           >
-            utilisateurs actifs sur l’app
+            points de vente
           </Body>
           <EditorWindow />
         </div>
       </StatSlot>
       <StatSlot at={SLOT.networks}>
         <div style={col}>
-          <Kicker>Une plateforme déployée chez plus de</Kicker>
+          <Kicker>Et plus de</Kicker>
           <BigNumber sweepAt={SLOT.networks + 22}>
             <Counter to={600} start={SLOT.networks + 2} duration={26} />
           </BigNumber>
