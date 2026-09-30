@@ -1,4 +1,5 @@
 // Renders the MP4s: node scripts/render.mjs [compositionId...]
+// FRAMES=0-59 renders only that range, for a quick end-to-end check.
 import { renderMedia, selectComposition } from '@remotion/renderer'
 import { cpus } from 'node:os'
 import { mkdirSync } from 'node:fs'
@@ -11,6 +12,9 @@ import {
 } from './common.mjs'
 
 const ids = process.argv.slice(2)
+const frameRange = process.env.FRAMES
+  ? process.env.FRAMES.split('-').map(Number)
+  : null
 const all = ['AntoineOS', 'Trailer', 'CodeToReality']
 const serveUrl = await makeBundle()
 mkdirSync(join(root, 'out'), { recursive: true })
@@ -36,7 +40,8 @@ for (const id of ids.length ? ids : all) {
     pixelFormat: 'yuv420p',
     audioCodec: 'aac',
     audioBitrate: '320k',
-    output,
+    outputLocation: output,
+    frameRange,
     browserExecutable,
     chromiumOptions,
     concurrency: Math.max(1, cpus().length),
