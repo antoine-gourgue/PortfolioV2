@@ -1,0 +1,52 @@
+// Renders the MP4s: node scripts/render.mjs [compositionId...]
+import { renderMedia, selectComposition } from '@remotion/renderer'
+import { cpus } from 'node:os'
+import { mkdirSync } from 'node:fs'
+import { join } from 'node:path'
+import {
+  browserExecutable,
+  chromiumOptions,
+  makeBundle,
+  root,
+} from './common.mjs'
+
+const ids = process.argv.slice(2)
+const all = ['AntoineOS', 'Trailer', 'CodeToReality']
+const serveUrl = await makeBundle()
+mkdirSync(join(root, 'out'), { recursive: true })
+
+for (const id of ids.length ? ids : all) {
+  const composition = await selectComposition({
+    serveUrl,
+    id,
+    browserExecutable,
+    chromiumOptions,
+  })
+  const output = join(root, `out/${id}.mp4`)
+  let last = -1
+  await renderMedia({
+    serveUrl,
+    composition,
+    codec: 'h264',
+    // JPEG frames encode several times faster than PNG; at 95 the loss is
+    // invisible once H.264 has been applied
+    imageFormat: 'jpeg',
+    jpegQuality: 95,
+    crf: 16,
+    pixelFormat: 'yuv420p',
+    audioCodec: 'aac',
+    audioBitrate: '320k',
+    output,
+    browserExecutable,
+    chromiumOptions,
+    concurrency: Math.max(1, cpus().length),
+    onProgress: ({ progress }) => {
+      const pct = Math.floor(progress * 100)
+      if (pct % 10 === 0 && pct !== last) {
+        last = pct
+        console.log(`${id}: ${pct}%`)
+      }
+    },
+  })
+  console.log(`Rendered ${output}`)
+}

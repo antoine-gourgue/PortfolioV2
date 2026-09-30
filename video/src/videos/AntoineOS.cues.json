@@ -1,0 +1,203 @@
+{
+  "id": "AntoineOS",
+  "durationInFrames": 1230,
+  "bpm": 120,
+  "gridOffset": 30,
+  "style": "pop",
+  "sections": [
+    {
+      "name": "intro",
+      "from": 0,
+      "to": 150
+    },
+    {
+      "name": "groove",
+      "from": 150,
+      "to": 570
+    },
+    {
+      "name": "break",
+      "from": 570,
+      "to": 750
+    },
+    {
+      "name": "groove2",
+      "from": 750,
+      "to": 990
+    },
+    {
+      "name": "build",
+      "from": 990,
+      "to": 1050
+    },
+    {
+      "name": "outro",
+      "from": 1050,
+      "to": 1230
+    }
+  ],
+  "sfx": [
+    {
+      "type": "swell",
+      "at": 0,
+      "len": 36
+    },
+    {
+      "type": "chime",
+      "at": 100
+    },
+    {
+      "type": "riser",
+      "at": 110,
+      "len": 40
+    },
+    {
+      "type": "impact",
+      "at": 150
+    },
+    {
+      "type": "pop",
+      "at": 190
+    },
+    {
+      "type": "pop",
+      "at": 202
+    },
+    {
+      "type": "whoosh",
+      "at": 268
+    },
+    {
+      "type": "swoosh",
+      "at": 303
+    },
+    {
+      "type": "whoosh",
+      "at": 324
+    },
+    {
+      "type": "tick",
+      "at": 345
+    },
+    {
+      "type": "tick",
+      "at": 360
+    },
+    {
+      "type": "tick",
+      "at": 375
+    },
+    {
+      "type": "tick",
+      "at": 390
+    },
+    {
+      "type": "tick",
+      "at": 405
+    },
+    {
+      "type": "tick",
+      "at": 420
+    },
+    {
+      "type": "tick",
+      "at": 435
+    },
+    {
+      "type": "swoosh",
+      "at": 450
+    },
+    {
+      "type": "riser",
+      "at": 530,
+      "len": 40
+    },
+    {
+      "type": "glitch",
+      "at": 564
+    },
+    {
+      "type": "glitch",
+      "at": 570
+    },
+    {
+      "type": "sub",
+      "at": 570
+    },
+    {
+      "type": "whoosh",
+      "at": 636
+    },
+    {
+      "type": "scan",
+      "at": 660
+    },
+    {
+      "type": "riser",
+      "at": 720,
+      "len": 30
+    },
+    {
+      "type": "impact",
+      "at": 750
+    },
+    {
+      "type": "counter",
+      "at": 760,
+      "len": 42
+    },
+    {
+      "type": "whoosh",
+      "at": 800
+    },
+    {
+      "type": "pop",
+      "at": 842
+    },
+    {
+      "type": "pop",
+      "at": 858
+    },
+    {
+      "type": "glitch",
+      "at": 924
+    },
+    {
+      "type": "impact",
+      "at": 930
+    },
+    {
+      "type": "hit",
+      "at": 960
+    },
+    {
+      "type": "hit",
+      "at": 990
+    },
+    {
+      "type": "riser",
+      "at": 1005,
+      "len": 45
+    },
+    {
+      "type": "impact",
+      "at": 1050
+    },
+    {
+      "type": "notify",
+      "at": 1058
+    },
+    {
+      "type": "whoosh",
+      "at": 1072
+    },
+    {
+      "type": "click",
+      "at": 1166
+    },
+    {
+      "type": "tail",
+      "at": 1170
+    }
+  ]
+}

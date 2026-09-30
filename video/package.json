@@ -1,0 +1,36 @@
+{
+  "name": "portfolio-promo-video",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "node scripts/sync-assets.mjs && remotion studio",
+    "render": "node scripts/render.mjs",
+    "still": "node scripts/still.mjs",
+    "audio": "python3 audio/synth.py",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/inter-tight": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@react-three/fiber": "^9.8.1",
+    "@remotion/bundler": "^4.0.530",
+    "@remotion/cli": "^4.0.530",
+    "@remotion/media-utils": "^4.0.530",
+    "@remotion/motion-blur": "^4.0.530",
+    "@remotion/noise": "^4.0.530",
+    "@remotion/renderer": "^4.0.530",
+    "@remotion/three": "^4.0.530",
+    "@remotion/transitions": "^4.0.530",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "remotion": "^4.0.530",
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.186.0",
+    "typescript": "^7.0.2"
+  }
+}

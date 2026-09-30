@@ -1,0 +1,161 @@
+{
+  "id": "Trailer",
+  "durationInFrames": 1140,
+  "bpm": 120,
+  "gridOffset": 0,
+  "style": "trailer",
+  "sections": [
+    {
+      "name": "intro",
+      "from": 0,
+      "to": 120
+    },
+    {
+      "name": "reveal",
+      "from": 120,
+      "to": 360
+    },
+    {
+      "name": "numbers",
+      "from": 360,
+      "to": 600
+    },
+    {
+      "name": "build",
+      "from": 600,
+      "to": 780
+    },
+    {
+      "name": "portrait",
+      "from": 780,
+      "to": 960
+    },
+    {
+      "name": "finale",
+      "from": 960,
+      "to": 1140
+    }
+  ],
+  "sfx": [
+    {
+      "type": "swell",
+      "at": 50,
+      "len": 70
+    },
+    {
+      "type": "impact",
+      "at": 120
+    },
+    {
+      "type": "braam",
+      "at": 120,
+      "note": 33
+    },
+    {
+      "type": "whoosh",
+      "at": 200
+    },
+    {
+      "type": "braam",
+      "at": 240,
+      "note": 29,
+      "gain": 0.6
+    },
+    {
+      "type": "riser",
+      "at": 320,
+      "len": 40
+    },
+    {
+      "type": "impact",
+      "at": 360
+    },
+    {
+      "type": "braam",
+      "at": 360,
+      "note": 33
+    },
+    {
+      "type": "counter",
+      "at": 362,
+      "len": 20
+    },
+    {
+      "type": "hit",
+      "at": 420
+    },
+    {
+      "type": "braam",
+      "at": 420,
+      "note": 29,
+      "gain": 0.7
+    },
+    {
+      "type": "hit",
+      "at": 480
+    },
+    {
+      "type": "braam",
+      "at": 480,
+      "note": 31,
+      "gain": 0.7
+    },
+    {
+      "type": "hit",
+      "at": 540
+    },
+    {
+      "type": "braam",
+      "at": 540,
+      "note": 28,
+      "gain": 0.7
+    },
+    {
+      "type": "hit",
+      "at": 600
+    },
+    {
+      "type": "hit",
+      "at": 645
+    },
+    {
+      "type": "impact",
+      "at": 690
+    },
+    {
+      "type": "riser",
+      "at": 720,
+      "len": 60
+    },
+    {
+      "type": "sub",
+      "at": 780
+    },
+    {
+      "type": "whoosh",
+      "at": 852
+    },
+    {
+      "type": "swell",
+      "at": 900,
+      "len": 60
+    },
+    {
+      "type": "impact",
+      "at": 960
+    },
+    {
+      "type": "braam",
+      "at": 960,
+      "note": 33
+    },
+    {
+      "type": "whoosh",
+      "at": 1000
+    },
+    {
+      "type": "tail",
+      "at": 1060
+    }
+  ]
+}
