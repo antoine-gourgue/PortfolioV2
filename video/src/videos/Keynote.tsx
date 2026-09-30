@@ -14,7 +14,6 @@ import {
 import { asset, cities, fonts, person } from '../brand'
 import { AnamorphicFlare, Grain } from '../fx/Overlays'
 import {
-  BarChart,
   BeatWords,
   CalendarIcon,
   IPhone3D,
@@ -31,6 +30,7 @@ import {
 } from '../keynote/Kit'
 import { footage } from '../scenes/OsScenes'
 import { TrafficLights } from '../ui/Apps'
+import { DigitaleoEditor, DigitaleoWordmark } from '../ui/DigitaleoEditor'
 import {
   AGLogo,
   Counter,
@@ -683,27 +683,8 @@ const ExplodedWindow: React.FC<{ show: Showcase; t: number; f: number }> = ({
   )
 }
 
-const Pill: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div
-    style={{
-      padding: '12px 26px',
-      borderRadius: 999,
-      background: 'rgba(255,255,255,0.08)',
-      boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.16)',
-      fontFamily: fonts.display,
-      fontSize: 34,
-      fontWeight: 600,
-      color: stage.white,
-      letterSpacing: '-0.01em',
-    }}
-  >
-    {children}
-  </div>
-)
-
 const Stat: React.FC<{ show: Showcase }> = ({ show }) => {
   const f = useCurrentFrame()
-  const { fps } = useVideoConfig()
   if (show.stat === 'ring') {
     return (
       <Rise at={24} style={{ display: 'flex', alignItems: 'center', gap: 36 }}>
@@ -755,21 +736,34 @@ const Stat: React.FC<{ show: Showcase }> = ({ show }) => {
       </Rise>
     )
   }
+  // The stack reads as a line of type, each name landing on its own beat
   return (
-    <div style={{ display: 'flex', gap: 16 }}>
+    <div
+      style={{
+        display: 'flex',
+        fontFamily: fonts.display,
+        fontSize: 38,
+        fontWeight: 600,
+        letterSpacing: '-0.015em',
+        color: '#d2d2d7',
+      }}
+    >
       {(show.stack ?? []).map((s, i) => {
-        const t = spring({
-          frame: f - 24 - i * 7,
-          fps,
-          config: { damping: 14, stiffness: 140 },
-        })
+        const t = ease(f, [24 + i * 6, 36 + i * 6], [0, 1], easeOut)
         return (
-          <div
+          <span
             key={s}
-            style={{ transform: `scale(${t})`, opacity: Math.min(1, t * 2) }}
+            style={{
+              opacity: t,
+              transform: `translateY(${(1 - t) * 16}px)`,
+              filter: t < 1 ? `blur(${(1 - t) * 6}px)` : undefined,
+            }}
           >
-            <Pill>{s}</Pill>
-          </div>
+            {i > 0 && (
+              <span style={{ margin: '0 18px', color: '#48484a' }}>·</span>
+            )}
+            {s}
+          </span>
         )
       })}
     </div>
@@ -855,20 +849,22 @@ const ShowcaseScene: React.FC<{ show: Showcase; index: number }> = ({
   )
 }
 
-const STAT_LEN = 60
+// Stat slots of the Digitaleo scene; the editor one runs longer so its
+// drag-and-drop and mobile switch can play out
+const SLOT = { years: 0, users: 60, networks: 160 }
+const EDITOR_W = 820
 
 /** A stat that rises in, holds with a slow drift, then pushes up and away. */
 const StatSlot: React.FC<{
   at: number
-  last?: boolean
+  len?: number
   children: React.ReactNode
-}> = ({ at, last, children }) => {
+}> = ({ at, len, children }) => {
   const f = useCurrentFrame()
-  if (f < at - 2 || (!last && f > at + STAT_LEN + 8)) return null
+  const last = len === undefined
+  if (f < at - 2 || (!last && f > at + len + 4)) return null
   const inT = ease(f, [at, at + 14], [0, 1], easeOut)
-  const outT = last
-    ? 0
-    : ease(f, [at + STAT_LEN - 6, at + STAT_LEN + 8], [0, 1], easeIn)
+  const outT = last ? 0 : ease(f, [at + len - 8, at + len + 4], [0, 1], easeIn)
   return (
     <AbsoluteFill
       style={{
@@ -1005,6 +1001,42 @@ const DotField: React.FC<{ at: number }> = ({ at }) => {
   )
 }
 
+/**
+ * The editor, rebuilt as a live page: typing, a block dropped in, the switch
+ * to mobile, compressed to fit the slot.
+ */
+const EditorWindow: React.FC = () => {
+  const f = useCurrentFrame()
+  return (
+    <div style={{ marginTop: 40, perspective: 1600 }}>
+      <div
+        style={{
+          width: EDITOR_W,
+          borderRadius: 14,
+          overflow: 'hidden',
+          background: '#fff',
+          boxShadow:
+            '0 50px 120px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.12)',
+          transform: `rotateX(${10 - (f - SLOT.users) * 0.06}deg) rotateY(${interpolate(f, [SLOT.users, SLOT.networks], [-6, 6])}deg)`,
+        }}
+      >
+        <div
+          style={{
+            height: 30,
+            display: 'flex',
+            alignItems: 'center',
+            paddingLeft: 12,
+            background: '#e8e8ed',
+          }}
+        >
+          <TrafficLights size={10} />
+        </div>
+        <DigitaleoEditor width={EDITOR_W} start={SLOT.users - 5} speed={1.33} />
+      </div>
+    </div>
+  )
+}
+
 const Kicker: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <Body size={40} style={{ marginBottom: 6 }}>
     {children}
@@ -1014,7 +1046,7 @@ const Kicker: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 /** Digitaleo, told in three numbers. */
 const NumbersScene: React.FC = () => {
   const f = useCurrentFrame()
-  const exit = ease(f, [158, 174], [0, 1], easeIn)
+  const exit = ease(f, [218, 234], [0, 1], easeIn)
   const col: React.CSSProperties = {
     position: 'absolute',
     top: 300,
@@ -1040,22 +1072,12 @@ const NumbersScene: React.FC = () => {
           opacity: ease(f, [0, 14], [0, 1]),
         }}
       >
-        <Img
-          src={asset('companies/digitaleo.png')}
-          style={{
-            width: 54,
-            height: 54,
-            borderRadius: 12,
-            background: '#fff',
-            padding: 7,
-            boxSizing: 'border-box',
-          }}
-        />
+        <DigitaleoWordmark size={44} color={stage.white} />
         <Body size={40} color={stage.white} weight={600}>
-          Digitaleo · Développeur Full Stack
+          · Développeur Full Stack
         </Body>
       </div>
-      <StatSlot at={0}>
+      <StatSlot at={SLOT.years} len={SLOT.users - SLOT.years}>
         <div style={col}>
           <Kicker>En alternance, pendant</Kicker>
           <BigNumber sweepAt={20}>
@@ -1072,11 +1094,11 @@ const NumbersScene: React.FC = () => {
           </div>
         </div>
       </StatSlot>
-      <StatSlot at={STAT_LEN}>
+      <StatSlot at={SLOT.users} len={SLOT.networks - SLOT.users}>
         <div style={col}>
           <Kicker>Mon éditeur d’e-mails, utilisé par</Kicker>
-          <BigNumber sweepAt={STAT_LEN + 24}>
-            <Counter to={37000} start={STAT_LEN + 2} duration={32} />
+          <BigNumber sweepAt={SLOT.users + 24}>
+            <Counter to={37000} start={SLOT.users + 2} duration={32} />
           </BigNumber>
           <Body
             size={46}
@@ -1086,21 +1108,14 @@ const NumbersScene: React.FC = () => {
           >
             utilisateurs actifs sur l’app
           </Body>
-          <div style={{ marginTop: 56 }}>
-            <BarChart
-              values={[3, 4, 5, 5, 7, 8, 10, 12, 14, 17]}
-              at={STAT_LEN + 8}
-              width={760}
-              height={250}
-            />
-          </div>
+          <EditorWindow />
         </div>
       </StatSlot>
-      <StatSlot at={STAT_LEN * 2} last>
+      <StatSlot at={SLOT.networks}>
         <div style={col}>
           <Kicker>Et déployé chez plus de</Kicker>
-          <BigNumber sweepAt={STAT_LEN * 2 + 22}>
-            <Counter to={600} start={STAT_LEN * 2 + 2} duration={26} />
+          <BigNumber sweepAt={SLOT.networks + 22}>
+            <Counter to={600} start={SLOT.networks + 2} duration={26} />
           </BigNumber>
           <Body
             size={46}
@@ -1111,7 +1126,7 @@ const NumbersScene: React.FC = () => {
             réseaux d’enseignes
           </Body>
           <div style={{ marginTop: 60 }}>
-            <DotField at={STAT_LEN * 2 + 10} />
+            <DotField at={SLOT.networks + 10} />
           </div>
         </div>
       </StatSlot>
@@ -1420,16 +1435,16 @@ export const Keynote: React.FC<{ withAudio?: boolean }> = ({
         <ShowcaseScene show={show} index={i} />
       </Sequence>
     ))}
-    <Sequence from={848} durationInFrames={174} name="Numbers">
+    <Sequence from={848} durationInFrames={234} name="Numbers">
       <NumbersScene />
     </Sequence>
-    <Sequence from={1020} durationInFrames={124} name="iPhone">
+    <Sequence from={1080} durationInFrames={124} name="iPhone">
       <PhoneScene />
     </Sequence>
-    <Sequence from={1140} durationInFrames={62} name="One more thing">
+    <Sequence from={1200} durationInFrames={62} name="One more thing">
       <OneMoreThing />
     </Sequence>
-    <Sequence from={1200} name="Availability">
+    <Sequence from={1260} name="Availability">
       <Availability />
     </Sequence>
     <Grain opacity={0.05} />

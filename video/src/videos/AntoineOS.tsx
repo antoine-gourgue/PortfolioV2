@@ -10,7 +10,6 @@ import {
   useCurrentFrame,
 } from 'remotion'
 import {
-  asset,
   colors,
   digitaleo,
   fonts,
@@ -25,6 +24,7 @@ import { Flash, Grain, LightLeak, Vignette } from '../fx/Overlays'
 import { Dust } from '../fx/Particles'
 import { ShaderBackground } from '../fx/Shader'
 import { Starfield } from '../fx/Starfield'
+import { DigitaleoEditor } from '../ui/DigitaleoEditor'
 import {
   AGLogo,
   Chip,
@@ -617,6 +617,12 @@ const AI: React.FC = () => {
   )
 }
 
+const EDITOR_W = 880
+
+/**
+ * Digitaleo in numbers, over the email editor rebuilt as a live page rather
+ * than a screenshot.
+ */
 export const Digitaleo: React.FC = () => {
   const f = useCurrentFrame()
   const win = useSpring(50, { damping: 18, stiffness: 80 })
@@ -684,25 +690,26 @@ export const Digitaleo: React.FC = () => {
         <div
           style={{
             position: 'absolute',
-            left: 540 - 450,
-            top: 530,
+            left: 540 - EDITOR_W / 2,
+            top: 490,
             opacity: win,
-            transform: `translateY(${(1 - win) * 300}px) rotateX(${(1 - win) * 30 + 8}deg) rotateY(${-8 + f * 0.04}deg)`,
+            transform: `translateY(${(1 - win) * 300}px) rotateX(${(1 - win) * 30 + 6}deg) rotateY(${-6 + f * 0.04}deg)`,
           }}
         >
           <MacWindow
-            width={900}
-            height={400}
+            width={EDITOR_W}
+            height={38 + (EDITOR_W * 760) / 1440}
             dark={false}
             title="Éditeur d'email — Digitaleo"
-            src={asset(`projects/${digitaleo.image}`)}
-          />
+          >
+            <DigitaleoEditor width={EDITOR_W} start={48} speed={1.6} />
+          </MacWindow>
         </div>
       </AbsoluteFill>
       <div
         style={{
           position: 'absolute',
-          top: 1040,
+          top: 1060,
           width: '100%',
           display: 'flex',
           justifyContent: 'center',

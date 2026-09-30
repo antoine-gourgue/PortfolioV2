@@ -13,13 +13,13 @@ import {
 import { fonts, person } from '../brand'
 import { footage } from '../scenes/OsScenes'
 import {
+  Annotation,
   Banner,
   Caret,
   ClosingCard,
   PHONE_RATIO,
   Phone,
   Tap,
-  ui,
   useTyped,
 } from '../ui/Apps'
 import { RevealText, clamp, easeIn, easeInOut } from '../ui/Primitives'
@@ -329,79 +329,30 @@ const Field: React.FC<{
   )
 }
 
+/** A point of the screen annotated in the margin beside the phone. */
 const Callout: React.FC<{
   sx: number
   sy: number
   side: 'left' | 'right'
   dy?: number
-  text: string
+  value: string
+  caption?: string
   from: number
   to: number
-  color?: string
-}> = ({ sx, sy, side, dy = 0, text, from, to, color = ui.blue }) => {
-  const f = useCurrentFrame()
-  const t = interpolate(f, [from, from + 14, to - 10, to], [0, 1, 1, 0], clamp)
-  if (t <= 0) return null
-  const x = SX + SW * sx
-  const y = SY + SH * sy
-  const px = side === 'left' ? PX - 24 : PX + PW + 24
-  const py = y + dy
-  return (
-    <>
-      <svg
-        style={{ position: 'absolute', left: 0, top: 0, overflow: 'visible' }}
-        width={1}
-        height={1}
-      >
-        <path
-          d={`M${x},${y} L${px},${py}`}
-          stroke={ink}
-          strokeOpacity={0.3 * t}
-          strokeWidth={2}
-          fill="none"
-        />
-        <circle
-          cx={x}
-          cy={y}
-          r={8 * t}
-          fill={color}
-          stroke="#fff"
-          strokeWidth={3}
-        />
-      </svg>
-      <div
-        style={{
-          position: 'absolute',
-          left: px,
-          top: py,
-          transform: `translate(${side === 'left' ? '-100%' : '0'}, -50%) scale(${0.9 + t * 0.1})`,
-          opacity: t,
-          maxWidth: 250,
-          padding: '14px 20px',
-          borderRadius: 22,
-          background: '#fff',
-          boxShadow: '0 12px 30px rgba(0,0,0,0.14), 0 0 0 1px rgba(0,0,0,0.05)',
-          fontFamily: fonts.body,
-          fontWeight: 700,
-          fontSize: 24,
-          lineHeight: 1.25,
-          color: ink,
-        }}
-      >
-        <div
-          style={{
-            width: 10,
-            height: 10,
-            borderRadius: 5,
-            background: color,
-            marginBottom: 6,
-          }}
-        />
-        {text}
-      </div>
-    </>
-  )
-}
+}> = ({ sx, sy, side, dy = 0, value, caption, from, to }) => (
+  <Annotation
+    x={SX + SW * sx}
+    y={SY + SH * sy}
+    lx={side === 'left' ? PX - 24 : PX + PW + 24}
+    ly={SY + SH * sy + dy}
+    placement={side}
+    value={value}
+    caption={caption}
+    from={from}
+    to={to}
+    maxWidth={side === 'left' ? PX - 60 : 1080 - PX - PW - 60}
+  />
+)
 
 const CAPTIONS: { from: number; to: number; first: string; second: string }[] =
   [
@@ -498,27 +449,28 @@ const Story: React.FC = () => {
         sy={0.37}
         side="left"
         dy={-60}
-        text="Notification de disponibilité"
+        value="Notification"
+        caption="de disponibilité"
         from={24}
         to={62}
-        color={ui.green}
       />
       <Callout
         sx={0.5}
         sy={0.78}
         side="left"
         dy={40}
-        text="37 000 utilisateurs actifs"
+        value="37 000"
+        caption="utilisateurs actifs"
         from={176}
         to={232}
-        color="#f26a36"
       />
       <Callout
         sx={0.5}
         sy={0.36}
         side="right"
         dy={-80}
-        text="Marketing SaaS · 2024 — 2026"
+        value="2024 — 2026"
+        caption="Marketing SaaS"
         from={184}
         to={232}
       />
@@ -527,27 +479,28 @@ const Story: React.FC = () => {
         sy={0.85}
         side="right"
         dy={-40}
-        text="Next.js · Prisma · Auth.js"
+        value="Next.js"
+        caption="Prisma · Auth.js"
         from={284}
         to={330}
-        color="#e60023"
       />
       <Callout
         sx={0.5}
         sy={0.4}
         side="left"
         dy={-40}
-        text="2,5 ans d’alternance"
+        value="2,5 ans"
+        caption="d’alternance"
         from={414}
         to={490}
-        color="#5E5CE6"
       />
       <Callout
         sx={0.5}
         sy={0.7}
         side="right"
         dy={40}
-        text="Vue.js · TypeScript · Design System"
+        value="Vue.js"
+        caption="TypeScript · Design System"
         from={426}
         to={490}
       />
@@ -556,27 +509,28 @@ const Story: React.FC = () => {
         sy={0.2}
         side="left"
         dy={-30}
-        text="Disponible en CDI"
+        value="CDI"
+        caption="dès octobre 2026"
         from={576}
         to={640}
-        color={ui.green}
       />
       <Callout
         sx={0.9}
         sy={0.94}
         side="right"
         dy={-120}
-        text="Chatbot IA du portfolio"
+        value="Chatbot IA"
+        caption="du portfolio"
         from={588}
         to={640}
-        color="#AF52DE"
       />
       <Callout
         sx={0.913}
         sy={0.082}
         side="right"
         dy={120}
-        text="Envoi direct à Antoine"
+        value="Envoi direct"
+        caption="à Antoine"
         from={846}
         to={880}
       />

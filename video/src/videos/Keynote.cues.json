@@ -1,6 +1,6 @@
 {
   "id": "Keynote",
-  "durationInFrames": 1380,
+  "durationInFrames": 1440,
   "bpm": 120,
   "gridOffset": 0,
   "style": "pop",
@@ -28,27 +28,27 @@
     {
       "name": "groove",
       "from": 840,
-      "to": 1020
+      "to": 1080
     },
     {
       "name": "lite",
-      "from": 1020,
-      "to": 1140
-    },
-    {
-      "name": "hush",
-      "from": 1140,
+      "from": 1080,
       "to": 1200
     },
     {
-      "name": "finale",
+      "name": "hush",
       "from": 1200,
-      "to": 1320
+      "to": 1260
+    },
+    {
+      "name": "finale",
+      "from": 1260,
+      "to": 1380
     },
     {
       "name": "outro",
-      "from": 1320,
-      "to": 1380
+      "from": 1380,
+      "to": 1440
     }
   ],
   "sfx": [
@@ -194,64 +194,86 @@
       "len": 32
     },
     {
+      "type": "type",
+      "at": 922,
+      "len": 24
+    },
+    {
+      "type": "click",
+      "at": 950
+    },
+    {
+      "type": "drop",
+      "at": 968
+    },
+    {
+      "type": "click",
+      "at": 981
+    },
+    {
+      "type": "swoosh",
+      "at": 984,
+      "gain": 0.5
+    },
+    {
       "type": "counter",
-      "at": 970,
+      "at": 1010,
       "len": 26
     },
     {
       "type": "scan",
-      "at": 978
+      "at": 1018
     },
     {
       "type": "whoosh",
-      "at": 1030,
+      "at": 1090,
       "gain": 0.9
     },
     {
       "type": "whoosh",
-      "at": 1050,
+      "at": 1110,
       "gain": 0.6
     },
     {
       "type": "tap",
-      "at": 1096
+      "at": 1156
     },
     {
       "type": "sub",
-      "at": 1140
+      "at": 1200
     },
     {
       "type": "hit",
-      "at": 1203,
+      "at": 1263,
       "gain": 0.8
     },
     {
       "type": "tick",
-      "at": 1234
+      "at": 1294
     },
     {
       "type": "chime",
-      "at": 1240
+      "at": 1300
     },
     {
       "type": "pop",
-      "at": 1258
+      "at": 1318
     },
     {
       "type": "pop",
-      "at": 1269
+      "at": 1329
     },
     {
       "type": "pop",
-      "at": 1280
+      "at": 1340
     },
     {
       "type": "pop",
-      "at": 1290
+      "at": 1350
     },
     {
       "type": "notify",
-      "at": 1302,
+      "at": 1362,
       "gain": 0.7
     }
   ]

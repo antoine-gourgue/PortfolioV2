@@ -222,7 +222,6 @@ export const journey = [
 ]
 
 export const digitaleo = {
-  image: 'digitaleo-editor.jpg',
   users: 37000,
   networks: 600,
   years: '2,5 ans',

@@ -389,7 +389,10 @@ export const AGLogo: React.FC<{
 export const AG_PATH =
   'M1440 2260 c0 -34 37 -97 72 -122 33 -23 38 -23 368 -29 308 -5 340 -7 392 -27 114 -42 199 -120 251 -231 27 -56 32 -80 35 -163 l4 -98 -348 0 c-192 0 -366 -3 -387 -6 -20 -4 -61 -21 -90 -38 -135 -81 -164 -271 -60 -387 75 -83 79 -84 416 -87 l297 -3 0 85 0 86 -271 0 c-174 0 -277 4 -291 11 -25 13 -50 72 -41 96 3 10 15 28 26 41 l20 22 366 0 366 0 -3 -260 -3 -260 -342 0 c-189 0 -371 5 -407 11 -230 37 -381 225 -368 457 10 180 143 341 322 388 37 10 125 14 329 14 182 0 277 4 277 10 0 19 -50 86 -81 109 -60 44 -100 51 -303 51 -212 0 -278 -11 -380 -60 -135 -65 -256 -200 -306 -341 -31 -89 -39 -259 -15 -349 52 -201 208 -365 410 -431 68 -23 81 -23 558 -27 l487 -3 0 480 c0 289 -4 511 -11 558 -32 233 -195 422 -429 499 -48 16 -103 18 -457 22 l-403 3 0 -21z'
 
-/** Small pill label, used for stacks and status chips. */
+/**
+ * Label for stacks and facts, set as plain type in the accent colour: no
+ * capsule, no glow.
+ */
 export const Chip: React.FC<{
   children: React.ReactNode
   color?: string
@@ -397,29 +400,16 @@ export const Chip: React.FC<{
 }> = ({ children, color = colors.sky, style }) => (
   <div
     style={{
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: 10,
-      padding: '10px 20px',
-      borderRadius: 999,
-      fontFamily: fonts.body,
+      display: 'inline-block',
+      fontFamily: fonts.display,
       fontWeight: 600,
-      fontSize: 24,
-      color: colors.white,
-      background: `${color}22`,
-      border: `1px solid ${color}66`,
+      fontSize: 26,
+      letterSpacing: '-0.01em',
+      color,
       ...style,
+      padding: 0,
     }}
   >
-    <div
-      style={{
-        width: 10,
-        height: 10,
-        borderRadius: 5,
-        background: color,
-        boxShadow: `0 0 12px ${color}`,
-      }}
-    />
     {children}
   </div>
 )

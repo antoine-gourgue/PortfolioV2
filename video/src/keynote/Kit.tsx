@@ -525,47 +525,6 @@ export const IPhone3D: React.FC<{
   )
 }
 
-/** Growing bars, the last one lit: Apple's "more, every year" chart. */
-export const BarChart: React.FC<{
-  values: number[]
-  at: number
-  width: number
-  height: number
-}> = ({ values, at, width, height }) => {
-  const f = useCurrentFrame()
-  const max = Math.max(...values)
-  const gap = width * 0.025
-  const bw = (width - gap * (values.length - 1)) / values.length
-  return (
-    <div style={{ position: 'relative', width, height }}>
-      {values.map((v, i) => {
-        const t = interpolate(f, [at + i * 2, at + i * 2 + 18], [0, 1], {
-          ...clamp,
-          easing: easeOut,
-        })
-        const last = i === values.length - 1
-        return (
-          <div
-            key={i}
-            style={{
-              position: 'absolute',
-              left: i * (bw + gap),
-              bottom: 0,
-              width: bw,
-              height: (v / max) * height * t,
-              borderRadius: `${bw * 0.25}px ${bw * 0.25}px 0 0`,
-              background: last
-                ? 'linear-gradient(180deg, #ffffff, #8e8e93)'
-                : '#2c2c2e',
-              boxShadow: last ? '0 0 40px rgba(255,255,255,0.35)' : undefined,
-            }}
-          />
-        )
-      })}
-    </div>
-  )
-}
-
 /** Activity-style ring filling to `pct`, with a bright leading cap. */
 export const Ring: React.FC<{
   pct: number

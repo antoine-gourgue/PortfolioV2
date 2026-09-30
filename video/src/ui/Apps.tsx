@@ -1120,28 +1120,14 @@ export const ClosingCard: React.FC<{
         <div
           style={{
             ...line(26),
-            marginTop: 46,
-            display: 'flex',
-            alignItems: 'center',
-            gap: 14,
-            padding: '16px 30px',
-            borderRadius: 999,
-            fontFamily: fonts.body,
-            fontWeight: 600,
-            fontSize: 34,
-            background: 'rgba(48,209,88,0.14)',
-            border: '1.5px solid rgba(48,209,88,0.5)',
+            marginTop: 44,
+            fontFamily: fonts.display,
+            fontWeight: 700,
+            fontSize: 40,
+            letterSpacing: '-0.02em',
+            color: dark ? ui.green : '#248a3d',
           }}
         >
-          <div
-            style={{
-              width: 14,
-              height: 14,
-              borderRadius: 7,
-              background: ui.green,
-              boxShadow: `0 0 ${10 + Math.sin(f / 8) * 6}px ${ui.green}`,
-            }}
-          />
           {person.availability}
         </div>
         <div
@@ -1172,6 +1158,144 @@ export const ClosingCard: React.FC<{
         >
           {person.url}
         </div>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Apple-style annotation: a hairline from a point of the interface to plain
+ * type, a figure and its caption. No chip, no shadow, no colour coding.
+ * `x, y` is the point on the interface, `lx, ly` where the line ends; the
+ * label sits on the `placement` side of that end.
+ */
+export const Annotation: React.FC<{
+  x: number
+  y: number
+  lx: number
+  ly: number
+  placement: 'left' | 'right' | 'above' | 'below'
+  value: string
+  caption?: string
+  from: number
+  to?: number
+  dark?: boolean
+  maxWidth?: number
+}> = ({
+  x,
+  y,
+  lx,
+  ly,
+  placement,
+  value,
+  caption,
+  from,
+  to = Infinity,
+  dark = false,
+  maxWidth = 250,
+}) => {
+  const f = useCurrentFrame()
+  const out = to === Infinity ? 0 : interpolate(f, [to - 10, to], [0, 1], clamp)
+  const ring = interpolate(f, [from, from + 8], [0, 1], {
+    ...clamp,
+    easing: easeOut,
+  })
+  const draw = interpolate(f, [from + 4, from + 16], [0, 1], {
+    ...clamp,
+    easing: easeInOut,
+  })
+  const label = interpolate(f, [from + 12, from + 26], [0, 1], {
+    ...clamp,
+    easing: easeOut,
+  })
+  if (ring <= 0 || out >= 1) return null
+  const ink = dark ? '#f5f5f7' : ui.label
+  const sub = dark ? '#a1a1a6' : '#6e6e73'
+  const ex = x + (lx - x) * draw
+  const ey = y + (ly - y) * draw
+  const gap = 14
+  const pos: React.CSSProperties =
+    placement === 'left'
+      ? { left: lx - gap, top: ly, transform: 'translate(-100%, -50%)' }
+      : placement === 'right'
+        ? { left: lx + gap, top: ly, transform: 'translateY(-50%)' }
+        : placement === 'below'
+          ? { left: lx, top: ly + gap, transform: 'translateX(-50%)' }
+          : { left: lx, top: ly - gap, transform: 'translate(-50%, -100%)' }
+  const align =
+    placement === 'left' ? 'right' : placement === 'right' ? 'left' : 'center'
+  // The label is revealed by a wipe running away from the line
+  const wipe = (1 - label) * 100
+  const clip =
+    placement === 'left'
+      ? `inset(0 0 0 ${wipe}%)`
+      : placement === 'right'
+        ? `inset(0 ${wipe}% 0 0)`
+        : placement === 'below'
+          ? `inset(0 0 ${wipe}% 0)`
+          : `inset(${wipe}% 0 0 0)`
+  return (
+    <div style={{ position: 'absolute', inset: 0, opacity: 1 - out }}>
+      <svg
+        style={{ position: 'absolute', left: 0, top: 0, overflow: 'visible' }}
+        width={1}
+        height={1}
+      >
+        {/* A pale halo under the hairline keeps it visible on dark screens */}
+        <line
+          x1={x}
+          y1={y}
+          x2={ex}
+          y2={ey}
+          stroke={dark ? '#000' : '#fff'}
+          strokeOpacity={0.55}
+          strokeWidth={4}
+        />
+        <line x1={x} y1={y} x2={ex} y2={ey} stroke={ink} strokeWidth={1.5} />
+        <circle
+          cx={x}
+          cy={y}
+          r={7 * ring}
+          fill={dark ? '#000' : '#fff'}
+          stroke={ink}
+          strokeWidth={2}
+        />
+      </svg>
+      <div
+        style={{
+          position: 'absolute',
+          ...pos,
+          width: 'max-content',
+          maxWidth,
+          textAlign: align,
+          clipPath: clip,
+          fontFamily: fonts.display,
+        }}
+      >
+        <div
+          style={{
+            fontSize: 38,
+            fontWeight: 700,
+            letterSpacing: '-0.025em',
+            lineHeight: 1.05,
+            color: ink,
+          }}
+        >
+          {value}
+        </div>
+        {caption && (
+          <div
+            style={{
+              marginTop: 4,
+              fontSize: 24,
+              fontWeight: 500,
+              lineHeight: 1.2,
+              color: sub,
+            }}
+          >
+            {caption}
+          </div>
+        )}
       </div>
     </div>
   )

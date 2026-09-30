@@ -13,6 +13,7 @@ import {
 import { fonts, person, projectImage, projects } from '../brand'
 import { footage } from '../scenes/OsScenes'
 import {
+  Annotation,
   Banner,
   ClosingCard,
   Cursor,
@@ -162,75 +163,6 @@ const GetButton: React.FC<{ getAt: number; openAt: number }> = ({
   )
 }
 
-/** An annotation: a dot on the UI, a hairline, a white label. */
-const Callout: React.FC<{
-  x: number
-  y: number
-  dx: number
-  dy: number
-  text: string
-  at: number
-  color?: string
-}> = ({ x, y, dx, dy, text, at, color = ui.blue }) => {
-  const f = useCurrentFrame()
-  const t = interpolate(f, [at, at + 14], [0, 1], { ...clamp, easing: easeOut })
-  const line = interpolate(f, [at, at + 10], [0, 1], clamp)
-  if (t <= 0) return null
-  return (
-    <>
-      <svg
-        style={{ position: 'absolute', left: 0, top: 0, overflow: 'visible' }}
-        width={1}
-        height={1}
-      >
-        <line
-          x1={x}
-          y1={y}
-          x2={x + dx * line}
-          y2={y + dy * line}
-          stroke={ink}
-          strokeOpacity={0.35}
-          strokeWidth={2}
-        />
-        <circle
-          cx={x}
-          cy={y}
-          r={8 * t}
-          fill={color}
-          stroke="#fff"
-          strokeWidth={3}
-        />
-      </svg>
-      <div
-        style={{
-          position: 'absolute',
-          left: x + dx,
-          top: y + dy,
-          transform: `translate(${dx < 0 ? '-100%' : '0'}, -50%) scale(${0.9 + t * 0.1})`,
-          opacity: t,
-          padding: '14px 24px',
-          borderRadius: 999,
-          background: '#fff',
-          boxShadow: '0 12px 30px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05)',
-          fontFamily: fonts.body,
-          fontWeight: 700,
-          fontSize: 28,
-          color: ink,
-          whiteSpace: 'nowrap',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 12,
-        }}
-      >
-        <div
-          style={{ width: 12, height: 12, borderRadius: 6, background: color }}
-        />
-        {text}
-      </div>
-    </>
-  )
-}
-
 const Dock: React.FC<{ bounceAt: number; y: number }> = ({ bounceAt, y }) => {
   const f = useCurrentFrame()
   const { fps } = useVideoConfig()
@@ -300,13 +232,14 @@ type Pick = {
   domain: string
   title: string
   subtitle: string
+  // Points of the page annotated under the window; `lx` is where each
+  // label sits, as a fraction of the window width
   callouts: {
     x: number
     y: number
-    dx: number
-    dy: number
-    text: string
-    color: string
+    lx: number
+    value: string
+    caption: string
   }[]
   refreshApercu?: string
 }
@@ -320,21 +253,13 @@ const PICKS: Pick[] = [
     title: 'Zoidberg 2.0',
     subtitle: 'IA médicale, en ligne.',
     callouts: [
-      {
-        x: 0.5,
-        y: 0.2,
-        dx: -120,
-        dy: -110,
-        text: '91,2 % d’exactitude',
-        color: ui.green,
-      },
+      { x: 0.5, y: 0.2, lx: 0.25, value: '91,2 %', caption: 'd’exactitude' },
       {
         x: 0.5,
         y: 0.68,
-        dx: 120,
-        dy: 120,
-        text: 'Verdict + Grad-CAM',
-        color: '#1fb8a6',
+        lx: 0.75,
+        value: 'Grad-CAM',
+        caption: 'le verdict, expliqué',
       },
     ],
   },
@@ -347,20 +272,18 @@ const PICKS: Pick[] = [
     subtitle: 'Ta collection Pokémon.',
     callouts: [
       {
-        x: 0.66,
-        y: 0.45,
-        dx: -60,
-        dy: -200,
-        text: 'Scan au téléphone',
-        color: '#ff5a36',
-      },
-      {
         x: 0.2,
         y: 0.42,
-        dx: 40,
-        dy: 210,
-        text: 'Cote Cardmarket chaque nuit',
-        color: '#ff9f0a',
+        lx: 0.25,
+        value: 'Cardmarket',
+        caption: 'cote mise à jour chaque nuit',
+      },
+      {
+        x: 0.66,
+        y: 0.45,
+        lx: 0.75,
+        value: 'Scan',
+        caption: 'depuis le téléphone',
       },
     ],
     refreshApercu: staticFile('footage/tailtcg.jpg'),
@@ -374,20 +297,18 @@ const PICKS: Pick[] = [
     subtitle: 'Des boards, en temps réel.',
     callouts: [
       {
-        x: 0.5,
-        y: 0.5,
-        dx: -140,
-        dy: 170,
-        text: 'Boards collaboratifs',
-        color: '#e60023',
-      },
-      {
         x: 0.28,
         y: 0.08,
-        dx: 90,
-        dy: -120,
-        text: 'Next.js · Prisma · Auth.js',
-        color: ink,
+        lx: 0.25,
+        value: 'Next.js',
+        caption: 'Prisma · Auth.js',
+      },
+      {
+        x: 0.5,
+        y: 0.5,
+        lx: 0.75,
+        value: 'Boards',
+        caption: 'collaboratifs, en temps réel',
       },
     ],
   },
@@ -628,15 +549,17 @@ const ProjectPick: React.FC<{ pick: Pick; prevShot: string }> = ({
       )}
       {f >= 64 &&
         pick.callouts.map((c, i) => (
-          <Callout
-            key={c.text}
+          <Annotation
+            key={c.value}
             x={safariX + 960 * c.x}
             y={safariY + 52 + 588 * c.y}
-            dx={c.dx}
-            dy={c.dy}
-            text={c.text}
-            color={c.color}
-            at={74 + i * 8}
+            lx={safariX + 960 * c.lx}
+            ly={safariY + 640 + 40}
+            placement="below"
+            value={c.value}
+            caption={c.caption}
+            from={74 + i * 8}
+            maxWidth={420}
           />
         ))}
       {f < 66 && (
@@ -710,23 +633,28 @@ const MobileAppStore: React.FC = () => {
           <Tap x={SW * btn.x} y={SH * btn.y} at={66} />
         </Phone>
       </div>
-      <Callout
+      <Annotation
         x={PX + 16 + SW * 0.2}
         y={PY + 16 + SH * 0.68}
-        dx={-60}
-        dy={-160}
-        text="Même App Store"
-        at={30}
-        color={ui.blue}
+        lx={PX - 30}
+        ly={PY + 16 + SH * 0.68 - 160}
+        placement="left"
+        value="Même App Store"
+        caption="version iPhone"
+        from={30}
+        to={96}
+        maxWidth={PX - 70}
       />
-      <Callout
+      <Annotation
         x={PX + 16 + SW * 0.5}
         y={PY + 16 + SH * 0.3}
-        dx={-80}
-        dy={-40}
-        text="TailTCG, en responsive"
-        at={100}
-        color="#ff5a36"
+        lx={PX - 30}
+        ly={PY + 16 + SH * 0.3 - 40}
+        placement="left"
+        value="TailTCG"
+        caption="en responsive"
+        from={100}
+        maxWidth={PX - 70}
       />
     </AbsoluteFill>
   )

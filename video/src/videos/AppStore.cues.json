@@ -71,12 +71,34 @@
       "len": 42
     },
     {
+      "type": "type",
+      "at": 235,
+      "len": 22
+    },
+    {
+      "type": "click",
+      "at": 267
+    },
+    {
       "type": "pop",
       "at": 272
     },
     {
+      "type": "drop",
+      "at": 282
+    },
+    {
       "type": "pop",
       "at": 288
+    },
+    {
+      "type": "click",
+      "at": 293
+    },
+    {
+      "type": "swoosh",
+      "at": 296,
+      "gain": 0.4
     },
     {
       "type": "click",

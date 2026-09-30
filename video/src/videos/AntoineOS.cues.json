@@ -184,12 +184,34 @@
       "at": 1162
     },
     {
+      "type": "type",
+      "at": 1165,
+      "len": 22
+    },
+    {
+      "type": "click",
+      "at": 1197
+    },
+    {
       "type": "pop",
       "at": 1202
     },
     {
+      "type": "drop",
+      "at": 1212
+    },
+    {
       "type": "pop",
       "at": 1218
+    },
+    {
+      "type": "click",
+      "at": 1223
+    },
+    {
+      "type": "swoosh",
+      "at": 1226,
+      "gain": 0.4
     },
     {
       "type": "glitch",
