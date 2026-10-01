@@ -4,6 +4,7 @@ from PIL import Image, ImageDraw
 
 out = sys.argv[1]
 pairs = list(zip(sys.argv[2::2], sys.argv[3::2]))
+# Cuts come in threes (before, on, after): keep each on one row
 cols = 6
 w, h = 288, 360
 rows = (len(pairs) + cols - 1) // cols

@@ -20,13 +20,13 @@ Every scene receives `len` (its slot in frames, from `timeline.json`) and the ma
 
 **Timeline:**
 
-| Frame   | What happens                                                                                              |
-| ------- | --------------------------------------------------------------------------------------------------------- |
-| 4       | The point of light starts tracing the mark (420 px wide, centred at y 560).                               |
-| 58      | The mark fills in silver; the anamorphic flare peaks at 58 and is gone by 86.                             |
-| 68      | The name rises letter by letter (silver, up to 92 px).                                                    |
-| 86      | The role fades up in grey.                                                                                |
-| last 20 | The whole group pushes towards the camera, scaling up to about 12×: the push-through into the next scene. |
+| Frame   | What happens                                                                                |
+| ------- | ------------------------------------------------------------------------------------------- |
+| 4       | The point of light starts tracing the mark (420 px wide, centred at y 560).                 |
+| 58      | The mark fills in silver; the anamorphic flare peaks at 58 and is gone by 86.               |
+| 68      | The name rises letter by letter (silver, up to 92 px).                                      |
+| 86      | The role fades up in grey.                                                                  |
+| last 22 | The whole group pushes towards the camera, scaling up to about 12×, and is gone by the cut. |
 
 **Mark:**
 
@@ -43,28 +43,36 @@ Every scene receives `len` (its slot in frames, from `timeline.json`) and the ma
 **Word:**
 
 - One word, ten characters at most: it is set up to 184 px and shrinks to fit 1000 px.
-- It is a name, not a sentence: the portfolio's name, the product, the brand.
+- It is a name or a promise in one word, never a sentence. Examples: the portfolio's name ("AntoineOS"), or for a product whose name the opener already shows, its promise ("Ensemble" for a budget app for couples).
 
 **Strip:**
 
-- The screens shown inside the letters, as `{ media, aspect }`. They are repeated until they outlast the scroll.
-- Use bright screens only. A dark screenshot makes parts of letters vanish into the stage.
+- The screens shown inside the letters, as `{ media, aspect, zoom?, focus? }`. They are repeated until they outlast the scroll.
+- Fill the letters with colour:
+  - A dark screenshot makes parts of letters vanish into the stage.
+  - A mostly white UI makes plain white letters with specks.
+  - Pick colourful screens: hero images, cards, charts, gradients. Or zoom into their colourful part: `zoom: 2.5, focus: [0.7, 0.3]` magnifies the screen 2.5× around a point 70 % across and 30 % down.
 
 **Through:**
 
-- The transform-origin, inside the word's box, that the camera flies through on exit.
-- Aim it at the counter (the hole) of a letter: an O, a D, an A. For "AntoineOS" it was `81% 54%`.
-- Check frames `len-20` to `len`: the camera must fall into black, not a letter's stroke.
+- The point the camera flies through, in frame pixels `[x, y]`: the centre of a letter's hole (an O, D, A, b, e…). The demo's "Studio" uses `[746, 638]`, the hole of its final "o".
+- Both zooms (the pull-back at the start and the fly-through at the end) use this point, so the hole stays still on screen while everything else scales around it.
+- **To set it:**
+  1. Render a full-size still in the middle of the scene (`npm run still -- <start + 90>`).
+  2. Measure the hole's centre in pixels and set `through`.
+  3. Render again: if the hole moved, set `through` to its new position. One or two passes converge.
+  4. Check the last frames before the cut (`len-8` to `len-1`): the camera must fall into black, not into a stroke. At 60× a few pixels matter.
+- Without `through`, the camera aims at the centre of the word, which is usually a stroke.
 
 **Timeline:**
 
-| Frame   | What happens                                      |
-| ------- | ------------------------------------------------- |
-| 0       | Starts at 5×, so the letters are abstract shapes. |
-| 0–80    | A spring pulls back to 1×.                        |
-| 44–84   | A specular sweep crosses the word.                |
-| 50      | The line rises below it, at y 800.                |
-| last 24 | The camera flies through the word.                |
+| Frame   | What happens                                                                                      |
+| ------- | ------------------------------------------------------------------------------------------------- |
+| 0       | Starts at 5×, so the letters are abstract shapes.                                                 |
+| 0–80    | A spring pulls back to 1×.                                                                        |
+| 44–84   | A specular sweep crosses the word.                                                                |
+| 50      | The line rises below it, at y 800.                                                                |
+| last 26 | The camera flies through the letter's hole, done by the cut. After `len` the scene draws nothing. |
 
 **Default sounds:** `whoosh` 0.
 
@@ -131,17 +139,18 @@ Every scene receives `len` (its slot in frames, from `timeline.json`) and the ma
 
 ## showcase
 
-**Content:** `content.showcases[item]`. Default length 80. Repeat the scene in the timeline, once per project. Give `tail` 10 to every showcase followed by another one: that is the whip.
+**Content:** `content.showcases[item]`. Default length 80. Repeat the scene in the timeline, once per project or feature. Give `tail` 10 to every showcase followed by another one: that is the whip.
 
 **Fields:**
 
-| Field             | What it holds                                                                                                                                                                                                                    |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`            | The project name, up to 104 px silver. A giant dark copy drifts behind the window.                                                                                                                                               |
-| `tag`             | Six words at most: what it is for, not how it is built.                                                                                                                                                                          |
-| `media`, `aspect` | The screenshot and its width / height, shown in a browser window 880 px wide.                                                                                                                                                    |
-| `layers`          | 1 to 4 crops `[x, y, w, h]`, as fractions of the screenshot: its main UI blocks (a header, a card, a chart). They hover at different depths, then land in place as the window settles. Pick blocks that make sense on their own. |
-| `proof`           | One proof point, shown from frame 24 (see below).                                                                                                                                                                                |
+| Field             | What it holds                                                                                                                                                                                                                                                                                                                         |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`            | The project name, up to 104 px silver. A giant dark copy drifts behind the window.                                                                                                                                                                                                                                                    |
+| `tag`             | Six words at most: what it is for, not how it is built.                                                                                                                                                                                                                                                                               |
+| `device`          | `'browser'` (default): the screen in a browser window 880 px wide. `'phone'`: a mobile screen in an iPhone that turns towards us; add `android: true` for an Android phone.                                                                                                                                                           |
+| `media`, `aspect` | The screenshot, and for a browser its width / height (default 1.6).                                                                                                                                                                                                                                                                   |
+| `layers`          | 1 to 4 crops `[x, y, w, h]`, as fractions of the screenshot: its main UI blocks (a header, a card, a chart). They hover at different depths, then land in place as the window settles. On a phone they also drift outwards before landing. Pick blocks that make sense on their own: measure them on a full-size still of the screen. |
+| `proof`           | One proof point, shown from frame 24 (see below).                                                                                                                                                                                                                                                                                     |
 
 **Proof:**
 
@@ -171,9 +180,12 @@ Every scene receives `len` (its slot in frames, from `timeline.json`) and the ma
 
 - `{ kind: 'timeline', from, to }`: a span of time drawn by light. Use it for durations.
 - `{ kind: 'window', media, aspect }`: the product itself, tilting. Use it for "used by N". It needs a slot of about 100 frames.
-- `{ kind: 'dots', cols, rows }`: one point per unit, lit by a wave. Use it for counts up to a few hundred.
+- `{ kind: 'dots', cols, rows }`: one point per unit, lit by a wave. Use it for counts up to a few thousand; small counts get bigger dots.
+- `{ kind: 'meter', max }`: a score out of `max` (10 at most), segments lighting up in step with the counter. Use it for a rating such as "4,8 / 5" (with `decimals: 1, suffix: ' / 5'`). A ring reads as a loading spinner there.
 
-**Exit:** each stat pushes up and blurs out over the last 10 frames of its slot, and the whole scene lifts away over frames `len-22` to `len-6`.
+Each stat is centred vertically under the header, so a short visual doesn't leave the bottom of the frame empty.
+
+**Exit:** each stat pushes up and blurs out over the last 10 frames of its slot, and the whole scene lifts away from `len-16` into its tail.
 
 **Default sounds:** a `counter` at each stat's start + 2, a `swoosh` when a window rises, a `scan` when dots light up.
 
@@ -183,13 +195,13 @@ Every scene receives `len` (its slot in frames, from `timeline.json`) and the ma
 
 **Timeline:**
 
-| Frame   | What happens                                                                                                 |
-| ------- | ------------------------------------------------------------------------------------------------------------ |
-| 0–58    | The iPhone turns from its back, so the titanium and camera catch the light. Its screen wakes as it faces us. |
-| 58–92   | The camera moves in.                                                                                         |
-| 24      | The title rises letter by letter.                                                                            |
-| 150     | The two `side` phones arrive on springs, and the main phone steps back into a lineup of three.               |
-| last 20 | Everything drops out of frame.                                                                               |
+| Frame   | What happens                                                                                                                |
+| ------- | --------------------------------------------------------------------------------------------------------------------------- |
+| 0–58    | The iPhone turns from its back, so the titanium and camera catch the light. Its screen wakes as it faces us.                |
+| 58–92   | The camera moves in.                                                                                                        |
+| 24      | The title rises letter by letter.                                                                                           |
+| 150     | The two `side` phones arrive on springs, and the main phone steps back into a lineup of three.                              |
+| last 14 | Everything drops out of frame, into the tail; the title clears first, by `len-4`, so it never meets the next scene's title. |
 
 **Flow:**
 
@@ -197,6 +209,10 @@ Every scene receives `len` (its slot in frames, from `timeline.json`) and the ma
 - Three steps fit: 0, 66, 112.
 
 **Captions:** `{ at, text }`, one at a time under the title. Time each one with its screen.
+
+**Side phones:** two `{ media, android? }`. For an app on both stores, make one of them Android: three iPhones would say iOS only.
+
+**Placement:** for an app, put this scene right after the hero, on the drop: the phone is the product reveal.
 
 **Default sounds:** `whoosh` 6, a `tap` 4 frames before each step, a `swoosh` for each side phone at 152 and 160.
 

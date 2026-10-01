@@ -1,5 +1,6 @@
 // One contact sheet of the whole film, to look at before any render:
 // node scripts/review.mjs [perScene]   (default 3 frames per scene)
+// node scripts/review.mjs cuts         (every cut: 4 frames before, on, after)
 // Writes out/review/<frame>.png and out/review/sheet.png.
 import { renderStill, selectComposition } from '@remotion/renderer'
 import { execFileSync } from 'node:child_process'
@@ -13,10 +14,19 @@ import {
   timeline,
 } from './common.mjs'
 
-const per = Number(process.argv[2] ?? 3)
+const cuts = process.argv[2] === 'cuts'
+const per = cuts ? 0 : Number(process.argv[2] ?? 3)
 const frames = []
 let from = 0
 for (const s of timeline.scenes) {
+  if (cuts && from > 0) {
+    for (const d of [-4, 0, 4]) {
+      frames.push({
+        f: from + d,
+        label: `${s.kind}${s.item ?? ''} ${d >= 0 ? '+' : ''}${d}`,
+      })
+    }
+  }
   for (let k = 0; k < per; k++) {
     // Spread across the scene, skipping its first and last frames where it
     // is still entering or already leaving

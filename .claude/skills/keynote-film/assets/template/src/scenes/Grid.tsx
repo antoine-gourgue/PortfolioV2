@@ -65,10 +65,10 @@ export const Grid: React.FC<{
   const { fps } = useVideoConfig()
   const cols = columns(icons.length)
   const rows = Math.ceil(icons.length / cols)
-  const exit = ease(f, [len - 26, len], [0, 1], easeIn)
+  const exit = ease(f, [len - 22, len + 4], [0, 1], easeIn)
   const settled = ease(f, [40, 60], [0, 1])
   return (
-    <AbsoluteFill style={{ background: '#000' }}>
+    <AbsoluteFill>
       <StageLight y={58} w={60} opacity={1 - exit} />
       <AbsoluteFill style={{ perspective: 1500, perspectiveOrigin: '50% 56%' }}>
         <div
@@ -113,7 +113,8 @@ export const Grid: React.FC<{
                   height: SIZE,
                   transform: `translate3d(${x * spread}px, ${y * spread}px, ${z}px) rotateX(${s.rx * (1 - t)}deg) rotateY(${s.ry * (1 - t)}deg)`,
                   opacity:
-                    Math.min(1, t * 2) * (1 - ease(f, [len - 12, len], [0, 1])),
+                    Math.min(1, t * 2) *
+                    (1 - ease(f, [len - 8, len + 4], [0, 1])),
                   borderRadius: '22%',
                   overflow: 'hidden',
                   background:

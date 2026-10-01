@@ -22,19 +22,24 @@ The template comes from the film Antoine Gourgue made for his job search (`video
 
 ## The film
 
-| Scene          | Default    | What happens                                                                      |
-| -------------- | ---------- | --------------------------------------------------------------------------------- |
-| `opener`       | 4 s        | A point of light traces the mark; the name builds letter by letter, then the role |
-| `hero`         | 4 s        | One big word, screens scrolling inside its letters; the camera flies through it   |
-| `laptop`       | 8 s        | A MacBook rises and opens, windows lift off its screen, three words on the beat   |
-| `grid`         | 4 s        | App icons converge out of deep space into a grid: "9 projets."                    |
-| `showcase` × 3 | 2.7 s each | A project: name, tagline, exploded 3D window, one proof point; whip pans between  |
-| `numbers`      | 8 s        | Up to three big silver numbers counting up, each with a visual for scale          |
-| `phone`        | 8 s        | An iPhone turns out of the dark, wakes, navigates; two more join it               |
-| `oneMoreThing` | 2 s        | The pause: one line on black, the music drops out                                 |
-| `end`          | 8 s        | "Disponible." → a list on the beat (cities, platforms…) → mark, name, link        |
+| Scene          | Default    | What happens                                                                                      |
+| -------------- | ---------- | ------------------------------------------------------------------------------------------------- |
+| `opener`       | 4 s        | A point of light traces the mark; the name builds letter by letter, then the role                 |
+| `hero`         | 4 s        | One big word, screens scrolling inside its letters; the camera flies through it                   |
+| `laptop`       | 8 s        | A MacBook rises and opens, windows lift off its screen, three words on the beat                   |
+| `grid`         | 4 s        | App icons converge out of deep space into a grid: "9 projets."                                    |
+| `showcase` × 3 | 2.7 s each | A project or feature: name, tagline, an exploded 3D window or phone, one proof; whip pans between |
+| `numbers`      | 8 s        | Up to three big silver numbers counting up, each with a visual for scale                          |
+| `phone`        | 8 s        | An iPhone turns out of the dark, wakes, navigates; two more join it                               |
+| `oneMoreThing` | 2 s        | The pause: one line on black, the music drops out                                                 |
+| `end`          | 8 s        | "Disponible." → a list on the beat (cities, platforms…) → mark, name, link                        |
 
-Scenes are optional and can be reordered or repeated. The story comes first: a product launch might drop `numbers` and `grid`, a portfolio might add showcases. `references/scenes.md` gives each scene's props, timings and limits.
+Scenes are optional and can be reordered or repeated; content is only needed for the scenes the timeline uses. The story comes first:
+
+- **A mobile app launch:** drop `laptop` and `grid`, open on the `phone` after the hero, and make the showcases phones (`device: 'phone'`). Put an Android in the lineup (`android: true`) if the app is on both stores.
+- **A portfolio:** keep everything and add showcases.
+
+`references/scenes.md` gives each scene's props, timings and limits.
 
 ## Workflow
 
@@ -43,8 +48,8 @@ Scenes are optional and can be reordered or repeated. The story comes first: a p
 Collect what the film needs. Ask only for what is missing, in the user's language.
 
 - **Purpose:** the goal (job search, launch, portfolio) and where it will be posted.
-- **Hero:** the subject's name, role and mark (an SVG path, or initials), plus the hero word and its one-line promise.
-- **Showcases:** two to four of them, each with a name, a tagline of six words at most, a screenshot and one proof (a stack, a score, a result).
+- **Hero:** the subject's name, role and mark (an SVG path, or initials), plus the hero word (one word: a name, or the promise in one word) and its one-line promise.
+- **Showcases:** two to four projects or features, each with a name, a tagline of six words at most, a desktop or mobile screenshot and one proof (a stack, a score, a result).
 - **Numbers:** up to three, each with its exact wording. If a figure describes a third party, such as an employer, a client or a platform, check it on the web and use its real unit. "37 000 points de vente" and "37 000 utilisateurs" are different claims.
 - **Phone screens:** two or three screens, if there is a mobile story.
 - **End card:** the headline, the list (cities, platforms) and the link.
@@ -78,6 +83,17 @@ Write in the user's language with proper typography: ’ « » and French number
 
 When a product is the heart of the story, rebuild its key screen as a React component and pass the element as the media. Antoine's film did this for the Digitaleo editor. The rebuilt UI stays crisp in 3D and can animate: typing, a block dropped in, a switch to mobile. A screenshot can't.
 
+- **Sizing:** size such a UI in container units (`cqw`, as the mocks in `kit/screens.tsx` do), so one component reads the same in a phone, a window and the hero letters.
+- **The React import:** Remotion compiles JSX with the classic runtime, so every `.tsx` file that contains JSX, `content.tsx` included, must `import React from 'react'`. The tsconfig matches it, so `npm run typecheck` flags a missing import instead of the render failing with `React is not defined`.
+
+**The hero:**
+
+- **Letter fill:** fill the hero's letters with colour. Mostly white UI makes plain white letters and dark UI makes them vanish. Use colourful screens, or zoom into their colourful parts with `zoom` and `focus`.
+- **The fly-through point:** set `through` to the centre of a letter's hole in frame pixels.
+  1. Render a full-size still of the hero and measure the hole there.
+  2. Set `through` to it, render again: the hole must not move between two frames of the scene, because it is the fixed point of both zooms.
+  3. At the 60× exit, a few pixels off lands the camera on a stroke, so check the last frames before the cut.
+
 ### 4. Pace the timeline
 
 `src/timeline.json` lists the scenes in order:
@@ -91,7 +107,7 @@ When a product is the heart of the story, rebuild its key screen as a React comp
 
 **Pacing rules:**
 
-- **The grid:** 120 BPM, so a beat is 15 frames and a bar 60. Scene lengths are multiples of 15. Big cuts land on a bar, or within 4 frames of one.
+- **The grid:** 120 BPM, so a beat is 15 frames and a bar 60. The cuts that matter (the drop after the hero, the start of the end card) land on a bar, or within 4 frames of one. Showcases keep their own 80-frame rhythm between them.
 - **Reading time:** a line of text stays readable for at least 45 frames, and for at least 60 if it runs to seven words or more.
 - **Screens:** a screen the viewer has to understand (a UI, a step of the phone flow) holds at least 30 frames once it has landed. Show no more than three phone screens in 8 seconds: the mobile chapter of the original felt rushed until it got this room.
 - **Music:** the `music` bars should add up to the scenes' total; `npm run audio` warns otherwise.
@@ -100,6 +116,7 @@ When a product is the heart of the story, rebuild its key screen as a React comp
 
 ```bash
 npm run review              # out/review/sheet.png: 3 frames per scene, ~1 min
+npm run review -- cuts      # every cut: 4 frames before, on it, 4 after
 npm run still -- 640 980    # full-size frames into out/stills/
 ```
 
@@ -157,10 +174,17 @@ These rules come from the original film's feedback rounds. `references/grammar.m
 
 - **3D and opacity:** opacity or filter on an element with `transform-style: preserve-3d` flattens it. Animate the opacity of a plain wrapper around the 3D element, as `Laptop` and `Phone` do.
 - **Pure frames:** use Remotion's `random(seed)`, never `Math.random()` or `Date`, so every frame is a pure function of its number.
-- **Overlapping scenes:** they need transparent backgrounds where they overlap, or the later one hides the earlier one's exit. Showcases share one pan so the whip stays edge to edge.
+- **Overlapping scenes:**
+  - Scene backgrounds are transparent: the film's root is black.
+  - A scene exits over its last frames and into its `tail`, so it dissolves into the next entrance. A scene that is gone exactly at its cut, followed by one that fades in, leaves black frames.
+  - The exceptions end by the cut on purpose:
+    - the hero, whose camera is inside a letter by then;
+    - the opener, whose push-through would clutter the hero's first frames;
+    - "One more thing…", a deliberate cut to black.
+  - Showcases share one pan, so the whip stays edge to edge.
 - **Hand-offs:** in a screen-to-screen transition, the outgoing layer must animate as leaving, not re-enter. Otherwise the hand-off flashes black.
 - **Filters:** large filters (blur, SVG) on full-frame layers are slow on the software renderer. Mount them only while they are visible, as `Smear` does for whips.
-- **Fonts:** `src/fonts.ts` holds the render until fonts are loaded. Add any new face there, or the first frames render in a fallback font.
+- **Fonts:** `src/fonts.ts` holds the render until fonts are loaded. Add any new face there, or the first frames render in a fallback font. The film's root sets Inter and white, so stray text never falls back to a serif.
 - **ffmpeg:** Remotion's bundled ffmpeg lacks several filters (`fps`, `setsar`, `fade`). `scripts/encode.sh` only uses options it supports, and prefers a system ffmpeg when there is one.
 
 ## Adapting the template
@@ -172,7 +196,13 @@ These rules come from the original film's feedback rounds. `references/grammar.m
   2. Register its `kind` in `src/timeline.ts` and in the `switch` of `src/Film.tsx`.
   3. Place it in `timeline.json`.
 
-  Follow the house structure: a black or transparent `AbsoluteFill`, a `StageLight`, one continuous camera move, an entrance from frame 0, and an exit over the last 15 to 25 frames that overlaps the next scene through `tail`.
+  Follow the house structure:
+
+  - a transparent `AbsoluteFill` and a `StageLight`;
+  - one continuous camera move;
+  - an entrance from frame 0;
+  - an exit over the last 15 to 25 frames that runs into `tail` (to about `len + 4`);
+  - opacity on plain wrappers, never on `preserve-3d` elements.
 
 - **The reference implementation:** in the PortfolioV2 repository, `video/src/videos/Keynote.tsx` is the original film. It also has extras such as the rebuilt Digitaleo editor in `video/src/ui/DigitaleoEditor.tsx`.
 

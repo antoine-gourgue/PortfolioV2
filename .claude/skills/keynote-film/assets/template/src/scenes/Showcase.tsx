@@ -8,6 +8,7 @@ import {
 } from 'remotion'
 import { CX, fonts, stage } from '../config'
 import { Ring } from '../kit/charts'
+import { IPhone3D } from '../kit/devices'
 import { Smear, StageLight } from '../kit/light'
 import { Body, Rise, ease, easeIn, easeOut, fitSize } from '../kit/motion'
 import { Shot, TrafficLights, type Media } from '../kit/screens'
@@ -94,6 +95,82 @@ const ExplodedWindow: React.FC<{
           </div>
         </div>
       ))}
+    </div>
+  )
+}
+
+const PHONE_W = 350
+const PHONE_H = PHONE_W * 2.07
+// The display inside IPhone3D: the frame's rim plus the glass bezel, and the
+// depth of the glass in front of the phone's centre
+const INSET = PHONE_W * 0.054
+const SCREEN_W = PHONE_W - INSET * 2
+const SCREEN_H = PHONE_H - INSET * 2
+const GLASS_Z = PHONE_W * 0.0525 + 1.5
+
+/**
+ * A mobile screen in an iPhone turning towards us, its UI blocks lifted off
+ * the glass and drifting outwards, then settling back onto the display.
+ */
+const ExplodedPhone: React.FC<{
+  media: Media
+  android?: boolean
+  layers: Crop[]
+  t: number
+  f: number
+  len: number
+}> = ({ media, android, layers, t, f, len }) => {
+  const lift = 1 - t
+  const ry = -34 * lift + interpolate(f, [0, len], [-9, 9])
+  return (
+    <div
+      style={{
+        position: 'relative',
+        width: PHONE_W,
+        height: PHONE_H,
+        transformStyle: 'preserve-3d',
+        transform: `rotateX(${20 * lift + 3}deg) rotateY(${ry}deg) rotateZ(${-8 * lift}deg)`,
+      }}
+    >
+      <IPhone3D
+        width={PHONE_W}
+        angle={ry}
+        android={android}
+        screen={<Shot media={media} />}
+      />
+      {layers.map(([x, y, w, lh], i) => {
+        // Blocks drift away from the centre line, so they read as separate
+        // pieces of UI rather than one blurred copy of the screen
+        const dx = (x + w / 2 - 0.5) * 300 * lift
+        return (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              left: INSET + x * SCREEN_W,
+              top: INSET + y * SCREEN_H,
+              width: w * SCREEN_W,
+              height: lh * SCREEN_H,
+              overflow: 'hidden',
+              borderRadius: 10,
+              transform: `translate3d(${dx}px, 0, ${GLASS_Z + lift * (110 + i * 80)}px)`,
+              boxShadow: `0 ${lift * 40}px ${lift * 60}px rgba(0,0,0,${0.6 * lift})`,
+            }}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                left: -x * SCREEN_W,
+                top: -y * SCREEN_H,
+                width: SCREEN_W,
+                height: SCREEN_H,
+              }}
+            >
+              <Shot media={media} />
+            </div>
+          </div>
+        )
+      })}
     </div>
   )
 }
@@ -225,7 +302,10 @@ export const Showcase: React.FC<{
   const smear = Math.sin(Math.PI * (inT || outT)) * 70
   const fadeIn = whipIn ? 1 : ease(f, [0, 12], [0, 1])
   const lift = whipOut ? 0 : ease(f, [len - 8, len + 4], [0, 1], easeIn)
-  const h = WIN_W / show.aspect
+  const phone = show.device === 'phone'
+  const aspect = show.aspect ?? 1.6
+  const boxW = phone ? PHONE_W : WIN_W
+  const boxH = phone ? PHONE_H : WIN_W / aspect + WIN_BAR
   return (
     <AbsoluteFill
       style={{
@@ -273,20 +353,31 @@ export const Showcase: React.FC<{
             <div
               style={{
                 position: 'absolute',
-                left: CX - WIN_W / 2,
-                top: 740 - (h + WIN_BAR) / 2,
+                left: CX - boxW / 2,
+                top: (phone ? 760 : 740) - boxH / 2,
                 transformStyle: 'preserve-3d',
                 transform: `translateZ(${interpolate(land, [0, 1], [-500, 0]) + f * 0.8}px)`,
               }}
             >
-              <ExplodedWindow
-                media={show.media}
-                aspect={show.aspect}
-                layers={show.layers}
-                t={land}
-                f={f}
-                len={len}
-              />
+              {phone ? (
+                <ExplodedPhone
+                  media={show.media}
+                  android={show.android}
+                  layers={show.layers}
+                  t={land}
+                  f={f}
+                  len={len}
+                />
+              ) : (
+                <ExplodedWindow
+                  media={show.media}
+                  aspect={aspect}
+                  layers={show.layers}
+                  t={land}
+                  f={f}
+                  len={len}
+                />
+              )}
             </div>
           </AbsoluteFill>
           <div

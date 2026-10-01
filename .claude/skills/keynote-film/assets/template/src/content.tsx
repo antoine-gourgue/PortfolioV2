@@ -1,9 +1,12 @@
+import React from 'react'
+import { MockScreen } from './kit/screens'
 import type { Content } from './types'
 
 // Demo content: a fictional designer, with screens drawn in code. Replace all
 // of it. Real screenshots go in public/footage/ and are referenced as
-// 'footage/name.jpg'; a product UI rebuilt in code can be passed as a
-// React element wherever a screen is expected.
+// 'footage/name.jpg'; a product UI rebuilt in code can be passed as a React
+// element wherever a screen is expected (see numbers below). Remotion
+// compiles JSX with the classic runtime: keep the React import.
 
 const blue = '#0a84ff'
 const pink = '#ff375f'
@@ -23,7 +26,9 @@ export const content: Content = {
       { media: { mock: 'web', title: 'Pulse', accent: pink }, aspect: 1.6 },
       { media: { mock: 'web', title: 'Nova', accent: green }, aspect: 1.6 },
     ],
-    through: '58% 55%',
+    // The hole of the final "o": the camera leaves through it. Measured on
+    // a full-size still of the hero, then checked on the exit frames
+    through: [746, 638],
   },
 
   laptop: {
@@ -74,11 +79,11 @@ export const content: Content = {
     {
       name: 'Pulse',
       tag: 'Le suivi santé, simplifié.',
-      media: { mock: 'web', title: 'Pulse', accent: pink },
-      aspect: 1.6,
+      device: 'phone',
+      media: { mock: 'mobile', title: 'Pulse', accent: pink },
       layers: [
-        [0.53, 0.2, 0.42, 0.52],
-        [0.36, 0.78, 0.29, 0.18],
+        [0.06, 0.3, 0.88, 0.27],
+        [0.06, 0.6, 0.88, 0.17],
       ],
       proof: {
         kind: 'ring',
@@ -119,7 +124,11 @@ export const content: Content = {
         unit: 'personnes chaque mois',
         visual: {
           kind: 'window',
-          media: { mock: 'desktop', title: 'Lumen', accent: blue },
+          media: (
+            <MockScreen
+              spec={{ mock: 'desktop', title: 'Lumen', accent: blue }}
+            />
+          ),
           aspect: 1.6,
         },
         len: 100,
@@ -154,8 +163,11 @@ export const content: Content = {
       { at: 156, text: 'Et le même soin partout.' },
     ],
     side: [
-      { mock: 'mobile', title: 'Nova', accent: green },
-      { mock: 'mobile', title: 'Tempo', accent: orange },
+      {
+        media: { mock: 'mobile', title: 'Nova', accent: green },
+        android: true,
+      },
+      { media: { mock: 'mobile', title: 'Tempo', accent: orange } },
     ],
   },
 
@@ -175,6 +187,6 @@ export const content: Content = {
     foot: 'Disponible en CDI · janvier 2027',
     sub: 'Lyon · Nantes · Paris',
     laptop: { mock: 'desktop', title: 'Atlas', accent: blue },
-    phone: { mock: 'mobile', title: 'Projets', accent: pink },
+    phone: { media: { mock: 'mobile', title: 'Projets', accent: pink } },
   },
 }

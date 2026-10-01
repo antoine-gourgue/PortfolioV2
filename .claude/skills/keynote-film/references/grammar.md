@@ -84,13 +84,13 @@ The rule is simple: compare frame `n` and frame `n + 15` of any shot, and someth
 
 | Exit         | How                                                                                                                             | Where                                             |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| Push-through | the group scales up hard (to ~12×, or `60^t` for flying through a letter) with an ease-in, and fades in the last 6–10 frames    | opener → hero, hero → laptop                      |
+| Push-through | the group scales up hard (to ~12×, or `60^t` for flying through a letter's hole) with an ease-in, done by the cut               | opener → hero, hero → next                        |
 | Fly-past     | the 3D group moves towards the camera (`translateZ` +1500) while it fades                                                       | laptop, grid icons bursting                       |
 | Whip pan     | both shots translate by the frame width on the same eased curve, with a horizontal `Smear` peaking at 70 px mid-whip; 10 frames | between showcases                                 |
 | Push-up      | the content rises 120–220 px, blurs and fades in 10–16 frames                                                                   | stat slots, the numbers scene, end-card movements |
 | Drop         | devices fall out of frame (+900 px) while the stage light dims                                                                  | phone                                             |
 
-Scenes overlap by their `tail` (6 frames by default) so an exit and the next entrance share frames. Cuts to black are reserved for "One more thing…".
+Scene backgrounds are transparent and scenes overlap by their `tail` (6 frames by default), so an exit dissolves into the next entrance. An exit that ends exactly at the cut before a scene that fades in leaves black frames: run it into the tail. Cuts to black are reserved for "One more thing…".
 
 ## Easing and springs
 

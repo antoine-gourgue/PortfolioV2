@@ -66,7 +66,7 @@ export const Laptop: React.FC<{
     ''
   )
   return (
-    <AbsoluteFill style={{ background: '#000' }}>
+    <AbsoluteFill>
       <StageLight y={62} w={70} h={40} opacity={enter} />
       {/* Opacity on the preserve-3d elements themselves would flatten them */}
       <AbsoluteFill

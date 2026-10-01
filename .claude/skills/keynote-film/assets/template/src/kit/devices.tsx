@@ -286,9 +286,12 @@ export const MacBook3D: React.FC<{
 
 // Natural titanium, lit by a key light at the front upper left
 const TITANIUM = [182, 177, 168]
-const metal = (k: number) => {
+// A darker anodised frame, so an Android phone in a lineup does not read as
+// another iPhone
+const GRAPHITE = [112, 116, 124]
+const metal = (k: number, base = TITANIUM) => {
   const m = Math.max(0.28, Math.min(1.32, k))
-  return `rgb(${TITANIUM.map((c) => Math.round(Math.min(255, c * m))).join(',')})`
+  return `rgb(${base.map((c) => Math.round(Math.min(255, c * m))).join(',')})`
 }
 
 /**
@@ -304,7 +307,10 @@ export const IPhone3D: React.FC<{
   angle?: number
   screenOn?: number
   logo?: DeviceLogo
-}> = ({ width: W, screen, angle = 0, screenOn = 1, logo }) => {
+  /** A generic Android phone instead: graphite frame, punch-hole camera. */
+  android?: boolean
+}> = ({ width: W, screen, angle = 0, screenOn = 1, logo, android }) => {
+  const frame = android ? GRAPHITE : TITANIUM
   const H = W * 2.07
   const R = W * 0.17
   const T = W * 0.105
@@ -364,7 +370,7 @@ export const IPhone3D: React.FC<{
         width: T * 0.5,
         height: H * len,
         borderRadius: T * 0.25,
-        background: metal((side < 0 ? leftK : rightK) * 0.95),
+        background: metal((side < 0 ? leftK : rightK) * 0.95, frame),
         transform: `rotateY(${side * 90}deg)`,
         backfaceVisibility: 'hidden',
         WebkitBackfaceVisibility: 'hidden',
@@ -396,7 +402,7 @@ export const IPhone3D: React.FC<{
               height: H - inset * 2,
               borderRadius: R - inset,
               transform: `translateZ(${(t * T) / 2}px)`,
-              background: `linear-gradient(180deg, rgba(255,255,255,0.12), rgba(0,0,0,0.18)), linear-gradient(90deg, ${metal(leftK * k)}, ${metal(0.95 * k)} 50%, ${metal(rightK * k)})`,
+              background: `linear-gradient(180deg, rgba(255,255,255,0.12), rgba(0,0,0,0.18)), linear-gradient(90deg, ${metal(leftK * k, frame)}, ${metal(0.95 * k, frame)} 50%, ${metal(rightK * k, frame)})`,
             }}
           />
         )
@@ -443,11 +449,12 @@ export const IPhone3D: React.FC<{
           <div
             style={{
               position: 'absolute',
-              top: W * 0.03,
+              // The Dynamic Island, or a punch-hole camera on Android
+              top: android ? W * 0.032 : W * 0.03,
               left: '50%',
-              width: W * 0.3,
-              height: W * 0.085,
-              marginLeft: -W * 0.15,
+              width: android ? W * 0.04 : W * 0.3,
+              height: android ? W * 0.04 : W * 0.085,
+              marginLeft: android ? -W * 0.02 : -W * 0.15,
               borderRadius: W,
               background: '#000',
             }}

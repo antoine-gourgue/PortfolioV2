@@ -1,11 +1,11 @@
 import React from 'react'
-import { AbsoluteFill, interpolate, useCurrentFrame } from 'remotion'
+import { AbsoluteFill, Easing, interpolate, useCurrentFrame } from 'remotion'
 import { stage } from '../config'
 import { DotField, Timeline } from '../kit/charts'
 import { StageLight } from '../kit/light'
-import { Body, ease, easeIn, easeOut, fitSize } from '../kit/motion'
+import { Body, clamp, ease, easeIn, easeOut, fitSize } from '../kit/motion'
 import { Shot, TrafficLights } from '../kit/screens'
-import { Counter, SilverText, formatNumber } from '../kit/type'
+import { Counter, SILVER, SilverText, formatNumber } from '../kit/type'
 import type { Stat, StatVisual } from '../types'
 
 const WINDOW_W = 820
@@ -35,12 +35,48 @@ const StatSlot: React.FC<{
   )
 }
 
-const Visual: React.FC<{ visual: StatVisual; at: number; len: number }> = ({
-  visual,
-  at,
-  len,
-}) => {
+const Visual: React.FC<{
+  visual: StatVisual
+  value: number
+  at: number
+  len: number
+}> = ({ visual, value, at, len }) => {
   const f = useCurrentFrame()
+  if (visual.kind === 'meter') {
+    // Lit in step with the counter above it (same frames, same curve), so
+    // the last segment stops where the number does
+    const t = interpolate(f, [at + 2, at + 32], [0, value], {
+      ...clamp,
+      easing: Easing.bezier(0.2, 0.8, 0.2, 1),
+    })
+    const gap = 20
+    const seg = Math.min(150, (820 - gap * (visual.max - 1)) / visual.max)
+    return (
+      <div style={{ marginTop: 80, display: 'flex', gap }}>
+        {Array.from({ length: visual.max }, (_, i) => (
+          <div
+            key={i}
+            style={{
+              width: seg,
+              height: 22,
+              borderRadius: 11,
+              background: '#2c2c2e',
+              overflow: 'hidden',
+            }}
+          >
+            <div
+              style={{
+                width: `${Math.max(0, Math.min(1, t - i)) * 100}%`,
+                height: '100%',
+                borderRadius: 11,
+                background: SILVER,
+              }}
+            />
+          </div>
+        ))}
+      </div>
+    )
+  }
   if (visual.kind === 'timeline') {
     return (
       <div style={{ marginTop: 60 }}>
@@ -104,7 +140,8 @@ export const Numbers: React.FC<{
   stats: Stat[]
 }> = ({ len, header, stats }) => {
   const f = useCurrentFrame()
-  const exit = ease(f, [len - 22, len - 6], [0, 1], easeIn)
+  // Runs into the tail, so the next scene's entrance overlaps it
+  const exit = ease(f, [len - 16, len + 4], [0, 1], easeIn)
   const starts = stats.map((_, i) =>
     stats.slice(0, i).reduce((a, s) => a + (s.len ?? 60), 0)
   )
@@ -135,12 +172,16 @@ export const Numbers: React.FC<{
           <StatSlot key={i} at={at} len={last ? undefined : slot}>
             <div
               style={{
+                // Centred in the space under the header, so a stat with a
+                // short visual does not leave the bottom of the frame empty
                 position: 'absolute',
-                top: 300,
+                top: 240,
+                bottom: 80,
                 width: '100%',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               <Body size={40} style={{ marginBottom: 6 }}>
@@ -171,7 +212,12 @@ export const Numbers: React.FC<{
                 </Body>
               )}
               {stat.visual && (
-                <Visual visual={stat.visual} at={at} len={slot} />
+                <Visual
+                  visual={stat.visual}
+                  value={stat.value}
+                  at={at}
+                  len={slot}
+                />
               )}
             </div>
           </StatSlot>

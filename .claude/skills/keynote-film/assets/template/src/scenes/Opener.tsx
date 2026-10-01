@@ -21,10 +21,11 @@ export const Opener: React.FC<{
 }> = ({ len, name, role, mark }) => {
   const f = useCurrentFrame()
   const push = interpolate(f, [0, len - 10], [0.9, 1.03])
-  const exit = ease(f, [len - 20, len + 4], [0, 1], easeIn)
+  // Gone by the cut: the hero opens on giant letters, a clean cut reads better
+  const exit = ease(f, [len - 22, len], [0, 1], easeIn)
   const flare = interpolate(f, [50, 58, 86], [0, 0.9, 0], clamp)
   return (
-    <AbsoluteFill style={{ background: '#000' }}>
+    <AbsoluteFill>
       <StageLight
         y={42}
         opacity={interpolate(f, [40, 70], [0, 1], clamp) * (1 - exit)}
@@ -33,7 +34,7 @@ export const Opener: React.FC<{
         style={{
           transform: `scale(${push * (1 + exit ** 2 * 11)})`,
           transformOrigin: `50% ${LOGO_Y}px`,
-          opacity: 1 - ease(f, [len - 6, len + 4], [0, 1]),
+          opacity: 1 - ease(f, [len - 8, len], [0, 1]),
         }}
       >
         <div

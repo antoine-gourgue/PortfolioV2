@@ -10,9 +10,9 @@ import { CX } from '../config'
 import { IPhone3D, type DeviceLogo } from '../kit/devices'
 import { StageLight } from '../kit/light'
 import { Body, clamp, ease, easeIn, easeInOut, fitSize } from '../kit/motion'
-import { Shot, type Media } from '../kit/screens'
+import { Shot } from '../kit/screens'
 import { Letters } from '../kit/type'
-import type { PhoneStep } from '../types'
+import type { PhoneShot, PhoneStep } from '../types'
 
 const PHONE_W = 370
 /** When the two side phones join the main one, in frames into the scene. */
@@ -85,7 +85,7 @@ export const Phone: React.FC<{
   title: string
   flow: PhoneStep[]
   captions: { at: number; text: string }[]
-  side: Media[]
+  side: PhoneShot[]
   logo?: DeviceLogo
 }> = ({ len, title, flow, captions, side, logo }) => {
   const f = useCurrentFrame()
@@ -104,14 +104,18 @@ export const Phone: React.FC<{
         config: { damping: 20, stiffness: 60 },
       })
     : 0
-  const exit = ease(f, [len - 20, len], [0, 1], easeIn)
+  // The drop runs into the tail, so the next scene's entrance overlaps it
+  // instead of following black frames
+  const exit = ease(f, [len - 14, len + 6], [0, 1], easeIn)
+  // The title clears first: the next scene builds its own in the same zone
+  const titleOut = ease(f, [len - 18, len - 4], [0, 1])
   const ry =
     interpolate(turn, [0, 1], [-200, 0]) + Math.sin((f - 58) / 30) * 4 * turn
   const rx = interpolate(turn, [0, 1], [16, 3]) + Math.sin(f / 34) * 1.5
   const rz = interpolate(turn, [0, 1], [-12, 0])
   const mainScale = (1 + 0.15 * zoom) * (1 - 0.3 * line)
   const screenOn = interpolate(ry, [-60, -15], [0, 1], clamp)
-  const sidePhone = (dir: -1 | 1, media: Media, delay: number) => {
+  const sidePhone = (dir: -1 | 1, phone: PhoneShot, delay: number) => {
     const t = spring({
       frame: f - SIDE_AT - delay,
       fps,
@@ -133,7 +137,8 @@ export const Phone: React.FC<{
           width={PHONE_W}
           angle={angle}
           logo={logo}
-          screen={<Shot media={media} />}
+          android={phone.android}
+          screen={<Shot media={phone.media} />}
         />
       </div>
     )
@@ -189,7 +194,7 @@ export const Phone: React.FC<{
           position: 'absolute',
           top: 120,
           width: '100%',
-          opacity: 1 - exit,
+          opacity: 1 - titleOut,
         }}
       >
         <Letters text={title} at={24} size={fitSize(title, 100)} silver />

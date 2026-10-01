@@ -16,6 +16,7 @@ On a 4-core machine with no GPU, measured on the template's 54-second demo:
 | Command                                | Time                                    |
 | -------------------------------------- | --------------------------------------- |
 | `npm run review` (33 half-size frames) | about 1 min                             |
+| `npm run review -- cuts` (30 frames)   | about 1 min                             |
 | `npm run still -- <frame>`             | 2–5 s                                   |
 | `npm run audio`                        | about 30 s                              |
 | `npm run render` (1620 frames)         | about 15 min                            |
@@ -38,7 +39,7 @@ Go through it on `out/review/sheet.png`, then on full-size stills of anything do
   - the device screens face the camera long enough to be read.
 - **Motion:** two frames 15 apart differ in every shot. If not, add a drift.
 - **Transitions:**
-  - render frames around each cut (the cut −4, the cut, the cut +4);
+  - `npm run review -- cuts` renders every cut: 4 frames before, on it, 4 after;
   - nothing pops or flashes, there is no black frame, and nothing from the previous scene is left over.
 - **Timing:**
   - every line stays at least 45 frames;

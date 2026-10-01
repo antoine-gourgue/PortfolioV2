@@ -13,17 +13,105 @@ const MAC_W = 670
 const MAC_D = MAC_W * 0.69
 const PHONE_W = 210
 
+const logo = (size: number, color: string) => (
+  <Monogram mark={content.mark} size={size} color={color} />
+)
+
+/** The MacBook with the iPhone leaning in front of it. */
+const LaptopAndPhone: React.FC = () => {
+  const { laptop, phone } = content.thumb
+  return (
+    <AbsoluteFill style={{ perspective: 2000, perspectiveOrigin: '50% 60%' }}>
+      <div
+        style={{
+          position: 'absolute',
+          left: CX - MAC_W / 2 - 40,
+          top: 960,
+          width: MAC_W,
+          height: 0,
+          transformStyle: 'preserve-3d',
+          transform: 'rotateX(-16deg) rotateY(-20deg)',
+        }}
+      >
+        <div
+          style={{
+            transformStyle: 'preserve-3d',
+            transform: `translateZ(${-MAC_D / 2}px)`,
+          }}
+        >
+          <MacBook3D
+            width={MAC_W}
+            lid={104}
+            sheen={0.55}
+            logo={logo}
+            screen={laptop && <Shot media={laptop} />}
+          />
+        </div>
+      </div>
+      <div
+        style={{
+          position: 'absolute',
+          left: 745,
+          top: 640,
+          transformStyle: 'preserve-3d',
+          transform: 'translateZ(120px) rotateY(-16deg) rotateZ(4deg)',
+        }}
+      >
+        <IPhone3D
+          width={PHONE_W}
+          angle={-16}
+          logo={logo}
+          android={phone.android}
+          screen={<Shot media={phone.media} />}
+        />
+      </div>
+    </AbsoluteFill>
+  )
+}
+
+/** A mobile-only product: two phones side by side. */
+const TwoPhones: React.FC = () => {
+  const { phone, phone2 } = content.thumb
+  const shots = [
+    { shot: phone2 ?? phone, x: CX - 250, ry: 20, rz: -4, z: -40 },
+    { shot: phone, x: CX + 10, ry: -16, rz: 3, z: 80 },
+  ]
+  return (
+    <AbsoluteFill style={{ perspective: 2000, perspectiveOrigin: '50% 60%' }}>
+      {shots.map(({ shot, x, ry, rz, z }, i) => (
+        <div
+          key={i}
+          style={{
+            position: 'absolute',
+            left: x,
+            top: 520,
+            transformStyle: 'preserve-3d',
+            transform: `translateZ(${z}px) rotateY(${ry}deg) rotateZ(${rz}deg)`,
+          }}
+        >
+          <IPhone3D
+            width={PHONE_W * 1.15}
+            angle={ry}
+            logo={logo}
+            android={shot.android}
+            screen={<Shot media={shot.media} />}
+          />
+        </div>
+      ))}
+    </AbsoluteFill>
+  )
+}
+
 /**
- * Cover image: the hook in silver type over the MacBook and the iPhone,
- * availability underneath. Seen small in a feed, so few words, large.
+ * Cover image: the hook in silver type over the devices, availability or
+ * release underneath. Seen small in a feed, so few words, large.
  */
 export const Thumb: React.FC = () => {
-  const { hook, foot, sub, laptop, phone } = content.thumb
-  const logo = (size: number, color: string) => (
-    <Monogram mark={content.mark} size={size} color={color} />
-  )
+  const { hook, foot, sub, laptop } = content.thumb
   return (
-    <AbsoluteFill style={{ background: '#000' }}>
+    <AbsoluteFill
+      style={{ background: '#000', fontFamily: fonts.body, color: stage.white }}
+    >
       <StageLight y={58} w={70} h={42} />
       <div
         style={{
@@ -38,7 +126,10 @@ export const Thumb: React.FC = () => {
           color: stage.grey,
         }}
       >
-        {content.name} · {content.role}
+        {/* A product's cover already sets its name in the hook */}
+        {hook[0] === content.name
+          ? content.role
+          : `${content.name} · ${content.role}`}
       </div>
       <div
         style={{
@@ -67,55 +158,11 @@ export const Thumb: React.FC = () => {
           fontSize: fitSize(hook[1], 64, 1000),
           fontWeight: 700,
           letterSpacing: '-0.03em',
-          color: stage.white,
         }}
       >
         {hook[1]}
       </div>
-      <AbsoluteFill style={{ perspective: 2000, perspectiveOrigin: '50% 60%' }}>
-        <div
-          style={{
-            position: 'absolute',
-            left: CX - MAC_W / 2 - 40,
-            top: 960,
-            width: MAC_W,
-            height: 0,
-            transformStyle: 'preserve-3d',
-            transform: 'rotateX(-16deg) rotateY(-20deg)',
-          }}
-        >
-          <div
-            style={{
-              transformStyle: 'preserve-3d',
-              transform: `translateZ(${-MAC_D / 2}px)`,
-            }}
-          >
-            <MacBook3D
-              width={MAC_W}
-              lid={104}
-              sheen={0.55}
-              logo={logo}
-              screen={<Shot media={laptop} />}
-            />
-          </div>
-        </div>
-        <div
-          style={{
-            position: 'absolute',
-            left: 745,
-            top: 640,
-            transformStyle: 'preserve-3d',
-            transform: 'translateZ(120px) rotateY(-16deg) rotateZ(4deg)',
-          }}
-        >
-          <IPhone3D
-            width={PHONE_W}
-            angle={-16}
-            logo={logo}
-            screen={<Shot media={phone} />}
-          />
-        </div>
-      </AbsoluteFill>
+      {laptop ? <LaptopAndPhone /> : <TwoPhones />}
       <div
         style={{
           position: 'absolute',
@@ -130,7 +177,6 @@ export const Thumb: React.FC = () => {
             fontSize: fitSize(foot, 54, 1000),
             fontWeight: 700,
             letterSpacing: '-0.02em',
-            color: stage.white,
           }}
         >
           {foot}
