@@ -1,0 +1,33 @@
+{
+  "name": "portfolio-promo-video",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "node scripts/sync-assets.mjs && remotion studio",
+    "render": "node scripts/render.mjs",
+    "still": "node scripts/still.mjs",
+    "audio": "python3 audio/synth.py",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/inter-tight": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@remotion/bundler": "^4.0.530",
+    "@remotion/cli": "^4.0.530",
+    "@remotion/motion-blur": "^4.0.530",
+    "@remotion/noise": "^4.0.530",
+    "@remotion/renderer": "^4.0.530",
+    "framework7-icons": "^5.0.5",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "remotion": "^4.0.530"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "topojson-client": "^3.1.0",
+    "typescript": "^7.0.2",
+    "world-atlas": "^2.0.2"
+  }
+}

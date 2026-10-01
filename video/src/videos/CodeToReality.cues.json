@@ -1,0 +1,204 @@
+{
+  "id": "CodeToReality",
+  "durationInFrames": 1140,
+  "bpm": 120,
+  "gridOffset": 0,
+  "style": "tech",
+  "sections": [
+    {
+      "name": "typing",
+      "from": 0,
+      "to": 180
+    },
+    {
+      "name": "build",
+      "from": 180,
+      "to": 420
+    },
+    {
+      "name": "ai",
+      "from": 420,
+      "to": 600
+    },
+    {
+      "name": "terminal",
+      "from": 600,
+      "to": 780
+    },
+    {
+      "name": "face",
+      "from": 780,
+      "to": 960
+    },
+    {
+      "name": "deploy",
+      "from": 960,
+      "to": 1140
+    }
+  ],
+  "sfx": [
+    {
+      "type": "type",
+      "at": 4,
+      "len": 132
+    },
+    {
+      "type": "click",
+      "at": 160
+    },
+    {
+      "type": "riser",
+      "at": 150,
+      "len": 30
+    },
+    {
+      "type": "impact",
+      "at": 180
+    },
+    {
+      "type": "glitch",
+      "at": 180
+    },
+    {
+      "type": "whoosh",
+      "at": 240
+    },
+    {
+      "type": "whoosh",
+      "at": 300
+    },
+    {
+      "type": "scan",
+      "at": 340
+    },
+    {
+      "type": "pop",
+      "at": 340
+    },
+    {
+      "type": "pop",
+      "at": 360
+    },
+    {
+      "type": "pop",
+      "at": 380
+    },
+    {
+      "type": "riser",
+      "at": 396,
+      "len": 24
+    },
+    {
+      "type": "glitch",
+      "at": 414
+    },
+    {
+      "type": "impact",
+      "at": 420
+    },
+    {
+      "type": "type",
+      "at": 424,
+      "len": 26
+    },
+    {
+      "type": "counter",
+      "at": 456,
+      "len": 64
+    },
+    {
+      "type": "hit",
+      "at": 540
+    },
+    {
+      "type": "whoosh",
+      "at": 556
+    },
+    {
+      "type": "riser",
+      "at": 576,
+      "len": 24
+    },
+    {
+      "type": "impact",
+      "at": 600
+    },
+    {
+      "type": "type",
+      "at": 604,
+      "len": 16
+    },
+    {
+      "type": "tick",
+      "at": 632
+    },
+    {
+      "type": "tick",
+      "at": 647
+    },
+    {
+      "type": "tick",
+      "at": 662
+    },
+    {
+      "type": "tick",
+      "at": 677
+    },
+    {
+      "type": "tick",
+      "at": 692
+    },
+    {
+      "type": "tick",
+      "at": 707
+    },
+    {
+      "type": "notify",
+      "at": 740
+    },
+    {
+      "type": "riser",
+      "at": 750,
+      "len": 30
+    },
+    {
+      "type": "glitch",
+      "at": 774
+    },
+    {
+      "type": "sub",
+      "at": 780
+    },
+    {
+      "type": "whoosh",
+      "at": 876
+    },
+    {
+      "type": "swell",
+      "at": 900,
+      "len": 60
+    },
+    {
+      "type": "type",
+      "at": 964,
+      "len": 26
+    },
+    {
+      "type": "counter",
+      "at": 992,
+      "len": 26
+    },
+    {
+      "type": "impact",
+      "at": 1020
+    },
+    {
+      "type": "whoosh",
+      "at": 1040
+    },
+    {
+      "type": "tail",
+      "at": 1080
+    }
+  ]
+}

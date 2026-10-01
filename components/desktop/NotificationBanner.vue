@@ -5,7 +5,7 @@
         v-if="current"
         :key="current.id"
         class="fixed left-1/2 top-11 z-[420] w-[calc(100%-24px)] max-w-[360px] -translate-x-1/2 text-left lg:left-auto lg:right-3 lg:translate-x-0"
-        @click="dismiss"
+        @click="activate"
       >
         <div
           class="flex items-center gap-3 rounded-2xl border border-white/40 bg-white/75 p-3 shadow-[0_12px_40px_-8px_rgba(0,0,0,0.35)] ring-1 ring-black/5 backdrop-blur-2xl"
@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-const { current, dismiss } = useNotify()
+const { current, activate } = useNotify()
 </script>
 
 <style scoped>

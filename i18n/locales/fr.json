@@ -500,6 +500,10 @@
     "errBack": "Retour au bureau",
     "close": "Fermer",
     "notifNow": "maintenant",
+    "videoTitle": "Mon CV.mp4",
+    "videoNotifTitle": "Mon CV, en vidéo",
+    "videoNotifMessage": "Mon parcours en moins d’une minute. À regarder avec le son.",
+    "videoSpotlight": "Mon CV en vidéo",
     "scrollDown": "Descendre vers les projets",
     "term": {
       "helpHelp": "cette aide",

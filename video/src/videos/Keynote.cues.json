@@ -1,0 +1,294 @@
+{
+  "id": "Keynote",
+  "durationInFrames": 1620,
+  "bpm": 120,
+  "gridOffset": 0,
+  "style": "pop",
+  "sections": [
+    {
+      "name": "intro",
+      "from": 0,
+      "to": 120
+    },
+    {
+      "name": "build",
+      "from": 120,
+      "to": 240
+    },
+    {
+      "name": "groove",
+      "from": 240,
+      "to": 600
+    },
+    {
+      "name": "groove2",
+      "from": 600,
+      "to": 840
+    },
+    {
+      "name": "groove",
+      "from": 840,
+      "to": 1080
+    },
+    {
+      "name": "lite",
+      "from": 1080,
+      "to": 1320
+    },
+    {
+      "name": "hush",
+      "from": 1320,
+      "to": 1380
+    },
+    {
+      "name": "finale",
+      "from": 1380,
+      "to": 1560
+    },
+    {
+      "name": "outro",
+      "from": 1560,
+      "to": 1620
+    }
+  ],
+  "sfx": [
+    {
+      "type": "swell",
+      "at": 0,
+      "len": 58
+    },
+    {
+      "type": "chime",
+      "at": 58
+    },
+    {
+      "type": "whoosh",
+      "at": 120,
+      "gain": 0.8
+    },
+    {
+      "type": "hit",
+      "at": 240,
+      "gain": 0.8
+    },
+    {
+      "type": "whoosh",
+      "at": 244,
+      "gain": 0.9
+    },
+    {
+      "type": "swoosh",
+      "at": 270,
+      "gain": 0.6
+    },
+    {
+      "type": "tick",
+      "at": 304
+    },
+    {
+      "type": "swoosh",
+      "at": 318,
+      "gain": 0.5
+    },
+    {
+      "type": "swoosh",
+      "at": 330,
+      "gain": 0.5
+    },
+    {
+      "type": "swoosh",
+      "at": 342,
+      "gain": 0.5
+    },
+    {
+      "type": "swoosh",
+      "at": 354,
+      "gain": 0.5
+    },
+    {
+      "type": "swoosh",
+      "at": 366,
+      "gain": 0.5
+    },
+    {
+      "type": "whoosh",
+      "at": 476,
+      "gain": 0.8
+    },
+    {
+      "type": "swell",
+      "at": 480,
+      "len": 30
+    },
+    {
+      "type": "hit",
+      "at": 525,
+      "gain": 0.6
+    },
+    {
+      "type": "whoosh",
+      "at": 590,
+      "gain": 0.8
+    },
+    {
+      "type": "counter",
+      "at": 626,
+      "len": 36
+    },
+    {
+      "type": "whoosh",
+      "at": 682,
+      "gain": 0.8
+    },
+    {
+      "type": "pop",
+      "at": 704
+    },
+    {
+      "type": "pop",
+      "at": 711
+    },
+    {
+      "type": "pop",
+      "at": 718
+    },
+    {
+      "type": "pop",
+      "at": 725
+    },
+    {
+      "type": "whoosh",
+      "at": 762,
+      "gain": 0.8
+    },
+    {
+      "type": "swoosh",
+      "at": 780,
+      "gain": 0.6
+    },
+    {
+      "type": "pop",
+      "at": 784
+    },
+    {
+      "type": "pop",
+      "at": 791
+    },
+    {
+      "type": "pop",
+      "at": 798
+    },
+    {
+      "type": "whoosh",
+      "at": 842,
+      "gain": 0.8
+    },
+    {
+      "type": "counter",
+      "at": 850,
+      "len": 28
+    },
+    {
+      "type": "counter",
+      "at": 910,
+      "len": 32
+    },
+    {
+      "type": "type",
+      "at": 922,
+      "len": 24
+    },
+    {
+      "type": "click",
+      "at": 950
+    },
+    {
+      "type": "drop",
+      "at": 968
+    },
+    {
+      "type": "click",
+      "at": 981
+    },
+    {
+      "type": "swoosh",
+      "at": 984,
+      "gain": 0.5
+    },
+    {
+      "type": "counter",
+      "at": 1010,
+      "len": 26
+    },
+    {
+      "type": "scan",
+      "at": 1018
+    },
+    {
+      "type": "whoosh",
+      "at": 1086,
+      "gain": 0.6
+    },
+    {
+      "type": "tap",
+      "at": 1142
+    },
+    {
+      "type": "tap",
+      "at": 1188
+    },
+    {
+      "type": "swoosh",
+      "at": 1232,
+      "gain": 0.5
+    },
+    {
+      "type": "swoosh",
+      "at": 1240,
+      "gain": 0.5
+    },
+    {
+      "type": "sub",
+      "at": 1320
+    },
+    {
+      "type": "hit",
+      "at": 1384,
+      "gain": 0.8
+    },
+    {
+      "type": "pop",
+      "at": 1464
+    },
+    {
+      "type": "pop",
+      "at": 1479
+    },
+    {
+      "type": "pop",
+      "at": 1494
+    },
+    {
+      "type": "pop",
+      "at": 1509
+    },
+    {
+      "type": "swoosh",
+      "at": 1524,
+      "gain": 0.5
+    },
+    {
+      "type": "whoosh",
+      "at": 1548,
+      "gain": 0.6
+    },
+    {
+      "type": "chime",
+      "at": 1562
+    },
+    {
+      "type": "click",
+      "at": 1572
+    }
+  ]
+}

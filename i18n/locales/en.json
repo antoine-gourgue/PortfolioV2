@@ -500,6 +500,10 @@
     "errBack": "Back to desktop",
     "close": "Close",
     "notifNow": "now",
+    "videoTitle": "My resume.mp4",
+    "videoNotifTitle": "My resume, as a video",
+    "videoNotifMessage": "My journey in under a minute (in French). Best with sound on.",
+    "videoSpotlight": "My resume as a video",
     "scrollDown": "Scroll down to the projects",
     "term": {
       "helpHelp": "this help",

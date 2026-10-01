@@ -56,6 +56,7 @@ export function useDesktop() {
       about: false,
       blog: false,
       contact: false,
+      video: false,
     },
     minimizedApps: {},
     wallpaperAuto: true,

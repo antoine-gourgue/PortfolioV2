@@ -95,6 +95,7 @@
 <script setup lang="ts">
 const desktop = useDesktop()
 const { t } = useI18n()
+const track = useTrack()
 const localePath = useLocalePath()
 const router = useRouter()
 
@@ -292,6 +293,17 @@ const items = computed<Item[]>(() => [
       a.download = ''
       a.click()
       close()
+    },
+  },
+  {
+    id: 'video',
+    label: t('macos.videoSpotlight'),
+    icon: { name: 'quicktime' },
+    kind: 'MP4',
+    group: 'actions',
+    action: () => {
+      track('video_open', { source: 'spotlight' })
+      openApp('video')
     },
   },
   {

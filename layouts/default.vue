@@ -51,6 +51,7 @@
     <LazyDesktopAppAbout hydrate-on-idle />
     <LazyDesktopAppBlog hydrate-on-idle />
     <LazyDesktopAppContact hydrate-on-idle />
+    <LazyDesktopAppVideo hydrate-on-idle />
     <LazyDesktopLockScreen hydrate-on-idle />
     <LazyDesktopNotificationBanner hydrate-on-idle />
   </div>
