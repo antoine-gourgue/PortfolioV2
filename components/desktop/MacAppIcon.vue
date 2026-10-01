@@ -762,6 +762,40 @@
     </template>
   </svg>
 
+  <!-- QuickTime Player: the video CV -->
+  <svg
+    v-else-if="name === 'quicktime'"
+    viewBox="0 0 100 100"
+    class="h-full w-full drop-shadow-sm"
+  >
+    <defs>
+      <linearGradient :id="`qt-${uid}`" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#3A3D46" />
+        <stop offset="1" stop-color="#0E1015" />
+      </linearGradient>
+      <linearGradient :id="`qts-${uid}`" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#F4F5F7" />
+        <stop offset="1" stop-color="#9EA3AD" />
+      </linearGradient>
+    </defs>
+    <rect width="100" height="100" rx="22" :fill="`url(#qt-${uid})`" />
+    <circle
+      cx="47"
+      cy="46"
+      r="23"
+      fill="none"
+      :stroke="`url(#qts-${uid})`"
+      stroke-width="8"
+    />
+    <path
+      d="M63 62 L77 76"
+      :stroke="`url(#qts-${uid})`"
+      stroke-width="9"
+      stroke-linecap="round"
+    />
+    <path d="M41 35 L58 46 L41 57 Z" fill="#FFFFFF" />
+  </svg>
+
   <!-- PDF file -->
   <svg
     v-else-if="name === 'pdf'"

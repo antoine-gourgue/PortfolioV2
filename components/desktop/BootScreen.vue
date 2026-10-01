@@ -27,6 +27,11 @@ import AgLogo from '~/components/ui/AGLogo.vue'
 const { gsap } = useGsap()
 
 const visible = ref(true)
+// Read by whatever must wait for the desktop to be on screen
+const booted = useState('booted', () => false)
+watch(visible, (v) => {
+  if (!v) booted.value = true
+})
 const bootEl = ref<HTMLElement | null>(null)
 const barEl = ref<HTMLElement | null>(null)
 
