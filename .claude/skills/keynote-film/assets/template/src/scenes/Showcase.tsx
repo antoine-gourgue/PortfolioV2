@@ -9,7 +9,7 @@ import {
 import { CX, fonts, stage } from '../config'
 import { Ring } from '../kit/charts'
 import { Smear, StageLight } from '../kit/light'
-import { Body, Rise, ease, easeOut, fitSize } from '../kit/motion'
+import { Body, Rise, ease, easeIn, easeOut, fitSize } from '../kit/motion'
 import { Shot, TrafficLights, type Media } from '../kit/screens'
 import { Counter, Letters, formatNumber } from '../kit/type'
 import type { Crop, Proof, Showcase as ShowcaseData } from '../types'
@@ -203,13 +203,16 @@ const ProofLine: React.FC<{ proof: Proof }> = ({ proof }) => {
  * One project: title, exploded window, one proof point. Consecutive
  * showcases are joined by a whip pan: both shots ride the same pan so they
  * stay butted edge to edge, which is why the scene background is transparent.
+ * The last of a run lifts away instead, so it does not smear across the
+ * next scene's entrance.
  */
 export const Showcase: React.FC<{
   len: number
   show: ShowcaseData
   id: string
   whipIn: boolean
-}> = ({ len, show, id, whipIn }) => {
+  whipOut: boolean
+}> = ({ len, show, id, whipIn, whipOut }) => {
   const f = useCurrentFrame()
   const { fps } = useVideoConfig()
   const land = spring({
@@ -218,12 +221,19 @@ export const Showcase: React.FC<{
     config: { damping: 22, stiffness: 42 },
   })
   const inT = whipIn ? 1 - ease(f, [0, WHIP], [0, 1]) : 0
-  const outT = ease(f, [len, len + WHIP], [0, 1])
+  const outT = whipOut ? ease(f, [len, len + WHIP], [0, 1]) : 0
   const smear = Math.sin(Math.PI * (inT || outT)) * 70
   const fadeIn = whipIn ? 1 : ease(f, [0, 12], [0, 1])
+  const lift = whipOut ? 0 : ease(f, [len - 8, len + 4], [0, 1], easeIn)
   const h = WIN_W / show.aspect
   return (
-    <AbsoluteFill style={{ opacity: fadeIn }}>
+    <AbsoluteFill
+      style={{
+        opacity: fadeIn * (1 - lift),
+        transform: lift ? `translateY(${-lift * 120}px)` : undefined,
+        filter: lift ? `blur(${lift * 10}px)` : undefined,
+      }}
+    >
       <Smear id={`whip-${id}`} amount={smear}>
         <AbsoluteFill
           style={{ transform: `translateX(${(inT - outT) * 1080}px)` }}

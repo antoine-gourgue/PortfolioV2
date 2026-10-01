@@ -2,17 +2,17 @@
 
 Every scene receives `len` (its slot in frames, from `timeline.json`) and the matching part of `content.tsx`. Times below are frames from the start of the scene, at 30 fps.
 
-| Scene                         | Content                               | Default length (frames) | Note      |
-| ----------------------------- | ------------------------------------- | ----------------------- | --------- |
-| [opener](#opener)             | `name`, `role`, `mark`                | 120                     |           |
-| [hero](#hero)                 | `content.hero`                        | 124                     |           |
-| [laptop](#laptop)             | `content.laptop`                      | 236                     |           |
-| [grid](#grid)                 | `content.grid`                        | 120                     |           |
-| [showcase](#showcase)         | `content.showcases[item]`             | 80 each                 | `tail` 10 |
-| [numbers](#numbers)           | `content.numbers`                     | 240                     |           |
-| [phone](#phone)               | `content.phone`                       | 240                     |           |
-| [oneMoreThing](#onemorething) | `content.oneMoreThing`                | 60                      |           |
-| [end](#end)                   | `content.end`, plus `name` and `mark` | 240                     | `tail` 0  |
+| Scene                         | Content                               | Default length (frames) | Note                                    |
+| ----------------------------- | ------------------------------------- | ----------------------- | --------------------------------------- |
+| [opener](#opener)             | `name`, `role`, `mark`                | 120                     |                                         |
+| [hero](#hero)                 | `content.hero`                        | 124                     |                                         |
+| [laptop](#laptop)             | `content.laptop`                      | 236                     |                                         |
+| [grid](#grid)                 | `content.grid`                        | 120                     |                                         |
+| [showcase](#showcase)         | `content.showcases[item]`             | 80 each                 | `tail` 10 when another showcase follows |
+| [numbers](#numbers)           | `content.numbers`                     | 240                     |                                         |
+| [phone](#phone)               | `content.phone`                       | 240                     |                                         |
+| [oneMoreThing](#onemorething) | `content.oneMoreThing`                | 60                      |                                         |
+| [end](#end)                   | `content.end`, plus `name` and `mark` | 240                     | `tail` 0                                |
 
 ## opener
 
@@ -131,7 +131,7 @@ Every scene receives `len` (its slot in frames, from `timeline.json`) and the ma
 
 ## showcase
 
-**Content:** `content.showcases[item]`. Default length 80, with `tail` 10 for the whip. Repeat the scene in the timeline, once per project.
+**Content:** `content.showcases[item]`. Default length 80. Repeat the scene in the timeline, once per project. Give `tail` 10 to every showcase followed by another one: that is the whip.
 
 **Fields:**
 
@@ -149,9 +149,9 @@ Every scene receives `len` (its slot in frames, from `timeline.json`) and the ma
 - `{ kind: 'ring', value, pct, suffix, label, sub }`: a score filling a ring, its number counting up.
 - `{ kind: 'line', text }`: one short sentence.
 
-**Whip:** a showcase that follows another whips in from the right; the first one fades in. Every showcase whips out over its `tail`.
+**Whip:** a showcase that follows another whips in from the right; the first one fades in. A showcase followed by another whips out over its `tail`. The last of a run lifts away and blurs out over its last 8 frames instead, so it never smears across the next scene's entrance.
 
-**Default sounds:** a stack gets a `pop` per item at 24, 30, 36…, a ring gets a `counter` at 26 (36 frames). The whip out is a `whoosh` at 82.
+**Default sounds:** a stack gets a `pop` per item at 24, 30, 36…, a ring gets a `counter` at 26 (36 frames). The whip out is a `whoosh` at 82, and the last showcase's lift is a `swoosh` at 76.
 
 ## numbers
 

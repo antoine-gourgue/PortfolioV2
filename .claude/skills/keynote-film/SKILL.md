@@ -103,7 +103,7 @@ npm run review              # out/review/sheet.png: 3 frames per scene, ~1 min
 npm run still -- 640 980    # full-size frames into out/stills/
 ```
 
-Open the contact sheet and look at it. Every rendered minute costs 15 to 20 minutes, and a still costs 2 seconds. Go through the QA checklist in `references/delivery.md`; the common misses are:
+Open the contact sheet and look at it. A full render of the 54-second film takes about 15 minutes on 4 cores, and a still takes 2 seconds. Go through the QA checklist in `references/delivery.md`; the common misses are:
 
 - text overflowing or colliding;
 - a screen covering a title;

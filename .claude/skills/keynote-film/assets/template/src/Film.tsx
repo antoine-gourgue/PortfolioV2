@@ -35,13 +35,13 @@ const scene = (slot: Slot, i: number) => {
     case 'grid':
       return <Grid len={len} {...c.grid} />
     case 'showcase': {
-      const prev = placed[i - 1]
       return (
         <Showcase
           len={len}
           id={String(i)}
           show={c.showcases[slot.item ?? 0]}
-          whipIn={prev?.kind === 'showcase'}
+          whipIn={placed[i - 1]?.kind === 'showcase'}
+          whipOut={placed[i + 1]?.kind === 'showcase'}
         />
       )
     }

@@ -13,13 +13,13 @@
 
 On a 4-core machine with no GPU, measured on the template's 54-second demo:
 
-| Command                                | Time            | Cost per frame      |
-| -------------------------------------- | --------------- | ------------------- |
-| `npm run review` (33 half-size frames) | about 1 min     |                     |
-| `npm run still -- <frame>`             | 2–5 s           |                     |
-| `npm run audio`                        | about 30 s      |                     |
-| `npm run render` (1620 frames)         | **RENDER_TIME** |                     |
-| A `FRAMES=a-b` render                  | proportional    | about **PER_FRAME** |
+| Command                                | Time                                    |
+| -------------------------------------- | --------------------------------------- |
+| `npm run review` (33 half-size frames) | about 1 min                             |
+| `npm run still -- <frame>`             | 2–5 s                                   |
+| `npm run audio`                        | about 30 s                              |
+| `npm run render` (1620 frames)         | about 15 min                            |
+| A `FRAMES=a-b` render                  | about 0.55 s a frame, plus the bundling |
 
 Full-frame blurs and 3D-heavy scenes (laptop, phone) cost more than type scenes.
 
@@ -53,7 +53,7 @@ Go through it on `out/review/sheet.png`, then on full-size stills of anything do
 
 ## Encoding
 
-`npm run render` writes an H.264 file (CRF 19, slow preset, AAC 320k), which is visually lossless and runs about 15–20 MB a minute. For uploads, run:
+`npm run render` writes an H.264 file (CRF 19, slow preset, AAC 320k), which is visually lossless: the 54-second demo weighs 11.5 MB. For uploads, run:
 
 ```bash
 scripts/encode.sh out/Film.mp4
@@ -66,7 +66,7 @@ This writes `out/Film-web.mp4` in the most compatible profile:
 - AAC 48 kHz stereo;
 - the `moov` atom first.
 
-Use `CRF=24` for a lighter file to self-host (about 7–12 MB a minute).
+At its default CRF 20 the demo comes out at 8.2 MB. Use `CRF=24` for a lighter file to self-host.
 
 ## LinkedIn
 
