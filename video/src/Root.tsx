@@ -1,5 +1,5 @@
 import React from 'react'
-import { Composition } from 'remotion'
+import { Composition, Still } from 'remotion'
 import { FPS, HEIGHT, WIDTH } from './brand'
 import { AntoineOS } from './videos/AntoineOS'
 import { AppStore } from './videos/AppStore'
@@ -10,6 +10,7 @@ import codeCues from './videos/CodeToReality.cues.json'
 import { IPhone } from './videos/IPhone'
 import { Keynote } from './videos/Keynote'
 import keynoteCues from './videos/Keynote.cues.json'
+import { KeynoteThumb } from './videos/KeynoteThumb'
 import iphoneCues from './videos/iPhone.cues.json'
 import { Trailer } from './videos/Trailer'
 import trailerCues from './videos/Trailer.cues.json'
@@ -69,6 +70,12 @@ export const RemotionRoot: React.FC = () => (
       width={WIDTH}
       height={HEIGHT}
       defaultProps={{ withAudio: true }}
+    />
+    <Still
+      id="KeynoteThumb"
+      component={KeynoteThumb}
+      width={WIDTH}
+      height={HEIGHT}
     />
   </>
 )
