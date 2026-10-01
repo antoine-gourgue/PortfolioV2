@@ -64,6 +64,21 @@
       ></span>
     </button>
 
+    <!-- Apps without a permanent icon show up only while they run -->
+    <button
+      v-for="app in runningApps"
+      :key="app.id"
+      :ref="setItemRef"
+      class="dock-icon group"
+      @click="(focusRunning(app.id), bounce($event))"
+    >
+      <DesktopMacAppIcon :name="app.icon" />
+      <span class="dock-tip">{{ app.raw }}</span>
+      <span
+        class="absolute -bottom-[7px] left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-white/80"
+      ></span>
+    </button>
+
     <template v-if="minimized.length">
       <div class="mx-1 h-11 w-px self-center bg-white/30"></div>
       <button
@@ -101,7 +116,7 @@ import type { ComponentPublicInstance } from 'vue'
 const localePath = useLocalePath()
 const route = useRoute()
 const { gsap } = useGsap()
-const { minimized, restore, toggleApp, openApp, state } = useDesktop()
+const { minimized, restore, toggleApp, openApp, focusApp, state } = useDesktop()
 const launchpad = useLaunchpad()
 
 const musicPlaying = computed(() => useMusic().state.value.playing)
@@ -116,6 +131,22 @@ const utilApps = [
   { id: 'sports', label: 'macos.sportsTitle', icon: 'sports' },
   { id: 'settings', label: 'macos.settingsTitle', icon: 'settings' },
 ]
+
+const transientApps = [
+  { id: 'video', icon: 'quicktime', raw: 'QuickTime Player' },
+]
+const runningApps = computed(() =>
+  transientApps.filter(
+    (app) => state.value.apps[app.id] || state.value.minimizedApps[app.id]
+  )
+)
+// Like the real Dock: a minimized app comes back, an open one comes forward
+const focusRunning = (id: string) => {
+  if (state.value.minimizedApps[id]) {
+    sfx.restore()
+    openApp(id)
+  } else focusApp(id)
+}
 
 // Explicit resolution: a 'NuxtLink' string in <component :is> does not resolve
 const NuxtLinkComponent = resolveComponent('NuxtLink')

@@ -107,11 +107,28 @@ const bringToFront = () => {
 }
 const close = () => desktop.closeApp('video')
 
+// The Dock icon brings an open player forward through focusApp(), which
+// cannot reach this window's own z-index
+watch(
+  () => desktop.state.value.activeApp,
+  (id) => {
+    if (id === 'video') z.value = 40 + desktop.state.value.topZ
+  }
+)
+
+// Where playback picks up when the window comes back from the Dock
+let resumeAt = 0
+
 let drags: ReturnType<typeof Draggable.create> = []
 watch(
   () => desktop.state.value.apps.video,
   (open) => {
     if (!open) {
+      // Runs before the DOM update, so the <video> is still there: a
+      // window sent to the Dock resumes where it was, a closed one restarts
+      resumeAt = desktop.state.value.minimizedApps.video
+        ? (videoEl.value?.currentTime ?? 0)
+        : 0
       drags.forEach((d) => d.kill())
       drags = []
       return
@@ -140,7 +157,10 @@ watch(
       })
       // Opened by a click, so browsers let it start with sound; if one
       // still refuses, the native controls are there to start it
-      videoEl.value?.play().catch(() => {})
+      const video = videoEl.value
+      if (!video) return
+      if (resumeAt) video.currentTime = resumeAt
+      video.play().catch(() => {})
     })
   }
 )

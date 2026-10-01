@@ -647,6 +647,7 @@ const FLOATING_APPS = new Set([
   'sports',
   'settings',
   'trash',
+  'video',
 ])
 
 /** The name each app carries in the menu bar */
@@ -659,6 +660,7 @@ const APP_NAMES: Record<string, { label?: string; raw?: string }> = {
   sports: { label: 'macos.sportsTitle' },
   settings: { label: 'macos.settingsTitle' },
   trash: { label: 'macos.trash' },
+  video: { raw: 'QuickTime Player' },
   about: { raw: 'Contacts' },
   terminal: { raw: 'Terminal' },
   finder: { raw: 'Finder' },
@@ -744,6 +746,7 @@ const STATUS_TINTS: Record<string, { bg: string; light: boolean }> = {
   news: { bg: '#FFFFFF', light: false },
   settings: { bg: '#F2F2F7', light: false },
   trash: { bg: '#FFFFFF', light: false },
+  video: { bg: '#1C1C1E', light: true },
   // Former routes, now apps: keep their own mobile-window backgrounds
   projects: { bg: '#FFFFFF', light: false },
   about: { bg: '#F2F2F7', light: false },
