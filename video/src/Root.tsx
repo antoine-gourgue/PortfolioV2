@@ -2,6 +2,14 @@ import React from 'react'
 import { Composition, Still } from 'remotion'
 import { FPS, HEIGHT, WIDTH } from './brand'
 import { AntoineOS } from './videos/AntoineOS'
+import {
+  BANNER_H,
+  BANNER_W,
+  Banner,
+  BannerAvailable,
+  BannerOS,
+  BannerProjects,
+} from './videos/Banner'
 import { AppStore } from './videos/AppStore'
 import appStoreCues from './videos/AppStore.cues.json'
 import antoineOSCues from './videos/AntoineOS.cues.json'
@@ -70,6 +78,25 @@ export const RemotionRoot: React.FC = () => (
       width={WIDTH}
       height={HEIGHT}
       defaultProps={{ withAudio: true }}
+    />
+    <Still id="Banner" component={Banner} width={BANNER_W} height={BANNER_H} />
+    <Still
+      id="BannerOS"
+      component={BannerOS}
+      width={BANNER_W}
+      height={BANNER_H}
+    />
+    <Still
+      id="BannerProjects"
+      component={BannerProjects}
+      width={BANNER_W}
+      height={BANNER_H}
+    />
+    <Still
+      id="BannerAvailable"
+      component={BannerAvailable}
+      width={BANNER_W}
+      height={BANNER_H}
     />
     <Still
       id="KeynoteThumb"
