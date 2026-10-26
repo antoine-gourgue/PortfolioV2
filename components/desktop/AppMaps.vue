@@ -57,7 +57,11 @@
         </div>
 
         <div class="relative min-h-0 flex-1">
-          <div ref="mapEl" class="absolute inset-0"></div>
+          <!-- MapLibre forces position: relative on its container, so the
+               absolute box has to be a wrapper -->
+          <div class="absolute inset-0">
+            <div ref="mapEl" class="h-full w-full"></div>
+          </div>
 
           <!-- Floating panel, Apple Maps style -->
           <aside
@@ -140,7 +144,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Map as LeafletMap } from 'leaflet'
+import type { Map as MapLibreMap } from 'maplibre-gl'
 
 const desktop = useDesktop()
 const sfx = useSfx()
@@ -173,7 +177,7 @@ const places: Place[] = [
     color: '#0A84FF',
     lat: 43.4832,
     lon: -1.5146,
-    zoom: 12,
+    zoom: 11,
   },
   {
     id: 'digitaleo',
@@ -183,7 +187,7 @@ const places: Place[] = [
     color: '#5E5CE6',
     lat: 48.0985,
     lon: -1.6989,
-    zoom: 14,
+    zoom: 13,
   },
   {
     id: 'epitech',
@@ -193,54 +197,66 @@ const places: Place[] = [
     color: '#FF9F0A',
     lat: 48.125,
     lon: -1.6974,
-    zoom: 14,
+    zoom: 13,
   },
 ]
 
 const selected = ref('home')
 
-let map: LeafletMap | null = null
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let L: any = null
+let map: MapLibreMap | null = null
 
 const initMap = async () => {
   if (map || !mapEl.value) return
-  L = (await import('leaflet')).default
-  // @ts-expect-error untyped CSS import
-  await import('leaflet/dist/leaflet.css')
-
-  map = L.map(mapEl.value, { zoomControl: false, attributionControl: true })
-  map!.attributionControl.setPrefix(false)
-  // Top right like Apple Maps: at the bottom the controls sank behind
-  // the places sheet on mobile
-  L.control.zoom({ position: 'topright' }).addTo(map)
-  L.tileLayer(
-    'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-    {
-      attribution: '© OpenStreetMap · © CARTO',
-      maxZoom: 19,
-    }
-  ).addTo(map)
-
-  for (const place of places) {
-    const icon = L.divIcon({
-      className: '',
-      html: `<div class="map-pin" style="background:${place.color}"><i aria-hidden="true" class="f7-icons">${place.icon}</i></div>`,
-      iconSize: [34, 42],
-      iconAnchor: [17, 40],
-    })
-    L.marker([place.lat, place.lon], { icon })
-      .addTo(map)
-      .on('click', () => flyTo(place))
-  }
+  const [maplibregl, { default: workerUrl }] = await Promise.all([
+    import('maplibre-gl'),
+    // The bundle resolves its worker relative to its own file, which Vite
+    // never emits: ship it as an asset and point MapLibre at it
+    import('maplibre-gl/dist/maplibre-gl-worker.mjs?url'),
+    import('maplibre-gl/dist/maplibre-gl.css'),
+  ])
+  maplibregl.setWorkerUrl(workerUrl)
 
   const home = places[0]
-  map!.setView([home.lat, home.lon], home.zoom)
+  map = new maplibregl.Map({
+    container: mapEl.value,
+    // OpenFreeMap: OpenStreetMap vector tiles with no API key, account or
+    // quota (CARTO now watermarks every keyless tile)
+    style: 'https://tiles.openfreemap.org/styles/liberty',
+    center: [home.lon, home.lat],
+    zoom: home.zoom,
+    attributionControl: false,
+  })
+  // Top right like Apple Maps: at the bottom the controls sank behind
+  // the places sheet on mobile, and the attribution must stay visible
+  map.addControl(
+    new maplibregl.NavigationControl({ showCompass: false }),
+    'top-right'
+  )
+  map.addControl(
+    new maplibregl.AttributionControl({ compact: true }),
+    'top-right'
+  )
+
+  for (const place of places) {
+    // MapLibre positions the marker element with its own transform:
+    // the rotated pin needs a wrapper so both transforms survive
+    const el = document.createElement('div')
+    el.className = 'map-pin-anchor'
+    el.innerHTML = `<div class="map-pin" style="background:${place.color}"><i aria-hidden="true" class="f7-icons">${place.icon}</i></div>`
+    el.addEventListener('click', () => flyTo(place))
+    new maplibregl.Marker({ element: el, anchor: 'bottom' })
+      .setLngLat([place.lon, place.lat])
+      .addTo(map)
+  }
 }
 
 const flyTo = (place: Place) => {
   selected.value = place.id
-  map?.flyTo([place.lat, place.lon], place.zoom, { duration: 1.1 })
+  map?.flyTo({
+    center: [place.lon, place.lat],
+    zoom: place.zoom,
+    duration: 1100,
+  })
 }
 
 let drags: ReturnType<typeof Draggable.create> = []
@@ -250,7 +266,7 @@ watch(
     if (!open) {
       drags.forEach((d) => d.kill())
       drags = []
-      // v-if destroys the container: destroy the Leaflet instance too,
+      // v-if destroys the container: destroy the MapLibre instance too,
       // otherwise reopening finds a map bound to a dead element (white screen)
       map?.remove()
       map = null
@@ -268,7 +284,7 @@ watch(
         ease: 'back.out(1.4)',
       })
       await initMap()
-      setTimeout(() => map?.invalidateSize(), 380)
+      setTimeout(() => map?.resize(), 380)
       if (window.matchMedia('(min-width: 1024px)').matches) {
         drags = Draggable.create(winEl.value, {
           trigger: winEl.value.querySelectorAll('.maps-drag'),
@@ -288,28 +304,27 @@ onUnmounted(() => {
 
 <style>
 /* Mobile: push the controls below the status bar, which overlays the map */
-.leaflet-top {
+.maplibregl-ctrl-top-right {
   top: 2rem !important;
 }
 @media (min-width: 1024px) {
-  .leaflet-top {
+  .maplibregl-ctrl-top-right {
     top: 0 !important;
   }
 }
 
-/* OSM/CARTO license attribution: mandatory but discreet */
-.leaflet-control-attribution {
+/* OSM/OpenFreeMap license attribution: mandatory but discreet */
+.maplibregl-ctrl-attrib {
   font-size: 8.5px !important;
-  background: rgba(255, 255, 255, 0.6) !important;
-  color: rgba(0, 0, 0, 0.45) !important;
-  padding: 1px 5px !important;
-  border-radius: 6px 0 0 0;
-}
-.leaflet-control-attribution a {
-  color: rgba(0, 0, 0, 0.45) !important;
 }
 
-/* Apple Maps-style pin (global: injected by Leaflet outside the component) */
+/* Apple Maps-style pin (global: injected by MapLibre outside the component).
+   The anchor box ends where the rotated square's tip lands. */
+.map-pin-anchor {
+  width: 34px;
+  height: 41px;
+  cursor: pointer;
+}
 .map-pin {
   width: 34px;
   height: 34px;
